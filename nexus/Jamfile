@@ -1,0 +1,4 @@
+lib nexus
+    : [ glob *.cpp ] 
+      /site-config//urdl
+    ;

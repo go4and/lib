@@ -1,0 +1,329 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C35AA50C135391D500649921 /* psql.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA50A135391D500649921 /* psql.cpp */; };
+		C35AA50D135391D500649921 /* psql.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA50B135391D500649921 /* psql.h */; };
+		C35AA5131353991100649921 /* libboost_system-mt-d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C35AA5121353991100649921 /* libboost_system-mt-d.dylib */; };
+		C35AA5151353999C00649921 /* libpq.5.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C35AA5141353999C00649921 /* libpq.5.3.dylib */; };
+		C38B10DF135778F900F7A097 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C38B10D6135778E200F7A097 /* mlog.dylib */; };
+		C38B10E0135778F900F7A097 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C38B10D9135778E200F7A097 /* mstd.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C38B10D5135778E200F7A097 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C38B10CE135778E200F7A097 /* mlog.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C3F10D4F1352FCE200D8C945;
+			remoteInfo = mlog;
+		};
+		C38B10D8135778E200F7A097 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C38B10D1135778E200F7A097 /* mstd.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C32455981352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C38B10DB135778EB00F7A097 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C38B10D1135778E200F7A097 /* mstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C32455971352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C38B10DD135778EB00F7A097 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C38B10CE135778E200F7A097 /* mlog.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C3F10D4E1352FCE200D8C945;
+			remoteInfo = mlog;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C3389D47135388790010E3BF /* psql.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = psql.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C35AA50A135391D500649921 /* psql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = psql.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA50B135391D500649921 /* psql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psql.h; sourceTree = SOURCE_ROOT; };
+		C35AA5121353991100649921 /* libboost_system-mt-d.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_system-mt-d.dylib"; path = "../../../../../../../usr/local/boost_1_46_1/stage/lib/libboost_system-mt-d.dylib"; sourceTree = "<group>"; };
+		C35AA5141353999C00649921 /* libpq.5.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpq.5.3.dylib; path = ../../../../../../../opt/local/lib/postgresql90/libpq.5.3.dylib; sourceTree = "<group>"; };
+		C38B10CE135778E200F7A097 /* mlog.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mlog.xcodeproj; path = ../mlog/mlog.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C38B10D1135778E200F7A097 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C3389D44135388790010E3BF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C38B10DF135778F900F7A097 /* mlog.dylib in Frameworks */,
+				C38B10E0135778F900F7A097 /* mstd.dylib in Frameworks */,
+				C35AA5151353999C00649921 /* libpq.5.3.dylib in Frameworks */,
+				C35AA5131353991100649921 /* libboost_system-mt-d.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C3389D3C135388790010E3BF = {
+			isa = PBXGroup;
+			children = (
+				C38B10CE135778E200F7A097 /* mlog.xcodeproj */,
+				C38B10D1135778E200F7A097 /* mstd.xcodeproj */,
+				C35AA5141353999C00649921 /* libpq.5.3.dylib */,
+				C35AA5121353991100649921 /* libboost_system-mt-d.dylib */,
+				C3389D49135388790010E3BF /* psql */,
+				C3389D48135388790010E3BF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C3389D48135388790010E3BF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3389D47135388790010E3BF /* psql.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3389D49135388790010E3BF /* psql */ = {
+			isa = PBXGroup;
+			children = (
+				C35AA50A135391D500649921 /* psql.cpp */,
+				C35AA50B135391D500649921 /* psql.h */,
+			);
+			path = psql;
+			sourceTree = "<group>";
+		};
+		C38B10CF135778E200F7A097 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C38B10D6135778E200F7A097 /* mlog.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C38B10D2135778E200F7A097 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C38B10D9135778E200F7A097 /* mstd.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C3389D45135388790010E3BF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C35AA50D135391D500649921 /* psql.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C3389D46135388790010E3BF /* psql */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3389D55135388790010E3BF /* Build configuration list for PBXNativeTarget "psql" */;
+			buildPhases = (
+				C3389D43135388790010E3BF /* Sources */,
+				C3389D44135388790010E3BF /* Frameworks */,
+				C3389D45135388790010E3BF /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C38B10DC135778EB00F7A097 /* PBXTargetDependency */,
+				C38B10DE135778EB00F7A097 /* PBXTargetDependency */,
+			);
+			name = psql;
+			productName = psql;
+			productReference = C3389D47135388790010E3BF /* psql.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C3389D3E135388790010E3BF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = IP;
+			};
+			buildConfigurationList = C3389D41135388790010E3BF /* Build configuration list for PBXProject "psql" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C3389D3C135388790010E3BF;
+			productRefGroup = C3389D48135388790010E3BF /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C38B10CF135778E200F7A097 /* Products */;
+					ProjectRef = C38B10CE135778E200F7A097 /* mlog.xcodeproj */;
+				},
+				{
+					ProductGroup = C38B10D2135778E200F7A097 /* Products */;
+					ProjectRef = C38B10D1135778E200F7A097 /* mstd.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				C3389D46135388790010E3BF /* psql */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C38B10D6135778E200F7A097 /* mlog.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mlog.dylib;
+			remoteRef = C38B10D5135778E200F7A097 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C38B10D9135778E200F7A097 /* mstd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mstd.dylib;
+			remoteRef = C38B10D8135778E200F7A097 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C3389D43135388790010E3BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C35AA50C135391D500649921 /* psql.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C38B10DC135778EB00F7A097 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mstd;
+			targetProxy = C38B10DB135778EB00F7A097 /* PBXContainerItemProxy */;
+		};
+		C38B10DE135778EB00F7A097 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mlog;
+			targetProxy = C38B10DD135778EB00F7A097 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		C3389D53135388790010E3BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(INCLUDE)",
+					"$(PROJECT_DIR)/..",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		C3389D54135388790010E3BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(INCLUDE)",
+					"$(PROJECT_DIR)/..",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C3389D56135388790010E3BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/boost_1_46_1/stage/lib,
+					/opt/local/lib/postgresql90,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C3389D57135388790010E3BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/boost_1_46_1/stage/lib,
+					/opt/local/lib/postgresql90,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C3389D41135388790010E3BF /* Build configuration list for PBXProject "psql" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3389D53135388790010E3BF /* Debug */,
+				C3389D54135388790010E3BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3389D55135388790010E3BF /* Build configuration list for PBXNativeTarget "psql" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3389D56135388790010E3BF /* Debug */,
+				C3389D57135388790010E3BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C3389D3E135388790010E3BF /* Project object */;
+}

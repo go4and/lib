@@ -1,0 +1,16 @@
+#lib boost_thread : : <name>boost_thread-d <variant>debug <toolset>gcc ;
+#lib boost_thread : : <name>boost_thread <variant>release <toolset>gcc ;
+#lib boost_thread : : <name>boost_thread <variant>profile <toolset>gcc ;
+#lib boost_thread : : <toolset>msvc ;
+
+#lib boost_system : : <name>boost_system-d <variant>debug <toolset>gcc ;
+#lib boost_system : : <name>boost_system <variant>release <toolset>gcc ;
+#lib boost_system : : <name>boost_system <variant>profile <toolset>gcc ;
+#lib boost_system : : <toolset>msvc ;
+
+#lib boost_filesystem : : <name>boost_filesystem-d <variant>debug <toolset>gcc ;
+#lib boost_filesystem : : <name>boost_filesystem <variant>release <toolset>gcc ;
+#lib boost_filesystem : : <name>boost_filesystem <variant>profile <toolset>gcc ;
+#lib boost_filesystem : : <toolset>msvc ;
+
+lib mstd : [ glob *.cpp ] ; #/site-config//boost_filesystem /site-config//boost_system /site-config//boost_thread ;

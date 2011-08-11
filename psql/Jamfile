@@ -1,0 +1,21 @@
+project psql ;
+
+lib secur32 : : <name>secur32 <toolset>msvc ;
+lib shell32 : : <name>shell32 <toolset>msvc ;
+lib advapi32 : : <name>advapi32 <toolset>msvc ;
+
+alias secur32 : : <toolset>gcc ;
+alias shell32 : : <toolset>gcc ;
+alias advapi32 : : <toolset>gcc ;
+
+lib psql : psql.cpp secur32 shell32 advapi32 ;
+
+exe htontest : htontest.cpp ;
+
+exe conntest : conntest.cpp psql /site-config//boost_thread ;
+
+exe ltest : ltest.cpp psql ../mstd ;
+
+explicit htontest ;
+explicit conntest ;
+explicit ltest ;

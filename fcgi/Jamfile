@@ -1,0 +1,3 @@
+project fcgi ;
+
+lib fcgi : [ glob *.cpp ] ;

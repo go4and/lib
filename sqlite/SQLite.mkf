@@ -1,0 +1,9 @@
+files {
+  SQLite.h
+  SQLite.cpp
+#  (internal)
+#  sqlite3.h
+#  sqlite3.c
+#  sqlite3ext.h 
+}
+

@@ -1,0 +1,504 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C3161E67135776A20001E128 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E66135776A20001E128 /* libz.dylib */; };
+		C3161E69135776AA0001E128 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E68135776AA0001E128 /* libcrypto.dylib */; };
+		C3161E6B135776B10001E128 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E6A135776B10001E128 /* libssl.dylib */; };
+		C3161E84135776EF0001E128 /* mcrypt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E77135776CE0001E128 /* mcrypt.dylib */; };
+		C3161E85135776EF0001E128 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E7A135776CE0001E128 /* mlog.dylib */; };
+		C3161E86135776EF0001E128 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E7D135776CE0001E128 /* mstd.dylib */; };
+		C35AA4C913538DD100649921 /* AsyncGuard.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4A713538DD100649921 /* AsyncGuard.h */; };
+		C35AA4CA13538DD100649921 /* AsyncOperations.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4A813538DD100649921 /* AsyncOperations.h */; };
+		C35AA4CB13538DD100649921 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4A913538DD100649921 /* Buffer.cpp */; };
+		C35AA4CC13538DD100649921 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4AA13538DD100649921 /* Buffer.h */; };
+		C35AA4CD13538DD100649921 /* Buffers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4AB13538DD100649921 /* Buffers.cpp */; };
+		C35AA4CE13538DD100649921 /* Buffers.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4AC13538DD100649921 /* Buffers.h */; };
+		C35AA4CF13538DD100649921 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4AD13538DD100649921 /* Clock.cpp */; };
+		C35AA4D013538DD100649921 /* Clock.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4AE13538DD100649921 /* Clock.h */; };
+		C35AA4D113538DD100649921 /* Config.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4AF13538DD100649921 /* Config.h */; };
+		C35AA4D213538DD100649921 /* Connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4B013538DD100649921 /* Connection.cpp */; };
+		C35AA4D313538DD100649921 /* Connection.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4B113538DD100649921 /* Connection.h */; };
+		C35AA4D413538DD100649921 /* Handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4B213538DD100649921 /* Handler.cpp */; };
+		C35AA4D513538DD100649921 /* Handler.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4B313538DD100649921 /* Handler.h */; };
+		C35AA4D613538DD100649921 /* IoThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4B413538DD100649921 /* IoThreadPool.cpp */; };
+		C35AA4D713538DD100649921 /* IoThreadPool.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4B513538DD100649921 /* IoThreadPool.h */; };
+		C35AA4D813538DD100649921 /* Packet.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4B613538DD100649921 /* Packet.h */; };
+		C35AA4D913538DD100649921 /* PacketPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4B713538DD100649921 /* PacketPacker.cpp */; };
+		C35AA4DA13538DD100649921 /* PacketPacker.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4B813538DD100649921 /* PacketPacker.h */; };
+		C35AA4DB13538DD100649921 /* PacketReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4B913538DD100649921 /* PacketReader.cpp */; };
+		C35AA4DC13538DD100649921 /* PacketReader.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4BA13538DD100649921 /* PacketReader.h */; };
+		C35AA4DD13538DD100649921 /* PacketWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4BB13538DD100649921 /* PacketWriter.h */; };
+		C35AA4DE13538DD100649921 /* pch.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4BC13538DD100649921 /* pch.h */; };
+		C35AA4DF13538DD100649921 /* PipeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4BD13538DD100649921 /* PipeNode.cpp */; };
+		C35AA4E013538DD100649921 /* PipeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4BE13538DD100649921 /* PipeNode.h */; };
+		C35AA4E113538DD100649921 /* Signals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4BF13538DD100649921 /* Signals.cpp */; };
+		C35AA4E213538DD100649921 /* Signals.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4C013538DD100649921 /* Signals.h */; };
+		C35AA4E513538DD100649921 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4C313538DD100649921 /* Socket.cpp */; };
+		C35AA4E613538DD100649921 /* Socket.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4C413538DD100649921 /* Socket.h */; };
+		C35AA4E713538DD100649921 /* StackStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4C513538DD100649921 /* StackStream.cpp */; };
+		C35AA4E813538DD100649921 /* StackStream.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4C613538DD100649921 /* StackStream.h */; };
+		C35AA4E913538DD100649921 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4C713538DD100649921 /* Utils.cpp */; };
+		C35AA4EA13538DD100649921 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4C813538DD100649921 /* Utils.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C3161E76135776CE0001E128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3161E6C135776CE0001E128 /* mcrypt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C3389CEB135383290010E3BF;
+			remoteInfo = mcrypt;
+		};
+		C3161E79135776CE0001E128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3161E6F135776CE0001E128 /* mlog.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C3F10D4F1352FCE200D8C945;
+			remoteInfo = mlog;
+		};
+		C3161E7C135776CE0001E128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3161E72135776CE0001E128 /* mstd.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C32455981352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C3161E7E135776E10001E128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3161E6F135776CE0001E128 /* mlog.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C3F10D4E1352FCE200D8C945;
+			remoteInfo = mlog;
+		};
+		C3161E80135776E10001E128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3161E72135776CE0001E128 /* mstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C32455971352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C3161E82135776E10001E128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3161E6C135776CE0001E128 /* mcrypt.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C3389CEA135383290010E3BF;
+			remoteInfo = mcrypt;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C3161E66135776A20001E128 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		C3161E68135776AA0001E128 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
+		C3161E6A135776B10001E128 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
+		C3161E6C135776CE0001E128 /* mcrypt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mcrypt.xcodeproj; path = ../mcrypt/mcrypt.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C3161E6F135776CE0001E128 /* mlog.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mlog.xcodeproj; path = ../mlog/mlog.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C3161E72135776CE0001E128 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C3389D63135388960010E3BF /* nexus.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = nexus.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C35AA4A713538DD100649921 /* AsyncGuard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncGuard.h; sourceTree = SOURCE_ROOT; };
+		C35AA4A813538DD100649921 /* AsyncOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncOperations.h; sourceTree = SOURCE_ROOT; };
+		C35AA4A913538DD100649921 /* Buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4AA13538DD100649921 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = SOURCE_ROOT; };
+		C35AA4AB13538DD100649921 /* Buffers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Buffers.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4AC13538DD100649921 /* Buffers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Buffers.h; sourceTree = SOURCE_ROOT; };
+		C35AA4AD13538DD100649921 /* Clock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4AE13538DD100649921 /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clock.h; sourceTree = SOURCE_ROOT; };
+		C35AA4AF13538DD100649921 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = SOURCE_ROOT; };
+		C35AA4B013538DD100649921 /* Connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Connection.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4B113538DD100649921 /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = SOURCE_ROOT; };
+		C35AA4B213538DD100649921 /* Handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Handler.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4B313538DD100649921 /* Handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Handler.h; sourceTree = SOURCE_ROOT; };
+		C35AA4B413538DD100649921 /* IoThreadPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IoThreadPool.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4B513538DD100649921 /* IoThreadPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IoThreadPool.h; sourceTree = SOURCE_ROOT; };
+		C35AA4B613538DD100649921 /* Packet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Packet.h; sourceTree = SOURCE_ROOT; };
+		C35AA4B713538DD100649921 /* PacketPacker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketPacker.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4B813538DD100649921 /* PacketPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketPacker.h; sourceTree = SOURCE_ROOT; };
+		C35AA4B913538DD100649921 /* PacketReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketReader.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4BA13538DD100649921 /* PacketReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketReader.h; sourceTree = SOURCE_ROOT; };
+		C35AA4BB13538DD100649921 /* PacketWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketWriter.h; sourceTree = SOURCE_ROOT; };
+		C35AA4BC13538DD100649921 /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = SOURCE_ROOT; };
+		C35AA4BD13538DD100649921 /* PipeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PipeNode.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4BE13538DD100649921 /* PipeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PipeNode.h; sourceTree = SOURCE_ROOT; };
+		C35AA4BF13538DD100649921 /* Signals.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Signals.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4C013538DD100649921 /* Signals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Signals.h; sourceTree = SOURCE_ROOT; };
+		C35AA4C313538DD100649921 /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4C413538DD100649921 /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = SOURCE_ROOT; };
+		C35AA4C513538DD100649921 /* StackStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StackStream.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4C613538DD100649921 /* StackStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackStream.h; sourceTree = SOURCE_ROOT; };
+		C35AA4C713538DD100649921 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = SOURCE_ROOT; };
+		C35AA4C813538DD100649921 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C3389D60135388960010E3BF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3161E84135776EF0001E128 /* mcrypt.dylib in Frameworks */,
+				C3161E85135776EF0001E128 /* mlog.dylib in Frameworks */,
+				C3161E86135776EF0001E128 /* mstd.dylib in Frameworks */,
+				C3161E67135776A20001E128 /* libz.dylib in Frameworks */,
+				C3161E69135776AA0001E128 /* libcrypto.dylib in Frameworks */,
+				C3161E6B135776B10001E128 /* libssl.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C3161E6D135776CE0001E128 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3161E77135776CE0001E128 /* mcrypt.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3161E70135776CE0001E128 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3161E7A135776CE0001E128 /* mlog.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3161E73135776CE0001E128 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3161E7D135776CE0001E128 /* mstd.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3389D58135388960010E3BF = {
+			isa = PBXGroup;
+			children = (
+				C3161E6C135776CE0001E128 /* mcrypt.xcodeproj */,
+				C3161E6F135776CE0001E128 /* mlog.xcodeproj */,
+				C3161E72135776CE0001E128 /* mstd.xcodeproj */,
+				C3389D65135388960010E3BF /* nexus */,
+				C3389D64135388960010E3BF /* Products */,
+				C3161E66135776A20001E128 /* libz.dylib */,
+				C3161E68135776AA0001E128 /* libcrypto.dylib */,
+				C3161E6A135776B10001E128 /* libssl.dylib */,
+			);
+			sourceTree = "<group>";
+		};
+		C3389D64135388960010E3BF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3389D63135388960010E3BF /* nexus.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3389D65135388960010E3BF /* nexus */ = {
+			isa = PBXGroup;
+			children = (
+				C35AA4A713538DD100649921 /* AsyncGuard.h */,
+				C35AA4A813538DD100649921 /* AsyncOperations.h */,
+				C35AA4A913538DD100649921 /* Buffer.cpp */,
+				C35AA4AA13538DD100649921 /* Buffer.h */,
+				C35AA4AB13538DD100649921 /* Buffers.cpp */,
+				C35AA4AC13538DD100649921 /* Buffers.h */,
+				C35AA4AD13538DD100649921 /* Clock.cpp */,
+				C35AA4AE13538DD100649921 /* Clock.h */,
+				C35AA4AF13538DD100649921 /* Config.h */,
+				C35AA4B013538DD100649921 /* Connection.cpp */,
+				C35AA4B113538DD100649921 /* Connection.h */,
+				C35AA4B213538DD100649921 /* Handler.cpp */,
+				C35AA4B313538DD100649921 /* Handler.h */,
+				C35AA4B413538DD100649921 /* IoThreadPool.cpp */,
+				C35AA4B513538DD100649921 /* IoThreadPool.h */,
+				C35AA4B613538DD100649921 /* Packet.h */,
+				C35AA4B713538DD100649921 /* PacketPacker.cpp */,
+				C35AA4B813538DD100649921 /* PacketPacker.h */,
+				C35AA4B913538DD100649921 /* PacketReader.cpp */,
+				C35AA4BA13538DD100649921 /* PacketReader.h */,
+				C35AA4BB13538DD100649921 /* PacketWriter.h */,
+				C35AA4BC13538DD100649921 /* pch.h */,
+				C35AA4BD13538DD100649921 /* PipeNode.cpp */,
+				C35AA4BE13538DD100649921 /* PipeNode.h */,
+				C35AA4BF13538DD100649921 /* Signals.cpp */,
+				C35AA4C013538DD100649921 /* Signals.h */,
+				C35AA4C313538DD100649921 /* Socket.cpp */,
+				C35AA4C413538DD100649921 /* Socket.h */,
+				C35AA4C513538DD100649921 /* StackStream.cpp */,
+				C35AA4C613538DD100649921 /* StackStream.h */,
+				C35AA4C713538DD100649921 /* Utils.cpp */,
+				C35AA4C813538DD100649921 /* Utils.h */,
+			);
+			path = nexus;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C3389D61135388960010E3BF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C35AA4C913538DD100649921 /* AsyncGuard.h in Headers */,
+				C35AA4CA13538DD100649921 /* AsyncOperations.h in Headers */,
+				C35AA4CC13538DD100649921 /* Buffer.h in Headers */,
+				C35AA4CE13538DD100649921 /* Buffers.h in Headers */,
+				C35AA4D013538DD100649921 /* Clock.h in Headers */,
+				C35AA4D113538DD100649921 /* Config.h in Headers */,
+				C35AA4D313538DD100649921 /* Connection.h in Headers */,
+				C35AA4D513538DD100649921 /* Handler.h in Headers */,
+				C35AA4D713538DD100649921 /* IoThreadPool.h in Headers */,
+				C35AA4D813538DD100649921 /* Packet.h in Headers */,
+				C35AA4DA13538DD100649921 /* PacketPacker.h in Headers */,
+				C35AA4DC13538DD100649921 /* PacketReader.h in Headers */,
+				C35AA4DD13538DD100649921 /* PacketWriter.h in Headers */,
+				C35AA4DE13538DD100649921 /* pch.h in Headers */,
+				C35AA4E013538DD100649921 /* PipeNode.h in Headers */,
+				C35AA4E213538DD100649921 /* Signals.h in Headers */,
+				C35AA4E613538DD100649921 /* Socket.h in Headers */,
+				C35AA4E813538DD100649921 /* StackStream.h in Headers */,
+				C35AA4EA13538DD100649921 /* Utils.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C3389D62135388960010E3BF /* nexus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3389D71135388960010E3BF /* Build configuration list for PBXNativeTarget "nexus" */;
+			buildPhases = (
+				C3389D5F135388960010E3BF /* Sources */,
+				C3389D60135388960010E3BF /* Frameworks */,
+				C3389D61135388960010E3BF /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C3161E7F135776E10001E128 /* PBXTargetDependency */,
+				C3161E81135776E10001E128 /* PBXTargetDependency */,
+				C3161E83135776E10001E128 /* PBXTargetDependency */,
+			);
+			name = nexus;
+			productName = nexus;
+			productReference = C3389D63135388960010E3BF /* nexus.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C3389D5A135388960010E3BF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = IP;
+			};
+			buildConfigurationList = C3389D5D135388960010E3BF /* Build configuration list for PBXProject "nexus" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C3389D58135388960010E3BF;
+			productRefGroup = C3389D64135388960010E3BF /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C3161E6D135776CE0001E128 /* Products */;
+					ProjectRef = C3161E6C135776CE0001E128 /* mcrypt.xcodeproj */;
+				},
+				{
+					ProductGroup = C3161E70135776CE0001E128 /* Products */;
+					ProjectRef = C3161E6F135776CE0001E128 /* mlog.xcodeproj */;
+				},
+				{
+					ProductGroup = C3161E73135776CE0001E128 /* Products */;
+					ProjectRef = C3161E72135776CE0001E128 /* mstd.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				C3389D62135388960010E3BF /* nexus */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C3161E77135776CE0001E128 /* mcrypt.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mcrypt.dylib;
+			remoteRef = C3161E76135776CE0001E128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C3161E7A135776CE0001E128 /* mlog.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mlog.dylib;
+			remoteRef = C3161E79135776CE0001E128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C3161E7D135776CE0001E128 /* mstd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mstd.dylib;
+			remoteRef = C3161E7C135776CE0001E128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C3389D5F135388960010E3BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C35AA4CB13538DD100649921 /* Buffer.cpp in Sources */,
+				C35AA4CD13538DD100649921 /* Buffers.cpp in Sources */,
+				C35AA4CF13538DD100649921 /* Clock.cpp in Sources */,
+				C35AA4D213538DD100649921 /* Connection.cpp in Sources */,
+				C35AA4D413538DD100649921 /* Handler.cpp in Sources */,
+				C35AA4D613538DD100649921 /* IoThreadPool.cpp in Sources */,
+				C35AA4D913538DD100649921 /* PacketPacker.cpp in Sources */,
+				C35AA4DB13538DD100649921 /* PacketReader.cpp in Sources */,
+				C35AA4DF13538DD100649921 /* PipeNode.cpp in Sources */,
+				C35AA4E113538DD100649921 /* Signals.cpp in Sources */,
+				C35AA4E513538DD100649921 /* Socket.cpp in Sources */,
+				C35AA4E713538DD100649921 /* StackStream.cpp in Sources */,
+				C35AA4E913538DD100649921 /* Utils.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C3161E7F135776E10001E128 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mlog;
+			targetProxy = C3161E7E135776E10001E128 /* PBXContainerItemProxy */;
+		};
+		C3161E81135776E10001E128 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mstd;
+			targetProxy = C3161E80135776E10001E128 /* PBXContainerItemProxy */;
+		};
+		C3161E83135776E10001E128 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mcrypt;
+			targetProxy = C3161E82135776E10001E128 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		C3389D6F135388960010E3BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pch.h;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(INCLUDE)",
+					"$(PROJECT_DIR)/..",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lboost_system-mt-d",
+					"-lboost_thread-mt-d",
+				);
+				SDKROOT = macosx10.6;
+				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+			};
+			name = Debug;
+		};
+		C3389D70135388960010E3BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pch.h;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(INCLUDE)",
+					"$(PROJECT_DIR)/..",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C3389D72135388960010E3BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"/usr/local/urdl-0.1/lib\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C3389D73135388960010E3BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"/usr/local/urdl-0.1/lib\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C3389D5D135388960010E3BF /* Build configuration list for PBXProject "nexus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3389D6F135388960010E3BF /* Debug */,
+				C3389D70135388960010E3BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3389D71135388960010E3BF /* Build configuration list for PBXNativeTarget "nexus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3389D72135388960010E3BF /* Debug */,
+				C3389D73135388960010E3BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C3389D5A135388960010E3BF /* Project object */;
+}

@@ -1,0 +1,365 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C3161E5B1357765A0001E128 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E57135776420001E128 /* mstd.dylib */; };
+		C3389D1B1353839C0010E3BF /* Base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D061353839C0010E3BF /* Base64.cpp */; };
+		C3389D1C1353839C0010E3BF /* Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D071353839C0010E3BF /* Base64.h */; };
+		C3389D1D1353839C0010E3BF /* Blowfish.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D081353839C0010E3BF /* Blowfish.cpp */; };
+		C3389D1E1353839C0010E3BF /* Blowfish.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D091353839C0010E3BF /* Blowfish.h */; };
+		C3389D1F1353839C0010E3BF /* Config.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D0A1353839C0010E3BF /* Config.h */; };
+		C3389D201353839C0010E3BF /* crc32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D0B1353839C0010E3BF /* crc32.cpp */; };
+		C3389D211353839C0010E3BF /* crc32.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D0C1353839C0010E3BF /* crc32.h */; };
+		C3389D221353839C0010E3BF /* Crypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D0D1353839C0010E3BF /* Crypt.cpp */; };
+		C3389D231353839C0010E3BF /* Crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D0E1353839C0010E3BF /* Crypt.h */; };
+		C3389D241353839C0010E3BF /* Defines.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D0F1353839C0010E3BF /* Defines.h */; };
+		C3389D251353839C0010E3BF /* MD5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D101353839C0010E3BF /* MD5.cpp */; };
+		C3389D261353839C0010E3BF /* MD5.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D111353839C0010E3BF /* MD5.h */; };
+		C3389D271353839C0010E3BF /* pch.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D121353839C0010E3BF /* pch.h */; };
+		C3389D281353839C0010E3BF /* RSA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D131353839C0010E3BF /* RSA.cpp */; };
+		C3389D291353839C0010E3BF /* RSA.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D141353839C0010E3BF /* RSA.h */; };
+		C3389D2A1353839C0010E3BF /* SHA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D151353839C0010E3BF /* SHA.cpp */; };
+		C3389D2B1353839C0010E3BF /* SHA.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D161353839C0010E3BF /* SHA.h */; };
+		C3389D2C1353839C0010E3BF /* TEA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D171353839C0010E3BF /* TEA.cpp */; };
+		C3389D2D1353839C0010E3BF /* TEA.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D181353839C0010E3BF /* TEA.h */; };
+		C3389D2E1353839C0010E3BF /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D191353839C0010E3BF /* Utils.cpp */; };
+		C3389D2F1353839C0010E3BF /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D1A1353839C0010E3BF /* Utils.h */; };
+		C3DB2FA61394BA9B00A8CB1B /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C3161E56135776420001E128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3161E52135776420001E128 /* mstd.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C32455981352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C3161E591357764E0001E128 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3161E52135776420001E128 /* mstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C32455971352A6B900999158;
+			remoteInfo = mstd;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C3161E52135776420001E128 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C3389CEB135383290010E3BF /* mcrypt.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mcrypt.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3389D061353839C0010E3BF /* Base64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Base64.cpp; sourceTree = SOURCE_ROOT; };
+		C3389D071353839C0010E3BF /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = SOURCE_ROOT; };
+		C3389D081353839C0010E3BF /* Blowfish.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Blowfish.cpp; sourceTree = SOURCE_ROOT; };
+		C3389D091353839C0010E3BF /* Blowfish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blowfish.h; sourceTree = SOURCE_ROOT; };
+		C3389D0A1353839C0010E3BF /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = SOURCE_ROOT; };
+		C3389D0B1353839C0010E3BF /* crc32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc32.cpp; sourceTree = SOURCE_ROOT; };
+		C3389D0C1353839C0010E3BF /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = SOURCE_ROOT; };
+		C3389D0D1353839C0010E3BF /* Crypt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Crypt.cpp; sourceTree = SOURCE_ROOT; };
+		C3389D0E1353839C0010E3BF /* Crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crypt.h; sourceTree = SOURCE_ROOT; };
+		C3389D0F1353839C0010E3BF /* Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = SOURCE_ROOT; };
+		C3389D101353839C0010E3BF /* MD5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MD5.cpp; sourceTree = SOURCE_ROOT; };
+		C3389D111353839C0010E3BF /* MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MD5.h; sourceTree = SOURCE_ROOT; };
+		C3389D121353839C0010E3BF /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = SOURCE_ROOT; };
+		C3389D131353839C0010E3BF /* RSA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RSA.cpp; sourceTree = SOURCE_ROOT; };
+		C3389D141353839C0010E3BF /* RSA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSA.h; sourceTree = SOURCE_ROOT; };
+		C3389D151353839C0010E3BF /* SHA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SHA.cpp; sourceTree = SOURCE_ROOT; };
+		C3389D161353839C0010E3BF /* SHA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHA.h; sourceTree = SOURCE_ROOT; };
+		C3389D171353839C0010E3BF /* TEA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TEA.cpp; sourceTree = SOURCE_ROOT; };
+		C3389D181353839C0010E3BF /* TEA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEA.h; sourceTree = SOURCE_ROOT; };
+		C3389D191353839C0010E3BF /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = SOURCE_ROOT; };
+		C3389D1A1353839C0010E3BF /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = SOURCE_ROOT; };
+		C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.1.0.0.dylib; path = /opt/local/lib/libcrypto.1.0.0.dylib; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C3389CE8135383290010E3BF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3161E5B1357765A0001E128 /* mstd.dylib in Frameworks */,
+				C3DB2FA61394BA9B00A8CB1B /* libcrypto.1.0.0.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C3161E53135776420001E128 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3161E57135776420001E128 /* mstd.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3389CE0135383290010E3BF = {
+			isa = PBXGroup;
+			children = (
+				C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */,
+				C3161E52135776420001E128 /* mstd.xcodeproj */,
+				C3389CED135383290010E3BF /* mcrypt */,
+				C3389CEC135383290010E3BF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C3389CEC135383290010E3BF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3389CEB135383290010E3BF /* mcrypt.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3389CED135383290010E3BF /* mcrypt */ = {
+			isa = PBXGroup;
+			children = (
+				C3389D061353839C0010E3BF /* Base64.cpp */,
+				C3389D071353839C0010E3BF /* Base64.h */,
+				C3389D081353839C0010E3BF /* Blowfish.cpp */,
+				C3389D091353839C0010E3BF /* Blowfish.h */,
+				C3389D0A1353839C0010E3BF /* Config.h */,
+				C3389D0B1353839C0010E3BF /* crc32.cpp */,
+				C3389D0C1353839C0010E3BF /* crc32.h */,
+				C3389D0D1353839C0010E3BF /* Crypt.cpp */,
+				C3389D0E1353839C0010E3BF /* Crypt.h */,
+				C3389D0F1353839C0010E3BF /* Defines.h */,
+				C3389D101353839C0010E3BF /* MD5.cpp */,
+				C3389D111353839C0010E3BF /* MD5.h */,
+				C3389D121353839C0010E3BF /* pch.h */,
+				C3389D131353839C0010E3BF /* RSA.cpp */,
+				C3389D141353839C0010E3BF /* RSA.h */,
+				C3389D151353839C0010E3BF /* SHA.cpp */,
+				C3389D161353839C0010E3BF /* SHA.h */,
+				C3389D171353839C0010E3BF /* TEA.cpp */,
+				C3389D181353839C0010E3BF /* TEA.h */,
+				C3389D191353839C0010E3BF /* Utils.cpp */,
+				C3389D1A1353839C0010E3BF /* Utils.h */,
+			);
+			path = mcrypt;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C3389CE9135383290010E3BF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3389D1C1353839C0010E3BF /* Base64.h in Headers */,
+				C3389D1E1353839C0010E3BF /* Blowfish.h in Headers */,
+				C3389D1F1353839C0010E3BF /* Config.h in Headers */,
+				C3389D211353839C0010E3BF /* crc32.h in Headers */,
+				C3389D231353839C0010E3BF /* Crypt.h in Headers */,
+				C3389D241353839C0010E3BF /* Defines.h in Headers */,
+				C3389D261353839C0010E3BF /* MD5.h in Headers */,
+				C3389D271353839C0010E3BF /* pch.h in Headers */,
+				C3389D291353839C0010E3BF /* RSA.h in Headers */,
+				C3389D2B1353839C0010E3BF /* SHA.h in Headers */,
+				C3389D2D1353839C0010E3BF /* TEA.h in Headers */,
+				C3389D2F1353839C0010E3BF /* Utils.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C3389CEA135383290010E3BF /* mcrypt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3389CF9135383290010E3BF /* Build configuration list for PBXNativeTarget "mcrypt" */;
+			buildPhases = (
+				C3389CE7135383290010E3BF /* Sources */,
+				C3389CE8135383290010E3BF /* Frameworks */,
+				C3389CE9135383290010E3BF /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C3161E5A1357764E0001E128 /* PBXTargetDependency */,
+			);
+			name = mcrypt;
+			productName = mcrypt;
+			productReference = C3389CEB135383290010E3BF /* mcrypt.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C3389CE2135383290010E3BF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = IP;
+			};
+			buildConfigurationList = C3389CE5135383290010E3BF /* Build configuration list for PBXProject "mcrypt" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C3389CE0135383290010E3BF;
+			productRefGroup = C3389CEC135383290010E3BF /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C3161E53135776420001E128 /* Products */;
+					ProjectRef = C3161E52135776420001E128 /* mstd.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				C3389CEA135383290010E3BF /* mcrypt */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C3161E57135776420001E128 /* mstd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mstd.dylib;
+			remoteRef = C3161E56135776420001E128 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C3389CE7135383290010E3BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3389D1B1353839C0010E3BF /* Base64.cpp in Sources */,
+				C3389D1D1353839C0010E3BF /* Blowfish.cpp in Sources */,
+				C3389D201353839C0010E3BF /* crc32.cpp in Sources */,
+				C3389D221353839C0010E3BF /* Crypt.cpp in Sources */,
+				C3389D251353839C0010E3BF /* MD5.cpp in Sources */,
+				C3389D281353839C0010E3BF /* RSA.cpp in Sources */,
+				C3389D2A1353839C0010E3BF /* SHA.cpp in Sources */,
+				C3389D2C1353839C0010E3BF /* TEA.cpp in Sources */,
+				C3389D2E1353839C0010E3BF /* Utils.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C3161E5A1357764E0001E128 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mstd;
+			targetProxy = C3161E591357764E0001E128 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		C3389CF7135383290010E3BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pch.h;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(INCLUDE)",
+					"$(PROJECT_DIR)/..",
+				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lboost_system-mt-d",
+					"-lboost_filesystem-mt-d",
+				);
+				SDKROOT = macosx10.5;
+				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+			};
+			name = Debug;
+		};
+		C3389CF8135383290010E3BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pch.h;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(INCLUDE)",
+					"$(PROJECT_DIR)/..",
+				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lboost_system-mt",
+					"-lboost_filesystem-mt",
+				);
+				SDKROOT = macosx10.5;
+				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+			};
+			name = Release;
+		};
+		C3389CFA135383290010E3BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C3389CFB135383290010E3BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C3389CE5135383290010E3BF /* Build configuration list for PBXProject "mcrypt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3389CF7135383290010E3BF /* Debug */,
+				C3389CF8135383290010E3BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3389CF9135383290010E3BF /* Build configuration list for PBXNativeTarget "mcrypt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3389CFA135383290010E3BF /* Debug */,
+				C3389CFB135383290010E3BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C3389CE2135383290010E3BF /* Project object */;
+}

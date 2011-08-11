@@ -1,0 +1,31 @@
+lib boost_thread
+    :
+    : <name>boost_thread-d <variant>debug
+    ;
+
+lib boost_thread
+    :
+    : <name>boost_thread <variant>release
+    ;
+
+lib boost_system
+    :
+    : <name>boost_system-d <variant>debug
+    ;
+
+lib boost_system
+    :
+    : <name>boost_system <variant>release
+    ;
+
+lib boost_filesystem
+    :
+    : <name>boost_filesystem-d <variant>debug
+    ;
+
+lib boost_filesystem
+    :
+    : <name>boost_filesystem <variant>release
+    ;
+
+lib vlcmm : [ glob *.cpp ] : <variant>release ;

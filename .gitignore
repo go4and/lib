@@ -1,0 +1,10 @@
+/io
+/keyhook
+/KMP
+/mxsd
+/swutils
+/xmldom
+.svn
+*.mode1v3
+*.pbxuser
+*.user
