@@ -67,8 +67,8 @@ inline const Tree & checked_get(const Tree & inp, const typename Tree::path_type
 template<class Tree>
 void merge(Tree & out, const Tree & inp)
 {
-    BOOST_FOREACH(const typename Tree::value_type & i, inp)
-        out.put_child(i.first, i.second);
+    for(const typename Tree::const_iterator i = inp.begin(), end = inp.end(); i != end; ++i)
+        out.put_child(i->first, i->second);
 }
 
 template<class Tree>

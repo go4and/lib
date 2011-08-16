@@ -648,6 +648,8 @@ Manager::~Manager()
     }
 }
 
+MSTD_SINGLETON_IMPLEMENTATION(Manager);
+
 }
 
 #endif

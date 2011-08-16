@@ -8,6 +8,7 @@
 #include <iosfwd>
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/logic/tribool.hpp>
 
 #include <libpq-fe.h>
@@ -41,6 +42,23 @@ private:
     PGconn * conn_;
 };
 
+const size_t copyDataBufferSize = 2048; 
+
+struct CopyData {
+    char * pos;
+    char buffer[copyDataBufferSize];
+    
+    inline ptrdiff_t left() const
+    {
+        return buffer + copyDataBufferSize - pos;
+    }
+    
+    inline void begin()
+    {
+        pos = buffer;
+    }
+};
+
 class Connection : private PGConnHolder {
 public:
     Connection(const std::string & options);
@@ -53,9 +71,24 @@ public:
     void execVoid(const char * query, bool canHaveErrors = false);
     void execVoid(const char * query, size_t size, const char * const * values, int * lengths, bool canHaveErrors = false);
     void execVoid(const std::string & query, bool canHaveErrors = false);
+    
+    void copyBegin(const char * query, bool canHaveErrors = false);
+    void copyBegin(const std::string & query, bool canHaveErrors = false);
+
+    void copyStartRow(int16_t count);
+    void copyPutInt16(int16_t value);
+    void copyPutInt32(int32_t value);
+    void copyPutInt64(int64_t value);
+    void copyPut(const char * value, size_t len);
+
+    Result copyEnd();
 private:
+    void copyFlushBuffer();
+    void copySendBuffer(const char * begin, int len);
+    int wait(bool reading);
     void checkResult(const char * query, Result & result, bool canHaveErrors, const boost::posix_time::ptime & start);
 
+    boost::scoped_ptr<CopyData> copyData_;
     friend class ParametricExecution;
 };
 
@@ -288,6 +321,9 @@ class UnknownTypeTag;
 typedef mstd::own_exception<UnknownTypeTag, Exception> UnknownTypeException;
 class InvalidTypeTag;
 typedef mstd::own_exception<InvalidTypeTag, Exception> InvalidTypeException;
+class CopyFailedTag;
+typedef mstd::own_exception<CopyFailedTag, Exception> CopyFailedException;
+
 class OidTag;
 typedef boost::error_info<OidTag, Oid> OidInfo;
 class ExpectedOidTag;

@@ -12,6 +12,8 @@
 
 #include <mlog/Logging.h>
 
+#include <mlog/Dumper.h>
+
 #include "psql.h"
 
 MLOG_DECLARE_LOGGER(psql);
@@ -20,21 +22,21 @@ namespace psql {
 
 namespace {
 
-void write2(char *& pos, boost::int16_t value)
+void write2(char *& pos, int16_t value)
 {
-    *mstd::pointer_cast<boost::int16_t*>(pos) = mstd::hton(value);
+    *mstd::pointer_cast<int16_t*>(pos) = mstd::hton(value);
     pos += 2;
 }
 
-void write4(char *& pos, boost::int32_t value)
+void write4(char *& pos, int32_t value)
 {
-    *mstd::pointer_cast<boost::int32_t*>(pos) = mstd::hton(value);
+    *mstd::pointer_cast<int32_t*>(pos) = mstd::hton(value);
     pos += 4;
 }
 
-void write8(char *& pos, boost::int64_t value)
+void write8(char *& pos, int64_t value)
 {
-    *mstd::pointer_cast<boost::int64_t*>(pos) = mstd::hton(value);
+    *mstd::pointer_cast<int64_t*>(pos) = mstd::hton(value);
     pos += 8;
 }
 
@@ -60,32 +62,35 @@ PGconn * PGConnHolder::conn()
 // class Connection
 ////////////////////////////////////////////////////////////////////////////////
 
+int Connection::wait(bool reading)
+{
+    int socket = PQsocket(conn());
+
+    fd_set sockets;
+    FD_ZERO(&sockets);
+    FD_SET(socket, &sockets);
+
+    timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 100000;
+
+    if(reading)
+        return select(socket + 1, &sockets, 0, 0, &timeout);
+    else
+        return select(socket + 1, 0, &sockets, 0, &timeout);
+}
+
 Connection::Connection(const std::string & cmd)
     : PGConnHolder(cmd)
 {
     if(!conn() || PQstatus(conn()) == CONNECTION_BAD)
         BOOST_THROW_EXCEPTION(ConnectionException());
 
-    int socket = PQsocket(conn());
     PostgresPollingStatusType status = PGRES_POLLING_WRITING;
     while(status != PGRES_POLLING_OK)
     {
-        fd_set sockets;
-        FD_ZERO(&sockets);
-        FD_SET(socket, &sockets);
+        int result = wait(status == PGRES_POLLING_READING);
 
-        int result = 0;
-        timeval timeout;
-        timeout.tv_sec = 0;
-        timeout.tv_usec = 100000;
-        if(status == PGRES_POLLING_READING)
-        {
-            result = select(socket + 1, &sockets, 0, 0, &timeout);
-        } else if(status == PGRES_POLLING_WRITING)
-        {
-            result = select(socket + 1, 0, &sockets, 0, &timeout);
-        }
-        
         if(result > 0)
         {
             status = PQconnectPoll(conn());
@@ -118,10 +123,7 @@ void Connection::checkResult(const char * query, Result & result, bool canHaveEr
         MLOG_MESSAGE(Error, "slow query: " << query << ", passed: " << passed);
     if(!result.success())
     {
-        if(!canHaveErrors)
-            MLOG_MESSAGE(Error, "exec failed: " << result.status() << ", msg: " << result.error() << ", query: " << query);
-        else
-            MLOG_MESSAGE(Notice, "exec failed: " << result.status() << ", msg: " << result.error() << ", query: " << query);
+        MLOG_MESSAGE_EX(!canHaveErrors ? mlog::llError : mlog::llNotice, "exec failed: " << result.status() << ", msg: " << result.error() << ", query: " << query);
         BOOST_THROW_EXCEPTION(ExecException() << mstd::error_message(result.error()));
     }
 }
@@ -157,6 +159,128 @@ void Connection::execVoid(const char * query, bool canHaveErrors)
 void Connection::execVoid(const std::string & query, bool canHaveErrors)
 {
     execVoid(query.c_str(), canHaveErrors);
+}
+
+void Connection::copyBegin(const char * query, bool canHaveErrors)
+{
+    MLOG_DEBUG("copyBegin(" << query << ", " << canHaveErrors << ")");
+    
+    boost::posix_time::ptime start = boost::posix_time::microsec_clock::universal_time();
+    Result result(PQexecParams(conn(), query, 0, 0, 0, 0, 0, 0));
+    checkResult(query, result, canHaveErrors, start);
+    
+    if(!copyData_)
+        copyData_.reset(new CopyData);
+    copyData_->begin();
+
+    static const char prefix[] = "PGCOPY\n\xff\r\n\0\0\0\0\0\0\0\0\0";
+    static const size_t prefixLen = sizeof(prefix) - 1;
+    memcpy(copyData_->pos, prefix, prefixLen);
+    copyData_->pos += prefixLen;
+}
+
+void Connection::copyStartRow(int16_t columns)
+{
+    if(copyData_->left() < 2)
+        copyFlushBuffer();
+    write2(copyData_->pos, columns);
+}
+
+void Connection::copyBegin(const std::string & query, bool canHaveErrors)
+{
+    copyBegin(query.c_str(), canHaveErrors);
+}
+
+void Connection::copySendBuffer(const char * begin, int len)
+{
+    // MLOG_DEBUG("copySendBuffer(" << mlog::dump(begin, len) << ")");
+    int res;
+    while(!(res = PQputCopyData(conn(), begin, len)))
+        wait(false);
+    if(res < 0)
+        BOOST_THROW_EXCEPTION(CopyFailedException());
+}
+
+void Connection::copyFlushBuffer()
+{
+    char * begin = copyData_->buffer;
+    int len = copyData_->pos - begin;
+    if(len)
+    {
+        copySendBuffer(begin, len);
+        copyData_->pos = begin;
+    }
+}
+
+void Connection::copyPutInt16(int16_t value)
+{
+    if(copyData_->left() < 6)
+        copyFlushBuffer();
+    write4(copyData_->pos, 2);
+    write2(copyData_->pos, value);
+}
+
+void Connection::copyPutInt32(int32_t value)
+{
+    if(copyData_->left() < 8)
+        copyFlushBuffer();
+    write4(copyData_->pos, 4);
+    write4(copyData_->pos, value);
+}
+
+void Connection::copyPutInt64(int64_t value)
+{
+    if(copyData_->left() < 12)
+        copyFlushBuffer();
+    write4(copyData_->pos, 8);
+    write8(copyData_->pos, value);
+}
+
+void Connection::copyPut(const char * value, size_t len)
+{
+    if(copyData_->left() < 4)
+        copyFlushBuffer();
+    write4(copyData_->pos, len);
+    size_t left = copyData_->left();
+    if(left >= len)
+    {
+        memcpy(copyData_->pos, value, len);
+        copyData_->pos += len;        
+    } else if(left + copyDataBufferSize - 0x10 > len)
+    {        
+        memcpy(copyData_->pos, value, left);
+        copyData_->pos += left;
+        copyFlushBuffer();
+
+        value += left;
+        len -= left;
+        memcpy(copyData_->pos, value, len);
+        copyData_->pos += len;
+    } else {
+        copyFlushBuffer();
+        copySendBuffer(value, len);
+    }
+}
+
+Result Connection::copyEnd()
+{
+    if(copyData_->left() < 2)
+        copyFlushBuffer();
+    write2(copyData_->pos, -1);
+    copyFlushBuffer();
+    int res;
+    while(!(res = PQputCopyEnd(conn(), 0)))
+        wait(false);
+    if(res < 0)
+        BOOST_THROW_EXCEPTION(CopyFailedException());
+
+    boost::posix_time::ptime start = boost::posix_time::microsec_clock::universal_time();
+    Result result(PQgetResult(conn()));
+    checkResult("<END COPY>", result, false, start);
+    
+    MLOG_DEBUG("copyEnd - ok");
+    
+    return move(result);
 }
 
 Result Connection::exec(const char * query, size_t size, const char * const * values, int * lengths, bool canHaveErrors)
@@ -454,7 +578,7 @@ Result::~Result()
 bool Result::success() const
 {
     ExecStatusType status = PQresultStatus(value_);
-    return status == PGRES_COMMAND_OK || status == PGRES_TUPLES_OK;
+    return status == PGRES_COMMAND_OK || status == PGRES_TUPLES_OK || status == PGRES_COPY_IN || status == PGRES_COPY_OUT;
 }
 
 ExecStatusType Result::status() const

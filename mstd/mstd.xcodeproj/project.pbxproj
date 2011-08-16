@@ -300,16 +300,8 @@
 				C32456311352A9C800999158 /* wide_stream.hpp */,
 				C32456321352A9C800999158 /* xml.cpp */,
 				C32456331352A9C800999158 /* xml.hpp */,
-				C324559B1352A6B900999158 /* Supporting Files */,
 			);
 			path = mstd;
-			sourceTree = "<group>";
-		};
-		C324559B1352A6B900999158 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		C32455EE1352A9C800999158 /* detail */ = {

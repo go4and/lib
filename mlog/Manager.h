@@ -99,7 +99,8 @@ typedef boost::intrusive_ptr<LogDevice> LogDevicePtr;
 
 typedef boost::function<void(uint32_t, LogLevel, const char * logger, const char * msg, size_t len)> Listener;
 
-class MLOG_DECL Manager : public mstd::singleton<Manager> {
+class MLOG_DECL Manager {
+    MSTD_SINGLETON_DEFINITION(Manager);
 public:
     ~Manager();
 
@@ -122,7 +123,6 @@ private:
     detail::LoggerImpl & registerLogger(const std::string & name, boost::unique_lock<boost::mutex> & lock);
 
     friend class Logger;
-    MSTD_SINGLETON_DECLARATION(Manager);
 
     typedef boost::unordered_map<std::string, detail::LoggerImpl> Loggers;
     typedef std::vector<LogDevicePtr> DeviceGroup;

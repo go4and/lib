@@ -1,0 +1,384 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C346423813D3306700716430 /* CurlUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346422F13D3306700716430 /* CurlUtils.cpp */; };
+		C346423913D3306700716430 /* CurlUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423013D3306700716430 /* CurlUtils.h */; };
+		C346423A13D3306700716430 /* Download.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346423113D3306700716430 /* Download.cpp */; };
+		C346423B13D3306700716430 /* Download.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423213D3306700716430 /* Download.h */; };
+		C346423C13D3306700716430 /* DownloadDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423313D3306700716430 /* DownloadDefines.h */; };
+		C346423D13D3306700716430 /* DownloadStats.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423413D3306700716430 /* DownloadStats.h */; };
+		C346423E13D3306700716430 /* HTTP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346423513D3306700716430 /* HTTP.cpp */; };
+		C346423F13D3306700716430 /* HTTP.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423613D3306700716430 /* HTTP.h */; };
+		C346424013D3306700716430 /* pch.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423713D3306700716430 /* pch.h */; };
+		C346427613D331C700716430 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C346426513D3316700716430 /* mlog.dylib */; };
+		C346427713D331C700716430 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C346425F13D3315D00716430 /* mstd.dylib */; };
+		C346433813D3336B00716430 /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C346433713D3336B00716430 /* libcurl.4.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C346425E13D3315D00716430 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C346425A13D3315D00716430 /* mstd.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C32455981352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C346426413D3316700716430 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C346426013D3316700716430 /* mlog.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C3F10D4F1352FCE200D8C945;
+			remoteInfo = mlog;
+		};
+		C346427213D331B900716430 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C346425A13D3315D00716430 /* mstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C32455971352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C346427413D331B900716430 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C346426013D3316700716430 /* mlog.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C3F10D4E1352FCE200D8C945;
+			remoteInfo = mlog;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C346422F13D3306700716430 /* CurlUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CurlUtils.cpp; sourceTree = "<group>"; };
+		C346423013D3306700716430 /* CurlUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurlUtils.h; sourceTree = "<group>"; };
+		C346423113D3306700716430 /* Download.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Download.cpp; sourceTree = "<group>"; };
+		C346423213D3306700716430 /* Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Download.h; sourceTree = "<group>"; };
+		C346423313D3306700716430 /* DownloadDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadDefines.h; sourceTree = "<group>"; };
+		C346423413D3306700716430 /* DownloadStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadStats.h; sourceTree = "<group>"; };
+		C346423513D3306700716430 /* HTTP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HTTP.cpp; sourceTree = "<group>"; };
+		C346423613D3306700716430 /* HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTP.h; sourceTree = "<group>"; };
+		C346423713D3306700716430 /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = "<group>"; };
+		C346425A13D3315D00716430 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../../../trunk/cpp/lib/mstd/mstd.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C346426013D3316700716430 /* mlog.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mlog.xcodeproj; path = ../../../trunk/cpp/lib/mlog/mlog.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C346433713D3336B00716430 /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.4.dylib; path = /opt/local/lib/libcurl.4.dylib; sourceTree = "<absolute>"; };
+		D2AAC09D05546B4700DB518D /* mnet.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mnet.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D2AAC09B05546B4700DB518D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C346433813D3336B00716430 /* libcurl.4.dylib in Frameworks */,
+				C346427613D331C700716430 /* mlog.dylib in Frameworks */,
+				C346427713D331C700716430 /* mstd.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DDFF38A45A11DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC09D05546B4700DB518D /* mnet.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* mnet */ = {
+			isa = PBXGroup;
+			children = (
+				C346433713D3336B00716430 /* libcurl.4.dylib */,
+				C346425913D3314900716430 /* Dependencies */,
+				08FB77ACFE841707C02AAC07 /* Source */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DDFF38A45A11DB9C8B /* Products */,
+			);
+			name = mnet;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		08FB77ACFE841707C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				C346422F13D3306700716430 /* CurlUtils.cpp */,
+				C346423013D3306700716430 /* CurlUtils.h */,
+				C346423113D3306700716430 /* Download.cpp */,
+				C346423213D3306700716430 /* Download.h */,
+				C346423313D3306700716430 /* DownloadDefines.h */,
+				C346423413D3306700716430 /* DownloadStats.h */,
+				C346423513D3306700716430 /* HTTP.cpp */,
+				C346423613D3306700716430 /* HTTP.h */,
+				C346423713D3306700716430 /* pch.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		C346425913D3314900716430 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				C346426013D3316700716430 /* mlog.xcodeproj */,
+				C346425A13D3315D00716430 /* mstd.xcodeproj */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		C346425B13D3315D00716430 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C346425F13D3315D00716430 /* mstd.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C346426113D3316700716430 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C346426513D3316700716430 /* mlog.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC09905546B4700DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C346423913D3306700716430 /* CurlUtils.h in Headers */,
+				C346423B13D3306700716430 /* Download.h in Headers */,
+				C346423C13D3306700716430 /* DownloadDefines.h in Headers */,
+				C346423D13D3306700716430 /* DownloadStats.h in Headers */,
+				C346423F13D3306700716430 /* HTTP.h in Headers */,
+				C346424013D3306700716430 /* pch.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC09C05546B4700DB518D /* mnet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB916008733D950010E9CD /* Build configuration list for PBXNativeTarget "mnet" */;
+			buildPhases = (
+				D2AAC09905546B4700DB518D /* Headers */,
+				D2AAC09B05546B4700DB518D /* Frameworks */,
+				D2AAC09A05546B4700DB518D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C346427313D331B900716430 /* PBXTargetDependency */,
+				C346427513D331B900716430 /* PBXTargetDependency */,
+			);
+			name = mnet;
+			productName = libmnet;
+			productReference = D2AAC09D05546B4700DB518D /* mnet.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB916408733D950010E9CD /* Build configuration list for PBXProject "mnet" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 0867D691FE84028FC02AAC07 /* mnet */;
+			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C346426113D3316700716430 /* Products */;
+					ProjectRef = C346426013D3316700716430 /* mlog.xcodeproj */;
+				},
+				{
+					ProductGroup = C346425B13D3315D00716430 /* Products */;
+					ProjectRef = C346425A13D3315D00716430 /* mstd.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				D2AAC09C05546B4700DB518D /* mnet */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C346425F13D3315D00716430 /* mstd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mstd.dylib;
+			remoteRef = C346425E13D3315D00716430 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C346426513D3316700716430 /* mlog.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mlog.dylib;
+			remoteRef = C346426413D3316700716430 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC09A05546B4700DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C346423813D3306700716430 /* CurlUtils.cpp in Sources */,
+				C346423A13D3306700716430 /* Download.cpp in Sources */,
+				C346423E13D3306700716430 /* HTTP.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C346427313D331B900716430 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mstd;
+			targetProxy = C346427213D331B900716430 /* PBXContainerItemProxy */;
+		};
+		C346427513D331B900716430 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mlog;
+			targetProxy = C346427413D331B900716430 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB916108733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
+			};
+			name = Debug;
+		};
+		1DEB916208733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
+				STRIP_INSTALLED_PRODUCT = YES;
+				STRIP_STYLE = "non-global";
+			};
+			name = Release;
+		};
+		1DEB916508733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pch.h;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(INCLUDE)",
+					"$(PROJECT_DIR)/..",
+				);
+				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lboost_filesystem-mt-d",
+					"-lboost_system-mt-d",
+					"-lboost_thread-mt-d",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = mnet;
+				SDKROOT = macosx10.5;
+				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+			};
+			name = Debug;
+		};
+		1DEB916608733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pch.h;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(INCLUDE)",
+					"$(PROJECT_DIR)/..",
+				);
+				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lboost_filesystem-mt",
+					"-lboost_system-mt",
+					"-lboost_thread-mt",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = mnet;
+				SDKROOT = macosx10.5;
+				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB916008733D950010E9CD /* Build configuration list for PBXNativeTarget "mnet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916108733D950010E9CD /* Debug */,
+				1DEB916208733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB916408733D950010E9CD /* Build configuration list for PBXProject "mnet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916508733D950010E9CD /* Debug */,
+				1DEB916608733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

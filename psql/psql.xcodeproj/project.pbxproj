@@ -9,8 +9,7 @@
 /* Begin PBXBuildFile section */
 		C35AA50C135391D500649921 /* psql.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA50A135391D500649921 /* psql.cpp */; };
 		C35AA50D135391D500649921 /* psql.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA50B135391D500649921 /* psql.h */; };
-		C35AA5131353991100649921 /* libboost_system-mt-d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C35AA5121353991100649921 /* libboost_system-mt-d.dylib */; };
-		C35AA5151353999C00649921 /* libpq.5.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C35AA5141353999C00649921 /* libpq.5.3.dylib */; };
+		C3660D5913F5A1FB001F51AA /* libpq.5.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */; };
 		C38B10DF135778F900F7A097 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C38B10D6135778E200F7A097 /* mlog.dylib */; };
 		C38B10E0135778F900F7A097 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C38B10D9135778E200F7A097 /* mstd.dylib */; };
 /* End PBXBuildFile section */
@@ -50,8 +49,7 @@
 		C3389D47135388790010E3BF /* psql.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = psql.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C35AA50A135391D500649921 /* psql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = psql.cpp; sourceTree = SOURCE_ROOT; };
 		C35AA50B135391D500649921 /* psql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psql.h; sourceTree = SOURCE_ROOT; };
-		C35AA5121353991100649921 /* libboost_system-mt-d.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_system-mt-d.dylib"; path = "../../../../../../../usr/local/boost_1_46_1/stage/lib/libboost_system-mt-d.dylib"; sourceTree = "<group>"; };
-		C35AA5141353999C00649921 /* libpq.5.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpq.5.3.dylib; path = ../../../../../../../opt/local/lib/postgresql90/libpq.5.3.dylib; sourceTree = "<group>"; };
+		C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpq.5.3.dylib; path = /opt/local/lib/postgresql90/libpq.5.3.dylib; sourceTree = "<absolute>"; };
 		C38B10CE135778E200F7A097 /* mlog.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mlog.xcodeproj; path = ../mlog/mlog.xcodeproj; sourceTree = SOURCE_ROOT; };
 		C38B10D1135778E200F7A097 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -63,8 +61,7 @@
 			files = (
 				C38B10DF135778F900F7A097 /* mlog.dylib in Frameworks */,
 				C38B10E0135778F900F7A097 /* mstd.dylib in Frameworks */,
-				C35AA5151353999C00649921 /* libpq.5.3.dylib in Frameworks */,
-				C35AA5131353991100649921 /* libboost_system-mt-d.dylib in Frameworks */,
+				C3660D5913F5A1FB001F51AA /* libpq.5.3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,10 +73,9 @@
 			children = (
 				C38B10CE135778E200F7A097 /* mlog.xcodeproj */,
 				C38B10D1135778E200F7A097 /* mstd.xcodeproj */,
-				C35AA5141353999C00649921 /* libpq.5.3.dylib */,
-				C35AA5121353991100649921 /* libboost_system-mt-d.dylib */,
 				C3389D49135388790010E3BF /* psql */,
 				C3389D48135388790010E3BF /* Products */,
+				C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */,
 			);
 			sourceTree = "<group>";
 		};
@@ -229,7 +225,7 @@
 		C3389D53135388790010E3BF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -244,16 +240,16 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.6;
+				OTHER_LDFLAGS = "-lboost_system-mt-d";
+				SDKROOT = macosx10.5;
 			};
 			name = Debug;
 		};
 		C3389D54135388790010E3BF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -265,8 +261,7 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.5;
 			};
 			name = Release;
 		};
@@ -279,7 +274,6 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/boost_1_46_1/stage/lib,
 					/opt/local/lib/postgresql90,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -295,7 +289,6 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/boost_1_46_1/stage/lib,
 					/opt/local/lib/postgresql90,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
