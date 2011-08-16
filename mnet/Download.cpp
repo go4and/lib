@@ -99,11 +99,11 @@ private:
 #else
         fseeko(out, begin, SEEK_SET);
 #endif
-        fwrite(buf, static_cast<size_t>(len), 1, out);
+        size_t written = fwrite(buf, static_cast<size_t>(len), 1, out);
         fflush(out);
         begin += len;
         worker->downloaded_ += len;
-        MLOG_MESSAGE(Debug, "write(" << len << ", " << worker->downloaded_ << ')');
+        MLOG_MESSAGE(Debug, "write(" << len << ", " << worker->downloaded_ << "), written: " << written);
         return static_cast<size_t>(len);
     }
 
@@ -122,8 +122,8 @@ using namespace download_impl;
 class Download::Impl {
 public:
     explicit Impl(Download * parent, const std::string & url, const boost::filesystem::wpath & localfile, filesize_t size, const Listener & listener)
-        : parent_(parent), url_(url), localfile_(localfile), size_(size), listener_(listener), prevElapsed_(boost::posix_time::seconds(0)),
-          elapsed_(0), active_(false)
+        : parent_(parent), url_(url), localfile_(localfile), size_(size), listener_(listener), active_(false),
+          prevElapsed_(boost::posix_time::seconds(0)), elapsed_(0)
     {
         boost::filesystem::ifstream inp(metaFile(), std::ios::binary);
         if(inp)
@@ -278,7 +278,7 @@ private:
                         int rh = 0;
                         while(curl_multi_perform(curlm_, &rh) == CURLM_CALL_MULTI_PERFORM);
                         CURLMsg * msg;
-                        while(msg = curl_multi_info_read(curlm_, &rh))
+                        while((msg = curl_multi_info_read(curlm_, &rh)) != 0)
                         {
                             if(msg->msg == CURLMSG_DONE)
                             {
@@ -393,11 +393,18 @@ private:
             }
             size_t size = (p - buf) * sizeof(*buf);
             fseek(out, 0, SEEK_SET);
-            fwrite(buf, size, 1, out);
+            size_t written = fwrite(buf, size, 1, out);
+            if(written != size)
+                MLOG_ERROR("mata save failed: " << written << " vs " << size);
 #if BOOST_WINDOWS
             _chsize(_fileno(out), size);
 #else
-            ftruncate(fileno(out), size);
+            int res = ftruncate(fileno(out), size);
+            if(res < 0)
+            {
+                int err = errno;
+                MLOG_ERROR("failed to truncate meta: " << err);
+            }
 #endif
             fflush(out);
         }

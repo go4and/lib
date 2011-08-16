@@ -39,7 +39,7 @@ inline void atomic_write<8>(volatile void *ptr, boost::uint64_t value)
         __asm__ __volatile__ ( "fildq %1\n\t"
                                "fistpq (%2)" :  "=m"(*static_cast<volatile boost::uint64_t*>(ptr)) : "m"(value), "r"(ptr) : "memory" );
     } else
-        generic_modify<8>(ptr, boost::phoenix::val(value));
+        generic_modify<8>(ptr, Set<uint64_t>(value));
 }
 
 } }

@@ -45,6 +45,8 @@
 		C35AA4E813538DD100649921 /* StackStream.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4C613538DD100649921 /* StackStream.h */; };
 		C35AA4E913538DD100649921 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4C713538DD100649921 /* Utils.cpp */; };
 		C35AA4EA13538DD100649921 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4C813538DD100649921 /* Utils.h */; };
+		C366148213FA83C1001F51AA /* REST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C366148013FA83C1001F51AA /* REST.cpp */; };
+		C366148313FA83C1001F51AA /* REST.h in Headers */ = {isa = PBXBuildFile; fileRef = C366148113FA83C1001F51AA /* REST.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +134,8 @@
 		C35AA4C613538DD100649921 /* StackStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackStream.h; sourceTree = SOURCE_ROOT; };
 		C35AA4C713538DD100649921 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = SOURCE_ROOT; };
 		C35AA4C813538DD100649921 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = SOURCE_ROOT; };
+		C366148013FA83C1001F51AA /* REST.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = REST.cpp; sourceTree = SOURCE_ROOT; };
+		C366148113FA83C1001F51AA /* REST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REST.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,6 +228,8 @@
 				C35AA4BC13538DD100649921 /* pch.h */,
 				C35AA4BD13538DD100649921 /* PipeNode.cpp */,
 				C35AA4BE13538DD100649921 /* PipeNode.h */,
+				C366148013FA83C1001F51AA /* REST.cpp */,
+				C366148113FA83C1001F51AA /* REST.h */,
 				C35AA4BF13538DD100649921 /* Signals.cpp */,
 				C35AA4C013538DD100649921 /* Signals.h */,
 				C35AA4C313538DD100649921 /* Socket.cpp */,
@@ -262,6 +268,7 @@
 				C35AA4E613538DD100649921 /* Socket.h in Headers */,
 				C35AA4E813538DD100649921 /* StackStream.h in Headers */,
 				C35AA4EA13538DD100649921 /* Utils.h in Headers */,
+				C366148313FA83C1001F51AA /* REST.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,6 +376,7 @@
 				C35AA4E513538DD100649921 /* Socket.cpp in Sources */,
 				C35AA4E713538DD100649921 /* StackStream.cpp in Sources */,
 				C35AA4E913538DD100649921 /* Utils.cpp in Sources */,
+				C366148213FA83C1001F51AA /* REST.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,8 +405,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -413,24 +421,23 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lboost_system-mt-d",
 					"-lboost_thread-mt-d",
 				);
-				SDKROOT = macosx10.6;
-				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				SDKROOT = macosx10.5;
+				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Debug;
 		};
 		C3389D70135388960010E3BF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pch.h;
@@ -442,8 +449,10 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				SDKROOT = macosx;
+				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.5;
+				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Release;
 		};

@@ -84,7 +84,7 @@ private:
                 int rh = 0;
                 while(curl_multi_perform(*multi, &rh) == CURLM_CALL_MULTI_PERFORM);
                 CURLMsg * msg;
-                while(msg = curl_multi_info_read(*multi, &rh))
+                while((msg = curl_multi_info_read(*multi, &rh)) != 0)
                 {
                     if(msg->msg == CURLMSG_DONE)
                     {
@@ -191,24 +191,6 @@ private:
     std::string header_;
 };
 
-class GetXmlAsyncHandler {
-public:
-    explicit GetXmlAsyncHandler(const AsyncXmlHandler & handler)
-        : handler_(handler) {}
-    
-    void operator()(int ec, const std::string & data) const
-    {
-        if(!ec)
-        {
-            MLOG_MESSAGE(Debug, "received xml: " << data);
-            handler_(ec, parseXml(data));
-        } else
-            handler_(ec, boost::property_tree::ptree());
-    }
-private:
-    AsyncXmlHandler handler_;
-};
-
 class GetFileAsync : public AsyncTask {
 public:
     GetFileAsync(const std::string & url, const boost::filesystem::wpath & fname, const AsyncHandler & handler, const ProgressHandler & prog)
@@ -274,7 +256,13 @@ private:
     {
         FILE * out = self->out_;
         if(out)
-            fwrite(buf, size, nmemb, self->out_);
+        {
+            size_t written = fwrite(buf, size, nmemb, self->out_);
+            if(written != size * nmemb)
+            {
+                MLOG_ERROR("write failed: " << written << " vs " << size * nmemb);
+            }
+        }
         return size * nmemb;
     }
 
@@ -564,9 +552,73 @@ void getDataAsync(const std::string & url, const AsyncDataHandler & handler, con
     HTTP::instance().asyncHTTP().addTask(new GetDataAsync(url, handler, cookies));
 }
 
+boost::property_tree::ptree parseXml(const std::string& data)
+{
+    std::istringstream inp(data);
+    boost::property_tree::ptree result;
+    try {
+        boost::property_tree::read_xml(inp, result);
+    } catch(boost::property_tree::xml_parser_error&) {
+    }
+    return result;
+}
+
+boost::property_tree::ptree parseJSON(const std::string& data)
+{
+    std::istringstream inp(data);
+    boost::property_tree::ptree result;
+    try {
+        boost::property_tree::read_json(inp, result);
+    } catch(boost::property_tree::json_parser_error&) {
+    }
+    return result;
+}
+
+namespace {
+
+struct XmlParser {
+    static inline boost::property_tree::ptree parse(const std::string & data)
+    {
+        return parseXml(data);
+    }
+};
+
+struct JSONParser {
+    static inline boost::property_tree::ptree parse(const std::string & data)
+    {
+        return parseJSON(data);
+    }
+};
+
+template<class Parser>
+class GetTreeAsyncHandler {
+public:
+    explicit GetTreeAsyncHandler(const AsyncXmlHandler & handler)
+        : handler_(handler) {}
+    
+    void operator()(int ec, const std::string & data) const
+    {
+        if(!ec)
+        {
+            MLOG_DEBUG("received tree: " << data);
+            handler_(ec, Parser::parse(data));
+        } else
+            handler_(ec, boost::property_tree::ptree());
+    }
+private:
+    AsyncXmlHandler handler_;
+};
+
+}
+
 void getXmlAsync(const std::string & url, const AsyncXmlHandler & handler, const std::string & cookies)
 {
-    getDataAsync(url, GetXmlAsyncHandler(handler), cookies);
+    getDataAsync(url, GetTreeAsyncHandler<XmlParser>(handler), cookies);
+}
+
+void getJSONAsync(const std::string & url, const AsyncXmlHandler & handler, const std::string & cookies)
+{
+    getDataAsync(url, GetTreeAsyncHandler<JSONParser>(handler), cookies);
 }
 
 void getFileAsync(const std::string & url, const boost::filesystem::wpath & path, const AsyncHandler & handler)
@@ -586,17 +638,6 @@ void getFileAsync(const std::string & url, const boost::filesystem::wpath & path
 CURL * createCurl(const std::string & url, const std::string & cookies)
 {
     return HTTP::instance().createCurl(url, cookies);
-}
-
-boost::property_tree::ptree parseXml(const std::string& data)
-{
-    std::istringstream inp(data);
-    boost::property_tree::ptree result;
-    try {
-        boost::property_tree::read_xml(inp, result);
-    } catch(boost::property_tree::xml_parser_error&) {
-    }
-    return result;
 }
 
 int getRemoteFileSizeEx(std::string& uri, filesize_t & out)

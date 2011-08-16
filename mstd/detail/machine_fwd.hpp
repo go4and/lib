@@ -28,4 +28,19 @@ void atomic_write(volatile void *, typename size_to_int<size>::type);
 template<size_t S, class F>
 typename size_to_int<S>::type generic_modify(volatile void *ptr, F f);
 
+template<class Value>
+class Set {
+public:
+    explicit Set(const Value & v)
+        : value_(v) {}
+
+    template<class T>
+    Value operator()(const T & t) const
+    {
+        return value_;
+    }
+private:
+    Value value_;
+};
+
 } }

@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef MNET_BUILDING
+#include <boost/property_tree/ptree.hpp>
+#endif
+
 #include "DownloadDefines.h"
 
 typedef void CURL;
@@ -34,8 +38,10 @@ CURL * createCurl(const std::string & url, const std::string & cookies = std::st
 void getFileAsync(const std::string & url, const boost::filesystem::wpath & path, const AsyncHandler & handler);
 void getFileAsync(const std::string & url, const boost::filesystem::wpath & path, const AsyncHandler & handler, const ProgressHandler& progress);
 
-static boost::property_tree::ptree parseXml(const std::string& data);
+boost::property_tree::ptree parseXml(const std::string& data);
+boost::property_tree::ptree parseJSON(const std::string& data);
 void getXmlAsync(const std::string & url, const AsyncXmlHandler & handler, const std::string & cookie = std::string());
+void getJSONAsync(const std::string & url, const AsyncXmlHandler & handler, const std::string & cookie = std::string());
 void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const std::string & cookie = std::string());
 void getDataExAsync(const std::string & url, const AsyncDataExHandler & handler, const std::string & cookie = std::string());
 

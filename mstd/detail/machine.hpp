@@ -2,10 +2,6 @@
 
 #include <boost/cstdint.hpp>
 
-#include <boost/spirit/home/phoenix/core/argument.hpp>
-#include <boost/spirit/home/phoenix/core/value.hpp>
-#include <boost/spirit/home/phoenix/operator/arithmetic.hpp>
-
 #define MSTD_MACHINE_COMMON_PROCESSING
 
 #include "waiter.hpp"
@@ -62,16 +58,31 @@ inline typename size_to_int<S>::type generic_modify(volatile void *ptr, F f)
     return result;
 }
 
+template<class Value>
+class Append {
+public:
+    explicit Append(const Value & v)
+        : value_(v) {}
+
+    template<class T>
+    T operator()(const T & t) const
+    {
+        return t + value_;
+    }
+private:
+    Value value_;
+};
+
 template<size_t size>
 inline typename size_to_int<size>::type atomic_add(volatile void * ptr, typename size_to_int<size>::type value)
 {
-    return generic_modify<size>(ptr, boost::phoenix::arg_names::arg1 + value);
+    return generic_modify<size>(ptr, Append<typename size_to_int<size>::type>(value));
 }
 
 template<size_t size>
 inline typename size_to_int<size>::type atomic_read_write(volatile void * ptr, typename size_to_int<size>::type value)
 {
-    return generic_modify<size>(ptr, boost::phoenix::val(value));
+    return generic_modify<size>(ptr, Set<typename size_to_int<size>::type>(value));
 }
 
 #undef MSTD_MACHINE_COMMON_PROCESSING
