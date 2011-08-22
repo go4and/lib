@@ -65,6 +65,16 @@ const std::string & RESTRequest::url(const std::string & apiSecret)
     return url_;
 }
 
+const std::string & RESTRequest::url(const char * apiSecret)
+{
+    str_ += apiSecret;
+    std::string sig = mcrypt::visualize(mcrypt::md5String(str_));
+    url_ += "sig=";
+    url_ += sig;
+
+    return url_;
+}
+
 const std::string & socialRequestBase(SocialNetwork type)
 {
     static const std::string vkontURL = "http://api.vkontakte.ru/api.php?";

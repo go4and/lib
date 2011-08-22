@@ -19,28 +19,28 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = C3A2966613E08F5C00F7FC1B /* mlog.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = C3F10D4F1352FCE200D8C945 /* mlog.dylib */;
+			remoteGlobalIDString = C3F10D4F1352FCE200D8C945;
 			remoteInfo = mlog;
 		};
 		C3A2967013E08F5C00F7FC1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C3A2966913E08F5C00F7FC1B /* mstd.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = C32455981352A6B900999158 /* mstd.dylib */;
+			remoteGlobalIDString = C32455981352A6B900999158;
 			remoteInfo = mstd;
 		};
 		C3A2967213E08F6600F7FC1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C3A2966613E08F5C00F7FC1B /* mlog.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = C3F10D4E1352FCE200D8C945 /* mlog */;
+			remoteGlobalIDString = C3F10D4E1352FCE200D8C945;
 			remoteInfo = mlog;
 		};
 		C3A2967413E08F6600F7FC1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C3A2966913E08F5C00F7FC1B /* mstd.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = C32455971352A6B900999158 /* mstd */;
+			remoteGlobalIDString = C32455971352A6B900999158;
 			remoteInfo = mstd;
 		};
 /* End PBXContainerItemProxy section */
@@ -289,7 +289,7 @@
 				OTHER_LDFLAGS = "-lboost_system-mt-d";
 				PREBINDING = NO;
 				PRODUCT_NAME = sqlite;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.5;
 				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Debug;
@@ -312,7 +312,7 @@
 				OTHER_LDFLAGS = "-lboost_system-mt";
 				PREBINDING = NO;
 				PRODUCT_NAME = sqlite;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.5;
 				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Release;

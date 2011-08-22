@@ -523,6 +523,26 @@ BOOST_PP_REPEAT_FROM_TO(
     1, BOOST_PP_INC(NEXUS_PACKET_PACKER_MAX_ARITY),
     NEXUS_PACKET_PACKER_PACK_DEF, _ )
 
+#define NEXUS_PACKET_PACKER_PACK_VEC_DEF(z, n, data) \
+    template <BOOST_PP_ENUM_PARAMS(n, typename T)> \
+    void pack(std::vector<char> & out, BOOST_PP_ENUM_BINARY_PARAMS(n, const T, & x)) \
+    { \
+        size_t size = nexus::tupleSize(BOOST_PP_ENUM_PARAMS(n, x)) + 4; \
+        size_t oldSize = out.size(); \
+        out.resize(oldSize + size); \
+        char * pos = &out[oldSize]; \
+        char * start = pos; \
+        nexus::write(pos, static_cast<uint32_t>(size - 4)); \
+        nexus::tuplePack(pos, BOOST_PP_ENUM_PARAMS(n, x)); \
+        (void) start; \
+        BOOST_ASSERT(static_cast<size_t>(pos - start) == size); \
+    } \
+    /**/
+
+BOOST_PP_REPEAT_FROM_TO(
+    1, BOOST_PP_INC(NEXUS_PACKET_PACKER_MAX_ARITY),
+    NEXUS_PACKET_PACKER_PACK_VEC_DEF, _ )
+
 inline Buffer packCD(PacketCode code, size_t expectedSize)
 {
     size_t size = 1;

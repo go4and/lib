@@ -17,6 +17,7 @@ public:
     void addParam(const char * param, const std::string & value);
     void addParam(const char * param, const char * value);
     const std::string & url(const std::string & apiSecret);
+    const std::string & url(const char * secret);
 private:
     std::string url_;
     std::string str_;
