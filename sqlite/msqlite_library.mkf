@@ -1,0 +1,11 @@
+library
+{
+        ".,msqlite"
+}
+
+includepath .
+
+files
+{
+    SQLite.h
+}

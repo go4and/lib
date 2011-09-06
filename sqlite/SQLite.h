@@ -8,6 +8,7 @@
 #include <mstd/cstdint.hpp>
 
 #if !SQLITE_NO_EXCEPTIONS
+#error What a fuck?
 #include <mstd/exception.hpp>
 #endif
 
@@ -38,7 +39,8 @@ public:
     {
         return err_ ? &ErrorCode::err_ : 0;
     }
-   
+
+    int err() const { return err_; }
     const std::string & message() const { return message_; }
 
 #if !SQLITE_NO_EXCEPTIONS    

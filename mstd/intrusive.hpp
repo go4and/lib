@@ -10,6 +10,28 @@ struct delete_disposer {
     }
 };
 
+template<class Pool>
+class object_pool_disposer_t {
+public:
+    explicit object_pool_disposer_t(Pool & pool)
+        : pool_(pool) {}
+
+    template<class T>
+    void operator()(T * t) const
+    {
+        t->~T();
+        pool_.free(t);
+    }
+private:
+    Pool & pool_;
+};
+
+template<class Pool>
+object_pool_disposer_t<Pool> object_pool_disposer(Pool & pool)
+{
+    return object_pool_disposer_t<Pool>(pool);
+}
+
 struct new_cloner {
     template<class T>
     T * operator()(const T & t) const
@@ -30,6 +52,32 @@ struct key_compare {
     bool operator()(const Key & lhs, const T & rhs) const
     {
         return lhs < rhs.key;
+    }
+};
+
+struct identity {
+    template<class T>
+    T operator()(const T & t) const
+    {
+        return t;
+    }
+};
+
+template<class T, class Key, Key T::*member>
+struct key_equals {
+    bool operator()(const T & lhs, const Key & rhs) const
+    {
+        return lhs.*member == rhs;
+    }
+    
+    bool operator()(const Key & lhs, const T & rhs) const
+    {
+        return lhs == rhs.*member;
+    }
+    
+    bool operator()(const T & lhs, const T & rhs) const
+    {
+        return lhs.*member == rhs.*member;
     }
 };
 
