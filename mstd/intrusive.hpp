@@ -19,8 +19,7 @@ public:
     template<class T>
     void operator()(T * t) const
     {
-        t->~T();
-        pool_.free(t);
+        pool_.destroy(t);
     }
 private:
     Pool & pool_;
