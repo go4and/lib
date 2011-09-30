@@ -129,7 +129,6 @@
     </ClCompile>
     <ClCompile Include="PipeNode.cpp" />
     <ClCompile Include="Signals.cpp" />
-    <ClCompile Include="SocialApi.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="StackStream.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -151,7 +150,6 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PipeNode.h" />
     <ClInclude Include="Signals.h" />
-    <ClInclude Include="SocialApi.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="StackStream.h" />
     <ClInclude Include="Utils.h" />

@@ -58,7 +58,9 @@ void execute_file(const boost::filesystem::wpath & path)
     memset(&si, 0, sizeof(si));
     memset(&pi, 0, sizeof(pi));
     si.cb = sizeof(si);
-    CreateProcessW(NULL, const_cast<wchar_t*>(wfname(path).c_str()), NULL, NULL, true, 0, NULL, NULL, &si, &pi);
+    boost::filesystem::wpath parent = path;
+    parent.remove_filename();
+    CreateProcessW(NULL, const_cast<wchar_t*>(wfname(path).c_str()), NULL, NULL, true, 0, NULL, wfname(parent).c_str(), &si, &pi);
 #else
     std::string fname = apifname(path).c_str();
     if(!vfork())

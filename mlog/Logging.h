@@ -26,9 +26,9 @@ namespace mlog {
 #define MLOG_MESSAGE2(level1, value1, level2, value2) \
     do { \
         if(logger.enabled(mlog::ll##level1)) \
-            MLOG_DO_OUT(level1, value1); \
+            MLOG_DO_OUT(mlog::ll##level1, value1); \
         else if(logger.enabled(mlog::ll##level2)) \
-            MLOG_DO_OUT(level2, value2); \
+            MLOG_DO_OUT(mlog::ll##level2, value2); \
     } while(false)
 
 #define MLOG_FMESSAGE(level, value) \
