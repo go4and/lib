@@ -8,7 +8,6 @@
 #include <mstd/cstdint.hpp>
 
 #if !SQLITE_NO_EXCEPTIONS
-#error What a fuck?
 #include <mstd/exception.hpp>
 #endif
 
