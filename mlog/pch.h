@@ -13,6 +13,7 @@
 
 #if defined(BOOST_WINDOWS)
 #include <Windows.h>
+#include <ShlObj.h>
 #else
 #include <sys/time.h>
 #endif
@@ -54,6 +55,7 @@
 #include <mstd/buffers.hpp>
 #include <mstd/cstdint.hpp>
 #include <mstd/exception.hpp>
+#include <mstd/filesystem.hpp>
 #include <mstd/itoa.hpp>
 #include <mstd/reference_counter.hpp>
 #include <mstd/reverse_lock.hpp>

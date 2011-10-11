@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C3A29F55135F764700A4A237 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3A29F51135F763000A4A237 /* mstd.dylib */; };
+		C35853A3143F61CF0018E602 /* MacUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = C35853A2143F61CF0018E602 /* MacUtils.mm */; };
+		C35853A5143F62FB0018E602 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C35853A4143F62FB0018E602 /* Foundation.framework */; };
+		C36A1541143D828500185523 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C36A1540143D828500185523 /* mstd.dylib */; };
 		C3F10D841352FDE600D8C945 /* Config.h in Headers */ = {isa = PBXBuildFile; fileRef = C3F10D701352FDE600D8C945 /* Config.h */; };
 		C3F10D851352FDE600D8C945 /* Defines.h in Headers */ = {isa = PBXBuildFile; fileRef = C3F10D711352FDE600D8C945 /* Defines.h */; };
 		C3F10D861352FDE600D8C945 /* Dumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3F10D721352FDE600D8C945 /* Dumper.cpp */; };
@@ -26,25 +28,10 @@
 		C3F10D941352FDE600D8C945 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C3F10D831352FDE600D8C945 /* Utils.h */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		C3A29F50135F763000A4A237 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3A29F4C135F763000A4A237 /* mstd.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C32455981352A6B900999158;
-			remoteInfo = mstd;
-		};
-		C3A29F53135F763B00A4A237 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3A29F4C135F763000A4A237 /* mstd.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C32455971352A6B900999158;
-			remoteInfo = mstd;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		C3A29F4C135F763000A4A237 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C35853A2143F61CF0018E602 /* MacUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MacUtils.mm; path = ../../../../lib/mlog/MacUtils.mm; sourceTree = "<group>"; };
+		C35853A4143F62FB0018E602 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C36A1540143D828500185523 /* mstd.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3F10D4F1352FCE200D8C945 /* mlog.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3F10D701352FDE600D8C945 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = SOURCE_ROOT; };
 		C3F10D711352FDE600D8C945 /* Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = SOURCE_ROOT; };
@@ -69,25 +56,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3A29F55135F764700A4A237 /* mstd.dylib in Frameworks */,
+				C35853A5143F62FB0018E602 /* Foundation.framework in Frameworks */,
+				C36A1541143D828500185523 /* mstd.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C3A29F4D135F763000A4A237 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C3A29F51135F763000A4A237 /* mstd.dylib */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		C3F10D441352FCE200D8C945 = {
 			isa = PBXGroup;
 			children = (
-				C3A29F4C135F763000A4A237 /* mstd.xcodeproj */,
+				C35853A4143F62FB0018E602 /* Foundation.framework */,
+				C35853A2143F61CF0018E602 /* MacUtils.mm */,
+				C36A1540143D828500185523 /* mstd.dylib */,
 				C3F10D511352FCE200D8C945 /* mlog */,
 				C3F10D501352FCE200D8C945 /* Products */,
 			);
@@ -158,7 +140,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				C3A29F54135F763B00A4A237 /* PBXTargetDependency */,
 			);
 			name = mlog;
 			productName = mlog;
@@ -183,28 +164,12 @@
 			mainGroup = C3F10D441352FCE200D8C945;
 			productRefGroup = C3F10D501352FCE200D8C945 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = C3A29F4D135F763000A4A237 /* Products */;
-					ProjectRef = C3A29F4C135F763000A4A237 /* mstd.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				C3F10D4E1352FCE200D8C945 /* mlog */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		C3A29F51135F763000A4A237 /* mstd.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = mstd.dylib;
-			remoteRef = C3A29F50135F763000A4A237 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C3F10D4B1352FCE200D8C945 /* Sources */ = {
@@ -217,24 +182,17 @@
 				C3F10D8D1352FDE600D8C945 /* Output.cpp in Sources */,
 				C3F10D911352FDE600D8C945 /* ThreadTrace.cpp in Sources */,
 				C3F10D931352FDE600D8C945 /* Utils.cpp in Sources */,
+				C35853A3143F61CF0018E602 /* MacUtils.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		C3A29F54135F763B00A4A237 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = mstd;
-			targetProxy = C3A29F53135F763B00A4A237 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
 		C3F10D5B1352FCE300D8C945 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -251,8 +209,8 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
+				LD_DYLIB_INSTALL_NAME = mlog.dylib;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lboost_thread-mt-d",
 					"-lboost_filesystem-mt-d",
@@ -266,7 +224,7 @@
 		C3F10D5C1352FCE300D8C945 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -280,8 +238,8 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
+				LD_DYLIB_INSTALL_NAME = mlog.dylib;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-headerpad_max_install_names",
 					"-lboost_thread-mt",

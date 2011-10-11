@@ -247,8 +247,13 @@ public:
 class FileHolder : public boost::noncopyable {
 public:
     explicit FileHolder(const std::string & fname)
-        : fname_(fname), handle_(fopen(fname.c_str(), "ab"))
+        : fname_(fname)
     {
+        boost::filesystem::wpath path(mstd::deutf8(fname));
+        boost::filesystem::wpath dir = path;
+        dir.remove_filename();
+        create_directories(dir);
+        handle_ = mstd::wfopen(path, "ab");
         if(!handle_)
             BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Failed to open for writing: " + fname));
     }
@@ -293,6 +298,23 @@ DWORD getpid()
 }
 #endif
 
+#if BOOST_WINDOWS
+std::string documentsFolder()
+{
+    wchar_t buf[MAX_PATH + 1];
+    HRESULT hr = SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, 0, buf);
+    if(SUCCEEDED(hr))
+        return mstd::utf8(buf);
+    const wchar_t * b = _wgetenv(L"USERPROFILE");
+    if(b)
+        return mstd::utf8fname(boost::filesystem::wpath(b) / L"My Documents");
+    else
+        return "My Documents";
+}
+#elif defined(__APPLE__)
+extern std::string documentsFolder();
+#endif
+
 std::string parse(const std::string & fname)
 {
     std::string result;
@@ -320,7 +342,12 @@ std::string parse(const std::string & fname)
                     std::string temp = boost::lexical_cast<std::string>(onow());
                     std::replace(temp.begin(), temp.end(), ':', '-');
                     result += temp;
-                } else
+                } 
+#if BOOST_WINDOWS || defined(__APPLE__)
+                else if(key == "documents")
+                    result += documentsFolder();
+#endif
+                else
                     BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown key: " + key));
                 p = end;
             }

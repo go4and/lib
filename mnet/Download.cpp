@@ -393,7 +393,7 @@ private:
             }
             size_t size = (p - buf) * sizeof(*buf);
             fseek(out, 0, SEEK_SET);
-            size_t written = fwrite(buf, size, 1, out);
+            size_t written = fwrite(buf, 1, size, out);
             if(written != size)
                 MLOG_ERROR("mata save failed: " << written << " vs " << size);
 #if BOOST_WINDOWS
