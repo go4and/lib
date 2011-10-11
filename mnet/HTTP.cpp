@@ -138,21 +138,60 @@ private:
     std::vector<AsyncTaskPtr> queue_;
 };
 
-class GetDataAsync : public AsyncTask {
+class DownloadTask : public AsyncTask {
 public:
-    GetDataAsync(const std::string & url, const AsyncDataHandler & handler, const std::string & cookies)
-        : url_(url), handler_(handler), cookies_(cookies) {}
-
-    GetDataAsync(const std::string & url, const AsyncDataExHandler & handler, const std::string & cookies)
-        : url_(url), handlerEx_(handler), cookies_(cookies) {}
+    DownloadTask(const std::string & url, const std::string & cookies, const ProgressHandler & prog)
+        : url_(url), cookies_(cookies), prog_(prog), progress_(0)
+    {
+    }
 
     void start(CURLM * curlm)
     {
         initCurl(curlm, url_, cookies_);
+        curl_easy_setopt(curl_, CURLOPT_NOPROGRESS, prog_.empty() ? 1 : 0);
+        if(!prog_.empty())
+        {
+            void * self = this;
+            curl_easy_setopt(curl_, CURLOPT_PROGRESSFUNCTION, &DownloadTask::progress);
+            curl_easy_setopt(curl_, CURLOPT_PROGRESSDATA, self);
+        }
+        doStart();
+    }
+
+    virtual void doStart() = 0;
+
+    inline const std::string & url() const { return url_; }
+private:
+    static int progress(DownloadTask * self, double t, double d, double ultotal, double ulnow)
+    {
+        size_t pr = static_cast<size_t>(t ? (100.0 * d / t) : 0);
+        if(self->progress_ != pr)
+        {
+            self->progress_ = pr;
+            uiEnqueue(boost::bind(self->prog_, pr));
+        }
+        return 0;
+    }
+
+    std::string url_;
+    std::string cookies_;
+    ProgressHandler prog_;
+    size_t progress_;
+};
+
+class GetDataAsync : public DownloadTask {
+public:
+    GetDataAsync(const std::string & url, const AsyncDataHandler & handler, const ProgressHandler & progressHandler, const std::string & cookies)
+        : DownloadTask(url, cookies, progressHandler), handler_(handler) {}
+
+    GetDataAsync(const std::string & url, const AsyncDataExHandler & handler, const ProgressHandler & progressHandler, const std::string & cookies)
+        : DownloadTask(url, cookies, progressHandler), handlerEx_(handler) {}
+
+    void doStart()
+    {
         void * self = this;
         curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, &GetDataAsync::write);
         curl_easy_setopt(curl_, CURLOPT_WRITEDATA, self);
-        curl_easy_setopt(curl_, CURLOPT_NOPROGRESS, 1);
         if(!handlerEx_.empty())
         {
             curl_easy_setopt(curl_, CURLOPT_WRITEHEADER, &header_);
@@ -163,7 +202,7 @@ public:
     
     void done(int ec)
     {
-        MLOG_MESSAGE_EX(ec ? mlog::llWarning : mlog::llDebug, "get data: " << url_ << ", code: " << ec);
+        MLOG_MESSAGE_EX(ec ? mlog::llWarning : mlog::llDebug, "get data: " << url() << ", code: " << ec);
         if(handlerEx_.empty())
             uiEnqueue(boost::bind(handler_, ec, data_));
         else
@@ -183,18 +222,16 @@ private:
         return appendToString(buf, size, nmemb, header);
     }
     
-    std::string url_;
     AsyncDataHandler handler_;
     AsyncDataExHandler handlerEx_;
-    std::string cookies_;
     std::string data_;
     std::string header_;
 };
 
-class GetFileAsync : public AsyncTask {
+class GetFileAsync : public DownloadTask {
 public:
     GetFileAsync(const std::string & url, const boost::filesystem::wpath & fname, const AsyncHandler & handler, const ProgressHandler & prog)
-        : progress_(0), url_(url), fname_(fname), out_(0), handler_(handler), prog_(prog)
+        : DownloadTask(url, std::string(), prog), fname_(fname), out_(0), handler_(handler)
     {
     }
 
@@ -204,23 +241,18 @@ public:
             fclose(out_);
     }
 
-    void start(CURLM * curlm)
+    void doStart()
     {
-        initCurl(curlm, url_);
         void * self = this;
         curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, &GetFileAsync::write);
         curl_easy_setopt(curl_, CURLOPT_WRITEDATA, self);
-        curl_easy_setopt(curl_, CURLOPT_PROGRESSFUNCTION, &GetFileAsync::progress);
-        curl_easy_setopt(curl_, CURLOPT_PROGRESSDATA, self);
-        curl_easy_setopt(curl_, CURLOPT_NOPROGRESS, prog_.empty() ? 1 : 0);
-
         out_ = mstd::wfopen(fname_, "wb");
     }
 
     void done(int ec)
     {
         if(ec)
-            MLOG_MESSAGE(Warning, "failed to download: " << url_ << ", code: " << ec);
+            MLOG_MESSAGE(Warning, "failed to download: " << url() << ", code: " << ec);
         if(out_)
         {
             fclose(out_);
@@ -241,17 +273,6 @@ public:
     }*/
 
 private:
-    static int progress(GetFileAsync * self, double t, double d, double ultotal, double ulnow)
-    {
-        size_t pr = static_cast<size_t>(t ? (100.0 * d / t) : 0);
-        if(self->progress_ != pr)
-        {
-            self->progress_ = pr;
-            uiEnqueue(boost::bind(self->prog_, pr));
-        }
-        return 0;
-    }
-
     static size_t write(const char* buf, size_t size, size_t nmemb, GetFileAsync * self)
     {
         FILE * out = self->out_;
@@ -266,12 +287,9 @@ private:
         return size * nmemb;
     }
 
-    size_t progress_;
-    std::string url_;
     boost::filesystem::wpath fname_;
     FILE * out_;
     AsyncHandler handler_;
-    ProgressHandler prog_;
 };
 
 class HTTP {
@@ -549,7 +567,14 @@ void getDataAsync(const std::string & url, const AsyncDataHandler & handler, con
 {
     MLOG_DEBUG("getDataAsync(" << url << ", " << cookies << ')');
 
-    HTTP::instance().asyncHTTP().addTask(new GetDataAsync(url, handler, cookies));
+    HTTP::instance().asyncHTTP().addTask(new GetDataAsync(url, handler, ProgressHandler(), cookies));
+}
+
+void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const ProgressHandler & progress, const std::string & cookies)
+{
+    MLOG_DEBUG("getDataAsync(" << url << ", " << cookies << ')');
+
+    HTTP::instance().asyncHTTP().addTask(new GetDataAsync(url, handler, progress, cookies));
 }
 
 boost::property_tree::ptree parseXml(const std::string& data)

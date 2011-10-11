@@ -1,0 +1,370 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C346440713D33FDB00716430 /* GZip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346440213D33FDB00716430 /* GZip.cpp */; };
+		C346440813D33FDB00716430 /* GZip.h in Headers */ = {isa = PBXBuildFile; fileRef = C346440313D33FDB00716430 /* GZip.h */; };
+		C346440913D33FDB00716430 /* pch.h in Headers */ = {isa = PBXBuildFile; fileRef = C346440413D33FDB00716430 /* pch.h */; };
+		C346440A13D33FDB00716430 /* Tar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346440513D33FDB00716430 /* Tar.cpp */; };
+		C346440B13D33FDB00716430 /* Tar.h in Headers */ = {isa = PBXBuildFile; fileRef = C346440613D33FDB00716430 /* Tar.h */; };
+		C346442913D3409C00716430 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C346442113D3408600716430 /* mlog.dylib */; };
+		C346442A13D3409C00716430 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C346442413D3408600716430 /* mstd.dylib */; };
+		C346442C13D340AD00716430 /* libarchive.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C346442B13D340AD00716430 /* libarchive.2.dylib */; };
+		C346443113D340BF00716430 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C346443013D340BF00716430 /* libz.1.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C346442013D3408600716430 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C346441913D3408600716430 /* mlog.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C3F10D4F1352FCE200D8C945;
+			remoteInfo = mlog;
+		};
+		C346442313D3408600716430 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C346441C13D3408600716430 /* mstd.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C32455981352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C346442513D3408E00716430 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C346441C13D3408600716430 /* mstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C32455971352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C346442713D3408E00716430 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C346441913D3408600716430 /* mlog.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C3F10D4E1352FCE200D8C945;
+			remoteInfo = mlog;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C346440213D33FDB00716430 /* GZip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GZip.cpp; sourceTree = "<group>"; };
+		C346440313D33FDB00716430 /* GZip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZip.h; sourceTree = "<group>"; };
+		C346440413D33FDB00716430 /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = "<group>"; };
+		C346440513D33FDB00716430 /* Tar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tar.cpp; sourceTree = "<group>"; };
+		C346440613D33FDB00716430 /* Tar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tar.h; sourceTree = "<group>"; };
+		C346441913D3408600716430 /* mlog.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mlog.xcodeproj; path = ../mlog/mlog.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C346441C13D3408600716430 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C346442B13D340AD00716430 /* libarchive.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libarchive.2.dylib; path = /opt/local/lib/libarchive.2.dylib; sourceTree = "<absolute>"; };
+		C346443013D340BF00716430 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = /usr/lib/libz.1.dylib; sourceTree = "<absolute>"; };
+		D2AAC09D05546B4700DB518D /* marc.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = marc.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D2AAC09B05546B4700DB518D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C346443113D340BF00716430 /* libz.1.dylib in Frameworks */,
+				C346442C13D340AD00716430 /* libarchive.2.dylib in Frameworks */,
+				C346442913D3409C00716430 /* mlog.dylib in Frameworks */,
+				C346442A13D3409C00716430 /* mstd.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DDFF38A45A11DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC09D05546B4700DB518D /* marc.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* marc */ = {
+			isa = PBXGroup;
+			children = (
+				C346443013D340BF00716430 /* libz.1.dylib */,
+				C346442B13D340AD00716430 /* libarchive.2.dylib */,
+				C346441813D3407900716430 /* Dependencies */,
+				08FB77ACFE841707C02AAC07 /* Source */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DDFF38A45A11DB9C8B /* Products */,
+			);
+			name = marc;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		08FB77ACFE841707C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				C346440213D33FDB00716430 /* GZip.cpp */,
+				C346440313D33FDB00716430 /* GZip.h */,
+				C346440413D33FDB00716430 /* pch.h */,
+				C346440513D33FDB00716430 /* Tar.cpp */,
+				C346440613D33FDB00716430 /* Tar.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		C346441813D3407900716430 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				C346441913D3408600716430 /* mlog.xcodeproj */,
+				C346441C13D3408600716430 /* mstd.xcodeproj */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		C346441A13D3408600716430 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C346442113D3408600716430 /* mlog.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C346441D13D3408600716430 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C346442413D3408600716430 /* mstd.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC09905546B4700DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C346440813D33FDB00716430 /* GZip.h in Headers */,
+				C346440913D33FDB00716430 /* pch.h in Headers */,
+				C346440B13D33FDB00716430 /* Tar.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC09C05546B4700DB518D /* marc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB916008733D950010E9CD /* Build configuration list for PBXNativeTarget "marc" */;
+			buildPhases = (
+				D2AAC09905546B4700DB518D /* Headers */,
+				D2AAC09B05546B4700DB518D /* Frameworks */,
+				D2AAC09A05546B4700DB518D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C346442613D3408E00716430 /* PBXTargetDependency */,
+				C346442813D3408E00716430 /* PBXTargetDependency */,
+			);
+			name = marc;
+			productName = libmarc;
+			productReference = D2AAC09D05546B4700DB518D /* marc.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB916408733D950010E9CD /* Build configuration list for PBXProject "marc" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 0867D691FE84028FC02AAC07 /* marc */;
+			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C346441A13D3408600716430 /* Products */;
+					ProjectRef = C346441913D3408600716430 /* mlog.xcodeproj */;
+				},
+				{
+					ProductGroup = C346441D13D3408600716430 /* Products */;
+					ProjectRef = C346441C13D3408600716430 /* mstd.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				D2AAC09C05546B4700DB518D /* marc */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C346442113D3408600716430 /* mlog.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mlog.dylib;
+			remoteRef = C346442013D3408600716430 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C346442413D3408600716430 /* mstd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mstd.dylib;
+			remoteRef = C346442313D3408600716430 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC09A05546B4700DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C346440713D33FDB00716430 /* GZip.cpp in Sources */,
+				C346440A13D33FDB00716430 /* Tar.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C346442613D3408E00716430 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mstd;
+			targetProxy = C346442513D3408E00716430 /* PBXContainerItemProxy */;
+		};
+		C346442813D3408E00716430 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mlog;
+			targetProxy = C346442713D3408E00716430 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB916108733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
+			};
+			name = Debug;
+		};
+		1DEB916208733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
+				STRIP_INSTALLED_PRODUCT = YES;
+				STRIP_STYLE = "non-global";
+			};
+			name = Release;
+		};
+		1DEB916508733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pch.h;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(INCLUDE)",
+					"$(PROJECT_DIR)/..",
+				);
+				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lboost_filesystem-mt-d",
+					"-lboost_system-mt-d",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = marc;
+				SDKROOT = macosx10.5;
+				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+			};
+			name = Debug;
+		};
+		1DEB916608733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pch.h;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(INCLUDE)",
+					"$(PROJECT_DIR)/..",
+				);
+				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lboost_filesystem-mt",
+					"-lboost_system-mt",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = marc;
+				SDKROOT = macosx10.5;
+				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB916008733D950010E9CD /* Build configuration list for PBXNativeTarget "marc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916108733D950010E9CD /* Debug */,
+				1DEB916208733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB916408733D950010E9CD /* Build configuration list for PBXProject "marc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916508733D950010E9CD /* Debug */,
+				1DEB916608733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

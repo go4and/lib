@@ -14,7 +14,7 @@ typedef boost::function<void(int, const boost::property_tree::ptree&)> AsyncXmlH
 typedef boost::function<void(int, const std::string &)> AsyncDataHandler;
 typedef boost::function<void(int, const std::string &, const std::string &)> AsyncDataExHandler;
 typedef boost::function<void(int)> AsyncHandler;
-typedef boost::function<void(size_t)> ProgressHandler;
+typedef boost::function<void(int /* percent */)> ProgressHandler;
 typedef boost::function<void()> Action;
 typedef boost::function<void(const Action&)> UIEnqueuer;
 
@@ -43,6 +43,7 @@ boost::property_tree::ptree parseJSON(const std::string& data);
 void getXmlAsync(const std::string & url, const AsyncXmlHandler & handler, const std::string & cookie = std::string());
 void getJSONAsync(const std::string & url, const AsyncXmlHandler & handler, const std::string & cookie = std::string());
 void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const std::string & cookie = std::string());
+void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const ProgressHandler & progress, const std::string & cookie = std::string());
 void getDataExAsync(const std::string & url, const AsyncDataExHandler & handler, const std::string & cookie = std::string());
 
 int getRemoteFileSizeEx(std::string & uri, filesize_t & out);
