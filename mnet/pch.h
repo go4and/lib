@@ -5,7 +5,9 @@
 #include <curl/curl.h>
 
 #include <boost/function.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/thread.hpp>
 
 #include <boost/date_time/posix_time/ptime.hpp>
 
@@ -21,11 +23,16 @@
 
 #include <boost/scope_exit.hpp>
 
+#include <mstd/atomic.hpp>
 #include <mstd/cstdint.hpp>
+#include <mstd/exception.hpp>
 #include <mstd/filesystem.hpp>
 #include <mstd/handle_base.hpp>
 #include <mstd/intrusive.hpp>
 #include <mstd/itoa.hpp>
+#include <mstd/pointer_cast.hpp>
+#include <mstd/reference_counter.hpp>
+#include <mstd/singleton.hpp>
 
 #include <mlog/Dumper.h>
 #include <mlog/Logging.h>
