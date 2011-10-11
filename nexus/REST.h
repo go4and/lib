@@ -27,9 +27,4 @@ MSTD_DEFINE_ENUM_EX(SocialNetwork, sn_, (vkont)(mailru));
 
 const std::string & socialRequestBase(SocialNetwork type);
 
-#ifndef __APPLE__
-typedef boost::function<void(const boost::system::error_code &, const nexus::Buffer&)> URLHandler;
-void getUrl(boost::asio::io_service & ios, const std::string & url, const URLHandler & handler);
-#endif
-
 }
