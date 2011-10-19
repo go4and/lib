@@ -211,6 +211,7 @@ public:
 private:
     static size_t write(const char* buf, size_t size, size_t nmemb, GetDataAsync * self)
     {
+        MLOG_MESSAGE(Debug, "GetDataAsync::write(" << static_cast<const void*>(buf) << ", " << size << ", " << nmemb << ", " << self << ")");
         std::string & data = self->data_;
         data.insert(data.end(), buf, buf + size * nmemb);
         return size * nmemb;
@@ -278,7 +279,7 @@ private:
         FILE * out = self->out_;
         if(out)
         {
-            size_t written = fwrite(buf, size, nmemb, self->out_);
+            size_t written = fwrite(buf, 1, size * nmemb, self->out_);
             if(written != size * nmemb)
             {
                 MLOG_ERROR("write failed: " << written << " vs " << size * nmemb);
