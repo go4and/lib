@@ -301,6 +301,7 @@
 		C3389D5A135388960010E3BF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = IP;
 			};
 			buildConfigurationList = C3389D5D135388960010E3BF /* Build configuration list for PBXProject "nexus" */;

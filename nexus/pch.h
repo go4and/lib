@@ -55,8 +55,6 @@
 
 #include <boost/utility/enable_if.hpp>
 
-#include <urdl/read_stream.hpp>
-
 #include <zlib.h>
 
 #include <mstd/atomic.hpp>
