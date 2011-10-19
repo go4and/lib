@@ -122,8 +122,8 @@ private:
                     int res = select(maxfd + 1, &readfs, &writefs, &excfs, &timeout);
                     if(res == -1)
                     {
-                        MLOG_MESSAGE(Error, "select failed: " << res);
-                        break;
+                        int err = errno;
+                        MLOG_MESSAGE(Error, "select failed: " << err);
                     }
                 } else {
                     boost::this_thread::sleep(boost::posix_time::milliseconds(10));
@@ -366,7 +366,7 @@ public:
 	        }
         }
 
-	    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5);
+	    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 30);
 
 	    // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
 	    curl_easy_setopt(curl, CURLOPT_ENCODING, "gzip");

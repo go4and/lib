@@ -152,6 +152,7 @@
 		C3F10D461352FCE200D8C945 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = IP;
 			};
 			buildConfigurationList = C3F10D491352FCE200D8C945 /* Build configuration list for PBXProject "mlog" */;
@@ -201,7 +202,7 @@
 				GCC_PREFIX_HEADER = pch.h;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = "";
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -210,6 +211,7 @@
 					"$(PROJECT_DIR)/..",
 				);
 				LD_DYLIB_INSTALL_NAME = mlog.dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				OTHER_LDFLAGS = (
 					"-lboost_thread-mt-d",
@@ -230,7 +232,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pch.h;
-				GCC_VERSION = "";
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -239,6 +241,7 @@
 					"$(PROJECT_DIR)/..",
 				);
 				LD_DYLIB_INSTALL_NAME = mlog.dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				OTHER_LDFLAGS = (
 					"-headerpad_max_install_names",

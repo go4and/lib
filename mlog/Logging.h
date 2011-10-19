@@ -54,6 +54,9 @@ namespace mlog {
 
 #define MLOG_FMESSAGE(level, value) \
     do {} while(false)
+
+#define MLOG_MESSAGE_EX(level, value) \
+    do {} while(false)
 #endif
 
 #define MLOG_DEBUG(value) MLOG_MESSAGE(Debug, value)
