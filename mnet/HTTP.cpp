@@ -92,12 +92,9 @@ private:
                         curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, &task);
                         long code;
                         curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &code);
-                        if(code >= 300)
-                            MLOG_MESSAGE(Warning, "done with code: " << code << ", result: " << msg->data.result);
-                        else
-                            MLOG_MESSAGE(Info, "done with code: " << code << ", result: " << msg->data.result);
+                        MLOG_MESSAGE_EX(code >= 300 ? mlog::llWarning : mlog::llInfo, "done with code: " << code << ", result: " << msg->data.result);
 
-                        bool failed = msg->data.result != CURLE_WRITE_ERROR && (msg->data.result != CURLE_OK || code != 200);
+                        bool failed = msg->data.result != CURLE_OK || code != 200;
                         AsyncTaskPtr tp(task);
                         for(std::vector<AsyncTaskPtr>::iterator i = tasks.begin(), end = tasks.end(); i != end; ++i)
                             if(i->get() == task)
@@ -105,7 +102,7 @@ private:
                                 tasks.erase(i);
                                 break;
                             }
-                        task->done(failed ? (code ? code : -1) : 0);
+                        task->done(failed ? (code ? code : 600 + msg->data.result) : 0);
                     }
                 }
 
@@ -246,7 +243,6 @@ public:
         void * self = this;
         curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, &GetFileAsync::write);
         curl_easy_setopt(curl_, CURLOPT_WRITEDATA, self);
-        out_ = mstd::wfopen(fname_, "wb");
     }
 
     void done(int ec)
@@ -257,6 +253,11 @@ public:
         {
             fclose(out_);
             out_ = 0;
+            if(ec)
+            {
+                boost::system::error_code err;
+                remove(fname_, err);
+            }
         }
         uiEnqueue(boost::bind(handler_, ec));
     }
@@ -276,6 +277,8 @@ private:
     static size_t write(const char* buf, size_t size, size_t nmemb, GetFileAsync * self)
     {
         FILE * out = self->out_;
+        if(!out)
+            out = self->out_ = mstd::wfopen(self->fname_, "wb");
         if(out)
         {
             size_t written = fwrite(buf, size, nmemb, self->out_);
@@ -283,8 +286,9 @@ private:
             {
                 MLOG_ERROR("write failed: " << written << " vs " << size * nmemb);
             }
-        }
-        return size * nmemb;
+            return written;
+        } else
+            return 0;
     }
 
     boost::filesystem::wpath fname_;
@@ -372,7 +376,7 @@ public:
 	    curl_easy_setopt(curl, CURLOPT_ENCODING, "gzip");
 	    curl_easy_setopt(curl, CURLOPT_HTTP_CONTENT_DECODING, 1);
 	
-	    #ifdef __APPLE__
+	    #if !BOOST_WINDOWS
 	    /* setting this option is needed to allow libcurl to work
 	        multithreaded with standard DNS resolver. see libcurl
 	        documentation about the side-effects */
@@ -380,6 +384,8 @@ public:
 	    #endif
 	
         curl_easy_setopt(curl, CURLOPT_USERAGENT, userAgent().c_str());
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
 
         return curl;
     }
