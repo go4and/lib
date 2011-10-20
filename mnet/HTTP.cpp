@@ -208,6 +208,7 @@ public:
 private:
     static size_t write(const char* buf, size_t size, size_t nmemb, GetDataAsync * self)
     {
+        MLOG_MESSAGE(Debug, "GetDataAsync::write(" << static_cast<const void*>(buf) << ", " << size << ", " << nmemb << ", " << self << ")");
         std::string & data = self->data_;
         data.insert(data.end(), buf, buf + size * nmemb);
         return size * nmemb;
@@ -261,34 +262,26 @@ public:
         }
         uiEnqueue(boost::bind(handler_, ec));
     }
-
-/*    void operator()()
-    {
-        try {
-            MLOG_MESSAGE(Debug, "async file: " << url_ << " => " << mstd::utf8(fname_.external_file_string()));
-            http_->download(url_, fname_, boost::bind(&GetFileAsync::progress, this, _1));
-            uiEnqueue(boost::bind(handler_, boost::system::error_code()));
-        } catch(http_t::exception &) {
-            uiEnqueue(boost::bind(handler_, boost::system::errc::make_error_code(boost::system::errc::protocol_error)));
-        }
-    }*/
-
 private:
     static size_t write(const char* buf, size_t size, size_t nmemb, GetFileAsync * self)
     {
         FILE * out = self->out_;
         if(!out)
-            out = self->out_ = mstd::wfopen(self->fname_, "wb");
-        if(out)
         {
-            size_t written = fwrite(buf, size, nmemb, self->out_);
-            if(written != size * nmemb)
+            out = self->out_ = mstd::wfopen(self->fname_, "wb");
+            if(!out)
             {
-                MLOG_ERROR("write failed: " << written << " vs " << size * nmemb);
+                int err = errno;
+                MLOG_ERROR("failed to open " << mstd::utf8fname(fname_) << ", err: " << err << ", for: " << url());
+                return 0;
             }
-            return written;
-        } else
-            return 0;
+        }
+        size_t written = fwrite(buf, 1, size * nmemb, self->out_);
+        if(written != size * nmemb)
+        {
+            MLOG_ERROR("write failed: " << written << " vs " << size * nmemb);
+        }
+        return written;
     }
 
     boost::filesystem::wpath fname_;
