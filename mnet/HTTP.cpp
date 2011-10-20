@@ -248,6 +248,11 @@ public:
         curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, &GetFileAsync::write);
         curl_easy_setopt(curl_, CURLOPT_WRITEDATA, self);
         out_ = mstd::wfopen(fname_, "wb");
+        if(!out_)
+        {
+            int err = errno;
+            MLOG_ERROR("failed to open " << mstd::utf8fname(fname_) << ", err: " << err << ", for: " << url());
+        }
     }
 
     void done(int ec)
@@ -261,18 +266,6 @@ public:
         }
         uiEnqueue(boost::bind(handler_, ec));
     }
-
-/*    void operator()()
-    {
-        try {
-            MLOG_MESSAGE(Debug, "async file: " << url_ << " => " << mstd::utf8(fname_.external_file_string()));
-            http_->download(url_, fname_, boost::bind(&GetFileAsync::progress, this, _1));
-            uiEnqueue(boost::bind(handler_, boost::system::error_code()));
-        } catch(http_t::exception &) {
-            uiEnqueue(boost::bind(handler_, boost::system::errc::make_error_code(boost::system::errc::protocol_error)));
-        }
-    }*/
-
 private:
     static size_t write(const char* buf, size_t size, size_t nmemb, GetFileAsync * self)
     {
