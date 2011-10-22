@@ -272,7 +272,7 @@ private:
             if(!out)
             {
                 int err = errno;
-                MLOG_ERROR("failed to open " << mstd::utf8fname(fname_) << ", err: " << err << ", for: " << url());
+                MLOG_ERROR("failed to open " << mstd::utf8fname(self->fname_) << ", err: " << err << ", for: " << self->url());
                 return 0;
             }
         }
