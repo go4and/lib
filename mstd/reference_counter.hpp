@@ -5,12 +5,14 @@
 #include "config.hpp"
 
 #include "atomic.hpp"
+#include "disposers.hpp"
 
 namespace mstd {
 
-template<class T, class D>
+template<class T, class D, class C>
 class reference_counter;
 
+template<class Counter = atomic<size_t> >
 class MSTD_DECL reference_counter_base {
 public:
     reference_counter_base()
@@ -33,38 +35,30 @@ private:
         return value == 1;
     }
 
-    atomic<size_t> references_;
+    Counter references_;
     
-    template<class T, class D>
-    friend void intrusive_ptr_add_ref(reference_counter<T, D> * obj);
+    template<class T, class D, class C>
+    friend void intrusive_ptr_add_ref(reference_counter<T, D, C> * obj);
     
-    template<class T, class D>
-    friend void intrusive_ptr_release(reference_counter<T, D> * obj);
+    template<class T, class D, class C>
+    friend void intrusive_ptr_release(reference_counter<T, D, C> * obj);
 };
 
-struct Deleter {
-    template<class T>
-    static void release(T * t)
-    {
-        delete t;
-    }
+template<class T, class Releaser = delete_disposer, class Counter = atomic<size_t> >
+class reference_counter : public reference_counter_base<Counter> {
 };
 
-template<class T, class Releaser = Deleter>
-class reference_counter : public reference_counter_base {
-};
-
-template<class T, class D>
-inline void intrusive_ptr_add_ref(reference_counter<T, D> * obj)
+template<class T, class D, class C>
+inline void intrusive_ptr_add_ref(reference_counter<T, D, C> * obj)
 {
     obj->add_ref();
 }
 
-template<class T, class D>
-inline void intrusive_ptr_release(reference_counter<T, D> * obj)
+template<class T, class D, class C>
+inline void intrusive_ptr_release(reference_counter<T, D, C> * obj)
 {
     if(obj->release())
-        D::release(static_cast<T*>(obj));
+        D()(static_cast<T*>(obj));
 }
 
 }

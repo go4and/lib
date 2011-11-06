@@ -29,7 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C35853A2143F61CF0018E602 /* MacUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MacUtils.mm; path = ../../../../lib/mlog/MacUtils.mm; sourceTree = "<group>"; };
+		C35853A2143F61CF0018E602 /* MacUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MacUtils.mm; path = MacUtils.mm; sourceTree = SOURCE_ROOT; };
 		C35853A4143F62FB0018E602 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C36A1540143D828500185523 /* mstd.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3F10D4F1352FCE200D8C945 /* mlog.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,9 +68,8 @@
 			isa = PBXGroup;
 			children = (
 				C35853A4143F62FB0018E602 /* Foundation.framework */,
-				C35853A2143F61CF0018E602 /* MacUtils.mm */,
 				C36A1540143D828500185523 /* mstd.dylib */,
-				C3F10D511352FCE200D8C945 /* mlog */,
+				C3F10D511352FCE200D8C945 /* Sources */,
 				C3F10D501352FCE200D8C945 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -83,9 +82,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C3F10D511352FCE200D8C945 /* mlog */ = {
+		C3F10D511352FCE200D8C945 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C35853A2143F61CF0018E602 /* MacUtils.mm */,
 				C3F10D701352FDE600D8C945 /* Config.h */,
 				C3F10D711352FDE600D8C945 /* Defines.h */,
 				C3F10D721352FDE600D8C945 /* Dumper.cpp */,
@@ -103,6 +103,7 @@
 				C3F10D821352FDE600D8C945 /* Utils.cpp */,
 				C3F10D831352FDE600D8C945 /* Utils.h */,
 			);
+			name = Sources;
 			path = mlog;
 			sourceTree = "<group>";
 		};
@@ -202,7 +203,7 @@
 				GCC_PREFIX_HEADER = pch.h;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -232,7 +233,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pch.h;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

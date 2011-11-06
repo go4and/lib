@@ -145,4 +145,9 @@ void BufferAsString::pack(char *& out) const
     out += len;
 }
 
+void badExpectedSize(PacketCode code, size_t expectedSize, size_t size)
+{
+    throw InvalidPackSizeException() << PacketCodeInfo(code) << ExpectedSizeInfo(expectedSize) << FoundSizeInfo(size - 1); \
+}
+
 }

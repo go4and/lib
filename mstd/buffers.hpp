@@ -35,7 +35,7 @@ class buffer;
 namespace detail {
     class MSTD_DECL buffer_releaser {
     public:
-        static void release(buffer * buf);
+        void operator()(buffer * buf) const;
     };
 }
 

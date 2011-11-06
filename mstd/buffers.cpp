@@ -349,7 +349,7 @@ pbuffer scoped_allocator::operator()(size_t size)
 
 namespace detail {
 
-void buffer_releaser::release(buffer * buf)
+void buffer_releaser::operator()(buffer * buf) const
 {
     pool * p = buf->pool_;
     if(p)

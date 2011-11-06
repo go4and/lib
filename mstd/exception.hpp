@@ -36,15 +36,8 @@ class tag_errcode;
 typedef boost::error_info<tag_errno, boost::system::error_code> error_code;
 #endif
 
-inline error_message make_error_message(const std::string & text)
-{
-    return error_message(text);
-}
-
-inline error_message make_error_message(const std::wstring & text)
-{
-    return error_message(mstd::utf8(text));
-}
+error_message make_error_message(const std::string & text);
+error_message make_error_message(const std::wstring & text);
 
 class MSTD_DECL exception : public std::exception, public boost::exception {
 public:

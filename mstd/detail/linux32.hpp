@@ -21,6 +21,7 @@ template<>
 inline boost::uint64_t atomic_read<8>(const volatile void *aptr)
 {
     volatile boost::uint64_t * ptr = static_cast<volatile boost::uint64_t*>(const_cast<volatile void*>(aptr));
+#if !BOOST_CLANG
     if(!(reinterpret_cast<uint32_t>(ptr) & 7))
     {
         boost::uint64_t result;
@@ -28,17 +29,20 @@ inline boost::uint64_t atomic_read<8>(const volatile void *aptr)
                                "fistpq %0" : "=m"(result) : "m"(*ptr), "m"(result) : "memory");
         return result;
     } else
+#endif
         return atomic_cas<8>(ptr, 0, 0);
 }
 
 template<>
 inline void atomic_write<8>(volatile void *ptr, boost::uint64_t value)
 {
+#if !BOOST_CLANG
     if(!(reinterpret_cast<uint32_t>(ptr) & 7u))
     {
         __asm__ __volatile__ ( "fildq %1\n\t"
                                "fistpq (%2)" :  "=m"(*static_cast<volatile boost::uint64_t*>(ptr)) : "m"(value), "r"(ptr) : "memory" );
     } else
+#endif
         generic_modify<8>(ptr, Set<uint64_t>(value));
 }
 

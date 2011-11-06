@@ -543,11 +543,13 @@ BOOST_PP_REPEAT_FROM_TO(
     1, BOOST_PP_INC(NEXUS_PACKET_PACKER_MAX_ARITY),
     NEXUS_PACKET_PACKER_PACK_VEC_DEF, _ )
 
+void badExpectedSize(PacketCode code, size_t expectedSize, size_t size);
+
 inline Buffer packCD(PacketCode code, size_t expectedSize)
 {
     size_t size = 1;
     if(size != expectedSize + 1)
-        throw InvalidPackSizeException() << PacketCodeInfo(code) << ExpectedSizeInfo(expectedSize) << FoundSizeInfo(size - 1);
+        badExpectedSize(code, expectedSize, size);
     NEXUS_PACKET_PACKER_INIT_POS();
     write<unsigned char>(pos, code);
     NEXUS_PACKET_PACKER_RETURN();
@@ -559,7 +561,7 @@ inline Buffer packCD(PacketCode code, size_t expectedSize)
     { \
         size_t size = 1 + nexus::tupleSize(BOOST_PP_ENUM_PARAMS(n, x)); \
         if(size != expectedSize + 1) \
-            throw InvalidPackSizeException() << PacketCodeInfo(code) << ExpectedSizeInfo(expectedSize) << FoundSizeInfo(size - 1); \
+            badExpectedSize(code, expectedSize, size); \
         NEXUS_PACKET_PACKER_INIT_POS(); \
         write<unsigned char>(pos, code); \
         nexus::tuplePack(pos, BOOST_PP_ENUM_PARAMS(n, x)); \

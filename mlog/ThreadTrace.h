@@ -2,6 +2,8 @@
 
 #if !defined(MLOG_BUILDING) && !MLOG_NO_LOGGING
 #include <exception>
+
+#include <boost/thread/exceptions.hpp>
 #endif
 
 #include "Config.h"

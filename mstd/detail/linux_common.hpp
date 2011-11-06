@@ -8,25 +8,13 @@
 template<> \
 inline size_to_int<SIZE>::type atomic_cas<SIZE>(volatile void* ptr, size_to_int<SIZE>::type value, size_to_int<SIZE>::type cmp) \
 { \
-    typedef size_to_int<SIZE>::type value_type; \
-    value_type result; \
-    __asm__ __volatile__("lock\ncmpxchg" SUFFIX " %2, %1" \
-                          : "=a"(result), "=m"(*static_cast<volatile value_type*>(ptr)) \
-                          : "q"(value), "0"(cmp) \
-                          : "memory"); \
-    return result; \
+    return __sync_val_compare_and_swap(static_cast<volatile size_to_int<SIZE>::type *>(ptr), cmp, value); \
 } \
 \
 template<> \
 inline size_to_int<SIZE>::type atomic_add<SIZE>(volatile void* ptr, size_to_int<SIZE>::type value) \
 { \
-    typedef size_to_int<SIZE>::type value_type; \
-    value_type result; \
-    __asm__ __volatile__("lock\nxadd" SUFFIX " %0, %1" \
-                          : "=r"(result), "=m"(*static_cast<volatile value_type*>(ptr)) \
-                          : "0"(value) \
-                          : "memory"); \
-   return result; \
+   return __sync_fetch_and_add(static_cast<volatile size_to_int<SIZE>::type *>(ptr), value); \
 } \
 \
 template<> \

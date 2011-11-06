@@ -209,7 +209,8 @@ public:
     
     void operator()(const char * str, size_t len)
     {
-        fwrite(str, 1, len, handle_);
+        size_t wr = fwrite(str, 1, len, handle_);
+        BOOST_VERIFY(wr == len);
         fflush(handle_);
     }
 

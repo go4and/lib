@@ -97,47 +97,53 @@ const size_t resolveStorageSize = 0x200;
 
 #define NEXUS_DECLARE_HANDLER(suffix, cls, n, kind, strict) \
     BOOST_PP_EXPR_IF(n, template <BOOST_PP_ENUM_PARAMS(n, class T)>) \
-    class Handle##suffix { \
+    class BOOST_PP_CAT(Handle, suffix); \
+    \
+    BOOST_PP_EXPR_IF(n, template <BOOST_PP_ENUM_PARAMS(n, class T)>) \
+    friend class BOOST_PP_CAT(Handle, suffix); \
+    \
+    BOOST_PP_EXPR_IF(n, template <BOOST_PP_ENUM_PARAMS(n, class T)>) \
+    class BOOST_PP_CAT(Handle, suffix) { \
     public: \
         explicit Handle##suffix(cls * t BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(n, const T, & m)) \
             : t_(t) BOOST_PP_ENUM_TRAILING(n, NEXUS_HANDLER_ASSIGN_ARGUMENT_DEF, ~) {} \
     \
         BOOST_PP_REPEAT_FROM_TO( \
             1, BOOST_PP_INC(NEXUS_HANDLER_MAX_ARITY), \
-            NEXUS_HANDLER_FORWARD_DEF, (handle##suffix, n)) \
-    private: \
-        cls * t_; \
-        BOOST_PP_REPEAT(n, NEXUS_HANDLER_MEMBER_DEF, ~) \
+            NEXUS_HANDLER_FORWARD_DEF, (BOOST_PP_CAT(handle, suffix) , n)) \
         \
         void * alloc(size_t size) \
         { \
             return t_->storage##suffix##_.alloc(size); \
         } \
         \
-        friend void* asio_handler_allocate(size_t size, Handle##suffix BOOST_PP_EXPR_IF(n, <BOOST_PP_ENUM_PARAMS(n, T)>) * handler) \
-        { \
-            return handler->alloc(size); \
-        } \
-        \
         void free(void * data) \
         { \
             return t_->storage##suffix##_.free(data); \
         } \
+    private: \
+        cls * t_; \
+        BOOST_PP_REPEAT(n, NEXUS_HANDLER_MEMBER_DEF, ~) \
         \
-        friend void asio_handler_deallocate(void * data, size_t size, Handle##suffix BOOST_PP_EXPR_IF(n, <BOOST_PP_ENUM_PARAMS(n, T)>) * handler) \
-        { \
-            return handler->free(data); \
-        } \
     }; \
-    \
     BOOST_PP_EXPR_IF(n, template <BOOST_PP_ENUM_PARAMS(n, class T)>) \
-    Handle##suffix BOOST_PP_EXPR_IF(n, <BOOST_PP_ENUM_PARAMS(n, T)>) bind##suffix (BOOST_PP_ENUM_BINARY_PARAMS(n, const T, & m)) \
+    BOOST_PP_CAT(Handle, suffix) BOOST_PP_EXPR_IF(n, <BOOST_PP_ENUM_PARAMS(n, T)>) BOOST_PP_CAT(bind, suffix) (BOOST_PP_ENUM_BINARY_PARAMS(n, const T, & m)) \
     { \
-        return Handle##suffix BOOST_PP_EXPR_IF(n, <BOOST_PP_ENUM_PARAMS(n, T)>)(this BOOST_PP_ENUM_TRAILING_PARAMS(n, m)); \
+        return BOOST_PP_CAT(Handle, suffix) BOOST_PP_EXPR_IF(n, <BOOST_PP_ENUM_PARAMS(n, T)>)(this BOOST_PP_ENUM_TRAILING_PARAMS(n, m)); \
     } \
     \
-    BOOST_PP_EXPR_IF(n, template <BOOST_PP_ENUM(n, NEXUS_GET_DATA, class)>) \
-    friend class Handle##suffix; \
+    BOOST_PP_EXPR_IF(n, template <BOOST_PP_ENUM_PARAMS(n, class T)>) \
+    friend void* asio_handler_allocate(size_t size, BOOST_PP_CAT(Handle, suffix) BOOST_PP_EXPR_IF(n, <BOOST_PP_ENUM_PARAMS(n, T)>) * handler) \
+    { \
+        return handler->alloc(size); \
+    } \
+    \
+    BOOST_PP_EXPR_IF(n, template <BOOST_PP_ENUM_PARAMS(n, class T)>) \
+    friend void asio_handler_deallocate(void * data, size_t size, BOOST_PP_CAT(Handle, suffix) BOOST_PP_EXPR_IF(n, <BOOST_PP_ENUM_PARAMS(n, T)>) * handler) \
+    { \
+        return handler->free(data); \
+    } \
+    \
     nexus::HandlerStorage<nexus::kind##StorageSize, strict> storage##suffix##_; \
     /**/
 
