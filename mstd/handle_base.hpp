@@ -68,6 +68,18 @@ public:
     static bool is_null(const T & handle) { return handle == Parent::null(); }
 };
 
+template<class T, class R, R (*Closer)(T), T nil_value = 0>
+struct global_fun_traits {
+    static bool is_null(const T & handle) { return handle == null(); }
+
+    static const T & null() {
+        static const T nV = nil_value;
+        return nV;
+    }
+
+    static void close(const T & handle) { Closer(handle); }
+};
+
 template<class Handle, class Traits, template<class H, class T> class HandleOwningPolicy = member_owning_policy>
 class handle_base : public HandleOwningPolicy<Handle, Traits>, private boost::noncopyable {
 private:
