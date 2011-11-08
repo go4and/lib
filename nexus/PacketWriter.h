@@ -2,6 +2,7 @@
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_pod.hpp>
+#include <boost/type_traits/is_pointer.hpp>
 
 #include <mstd/pointer_cast.hpp>
 
@@ -10,7 +11,7 @@ namespace nexus {
 template<class T>
 void write(char *& pos, const T & t)
 {
-    BOOST_STATIC_ASSERT((boost::is_pod<T>::value));
+    BOOST_STATIC_ASSERT(boost::is_pod<T>::value && !boost::is_pointer<T>::value);
 
 #ifdef NDEBUG
     memcpy(pos, &t, sizeof(t));

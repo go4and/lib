@@ -4,10 +4,16 @@
 
 #include "config.hpp"
 
+#ifndef __S3E__
 #include "atomic.hpp"
+#endif
+
 #include "disposers.hpp"
 
 namespace mstd {
+
+template<typename T>
+class atomic;
 
 template<class T, class D, class C>
 class reference_counter;
