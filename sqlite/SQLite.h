@@ -16,7 +16,7 @@ struct sqlite3_stmt;
 
 namespace sqlite {
 
-class SQLite;
+class DB;
 
 class ErrorCode {
 public:
@@ -50,16 +50,21 @@ private:
     std::string message_;
 };
 
-class SQLiteStatement : private boost::noncopyable {
+struct Blob {
+    const char * data;
+    int len;
+};
+
+class Statement : private boost::noncopyable {
 public:
 #if !SQLITE_NO_EXCEPTIONS
-    SQLiteStatement(SQLite & db, const std::string & sql);
-    SQLiteStatement(SQLite & db, const std::wstring & sql);
+    Statement(DB & db, const std::string & sql);
+    Statement(DB & db, const std::wstring & sql);
 #endif
-    SQLiteStatement(SQLite & db, const std::string & sql, ErrorCode & ec);
-    SQLiteStatement(SQLite & db, const std::wstring & sql, ErrorCode & ec);
+    Statement(DB & db, const std::string & sql, ErrorCode & ec);
+    Statement(DB & db, const std::wstring & sql, ErrorCode & ec);
 
-    ~SQLiteStatement();
+    ~Statement();
 
 #if !SQLITE_NO_EXCEPTIONS
     void reset();
@@ -71,6 +76,8 @@ public:
     void bindInt64(int index, int64_t value);
     void bindInt(int index, int32_t value);
     void bindString(int index, const std::string & value);
+    void bindBlob(int index, const char * data, int len);
+    inline void bindBlob(int index, const Blob & blob) { bindBlob(index, blob.data, blob.len); }
     
     template<class T, class S>
     typename boost::enable_if<boost::is_same<T, int64_t>, void>::type
@@ -91,26 +98,27 @@ public:
     double getDouble(int col);
     std::string getString(int col);
     std::wstring getWString(int col);
+    Blob getBlob(int col);
     bool isNull(int col);
 private:
-    SQLite & db_;
+    DB & db_;
     sqlite3_stmt * handle_;
 #if !defined(MLOG_NO_LOGGING)
     std::string sql_;
 #endif
 };
 
-class SQLite : private boost::noncopyable {
+class DB : private boost::noncopyable {
 public:
 #if !SQLITE_NO_EXCEPTIONS
-    SQLite(const std::string & filename);
-    SQLite(const std::wstring & filename);
+    DB(const std::string & filename);
+    DB(const std::wstring & filename);
 #endif
 
-    SQLite(const std::string & filename, ErrorCode & ec);
-    SQLite(const std::wstring & filename, ErrorCode & ec);
+    DB(const std::string & filename, ErrorCode & ec);
+    DB(const std::wstring & filename, ErrorCode & ec);
     
-    SQLite();
+    DB();
     void open(const std::string & filename, ErrorCode & ec);
     void open(const std::wstring & filename, ErrorCode & ec);
 
@@ -122,7 +130,7 @@ public:
 #endif
     void exec(const std::string & sql, ErrorCode & ec);
 
-    ~SQLite();
+    ~DB();
 private:
     sqlite3 * handle_;
 };
@@ -130,9 +138,9 @@ private:
 class Transaction : public boost::noncopyable {
 public:
 #if !SQLITE_NO_EXCEPTIONS
-    explicit Transaction(SQLite & db);
+    explicit Transaction(DB & db);
 #endif
-    explicit Transaction(SQLite & db, ErrorCode & ec);
+    explicit Transaction(DB & db, ErrorCode & ec);
 
     ~Transaction();
 
@@ -141,12 +149,12 @@ public:
 #endif
     void commit(ErrorCode & ec);
 private:
-    SQLite * db_;
+    DB * db_;
     bool ok_;
 };
 
 #if !SQLITE_NO_EXCEPTIONS
-typedef mstd::own_exception<SQLite> SQLiteException;
+typedef mstd::own_exception<DB> Exception;
 #endif
 
 }

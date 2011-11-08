@@ -3,6 +3,8 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_pod.hpp>
 
+#include <mstd/pointer_cast.hpp>
+
 namespace nexus {
 
 template<class T>

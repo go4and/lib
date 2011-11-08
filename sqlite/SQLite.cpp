@@ -66,13 +66,9 @@ private:
 void ErrorCode::check_()
 {
     if(err_ != SQLITE_OK)
-        BOOST_THROW_EXCEPTION(SQLiteException() << mstd::error_message(message_) << mstd::error_no(err_));
+        BOOST_THROW_EXCEPTION(Exception() << mstd::error_message(message_) << mstd::error_no(err_));
 }
 #endif
-
-//////////////////////////////////////////////////////////////////////////
-// class SQLite::Impl
-//////////////////////////////////////////////////////////////////////////
 
 sqlite3 * sqliteOpen(const std::string & filename, ErrorCode & ec)
 {
@@ -88,85 +84,85 @@ sqlite3 * sqliteOpen(const std::string & filename, ErrorCode & ec)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// class SQLite
+// class DB
 //////////////////////////////////////////////////////////////////////////
 
 #if !SQLITE_NO_EXCEPTIONS
-SQLite::SQLite(const std::string & filename)
+DB::DB(const std::string & filename)
 {
     ErrorCode ec;
     handle_ = sqliteOpen(filename, ec);
     ec.check_();
 }
 
-SQLite::SQLite(const std::wstring & filename)
+DB::DB(const std::wstring & filename)
 {
     ErrorCode ec;
     handle_ = sqliteOpen(mstd::utf8(filename), ec);
     ec.check_();
 }
     
-void SQLite::exec(const std::string & sql)
+void DB::exec(const std::string & sql)
 {   
-    SQLiteStatement stmt(*this, sql);
+    Statement stmt(*this, sql);
     stmt.step();
 }
 #endif
 
-SQLite::SQLite() : handle_(0)
+DB::DB() : handle_(0)
 {
 }
 
-SQLite::SQLite(const std::string & filename, ErrorCode & ec)
+DB::DB(const std::string & filename, ErrorCode & ec)
     : handle_(sqliteOpen(filename, ec)) 
 {
 }
 
-SQLite::SQLite(const std::wstring & filename, ErrorCode & ec)
+DB::DB(const std::wstring & filename, ErrorCode & ec)
     : handle_(sqliteOpen(mstd::utf8(filename), ec)) {}
 
-void SQLite::open(const std::string & filename, ErrorCode & ec)
+void DB::open(const std::string & filename, ErrorCode & ec)
 {
     if(handle_)
         sqlite3_close(handle_);
     handle_ = sqliteOpen(filename, ec);
 }
 
-void SQLite::open(const std::wstring & filename, ErrorCode & ec)
+void DB::open(const std::wstring & filename, ErrorCode & ec)
 {
     if(handle_)
         sqlite3_close(handle_);
     handle_ = sqliteOpen(mstd::utf8(filename), ec);
 }
     
-void SQLite::exec(const std::string & sql, ErrorCode & ec)
+void DB::exec(const std::string & sql, ErrorCode & ec)
 {   
-    SQLiteStatement stmt(*this, sql, ec);
+    Statement stmt(*this, sql, ec);
     if(!ec)
         stmt.step(ec);
 }
 
-sqlite3 * SQLite::handle()
+sqlite3 * DB::handle()
 {
     return handle_;
 }
 
-int64_t SQLite::lastInsertRowId()
+int64_t DB::lastInsertRowId()
 {
     return sqlite3_last_insert_rowid(handle_);
 }
 
-SQLite::~SQLite()
+DB::~DB()
 {
     if(handle_)
         sqlite3_close(handle_);
 }
 
 //////////////////////////////////////////////////////////////////////////
-// class SQLiteStatement
+// class Statement
 //////////////////////////////////////////////////////////////////////////
 
-sqlite3_stmt * sqlitePrepare(SQLite & db, const std::string & sql, ErrorCode & ec)
+sqlite3_stmt * sqlitePrepare(DB & db, const std::string & sql, ErrorCode & ec)
 {
     const char * dummy;
     sqlite3_stmt * result = 0;
@@ -180,7 +176,7 @@ sqlite3_stmt * sqlitePrepare(SQLite & db, const std::string & sql, ErrorCode & e
 }
 
 #if !SQLITE_NO_EXCEPTIONS
-SQLiteStatement::SQLiteStatement(SQLite & db, const std::string & sql)
+Statement::Statement(DB & db, const std::string & sql)
     : db_(db)
 #if !defined(MLOG_NO_LOGGING)
           , sql_(sql)
@@ -191,7 +187,7 @@ SQLiteStatement::SQLiteStatement(SQLite & db, const std::string & sql)
     ec.check_();
 }
 
-SQLiteStatement::SQLiteStatement(SQLite & db, const std::wstring & sql)
+Statement::Statement(DB & db, const std::wstring & sql)
     : db_(db)
 #if !defined(MLOG_NO_LOGGING)
           , sql_(mstd::utf8(sql))
@@ -203,7 +199,7 @@ SQLiteStatement::SQLiteStatement(SQLite & db, const std::wstring & sql)
 }
 #endif
 
-SQLiteStatement::SQLiteStatement(SQLite & db, const std::string & sql, ErrorCode & ec)
+Statement::Statement(DB & db, const std::string & sql, ErrorCode & ec)
     : db_(db), handle_(sqlitePrepare(db, sql, ec))
 #if !defined(MLOG_NO_LOGGING)
           , sql_(sql)
@@ -211,7 +207,7 @@ SQLiteStatement::SQLiteStatement(SQLite & db, const std::string & sql, ErrorCode
 {
 }
 
-SQLiteStatement::SQLiteStatement(SQLite & db, const std::wstring & sql, ErrorCode & ec)
+Statement::Statement(DB & db, const std::wstring & sql, ErrorCode & ec)
     : db_(db), handle_(sqlitePrepare(db, mstd::utf8(sql), ec))
 #if !defined(MLOG_NO_LOGGING)
           , sql_(mstd::utf8(sql))
@@ -219,33 +215,38 @@ SQLiteStatement::SQLiteStatement(SQLite & db, const std::wstring & sql, ErrorCod
 {
 }
 
-SQLiteStatement::~SQLiteStatement()
+Statement::~Statement()
 {
     if(handle_)
         sqlite3_finalize(handle_);
 }
 
-void SQLiteStatement::bindInt(int index, int32_t value)
+void Statement::bindInt(int index, int32_t value)
 {
     sqlite3_bind_int(handle_, index, value);
 }
 
-void SQLiteStatement::bindInt64(int index, int64_t value)
+void Statement::bindInt64(int index, int64_t value)
 {
     sqlite3_bind_int64(handle_, index, value);
 }
 
-void SQLiteStatement::bindString(int index, const std::string & value)
+void Statement::bindString(int index, const std::string & value)
 {
     sqlite3_bind_text(handle_, index, value.c_str(), value.length(), SQLITE_STATIC);
 }
 
-void SQLiteStatement::reset(ErrorCode & ec)
+void Statement::bindBlob(int index, const char * data, int len)
+{
+    sqlite3_bind_blob(handle_, index, data, len, SQLITE_STATIC);
+}
+
+void Statement::reset(ErrorCode & ec)
 {
     resetEC(ec, sqlite3_reset(handle_), db_.handle());
 }
 
-bool SQLiteStatement::step(ErrorCode & ec)
+bool Statement::step(ErrorCode & ec)
 {
 #if !defined(__APPLE__) && !defined(MLOG_NO_LOGGING)
     mstd::performance_timer ptimer;
@@ -271,7 +272,7 @@ bool SQLiteStatement::step(ErrorCode & ec)
 }
 
 #if !SQLITE_NO_EXCEPTIONS
-bool SQLiteStatement::step()
+bool Statement::step()
 {
     ErrorCode ec;
     bool result = step(ec);
@@ -280,32 +281,32 @@ bool SQLiteStatement::step()
 }
 #endif
 
-int32_t SQLiteStatement::getInt(int col)
+int32_t Statement::getInt(int col)
 {
     return sqlite3_column_int(handle_, col);
 }
 
-int64_t SQLiteStatement::getInt64(int col)
+int64_t Statement::getInt64(int col)
 {
     return sqlite3_column_int64(handle_, col);
 }
 
-double SQLiteStatement::getDouble(int col)
+double Statement::getDouble(int col)
 {
     return sqlite3_column_int(handle_, col);
 }
 
-bool SQLiteStatement::isNull(int col)
+bool Statement::isNull(int col)
 {
     return sqlite3_column_type(handle_, col) == SQLITE_NULL;
 }
 
-std::string SQLiteStatement::getString(int col)
+std::string Statement::getString(int col)
 {
     return mstd::pointer_cast<const char*>(sqlite3_column_text(handle_, col));
 }
 
-std::wstring SQLiteStatement::getWString(int col)
+std::wstring Statement::getWString(int col)
 {
     const char * res = mstd::pointer_cast<const char*>(sqlite3_column_text(handle_, col));
     size_t len = strlen(res);
@@ -314,7 +315,15 @@ std::wstring SQLiteStatement::getWString(int col)
     return std::wstring(buf, end);
 }
 
-Transaction::Transaction(SQLite & db, ErrorCode & ec)
+Blob Statement::getBlob(int col)
+{
+    Blob result;
+    result.data = static_cast<const char*>(sqlite3_column_blob(handle_, col));
+    result.len = sqlite3_column_bytes(handle_, col);
+    return result;
+}
+
+Transaction::Transaction(DB & db, ErrorCode & ec)
     : db_(&db), ok_(false)
 {
     db_->exec("begin", ec);
@@ -323,7 +332,7 @@ Transaction::Transaction(SQLite & db, ErrorCode & ec)
 }
 
 #if !SQLITE_NO_EXCEPTIONS
-Transaction::Transaction(SQLite & db)
+Transaction::Transaction(DB & db)
     : db_(&db), ok_(false)
 {
     ErrorCode ec;

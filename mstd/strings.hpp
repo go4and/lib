@@ -8,7 +8,7 @@ namespace mstd {
 
 namespace detail {
 
-template<class T> class switch_char;
+template<class T> struct switch_char;
 
 template<> struct switch_char<char> { typedef wchar_t type; };
 template<> struct switch_char<wchar_t> { typedef char type; };

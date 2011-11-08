@@ -68,12 +68,17 @@ public:
     static bool is_null(const T & handle) { return handle == Parent::null(); }
 };
 
-template<class T, class R, R (*Closer)(T), T nil_value = 0>
+template<class T>
+struct make_null {
+    static T null() { return T(); }
+};
+
+template<class T, class R, R (*Closer)(T)>
 struct global_fun_traits {
     static bool is_null(const T & handle) { return handle == null(); }
 
     static const T & null() {
-        static const T nV = nil_value;
+        static const T nV = T();
         return nV;
     }
 
