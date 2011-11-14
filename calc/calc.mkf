@@ -4,6 +4,7 @@ includepath ..
 
 define _STLP_LITTLE_ENDIAN
 define _NATIVE_WCHAR_T_DEFINED
+define BOOST_SYSTEM_NO_DEPRECATED
 option enable-exceptions
 
 files

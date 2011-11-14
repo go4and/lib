@@ -4,30 +4,14 @@
 #include <fstream>
 #endif
 
+#include "utils.hpp"
+
 #include "environment.hpp"
 
 namespace ph = boost::phoenix;
 using namespace boost::phoenix::arg_names;
 
 namespace calc {
-
-class get_arg {
-public:
-    explicit get_arg(size_t idx)
-        : idx_(idx) {}
-
-    program operator()(const std::vector<program>&, const function_lookup&) const
-    {
-        return *this;
-    }
-
-    variable operator()(void *, variable * stack) const
-    {
-        return stack[idx_];
-    }
-private:
-    size_t idx_;
-};
 
 class user_function_lookup {
 public:
@@ -42,7 +26,7 @@ public:
         {
             return lookup_(name, arity);
         } else {
-            return func(get_arg(i - begin), 0);
+            return func(stack_arg(i - begin), 0);
         }
     }
 private:

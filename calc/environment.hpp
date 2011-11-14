@@ -24,7 +24,7 @@ public:
     template<class F>
     void add(const std::wstring & name, const F & f)
     {
-        check<detail::traits<F>::context_argument>();
+        check<typename detail::template traits<F>::context_argument>();
         do_add(name, func(detail::func_compiler<F>(f), detail::traits<F>::arity));
     }
 

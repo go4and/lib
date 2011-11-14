@@ -18,6 +18,8 @@ public:
     explicit invalid_function(const std::string & name)
         : name_(name) {}
 
+    ~invalid_function() throw() {}
+
     const std::string & name() const
     {
         return name_;

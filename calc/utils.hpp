@@ -26,4 +26,23 @@ T to_int(const variable & var)
     return static_cast<T>(to_number(var));
 }
 
+class stack_arg {
+public:
+    explicit stack_arg(size_t idx)
+        : idx_(idx) {}
+
+    program operator()(const std::vector<program>&, const function_lookup&) const
+    {
+        return *this;
+    }
+
+    variable operator()(void *, variable * stack) const
+    {
+        return stack[idx_];
+    }
+private:
+    size_t idx_;
+};
+
 }
+

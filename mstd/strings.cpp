@@ -5,17 +5,29 @@
 
 #include <boost/config.hpp>
 
-#if !BOOST_WINDOWS
-#include "buffers.hpp"
-
-#include <boost/algorithm/string.hpp>
+#if !BOOST_WINDOWS && !__S3E__
+#  define MSTD_USE_PBUFFER 1
 #else
-#undef _WIN32_IE
-#define _WIN32_IE _WIN32_IE_IE60SP2
-#include <Windows.h>
-#include <Shlwapi.h>
+#  define MSTD_USE_PBUFFER 0
+#endif
 
-#include <vector>
+#if MSTD_USE_PBUFFER
+#  include "buffers.hpp"
+#else
+#  include <vector>
+#endif
+
+#if !BOOST_WINDOWS
+
+#  include <boost/algorithm/string.hpp>
+
+#else
+
+#  undef _WIN32_IE
+#  define _WIN32_IE _WIN32_IE_IE60SP2
+#  include <Windows.h>
+#  include <Shlwapi.h>
+
 #endif
 
 #include "pointer_cast.hpp"
@@ -107,7 +119,7 @@ namespace {
     const size_t maxStackLen = 0xff;
 }
 
-#if !BOOST_WINDOWS
+#if MSTD_USE_PBUFFER 
 inline char * bufferBegin(const pbuffer & buf)
 {
     return buf->ptr();
@@ -123,7 +135,7 @@ std::string MSTD_STDCALL utf8(const wchar_t * src, size_t len)
 {
     if(len > maxStackLen)
     {
-#if !BOOST_WINDOWS
+#if MSTD_USE_PBUFFER 
         pbuffer buf = buffers::instance().take(len * max_utf8_length);
 #else
         std::vector<char> buf(len * max_utf8_length);
@@ -165,7 +177,7 @@ void utf8_to_lower(std::string & input)
     size_t len = input.length();
     if(len > maxStackLen)
     {
-#if !BOOST_WINDOWS
+#if MSTD_USE_PBUFFER 
         pbuffer buf = buffers::instance().take(len * sizeof(wchar_t));
 #else
         std::vector<char> buf(len * sizeof(wchar_t));
@@ -196,7 +208,7 @@ std::string utf8_to_lower_copy(const std::string & input)
     size_t len = input.length();
     if(len > maxStackLen)
     {
-#if !BOOST_WINDOWS
+#if MSTD_USE_PBUFFER
         pbuffer buf = buffers::instance().take(len * sizeof(wchar_t));
 #else
         std::vector<char> buf(len * sizeof(wchar_t));
@@ -267,7 +279,7 @@ std::wstring MSTD_STDCALL deutf8(const char * src, size_t len)
 {
     if(len > maxStackLen)
     {
-#if !BOOST_WINDOWS
+#if MSTD_USE_PBUFFER
         pbuffer buf = buffers::instance().take(len * sizeof(wchar_t));
 #else
         std::vector<char> buf(len * sizeof(wchar_t));
