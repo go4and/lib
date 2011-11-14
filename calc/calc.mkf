@@ -1,0 +1,18 @@
+includepath .
+includepath /usr/local/boost
+includepath ..
+
+define _STLP_LITTLE_ENDIAN
+define _NATIVE_WCHAR_T_DEFINED
+option enable-exceptions
+
+files
+{
+    [include]
+build.hpp          environment.hpp    exec.hpp           identifier.hpp     sign.hpp
+config.hpp         environment_op.hpp expression.hpp     invokation.hpp     utils.hpp
+conversion.hpp     exception.hpp      fwd.hpp            pch.hpp
+	
+    [src]
+build.cpp       environment.cpp exec.cpp        expression.cpp  invokation.cpp  pch.cpp         utils.cpp
+}

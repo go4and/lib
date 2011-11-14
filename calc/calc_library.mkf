@@ -1,0 +1,14 @@
+library
+{
+        ".,calc"
+}
+
+includepath . 
+
+files
+{
+    [include]
+build.hpp          environment.hpp    exec.hpp           identifier.hpp     sign.hpp
+config.hpp         environment_op.hpp expression.hpp     invokation.hpp     utils.hpp
+conversion.hpp     exception.hpp      fwd.hpp            
+}	

@@ -1,0 +1,2 @@
+lib calc : [ glob *.cpp ] [ glob detail/*.cpp ] ;
+
