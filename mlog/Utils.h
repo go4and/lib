@@ -4,6 +4,7 @@
 
 #if !defined(MLOG_BUILDING)
 #include <iosfwd>
+#include <boost/range/iterator_range.hpp>
 #endif
 
 #include "Config.h"
@@ -58,6 +59,12 @@ template<class Collection>
 OutCollection<Collection> ocollection(const Collection & collection)
 {
     return OutCollection<Collection>(collection);
+}
+
+template<class Iterator>
+OutCollection<boost::iterator_range<Iterator> > ocollection(const std::pair<Iterator, Iterator> & p)
+{
+    return OutCollection<boost::iterator_range<Iterator> >(boost::iterator_range<Iterator>(p.first, p.second));
 }
 
 template<class Collection>
