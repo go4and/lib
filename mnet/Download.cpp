@@ -125,9 +125,13 @@ public:
         : parent_(parent), url_(url), localfile_(localfile), size_(size), listener_(listener), active_(false),
           prevElapsed_(boost::posix_time::seconds(0)), elapsed_(0)
     {
+        MLOG_DEBUG("Download::Impl(" << parent << ", " << url << ", " << localfile << ", " << size << ')');
+    
         boost::filesystem::ifstream inp(metaFile(), std::ios::binary);
         if(inp)
         {
+            MLOG_DEBUG("Download::Impl, meta found");
+
             std::streambuf * buf = inp.rdbuf();
             std::streampos size = buf->pubseekoff(0, std::ios::end);
             if(size)
@@ -259,7 +263,10 @@ private:
                     if(!out)
                         out = mstd::wfopen(localfile_, "wb");
                     if(!out)
-                        throw std::exception();
+                    {
+                        MLOG_ERROR("Failed to open: " << localfile_);
+                        return;
+                    }
                     BOOST_SCOPE_EXIT((out)) {
                         if(out)
                             fclose(out);
