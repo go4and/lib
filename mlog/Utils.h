@@ -32,6 +32,12 @@ inline std::basic_ostream<Ch, CT> & operator<<(std::basic_ostream<Ch, CT> & out,
 MLOG_DECL void setup(const char * variable, const char * appname);
 MLOG_DECL void setupFromFile(const char * filename, const char * appname);
 
+template<class T1, class T2>
+std::ostream & operator<<(std::ostream & out, const std::pair<T1, T2> & p)
+{
+    return out << '(' << p.first << ',' << p.second << ')';
+}
+
 template<class Collection>
 class OutCollection {
 public:
