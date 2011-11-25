@@ -38,6 +38,7 @@ MSTD_DECL std::wstring MSTD_STDCALL deutf8(const char * value, size_t len);
 
 MSTD_DECL std::string utf8_to_lower_copy(const std::string & input);
 MSTD_DECL void utf8_to_lower(std::string & str);
+MSTD_DECL bool utf8_iequals(const std::string & lhs, const std::string & rhs);
 
 struct deutf8_functor {
     std::wstring operator()(const std::string & input) const

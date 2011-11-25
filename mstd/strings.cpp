@@ -161,15 +161,20 @@ std::string MSTD_STDCALL utf8(const std::wstring & value)
     return utf8(value.c_str(), value.length());
 }
 
-inline void utf8_to_lower(std::string & input, size_t len, wchar_t * buffer)
+inline wchar_t * utf8_lower_to_buffer(const std::string & input, size_t len, wchar_t * buffer)
 {
     const char * src = input.c_str();
-    wchar_t * begin = buffer;
-    wchar_t * end = mstd::deutf8(src, src + len, begin);
-    to_lower(begin, end - begin);
-    input.resize(utf8_length(begin, end));
+    wchar_t * end = mstd::deutf8(src, src + len, buffer);
+    to_lower(buffer, end - buffer);
+    return end;
+}
+
+inline void utf8_to_lower(std::string & input, size_t len, wchar_t * buffer)
+{
+    wchar_t * end = utf8_lower_to_buffer(input, len, buffer);
+    input.resize(utf8_length(buffer, end));
     char * obegin = &input[0];
-    mstd::utf8(begin, end, obegin);
+    mstd::utf8(buffer, end, obegin);
 }
 
 void utf8_to_lower(std::string & input)
@@ -220,6 +225,60 @@ std::string utf8_to_lower_copy(const std::string & input)
         return utf8_to_lower_copy(input, len, buffer);
     } else
         return std::string();
+}
+
+bool utf8_iequals(wchar_t * lbegin, wchar_t * lend, wchar_t * rbegin, wchar_t * rend)
+{
+    if(lend - lbegin != rend - rbegin)
+        return false;
+    for(; lbegin != lend; ++lbegin, ++rbegin)
+        if(*lbegin != *rbegin)
+            return false;
+    return true;
+}
+
+bool utf8_iequals(wchar_t * lbegin, wchar_t * lend, const std::string & rhs)
+{
+    size_t rhsLen = rhs.length();
+    if(rhsLen > maxStackLen)
+    {
+#if MSTD_USE_PBUFFER
+        pbuffer buf = buffers::instance().take(rhsLen * sizeof(wchar_t));
+#else
+        std::vector<char> buf(rhsLen * sizeof(wchar_t));
+#endif
+        wchar_t * rbegin = pointer_cast<wchar_t*>(bufferBegin(buf));
+        wchar_t * rend = utf8_lower_to_buffer(rhs, rhsLen, rbegin);
+        return utf8_iequals(lbegin, lend, rbegin, rend);
+    } else if(rhsLen)
+    {
+        wchar_t rbegin[maxStackLen];
+        wchar_t * rend = utf8_lower_to_buffer(rhs, rhsLen, rbegin);
+        return utf8_iequals(lbegin, lend, rbegin, rend);
+    } else
+        return lbegin == lend;
+}
+
+bool utf8_iequals(const std::string & lhs, const std::string & rhs)
+{
+    size_t lhsLen = lhs.length();
+    if(lhsLen > maxStackLen)
+    {
+#if MSTD_USE_PBUFFER
+        pbuffer buf = buffers::instance().take(lhsLen * sizeof(wchar_t));
+#else
+        std::vector<char> buf(lhsLen * sizeof(wchar_t));
+#endif
+        wchar_t * begin = pointer_cast<wchar_t*>(bufferBegin(buf));
+        wchar_t * end = utf8_lower_to_buffer(lhs, lhsLen, begin);
+        return utf8_iequals(begin, end, rhs);
+    } else if(lhsLen)
+    {
+        wchar_t buffer[maxStackLen];
+        wchar_t * end = utf8_lower_to_buffer(lhs, lhsLen, buffer);
+        return utf8_iequals(buffer, end, rhs);
+    } else
+        return rhs.empty();
 }
 
 class dev_null {
