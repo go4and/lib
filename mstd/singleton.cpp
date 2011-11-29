@@ -1,6 +1,7 @@
 #include <vector>
 
 #include <boost/config.hpp>
+#include <boost/version.hpp>
 
 #if !BOOST_WINDOWS
 #include <pthread.h>
@@ -14,14 +15,19 @@ namespace mstd {
 
 void MSTD_STDCALL call_once(once_flag & flag, void (MSTD_STDCALL *f)())
 {
-    if(boost::interprocess::detail::atomic_read32(&flag) != 1)
+#if BOOST_VERSION < 104800
+    namespace bid = boost::interprocess::detail;
+#else
+    namespace bid = boost::interprocess::ipcdetail;
+#endif
+    if(bid::atomic_read32(&flag) != 1)
     {
-        if(boost::interprocess::detail::atomic_cas32(&flag, 2, 0) == 0)
+        if(bid::atomic_cas32(&flag, 2, 0) == 0)
         {
             f();
-            boost::interprocess::detail::atomic_write32(&flag, 1);
+            bid::atomic_write32(&flag, 1);
         } else {
-            while(boost::interprocess::detail::atomic_read32(&flag) != 1)
+            while(bid::atomic_read32(&flag) != 1)
             {
 #if BOOST_WINDOWS
                 SwitchToThread();

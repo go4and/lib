@@ -3,6 +3,8 @@
 #ifndef MCRYPT_BUILDING
 #include <string>
 #include <vector>
+
+#include <boost/optional.hpp>
 #endif
 
 #include "Config.h"
@@ -37,6 +39,18 @@ namespace mcrypt {
     std::wstring wvisualize(const Container & data)
     {
         return detail::visualizeImpl<std::wstring>(data);
+    }
+
+    template<class Container>
+    std::string visualize(const boost::optional<Container> & opt)
+    {
+        return opt ? visualize(opt.get()) : std::string();
+    }
+
+    template<class Container>
+    std::wstring wvisualize(const boost::optional<Container> & opt)
+    {
+        return opt ? wvisualize(opt.get()) : std::wstring();
     }
     
     MCRYPT_DECL void bfcrypt(const std::string & password, const char * begin, const char * end, std::vector<char> & out);

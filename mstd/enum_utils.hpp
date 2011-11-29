@@ -60,6 +60,7 @@ namespace mstd {
     \
     MSTD_ENUM_TRANSLATOR(enumName, ); \
     MSTD_ENUM_TRANSLATOR(enumName, w); \
+    const size_t BOOST_PP_CAT(elementsIn, enumName) = BOOST_PP_SEQ_SIZE(list);
     /**/
 
 #define MSTD_DEFINE_ENUM(enumName, list) MSTD_DEFINE_ENUM_EX(enumName, , list)

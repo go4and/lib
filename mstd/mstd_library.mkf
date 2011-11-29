@@ -9,7 +9,7 @@ any_iterator.hpp      collections.hpp       exception.hpp         kmp.hpp       
 atomic.hpp            command_queue.hpp     filesystem.hpp        lexical_cast.hpp      pointer_cast.hpp      sqr.hpp               utf8.hpp
 atomic_pod.hpp        comparators.hpp       handle_base.hpp       linked_allocator.hpp  pre_spirit.hpp        strings.hpp           wide_stream.hpp
 auto_bind.hpp         config.hpp            has.hpp               long_map.hpp          process.hpp           tagged_lock.hpp       xml.hpp
-buffers.hpp           cstdint.hpp           hash_map.hpp          map_gen.hpp           ptree.hpp             thread_pool.hpp
+buffers.hpp           cstdint.hpp           hash_map.hpp          map_gen.hpp           ptree.hpp             thread_pool.hpp       indexed_map.hpp
 buffers_fwd.hpp       debug_mutex.hpp       hash_utils.hpp        move.hpp              random.hpp            threads.hpp
 call_traits.hpp       email.hpp             hton.hpp              mutex.hpp             reference_counter.hpp tid_map.hpp
 changed_set.hpp       enum_set.hpp          intrusive.hpp         null.hpp              reverse_lock.hpp      token_generator.hpp	disposers.hpp

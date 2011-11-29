@@ -265,6 +265,8 @@ public:
 private:
     static size_t write(const char* buf, size_t size, size_t nmemb, GetFileAsync * self)
     {
+        MLOG_DEBUG("GetFileAsync::write(" << size << ", " << nmemb << ", " << self << ')');
+
         FILE * out = self->out_;
         if(!out)
         {
