@@ -29,7 +29,7 @@ compiler parse(const std::wstring & str)
     } catch(boost::exception & e) {
         mstd::rethrow<build_exception>(e);
 #if !defined(I3D_OS_S3E)
-        terminate();
+        std::terminate();
 #endif
     } catch(std::exception &) {
         throw build_exception() << mstd::error_message("Unknown exception");
