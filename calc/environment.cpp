@@ -8,9 +8,6 @@
 
 #include "environment.hpp"
 
-namespace ph = boost::phoenix;
-using namespace boost::phoenix::arg_names;
-
 namespace calc {
 
 class user_function_lookup {

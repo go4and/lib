@@ -21,14 +21,17 @@
 		C3BEC1F31486B5FC00C6D98E /* expression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1DE1486B5FC00C6D98E /* expression.hpp */; };
 		C3BEC1F41486B5FC00C6D98E /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1DF1486B5FC00C6D98E /* fwd.hpp */; };
 		C3BEC1F51486B5FC00C6D98E /* identifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1E01486B5FC00C6D98E /* identifier.hpp */; };
-		C3BEC1F61486B5FC00C6D98E /* invokation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3BEC1E11486B5FC00C6D98E /* invokation.cpp */; };
-		C3BEC1F71486B5FC00C6D98E /* invokation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1E21486B5FC00C6D98E /* invokation.hpp */; };
 		C3BEC1F81486B5FC00C6D98E /* pch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3BEC1E31486B5FC00C6D98E /* pch.cpp */; };
 		C3BEC1F91486B5FC00C6D98E /* pch.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1E41486B5FC00C6D98E /* pch.hpp */; };
 		C3BEC1FA1486B5FC00C6D98E /* sign.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1E51486B5FC00C6D98E /* sign.hpp */; };
 		C3BEC1FB1486B5FC00C6D98E /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3BEC1E61486B5FC00C6D98E /* utils.cpp */; };
 		C3BEC1FC1486B5FC00C6D98E /* utils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1E71486B5FC00C6D98E /* utils.hpp */; };
 		C3BEC20A1486B91D00C6D98E /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3BEC2091486B91D00C6D98E /* mstd.dylib */; };
+		C3BEC20F1486BFCC00C6D98E /* calc_exprLexer.c in Sources */ = {isa = PBXBuildFile; fileRef = C3BEC20B1486BFCB00C6D98E /* calc_exprLexer.c */; };
+		C3BEC2101486BFCC00C6D98E /* calc_exprLexer.h in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC20C1486BFCB00C6D98E /* calc_exprLexer.h */; };
+		C3BEC2111486BFCC00C6D98E /* calc_exprParser.c in Sources */ = {isa = PBXBuildFile; fileRef = C3BEC20D1486BFCC00C6D98E /* calc_exprParser.c */; };
+		C3BEC2121486BFCC00C6D98E /* calc_exprParser.h in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC20E1486BFCC00C6D98E /* calc_exprParser.h */; };
+		C3BEC2141486C1F800C6D98E /* libantlr3c.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3BEC2131486C1F800C6D98E /* libantlr3c.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,14 +50,19 @@
 		C3BEC1DE1486B5FC00C6D98E /* expression.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = expression.hpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1DF1486B5FC00C6D98E /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1E01486B5FC00C6D98E /* identifier.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = identifier.hpp; sourceTree = SOURCE_ROOT; };
-		C3BEC1E11486B5FC00C6D98E /* invokation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = invokation.cpp; sourceTree = SOURCE_ROOT; };
-		C3BEC1E21486B5FC00C6D98E /* invokation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = invokation.hpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1E31486B5FC00C6D98E /* pch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pch.cpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1E41486B5FC00C6D98E /* pch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pch.hpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1E51486B5FC00C6D98E /* sign.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sign.hpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1E61486B5FC00C6D98E /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utils.cpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1E71486B5FC00C6D98E /* utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = utils.hpp; sourceTree = SOURCE_ROOT; };
 		C3BEC2091486B91D00C6D98E /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3BEC20B1486BFCB00C6D98E /* calc_exprLexer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = calc_exprLexer.c; sourceTree = SOURCE_ROOT; };
+		C3BEC20C1486BFCB00C6D98E /* calc_exprLexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calc_exprLexer.h; sourceTree = SOURCE_ROOT; };
+		C3BEC20D1486BFCC00C6D98E /* calc_exprParser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = calc_exprParser.c; sourceTree = SOURCE_ROOT; };
+		C3BEC20E1486BFCC00C6D98E /* calc_exprParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calc_exprParser.h; sourceTree = SOURCE_ROOT; };
+		C3BEC2131486C1F800C6D98E /* libantlr3c.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libantlr3c.dylib; path = ../../../../../usr/local/lib/libantlr3c.dylib; sourceTree = "<group>"; };
+		C3BEC2191486C6F300C6D98E /* calc_expr.g */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calc_expr.g; sourceTree = SOURCE_ROOT; };
+		C3BEC21E1486CD9B00C6D98E /* calc_expr.tokens */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = calc_expr.tokens; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3BEC2141486C1F800C6D98E /* libantlr3c.dylib in Frameworks */,
 				C3BEC20A1486B91D00C6D98E /* mstd.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,6 +81,7 @@
 		C3BEC1AE1486B30300C6D98E = {
 			isa = PBXGroup;
 			children = (
+				C3BEC2131486C1F800C6D98E /* libantlr3c.dylib */,
 				C3BEC2091486B91D00C6D98E /* mstd.dylib */,
 				C3BEC1BB1486B30300C6D98E /* calc */,
 				C3BEC1BA1486B30300C6D98E /* Products */,
@@ -89,6 +99,12 @@
 		C3BEC1BB1486B30300C6D98E /* calc */ = {
 			isa = PBXGroup;
 			children = (
+				C3BEC21E1486CD9B00C6D98E /* calc_expr.tokens */,
+				C3BEC2191486C6F300C6D98E /* calc_expr.g */,
+				C3BEC20B1486BFCB00C6D98E /* calc_exprLexer.c */,
+				C3BEC20C1486BFCB00C6D98E /* calc_exprLexer.h */,
+				C3BEC20D1486BFCC00C6D98E /* calc_exprParser.c */,
+				C3BEC20E1486BFCC00C6D98E /* calc_exprParser.h */,
 				C3BEC1D31486B5FC00C6D98E /* build.cpp */,
 				C3BEC1D41486B5FC00C6D98E /* build.hpp */,
 				C3BEC1D51486B5FC00C6D98E /* config.hpp */,
@@ -103,8 +119,6 @@
 				C3BEC1DE1486B5FC00C6D98E /* expression.hpp */,
 				C3BEC1DF1486B5FC00C6D98E /* fwd.hpp */,
 				C3BEC1E01486B5FC00C6D98E /* identifier.hpp */,
-				C3BEC1E11486B5FC00C6D98E /* invokation.cpp */,
-				C3BEC1E21486B5FC00C6D98E /* invokation.hpp */,
 				C3BEC1E31486B5FC00C6D98E /* pch.cpp */,
 				C3BEC1E41486B5FC00C6D98E /* pch.hpp */,
 				C3BEC1E51486B5FC00C6D98E /* sign.hpp */,
@@ -139,10 +153,11 @@
 				C3BEC1F31486B5FC00C6D98E /* expression.hpp in Headers */,
 				C3BEC1F41486B5FC00C6D98E /* fwd.hpp in Headers */,
 				C3BEC1F51486B5FC00C6D98E /* identifier.hpp in Headers */,
-				C3BEC1F71486B5FC00C6D98E /* invokation.hpp in Headers */,
 				C3BEC1F91486B5FC00C6D98E /* pch.hpp in Headers */,
 				C3BEC1FA1486B5FC00C6D98E /* sign.hpp in Headers */,
 				C3BEC1FC1486B5FC00C6D98E /* utils.hpp in Headers */,
+				C3BEC2101486BFCC00C6D98E /* calc_exprLexer.h in Headers */,
+				C3BEC2121486BFCC00C6D98E /* calc_exprParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,9 +216,10 @@
 				C3BEC1ED1486B5FC00C6D98E /* environment.cpp in Sources */,
 				C3BEC1F01486B5FC00C6D98E /* exec.cpp in Sources */,
 				C3BEC1F21486B5FC00C6D98E /* expression.cpp in Sources */,
-				C3BEC1F61486B5FC00C6D98E /* invokation.cpp in Sources */,
 				C3BEC1F81486B5FC00C6D98E /* pch.cpp in Sources */,
 				C3BEC1FB1486B5FC00C6D98E /* utils.cpp in Sources */,
+				C3BEC20F1486BFCC00C6D98E /* calc_exprLexer.c in Sources */,
+				C3BEC2111486BFCC00C6D98E /* calc_exprParser.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

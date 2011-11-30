@@ -5,66 +5,64 @@ options {
     language=C;
 }
 
-start: ( statement 
-{ 
-    pANTLR3_STRING str = $statement.tree->toStringTree($statement.tree);
-    pANTLR3_STRING ustr = str->toUTF8(str);
-    const char * result = (const char*)ustr->chars;
-    printf("tree: \%s\n", result);
-} )+ EOF ;
+start: expr EOF ;
 
-statement: expr NEWLINE -> expr
-         | NEWLINE      ->
-         ;
+expr: oterm (T_OR^ oterm)* ;
+oterm: aterm (T_AND^ aterm)* ;
+aterm: boterm (T_BITOR^ boterm)* ;
+boterm: bxterm (T_BITXOR^ bxterm)* ;
+bxterm: baterm (T_BITAND^ baterm)* ;
+baterm: eterm ((T_EQ^|T_NE^) eterm)* ;
+eterm: cterm ((T_GE^|T_LE^|T_LESS^|T_GREATER^) cterm)* ;
+cterm: sterm (T_CONCAT^ sterm)* ;
+sterm: bsterm ((T_SHIFT_LEFT^|T_SHIFT_RIGHT^) bsterm)* ;
+bsterm: term ((T_PLUS^|T_MINUS^) term)* ;
+term: factor ((T_MUL^|T_DIV^|T_MOD^) factor)* ;
 
-expr: oterm (OR^ oterm)* ;
-
-oterm: aterm (AND^ aterm)* ;
-
-aterm: boterm ('|'^ boterm)* ;
-
-boterm: bxterm ('^'^ bxterm)* ;
-
-bxterm: baterm ('&'^ baterm)* ;
-
-baterm: eterm (('=='^|'~='^) eterm)* ;
-
-eterm: cterm (('>='^|'<='^|'<'^|'>'^) cterm)* ;
-
-cterm: sterm ('..'^ sterm)* ;
-
-sterm: bsterm (('<<'^|'>>'^) bsterm)* ;
-
-bsterm: term (('+'^|'-'^) term)* ;
-
-term: factor (('*'^|'/'^|'%'^) factor)* ;
-
-factor: NUMBER
-      | HEX_NUMBER 
-      | NOT^ factor
-      | QSTRING
-      | ASTRING
+factor: T_NUMBER
+      | T_HEX_NUMBER 
+      | T_NOT^ factor
+      | T_QSTRING
+      | T_ASTRING
       | '('! expr ')'!
       | '['! expr ']'!
       | invokation
-      | '-'^ expr 
+      | T_MINUS^ expr 
       | '+'! expr
-      | '#' expr
+      | T_HASH^ expr
       ;
 
-invokation: IDENTIFIER (('(' paramList ')')|('[' paramList ']'))? ;
-paramList: expr (',' expr)* ;
+invokation: T_IDENTIFIER^ (('('! paramList ')'!)|('['! paramList ']'!))? ;
+paramList: expr (','! expr)* ;
 
-NUMBER: '0'..'9'+ ;
-HEX_NUMBER: '0x' ('0'..'9'|'a'..'z'|'A'..'Z')+ ;
-NOT: 'not';
-AND: 'and';
-OR: 'or';
-QSTRING: '"' QSTRING_GUTS '"';
+T_NUMBER: '0'..'9'+ ;
+T_HEX_NUMBER: '0x' ('0'..'9'|'a'..'z'|'A'..'Z')+ ;
+T_NOT: 'not';
+T_AND: 'and';
+T_OR: 'or';
+T_QSTRING: '"' QSTRING_GUTS '"';
 fragment QSTRING_GUTS : ( '\\'. | ~('\\'|'"') )* ;
-ASTRING: '\'' ASTRING_GUTS '\'';
+T_ASTRING: '\'' ASTRING_GUTS '\'';
 fragment ASTRING_GUTS : ( '\\'. | ~('\\'|'\'') )* ;
-IDENTIFIER: LETTER (LETTER|IDDIGIT)* ;
+T_IDENTIFIER: LETTER (LETTER|IDDIGIT)* ;
+T_PLUS: '+' ;
+T_MINUS: '-' ;
+T_MUL: '*' ;
+T_DIV: '/' ;
+T_MOD: '%' ;
+T_SHIFT_LEFT: '<<' ;
+T_SHIFT_RIGHT: '>>' ;
+T_BITOR: '|' ;
+T_BITAND: '&' ;
+T_BITXOR: '^' ;
+T_EQ: '==' ;
+T_NE: '~=' ;
+T_GE: '>=' ;
+T_LE: '<=' ;
+T_LESS: '<' ;
+T_GREATER: '>' ;
+T_CONCAT: '..' ;
+T_HASH: '#' ;
 
 fragment
 LETTER
@@ -102,6 +100,6 @@ IDDIGIT
        '\u1040'..'\u1049'
    ;
 
-WHITESPACE: (' '|'\t')+ { $channel = HIDDEN; } ;
-NEWLINE: '\r'? '\n' ;
+T_WHITESPACE: (' '|'\t')+ { $channel = HIDDEN; } ;
+T_NEWLINE: '\r'? '\n' ;
 
