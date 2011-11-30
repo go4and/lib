@@ -10,3 +10,4 @@
 *.pbxuser
 *.user
 xcuserdata
+*.xcworkspace
