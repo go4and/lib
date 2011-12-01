@@ -15,7 +15,8 @@ struct ToStringVisitor : public boost::static_visitor<std::wstring> {
 public:
     std::wstring operator()(calc::number i) const
     {
-        return boost::lexical_cast<std::wstring>(i);
+        wchar_t buf[0x20];
+        return mstd::itoa(i, buf);
     }
     
     const std::wstring & operator()(const std::wstring & s) const
@@ -39,8 +40,8 @@ public:
     calc::number operator()(const std::wstring & s) const
     {
         try {
-            return boost::lexical_cast<calc::number>(s);
-        } catch(boost::bad_lexical_cast&) {
+            return mstd::str2int10_checked<calc::number>(s);
+        } catch(mstd::bad_str2int_cast&) {
             return 0;
         }
     }

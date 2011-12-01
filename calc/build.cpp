@@ -12,7 +12,8 @@ compiler parse(const std::wstring & str)
 {
     try {
         compiler result;
-        parse(str, result);
+        parser parser;
+        parser.parse(str, result);
         return result;
     } catch(build_exception &) {
         throw;

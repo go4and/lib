@@ -172,7 +172,7 @@ struct InvokationCompiler {
         func d = lookup(name, args.size());
         if(d.function.empty())
             throw undefined_function(mstd::utf8(name));
-        if(d.arity != args.size())
+        if(static_cast<size_t>(d.arity) != args.size())
             throw invalid_arity(mstd::utf8(name), d.arity, args.size());
         std::vector<program> p;
         p.reserve(args.size());
@@ -399,7 +399,7 @@ void outTree(int level,pANTLR3_BASE_TREE pTree)
 {
     ANTLR3_UINT32 childcount =  pTree->getChildCount(pTree);
 
-    for (int i=0;i<childcount;i++)
+    for (ANTLR3_UINT32 i=0;i<childcount;i++)
     {
         pANTLR3_BASE_TREE pChild = (pANTLR3_BASE_TREE) pTree->children->get(pTree->children,i);
         for (int j=0;j<level;j++)
@@ -422,10 +422,18 @@ void outTree(int level,pANTLR3_BASE_TREE pTree)
 
 }
 
-void parse(const std::wstring & inp, compiler & result)
+void parser::parse(const std::wstring & inp, compiler & result)
 {
     std::string utf8inp = mstd::utf8(inp);
-    pANTLR3_INPUT_STREAM input = antlr3StringStreamNew(pANTLR3_UINT8(utf8inp.c_str()), ANTLR3_ENC_UTF8, utf8inp.length(), pANTLR3_UINT8("expression"));
+    pANTLR3_INPUT_STREAM input;
+    if(input_)
+    {
+        input = static_cast<pANTLR3_INPUT_STREAM>(input_);
+        input->reuse(input, pANTLR3_UINT8(utf8inp.c_str()), utf8inp.length(), pANTLR3_UINT8("expression"));
+    } else {
+        input = antlr3StringStreamNew(pANTLR3_UINT8(utf8inp.c_str()), ANTLR3_ENC_UTF8, utf8inp.length(), pANTLR3_UINT8("expression"));
+        input_ = input;
+    }
     pcalc_exprLexer lex = calc_exprLexerNew(input);
     pANTLR3_COMMON_TOKEN_STREAM tokens = antlr3CommonTokenStreamSourceNew(ANTLR3_SIZE_HINT, TOKENSOURCE(lex));
     pcalc_exprParser parser = calc_exprParserNew(tokens);

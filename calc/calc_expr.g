@@ -27,9 +27,9 @@ factor: T_NUMBER
       | '('! expr ')'!
       | '['! expr ']'!
       | invokation
-      | T_MINUS^ expr 
-      | '+'! expr
-      | T_HASH^ expr
+      | T_MINUS^ factor 
+      | '+'! factor
+      | T_HASH^ factor
       ;
 
 invokation: T_IDENTIFIER^ (('('! paramList ')'!)|('['! paramList ']'!))? ;

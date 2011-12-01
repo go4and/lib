@@ -79,6 +79,8 @@ private:
     compiler f_;
 };
 
+namespace {
+
 #ifndef NDEBUG
 std::ostream & functionsList()
 {
@@ -86,6 +88,8 @@ std::ostream & functionsList()
     return result;
 }
 #endif
+
+}
 
 void environment::do_add(const std::wstring & name, const func & f)
 {

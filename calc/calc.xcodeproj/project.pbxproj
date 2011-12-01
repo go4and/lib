@@ -20,7 +20,6 @@
 		C3BEC1F21486B5FC00C6D98E /* expression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3BEC1DD1486B5FC00C6D98E /* expression.cpp */; };
 		C3BEC1F31486B5FC00C6D98E /* expression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1DE1486B5FC00C6D98E /* expression.hpp */; };
 		C3BEC1F41486B5FC00C6D98E /* fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1DF1486B5FC00C6D98E /* fwd.hpp */; };
-		C3BEC1F51486B5FC00C6D98E /* identifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1E01486B5FC00C6D98E /* identifier.hpp */; };
 		C3BEC1F81486B5FC00C6D98E /* pch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3BEC1E31486B5FC00C6D98E /* pch.cpp */; };
 		C3BEC1F91486B5FC00C6D98E /* pch.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1E41486B5FC00C6D98E /* pch.hpp */; };
 		C3BEC1FA1486B5FC00C6D98E /* sign.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3BEC1E51486B5FC00C6D98E /* sign.hpp */; };
@@ -49,7 +48,6 @@
 		C3BEC1DD1486B5FC00C6D98E /* expression.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = expression.cpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1DE1486B5FC00C6D98E /* expression.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = expression.hpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1DF1486B5FC00C6D98E /* fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fwd.hpp; sourceTree = SOURCE_ROOT; };
-		C3BEC1E01486B5FC00C6D98E /* identifier.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = identifier.hpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1E31486B5FC00C6D98E /* pch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pch.cpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1E41486B5FC00C6D98E /* pch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pch.hpp; sourceTree = SOURCE_ROOT; };
 		C3BEC1E51486B5FC00C6D98E /* sign.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sign.hpp; sourceTree = SOURCE_ROOT; };
@@ -118,7 +116,6 @@
 				C3BEC1DD1486B5FC00C6D98E /* expression.cpp */,
 				C3BEC1DE1486B5FC00C6D98E /* expression.hpp */,
 				C3BEC1DF1486B5FC00C6D98E /* fwd.hpp */,
-				C3BEC1E01486B5FC00C6D98E /* identifier.hpp */,
 				C3BEC1E31486B5FC00C6D98E /* pch.cpp */,
 				C3BEC1E41486B5FC00C6D98E /* pch.hpp */,
 				C3BEC1E51486B5FC00C6D98E /* sign.hpp */,
@@ -152,7 +149,6 @@
 				C3BEC1F11486B5FC00C6D98E /* exec.hpp in Headers */,
 				C3BEC1F31486B5FC00C6D98E /* expression.hpp in Headers */,
 				C3BEC1F41486B5FC00C6D98E /* fwd.hpp in Headers */,
-				C3BEC1F51486B5FC00C6D98E /* identifier.hpp in Headers */,
 				C3BEC1F91486B5FC00C6D98E /* pch.hpp in Headers */,
 				C3BEC1FA1486B5FC00C6D98E /* sign.hpp in Headers */,
 				C3BEC1FC1486B5FC00C6D98E /* utils.hpp in Headers */,

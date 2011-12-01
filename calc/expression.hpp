@@ -4,6 +4,16 @@
 
 namespace calc {
 
-void parse(const std::wstring & inp, compiler & result);
+class parser {
+public:
+    parser()
+        : input_(0)
+    {
+    }
+
+    void parse(const std::wstring & inp, compiler & result);
+private:
+    void * input_;
+};
 
 }

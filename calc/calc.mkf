@@ -1,19 +1,23 @@
 includepath .
-includepath /usr/local/boost
+includepath /usr/local/include
 includepath ..
 
-define _STLP_LITTLE_ENDIAN
-define _NATIVE_WCHAR_T_DEFINED
 define BOOST_SYSTEM_NO_DEPRECATED
 option enable-exceptions
+
+subprojects {
+  ../../marmalade/libantlr/antlr_library
+}
 
 files
 {
     [include]
 build.hpp          environment.hpp    exec.hpp           identifier.hpp     sign.hpp
-config.hpp         environment_op.hpp expression.hpp     invokation.hpp     utils.hpp
+config.hpp         environment_op.hpp expression.hpp     utils.hpp
 conversion.hpp     exception.hpp      fwd.hpp            pch.hpp
+calc_exprLexer.h  calc_exprParser.h
 	
     [src]
-build.cpp       environment.cpp exec.cpp        expression.cpp  invokation.cpp  pch.cpp         utils.cpp
+build.cpp       environment.cpp exec.cpp        expression.cpp  pch.cpp         utils.cpp
+calc_exprLexer.c  calc_exprParser.c
 }
