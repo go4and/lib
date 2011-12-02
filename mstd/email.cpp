@@ -53,7 +53,7 @@ template<class It>
 bool verifyEmail(It begin, It end)
 {
     mstd::email_grammar<It> grammar;
-    return parse(begin, end, grammar >> boost::spirit::eoi);
+    return (end - begin < 64) && parse(begin, end, grammar >> boost::spirit::eoi);
 }
 
 bool verifyEmail(const std::string & input)

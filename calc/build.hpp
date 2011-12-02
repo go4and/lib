@@ -18,7 +18,7 @@ program buildEx(const environment & env, const std::wstring & range)
     } catch(build_exception & exc) {
         mstd::rethrow<Exception>(exc);
 #if !defined(I3D_OS_S3E)
-        terminate();
+        std::terminate();
 #endif
     }
 }

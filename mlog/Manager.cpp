@@ -253,7 +253,8 @@ public:
         boost::filesystem::wpath path(mstd::deutf8(fname));
         boost::filesystem::wpath dir = path;
         dir.remove_filename();
-        create_directories(dir);
+        boost::system::error_code ec;
+        create_directories(dir, ec);
         handle_ = mstd::wfopen(path, "ab");
         if(!handle_)
             BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Failed to open for writing: " + fname));

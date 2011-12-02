@@ -3,246 +3,195 @@
 #include "fwd.hpp"
 #include "environment.hpp"
 #include "exception.hpp"
-#include "invokation.hpp"
+
+#include "calc_exprLexer.h"
+#include "calc_exprParser.h"
 
 #include "expression.hpp"
 
-namespace ph = boost::phoenix;
-
 namespace calc {
-
-struct invokation_data;
-
-template<typename Iterator, wchar_t quote>
-class cstring : public boost::spirit::qi::grammar<Iterator, std::wstring()> {
-public:
-    cstring()
-        : cstring::base_type(root)
-    {
-        using namespace boost::spirit::labels;
-        using boost::spirit::standard_wide::char_;
-        root = *(
-                  (char_[_val += boost::spirit::_1] - quote - L'\\')
-                | (char_(L'\\') >> (
-                      char_(quote)[_val += quote]
-                    | char_(L'\\')[_val += L'\\']
-                  ))
-                );
-    }
-private:
-    boost::spirit::qi::rule<Iterator, std::wstring()> root;
-};
 
 namespace {
 
-class function_compiler {
-public:
-    explicit function_compiler(const invokation_data & data)
-        : data_(data) {}
+pANTLR3_BASE_TREE childAt(pANTLR3_BASE_TREE tree, ANTLR3_UINT32 index)
+{
+    return (pANTLR3_BASE_TREE) tree->children->get(tree->children, index);
+}
+
+std::wstring getText(pANTLR3_BASE_TREE tree)
+{
+    return mstd::deutf8(mstd::pointer_cast<const char*>(tree->getText(tree)->chars));
+}
+
+void makeCompiler(pANTLR3_BASE_TREE tree, compiler & out);
+
+template<class Op, class Result>
+struct UnaryProgram {
+    Op op;
+    program lhs;
+    
+    explicit UnaryProgram(Op o, const program & l)
+        : op(o), lhs(l)
+    {
+    }
+    
+    variable operator()(void * ctx, variable * stack) const
+    {
+        return op(detail::convert<Result>::apply(lhs(ctx, stack)));
+    }
+};
+
+template<class Op, class Result>
+struct UnaryCompiler {
+    Op op;
+    compiler lhs;
+
+    explicit UnaryCompiler(Op o)
+        : op(o)
+    {
+    }
+    
+    program operator()(const function_lookup & lookup) const
+    {
+        return UnaryProgram<Op, Result>(op, lhs(lookup));
+    }
+};
+
+template<class Result, class Op>
+void makeUnaryCompiler(pANTLR3_BASE_TREE tree, Op op, compiler & out)
+{
+    BOOST_ASSERT(tree->getChildCount(tree) == 1);
+    UnaryCompiler<Op, Result> result(op);
+    makeCompiler(childAt(tree, 0), result.lhs);
+    out = result;
+}
+
+struct AndProgram {
+    program lhs;
+    program rhs;
+
+    explicit AndProgram(const program & l, const program & r)
+        : lhs(l), rhs(r)
+    {
+    }
+
+    variable operator()(void * ctx, variable * stack) const
+    {
+        variable v = lhs(ctx, stack);
+        return is_true(v) ? rhs(ctx, stack) : v;
+    }
+};
+
+struct OrProgram {
+    program lhs;
+    program rhs;
+
+    explicit OrProgram(const program & l, const program & r)
+        : lhs(l), rhs(r)
+    {
+    }
+
+    variable operator()(void * ctx, variable * stack) const
+    {
+        variable v = lhs(ctx, stack);
+        return is_true(v) ? v : rhs(ctx, stack);
+    }
+};
+
+template<class Op, class Argument>
+struct BinaryProgram {
+    Op op;
+    program lhs;
+    program rhs;
+    
+    explicit BinaryProgram(const program & l, const program & r)
+        : lhs(l), rhs(r)
+    {
+    }
+    
+    variable operator()(void * ctx, variable * stack) const
+    {
+        return op(detail::convert<Argument>::apply(lhs(ctx, stack)),
+                  detail::convert<Argument>::apply(rhs(ctx, stack)));
+    }
+};
+
+template<class Program>
+struct BinaryCompiler {
+    compiler lhs;
+    compiler rhs;
 
     program operator()(const function_lookup & lookup) const
     {
-        func d = lookup(data_.name, data_.args.size());
+        return Program(lhs(lookup), rhs(lookup));
+    }
+};
+
+template<class Program>
+void makeBinaryCompiler(pANTLR3_BASE_TREE tree, compiler & out)
+{
+    BOOST_ASSERT(tree->getChildCount(tree) == 2);
+    BinaryCompiler<Program> result;
+    makeCompiler(childAt(tree, 0), result.lhs);
+    makeCompiler(childAt(tree, 1), result.rhs);
+    out = result;
+}
+
+template<class Value>
+struct ValueCompiler {
+    Value value;
+
+    explicit ValueCompiler(const Value & v)
+        : value(v)
+    {
+    }
+    
+    program operator()(const function_lookup & lookup) const
+    {
+        return *this;
+    }
+    
+    variable operator()(void * ctx, variable * stack) const
+    {
+        return value;
+    }
+};
+
+template<class Value>
+void makeValueCompiler(const Value & value, compiler & out)
+{
+    out = ValueCompiler<Value>(value);
+}
+
+struct InvokationCompiler {
+    std::wstring name;
+    std::vector<compiler> args;
+
+    program operator()(const function_lookup & lookup) const
+    {
+        func d = lookup(name, args.size());
         if(d.function.empty())
-            throw undefined_function(mstd::utf8(data_.name));
-        if(d.arity != data_.args.size())
-            throw invalid_arity(mstd::utf8(data_.name), d.arity, data_.args.size());
+            throw undefined_function(mstd::utf8(name));
+        if(static_cast<size_t>(d.arity) != args.size())
+            throw invalid_arity(mstd::utf8(name), d.arity, args.size());
         std::vector<program> p;
-        p.reserve(data_.args.size());
-        for(std::vector<compiler>::const_iterator i = data_.args.begin(), end = data_.args.end(); i != end; ++i)
+        p.reserve(args.size());
+        for(std::vector<compiler>::const_iterator i = args.begin(), end = args.end(); i != end; ++i)
             p.push_back((*i)(lookup));
         return d.function(p, lookup);
     }
-private:
-    invokation_data data_;
 };
 
-struct make_compiler_t : public mstd::fixed_result_function<compiler> {
-    template<class T>
-    compiler operator()(const T & t) const
-    {
-        return ph::lambda[ph::val(t)];
-    }
-    
-    compiler operator()(const invokation_data & data) const
-    {
-        return function_compiler(data);
-    }
-};
-
-ph::function<make_compiler_t> make_compiler;
-
-template<class T, class F>
-class op {
-public:
-    explicit op(const program & lhs, const program & rhs, const F & f)
-        : lhs_(lhs), rhs_(rhs), f_(f)
-    {
-    }
-
-    calc::variable operator()(void * ctx, variable * stack) const
-    {
-        return f_(detail::convert<T>::apply(lhs_(ctx, stack)), detail::convert<T>::apply(rhs_(ctx, stack)));
-    }
-private:
-    program lhs_;
-    program rhs_;
-    F f_;
-};
-
-template<class T, class F>
-class op_compiler {
-public:
-    explicit op_compiler(const compiler & lhs, const compiler & rhs, const F & f)
-        : lhs_(lhs), rhs_(rhs), f_(f)
-    {
-    }
-
-    program operator()(const function_lookup & lookup) const
-    {
-        return op<T, F>(lhs_(lookup), rhs_(lookup), f_);
-    }
-private:
-    compiler lhs_;
-    compiler rhs_;
-    F f_;
-};
-
-template<class T, class F>
-class unary_op {
-public:
-    explicit unary_op(const program & lhs, const F & f)
-        : lhs_(lhs), f_(f)
-    {
-    }
-
-    calc::variable operator()(void * ctx, variable * stack) const
-    {
-        const T & t = detail::convert<T>::apply(lhs_(ctx, stack));
-        return f_(t);
-    }
-private:
-    program lhs_;
-    F f_;
-};
-
-template<class T, class F>
-class unary_op_compiler {
-public:
-    explicit unary_op_compiler(const compiler & lhs, const F & f)
-        : lhs_(lhs), f_(f)
-    {
-    }
-
-    program operator()(const function_lookup & lookup) const
-    {
-        return unary_op<T, F>(lhs_(lookup), f_);
-    }
-private:
-    compiler lhs_;
-    F f_;
-};
-
-template<class T>
-struct make_op_t : public mstd::fixed_result_function<compiler> {
-    template<class F>
-    compiler operator()(const compiler & lhs, const compiler & rhs, const F & f) const
-    {
-        return op_compiler<T, F>(lhs, rhs, f);
-    }
-
-    template<class F>
-    compiler operator()(const compiler & lhs, const F & f) const
-    {
-        return unary_op_compiler<T, F>(lhs, f);
-    }
-};
-
-class or_op {
-public:
-    explicit or_op(const program & lhs, const program & rhs)
-        : lhs_(lhs), rhs_(rhs)
-    {
-    }
-
-    calc::variable operator()(void * ctx, variable * stack) const
-    {
-        variable v = lhs_(ctx, stack);
-        return is_true(v) ? v : rhs_(ctx, stack);
-    }
-private:
-    program lhs_;
-    program rhs_;
-};
-
-class or_op_compiler {
-public:
-    explicit or_op_compiler(const compiler & lhs, const compiler & rhs)
-        : lhs_(lhs), rhs_(rhs)
-    {
-    }
-
-    program operator()(const function_lookup & lookup) const
-    {
-        return or_op(lhs_(lookup), rhs_(lookup));
-    }
-private:
-    compiler lhs_;
-    compiler rhs_;
-};
-
-struct make_or_op_t : public mstd::fixed_result_function<compiler> {
-    compiler operator()(const compiler & lhs, const compiler & rhs) const
-    {
-        return or_op_compiler(lhs, rhs);
-    }
-};
-
-class and_op {
-public:
-    explicit and_op(const program & lhs, const program & rhs)
-        : lhs_(lhs), rhs_(rhs)
-    {
-    }
-
-    calc::variable operator()(void * ctx, variable * stack) const
-    {
-        variable v = lhs_(ctx, stack);
-        return is_true(v) ? rhs_(ctx, stack) : v;
-    }
-private:
-    program lhs_;
-    program rhs_;
-};
-
-class and_op_compiler {
-public:
-    explicit and_op_compiler(const compiler & lhs, const compiler & rhs)
-        : lhs_(lhs), rhs_(rhs)
-    {
-    }
-
-    program operator()(const function_lookup & lookup) const
-    {
-        return and_op(lhs_(lookup), rhs_(lookup));
-    }
-private:
-    compiler lhs_;
-    compiler rhs_;
-};
-
-struct make_and_op_t : public mstd::fixed_result_function<compiler> {
-    compiler operator()(const compiler & lhs, const compiler & rhs) const
-    {
-        return and_op_compiler(lhs, rhs);
-    }
-};
-
-ph::function<make_op_t<number> > make_number_op;
-ph::function<make_op_t<std::wstring> > make_string_op;
-ph::function<make_op_t<variable> > make_var_op;
-ph::function<make_or_op_t> make_or_op;
-ph::function<make_and_op_t> make_and_op;
+void makeInvokation(pANTLR3_BASE_TREE tree, compiler & out)
+{
+    InvokationCompiler result;
+    result.name = getText(tree);
+    size_t count = tree->getChildCount(tree);
+    result.args.resize(count);
+    for(size_t i = 0; i != count; ++i)
+        makeCompiler(childAt(tree, i), result.args[i]);
+    out = result;
+}
 
 struct mod {
     number operator()(number a1, number a2) const
@@ -255,24 +204,6 @@ struct div {
     number operator()(number a1, number a2) const
     {
         return a2 != 0 ? a1 / a2 : a1;
-    }
-};
-
-struct number_policies : public boost::spirit::qi::real_policies<number> {
-    static const bool allow_trailing_dot = false;
-
-    template <typename Iterator>
-    static bool parse_dot(Iterator & first, Iterator const & last)
-    {
-        if (first == last || *first != '.')
-            return false;
-        ++first;
-        if(first == last || *first < '0' || *first > '9')
-        {
-            --first;
-            return false;
-        }
-        return true;
     }
 };
 
@@ -316,106 +247,214 @@ struct shift_left {
     }
 };
 
-}
-
-struct expression_base::impl {
-    cstring<std::wstring::const_iterator, L'"'> cstr;
-    cstring<std::wstring::const_iterator, L'\''> castr;
-    boost::spirit::qi::rule<std::wstring::const_iterator, compiler(), boost::spirit::standard_wide::space_type> expr, 
-        oterm, aterm, boterm, bxterm, baterm, eterm, cterm, sterm, bsterm, term, factor;
-    invokation invok;
-
-    impl()
-        : invok(expr)
+struct size_ {
+    number operator()(const std::wstring & inp) const
     {
-        using boost::spirit::labels::_val;
-        using boost::spirit::labels::_1;
-        using boost::spirit::labels::_2;
-        using boost::phoenix::arg_names::arg1;
-        using boost::phoenix::arg_names::arg2;
-        using boost::spirit::lexeme;
-        using boost::spirit::qi::int_parser;
-        using boost::spirit::qi::real_parser;
-        using boost::spirit::qi::ureal_policies;
-        using boost::spirit::qi::uint_parser;
-        using boost::phoenix::bind;
-        using boost::phoenix::construct;
-
-        expr = oterm[_val = _1] >> *(lexeme[L"or"] >> oterm[_val = make_or_op(_val, _1)]);
-        oterm = aterm[_val = _1] >> *(lexeme[L"and"] >> aterm[_val = make_and_op(_val, _1)]);
-
-        aterm = boterm[_val = _1] >> *(L'|' >> boterm[_val = make_number_op(_val, _1, or_<number>())]);
-        boterm = bxterm[_val = _1] >> *(L'^' >> bxterm[_val = make_number_op(_val, _1, xor_<number>())]);
-
-        bxterm = baterm[_val = _1] >> *(L'&' >> baterm[_val = make_number_op(_val, _1, and_<number>())]);
-
-        baterm = eterm[_val = _1] >> *(lexeme[L"=="] >> eterm[_val = make_var_op(_val, _1, ph::lambda[arg1 == arg2])]
-                                      |lexeme[L"~="] >> eterm[_val = make_var_op(_val, _1, ph::lambda[!(arg1 == arg2)])]);
-
-        eterm = cterm[_val = _1] >> *(lexeme[L">="] >> cterm[_val = make_var_op(_val, _1, ph::lambda[!(arg1 < arg2)])]
-                                     |lexeme[L"<="] >> cterm[_val = make_var_op(_val, _1, ph::lambda[!(arg2 < arg1)])]
-                                     |L'>' >> cterm[_val = make_var_op(_val, _1, ph::lambda[arg2 < arg1])]
-                                     |L'<' >> cterm[_val = make_var_op(_val, _1, ph::lambda[arg1 < arg2])]);
-
-        cterm = sterm[_val = _1] >> *(lexeme[L".."] >> sterm[_val = make_string_op(_val, _1, std::plus<std::wstring>())]);
-
-        sterm = bsterm[_val = _1] >> *((lexeme[L">>"] >> bsterm[_val = make_number_op(_val, _1, shift_right<number>())])
-                                      |(lexeme[L"<<"] >> bsterm[_val = make_number_op(_val, _1, shift_left<number>())]));
-
-        bsterm = term[_val = _1] >> *((L'+' >> term[_val = make_number_op(_val, _1, std::plus<number>())])
-                                     |(L'-' >> term[_val = make_number_op(_val, _1, std::minus<number>())]));
-
-        term = factor[_val = _1] >> *((L'*' >> factor[_val = make_number_op(_val, _1, std::multiplies<number>())])
-                                     |(L'/' >> factor[_val = make_number_op(_val, _1, div())])
-                                     |(L'%' >> factor[_val = make_number_op(_val, _1, mod())]));
-
-        factor = (lexeme[L"0x" >> uint_parser<number, 16>()[_val = make_compiler(_1)]])
-               | lexeme[int_parser<number>()[_val = make_compiler(_1)]]
-               | (lexeme[L"not"] >> factor[_val = make_number_op(_1, std::logical_not<number>())])
-               | (lexeme[L'"' >> cstr[_val = make_compiler(_1)] >> '"'])
-               | (lexeme[L'\'' >> castr[_val = make_compiler(_1)] >> '\''])
-               | L'(' >> expr[_val = _1] >> L')'
-               | L'[' >> expr[_val = _1] >> L']'
-               | invok[_val = make_compiler(_1)]
-               | (L'-' >> expr[_val = make_number_op(_1, std::negate<number>())])
-               | (L'+' >> expr[_val = _1])
-               | (L'#' >> expr[_val = make_string_op(_1, ph::lambda[ph::size(arg1)])]);
-
-    #if !defined(NDEBUG) && 0
-        expr.name("expression.expr");
-        oterm.name("expression.oterm");
-        aterm.name("expression.aterm");
-        cterm.name("expression.cterm");
-        sterm.name("expression.sterm");
-        term.name("expression.term");
-        factor.name("expression.factor");
-
-        debug(expr);
-        debug(oterm);
-        debug(aterm);
-        debug(cterm);
-        debug(sterm);
-        debug(term);
-        debug(factor);
-    #endif
+        return inp.size();
     }
 };
 
-expression_base::expression_base()
-    : impl_(new impl) {}
+struct ne_ {
+    bool operator()(const variable & t1, const variable & t2) const
+    {
+        return !(t1 == t2);
+    }
+};
 
-expression_base::~expression_base()
+struct greater_ {
+    bool operator()(const variable & t1, const variable & t2) const
+    {
+        return t2 < t1;
+    }
+};
+
+struct ge_ {
+    bool operator()(const variable & t1, const variable & t2) const
+    {
+        return !(t1 < t2);
+    }
+};
+
+struct le_ {
+    bool operator()(const variable & t1, const variable & t2) const
+    {
+        return !(t2 < t1);
+    }
+};
+
+std::wstring parseString(pANTLR3_UINT8 inp)
 {
+    const char * temp = mstd::pointer_cast<const char*>(inp);
+    std::wstring result = mstd::deutf8(temp + 1, strlen(temp) - 2);
+    std::wstring::iterator w = result.begin(), end = result.end();
+    for(std::wstring::iterator i = w; i != end; ++i)
+    {
+        if(*i == L'\\')
+        {
+            *w++ = *++i;
+        } else {
+            if(i != w)
+                *w = *i;
+            ++w;
+        }
+    }
+    result.erase(w, end);
+    return result;
 }
 
-const expression_grammar::start_type & expression_base::root() const
+void makeCompiler(pANTLR3_BASE_TREE tree, compiler & out)
 {
-    return impl_->expr;
+    pANTLR3_COMMON_TOKEN token = tree->getToken(tree);
+    BOOST_ASSERT(token);
+    switch(token->type) {
+    case T_AND:
+        makeBinaryCompiler<AndProgram>(tree, out);
+        break;
+    case T_ASTRING:
+        makeValueCompiler(parseString(tree->getText(tree)->chars), out);
+        break;
+    case T_BITOR:
+        makeBinaryCompiler<BinaryProgram<or_<number>, number> >(tree, out);
+        break;
+    case T_BITXOR:
+        makeBinaryCompiler<BinaryProgram<xor_<number>, number> >(tree, out);
+        break;
+    case T_BITAND:
+        makeBinaryCompiler<BinaryProgram<and_<number>, number> >(tree, out);
+        break;
+    case T_CONCAT:
+        makeBinaryCompiler<BinaryProgram<std::plus<std::wstring>, std::wstring> >(tree, out);
+        break;
+    case T_DIV:
+        makeBinaryCompiler<BinaryProgram<div, number> >(tree, out);
+        break;
+    case T_EQ:
+        makeBinaryCompiler<BinaryProgram<std::equal_to<variable>, variable> >(tree, out);
+        break;
+    case T_GE:
+        makeBinaryCompiler<BinaryProgram<ge_, variable> >(tree,  out);
+        break;
+    case T_GREATER:
+        makeBinaryCompiler<BinaryProgram<greater_, variable> >(tree, out);
+        break;
+    case T_HASH:
+        makeUnaryCompiler<std::wstring>(tree, size_(), out);
+        break;
+    case T_HEX_NUMBER:
+        makeValueCompiler(mstd::str2int16<number>(mstd::pointer_cast<const char*>(tree->getText(tree)->chars) + 2), out);
+        break;
+    case T_IDENTIFIER:
+        makeInvokation(tree, out);
+        break;
+    case T_LE:
+        makeBinaryCompiler<BinaryProgram<le_, variable> >(tree, out);
+        break;
+    case T_LESS:
+        makeBinaryCompiler<BinaryProgram<std::less<variable>, variable> >(tree, out);
+        break;
+    case T_MINUS:
+        if(tree->getChildCount(tree) == 1)
+            makeUnaryCompiler<number>(tree, std::negate<number>(), out);
+        else
+            makeBinaryCompiler<BinaryProgram<std::minus<number>, number> >(tree, out);
+        break;
+    case T_MOD:
+        makeBinaryCompiler<BinaryProgram<mod, number> >(tree, out);
+        break;
+    case T_MUL:
+        makeBinaryCompiler<BinaryProgram<std::multiplies<number>, number> >(tree, out);
+        break;
+    case T_NE:
+        makeBinaryCompiler<BinaryProgram<ne_, variable> >(tree, out);
+        break;
+    case T_NOT:
+        makeUnaryCompiler<number>(tree, std::logical_not<number>(), out);
+        break;
+    case T_NUMBER:
+        makeValueCompiler(mstd::str2int10<number>(mstd::pointer_cast<const char*>(tree->getText(tree)->chars)), out);
+        break;
+    case T_QSTRING:
+        makeValueCompiler(parseString(tree->getText(tree)->chars), out);
+        break;
+    case T_OR:
+        makeBinaryCompiler<OrProgram>(tree, out);
+        break;
+    case T_PLUS:
+        makeBinaryCompiler<BinaryProgram<std::plus<number>, number> >(tree, out);
+        break;
+    case T_SHIFT_LEFT:
+        makeBinaryCompiler<BinaryProgram<shift_left<number>, number> >(tree, out);
+        break;
+    case T_SHIFT_RIGHT:
+        makeBinaryCompiler<BinaryProgram<shift_right<number>, number> >(tree, out);
+        break;
+    default:
+        std::cout << "unknown token: " << token->type << std::endl;
+        BOOST_ASSERT(false);
+        break;
+    }
 }
 
-expression::expression()
-    : expression::base_type(root())
+void outTree(int level,pANTLR3_BASE_TREE pTree)
 {
+    ANTLR3_UINT32 childcount =  pTree->getChildCount(pTree);
+
+    for (ANTLR3_UINT32 i=0;i<childcount;i++)
+    {
+        pANTLR3_BASE_TREE pChild = (pANTLR3_BASE_TREE) pTree->children->get(pTree->children,i);
+        for (int j=0;j<level;j++)
+        {
+            std::cout << "  ";
+        }
+        pANTLR3_COMMON_TOKEN token = pChild->getToken(pChild);
+        if(token)
+            std::cout << '[' << token->type << ']';
+        std::cout << 
+            pChild->getText(pChild)->chars <<       
+            std::endl;
+        int f=pChild->getChildCount(pChild);
+        if (f>0)
+        {
+            outTree(level+1,pChild);
+        }
+    }
+}
+
+}
+
+void parser::parse(const std::wstring & inp, compiler & result)
+{
+    std::string utf8inp = mstd::utf8(inp);
+    pANTLR3_INPUT_STREAM input;
+    if(input_)
+    {
+        input = static_cast<pANTLR3_INPUT_STREAM>(input_);
+        input->reuse(input, pANTLR3_UINT8(utf8inp.c_str()), utf8inp.length(), pANTLR3_UINT8("expression"));
+    } else {
+        input = antlr3StringStreamNew(pANTLR3_UINT8(utf8inp.c_str()), ANTLR3_ENC_UTF8, utf8inp.length(), pANTLR3_UINT8("expression"));
+        input_ = input;
+    }
+    pcalc_exprLexer lex = calc_exprLexerNew(input);
+    pANTLR3_COMMON_TOKEN_STREAM tokens = antlr3CommonTokenStreamSourceNew(ANTLR3_SIZE_HINT, TOKENSOURCE(lex));
+    pcalc_exprParser parser = calc_exprParserNew(tokens);
+
+    calc_exprParser_start_return ret = parser->start(parser);
+
+//    pANTLR3_STRING str = ret.tree->toStringTree(ret.tree);
+//    pANTLR3_STRING ustr = str->toUTF8(str);
+
+//    const char * xx = (const char*)ustr->chars;
+
+//    printf("tree: %s\n", xx);
+
+//    outTree(0, ret.tree);
+
+    makeCompiler(childAt(ret.tree, 0), result);
+
+    parser->free(parser);
+    tokens->free(tokens);
+    lex->free(lex);
+    input->close(input);
 }
 
 }

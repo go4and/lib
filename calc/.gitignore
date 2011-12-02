@@ -1,2 +1,7 @@
 /build_calc_xcode
 /lib
+/calc_exprLexer.c
+/calc_exprLexer.h
+/calc_exprParser.c
+/calc_exprParser.h
+/calc_expr.tokens

@@ -257,4 +257,16 @@ str2int16(const Ch * inp, size_t len)
     return result * sign;
 }
 
+template<class T>
+T str2int16(const wchar_t * c)
+{
+    return str2int16<T>(c, wcslen(c));
+}
+
+template<class T>
+T str2int16(const char * c)
+{
+    return str2int16<T>(c, strlen(c));
+}
+
 }
