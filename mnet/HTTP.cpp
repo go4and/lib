@@ -65,6 +65,9 @@ public:
 private:
     void execute()
     {
+        char * curlVersion = curl_version();
+        MLOG_DEBUG("curl version: " << curlVersion);
+
         try {
             std::vector<AsyncTaskPtr> tasks;
             CurlMultiHandle multi(curl_multi_init());
@@ -79,13 +82,23 @@ private:
                     tasks.insert(tasks.end(), queue_.begin(), queue_.end());
                     queue_.clear();
                 }
+                // MLOG_DEBUG("start tasks: " << oldTasks << " vs " << tasks.size());
                 for(size_t i = oldTasks, size = tasks.size(); i != size; ++i)
                     tasks[i]->start(*multi);
                 int rh = 0;
-                while(curl_multi_perform(*multi, &rh) == CURLM_CALL_MULTI_PERFORM);
+                // MLOG_DEBUG("performing curl");
+                for(;;)
+                {
+                    CURLMcode code = curl_multi_perform(*multi, &rh);
+                    // MLOG_DEBUG("perform code: " << code);
+                    if(code != CURLM_CALL_MULTI_PERFORM)
+                        break;
+                }
                 CURLMsg * msg;
+                // MLOG_DEBUG("reading messages");
                 while((msg = curl_multi_info_read(*multi, &rh)) != 0)
                 {
+                    // MLOG_DEBUG("message: " << msg->msg);
                     if(msg->msg == CURLMSG_DONE)
                     {
                         AsyncTask * task;
@@ -102,7 +115,7 @@ private:
                                 tasks.erase(i);
                                 break;
                             }
-                        task->done(failed ? (code ? code : 600 + msg->data.result) : 0);
+                        task->done(failed ? (code && code != 200 ? code : 600 + msg->data.result) : 0);
                     }
                 }
 
@@ -110,12 +123,14 @@ private:
                 FD_ZERO(&writefs);
                 FD_ZERO(&excfs);
                 maxfd = 0;
+                // MLOG_DEBUG("init fdset");
                 CURLMcode cr = curl_multi_fdset(*multi, &readfs, &writefs, &excfs, &maxfd);
                 if(cr != CURLM_OK)
                     MLOG_ERROR("curl_multi_fdset failed: " << cr);
                 if(maxfd != -1)
                 {
                     timeval timeout = { 0, 10000 };
+                    // MLOG_DEBUG("select");
                     int res = select(maxfd + 1, &readfs, &writefs, &excfs, &timeout);
                     if(res == -1)
                     {
@@ -123,6 +138,7 @@ private:
                         MLOG_MESSAGE(Error, "select failed: " << err);
                     }
                 } else {
+                    // MLOG_DEBUG("sleeping");
                     boost::this_thread::sleep(boost::posix_time::milliseconds(10));
                 }
             }
@@ -144,6 +160,9 @@ public:
 
     void start(CURLM * curlm)
     {
+        MLOG_DEBUG("DownloadTask::start(" << curlm << ")");
+        MLOG_DEBUG("DownloadTask, url = " << url() << ", cookies = " << cookies_);
+
         initCurl(curlm, url_, cookies_);
         curl_easy_setopt(curl_, CURLOPT_NOPROGRESS, prog_.empty() ? 1 : 0);
         if(!prog_.empty())
@@ -186,15 +205,17 @@ public:
 
     void doStart()
     {
+        MLOG_DEBUG("GetDataAsync::doStart(" << url() << ')');
         void * self = this;
         curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, &GetDataAsync::write);
         curl_easy_setopt(curl_, CURLOPT_WRITEDATA, self);
         if(!handlerEx_.empty())
         {
-            curl_easy_setopt(curl_, CURLOPT_WRITEHEADER, &header_);
+            curl_easy_setopt(curl_, CURLOPT_WRITEHEADER, self);
             curl_easy_setopt(curl_, CURLOPT_HEADER, 0);
             curl_easy_setopt(curl_, CURLOPT_HEADERFUNCTION, &GetDataAsync::writeHeader);
         }
+        MLOG_DEBUG("GetDataAsync::doStart, done");
     }
     
     void done(int ec)
@@ -214,10 +235,10 @@ private:
         return size * nmemb;
     }
     
-    static size_t writeHeader(const char * buf, size_t size, size_t nmemb, std::string * header)
+    static size_t writeHeader(const char * buf, size_t size, size_t nmemb, GetDataAsync * self)
     {
-        MLOG_MESSAGE(Debug, "writeHeader: " << std::string(buf, buf + size * nmemb));
-        return appendToString(buf, size, nmemb, header);
+        MLOG_MESSAGE(Debug, "GetDataAsync::writeHeader(" << static_cast<const void*>(buf) << ", " << size << ", " << nmemb << ", " << self << ")");
+        return appendToString(buf, size, nmemb, &self->header_);
     }
     
     AsyncDataHandler handler_;
