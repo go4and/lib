@@ -37,12 +37,6 @@
     <ClInclude Include="fwd.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="identifier.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="invokation.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="pch.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -50,6 +44,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="calc_exprLexer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="calc_exprParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -66,13 +66,16 @@
     <ClCompile Include="expression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="invokation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="calc_exprLexer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="calc_exprParser.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

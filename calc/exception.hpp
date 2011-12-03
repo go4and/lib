@@ -13,6 +13,37 @@ public:
 class parse_exception : public exception {
 };
 
+class empty_input_exception : public exception {
+};
+
+class lexer_exception : public exception {
+public:
+    lexer_exception(const std::wstring & message, const std::wstring & data)
+        : message_(message), data_(data)
+    {
+    }
+
+    const std::wstring & message() const { return message_; }
+    const std::wstring & data() const { return data_; }
+private:
+    std::wstring message_;
+    std::wstring data_;
+};
+
+class parser_exception : public exception {
+public:
+    parser_exception(const std::wstring & message, const std::wstring & data)
+        : message_(message), data_(data)
+    {
+    }
+
+    const std::wstring & message() const { return message_; }
+    const std::wstring & data() const { return data_; }
+private:
+    std::wstring message_;
+    std::wstring data_;
+};
+
 class invalid_function : public parse_exception {
 public:
     explicit invalid_function(const std::string & name)

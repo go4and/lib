@@ -13,18 +13,18 @@
 #endif
 
 #include <exception>
+#include <iostream>
 #include <string>
 #include <vector>
 
+#include <boost/array.hpp>
 #include <boost/bind.hpp>
 #include <boost/format.hpp>
 #include <boost/function.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <boost/algorithm/string/case_conv.hpp>
-
-#include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
 #include <boost/type_traits/function_traits.hpp>
 
@@ -47,7 +47,9 @@
 #include <mstd/itoa.hpp>
 #include <mstd/null.hpp>
 #include <mstd/pointer_cast.hpp>
+#include <mstd/reference_counter.hpp>
 #include <mstd/singleton.hpp>
+#include <mstd/utf8.hpp>
 
 #endif
 

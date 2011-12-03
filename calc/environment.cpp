@@ -46,23 +46,32 @@ private:
     size_t & i_;
 };
 
-class user_function_invoker {
+class user_function_invoker : public pre_program {
 public:
-    explicit user_function_invoker(const program & impl, const std::vector<program> & args)
-        : impl_(impl), args_(args) {}
+    explicit user_function_invoker(const program & impl, std::vector<pre_program*> & args)
+        : impl_(impl)
+    {
+        args_.swap(args);
+    }
 
-    variable operator()(void * context, variable * stack) const
+    variable run(void * context, variable * stack) const
     {
         size_t i = 0, size = args_.size();
         variable * vars = static_cast<variable*>(alloca(sizeof(variable) * size));
         deleter d(vars, i);
         for(; i != size; ++i)
-            new (vars + i) variable(args_[i](context, stack));
+            new (vars + i) variable(args_[i]->run(context, stack));
         return impl_(context, vars);
+    }
+
+    ~user_function_invoker()
+    {
+        for(std::vector<pre_program*>::iterator i = args_.begin(), end = args_.end(); i != end; ++i)
+            delete *i;
     }
 private:
     program impl_;
-    std::vector<program> args_;
+    std::vector<pre_program*> args_;
 };
 
 class user_function_compiler {
@@ -70,9 +79,9 @@ public:
     explicit user_function_compiler(const std::vector<std::wstring> & args, const compiler & f)
         : args_(args), f_(f) {}
 
-    program operator()(const std::vector<program> & args, const function_lookup & lookup) const
+    pre_program * operator()(std::vector<pre_program*> & args, const function_lookup & lookup) const
     {
-        return user_function_invoker(f_(user_function_lookup(args_, lookup)), args);
+        return new user_function_invoker(f_(user_function_lookup(args_, lookup)), args);
     }
 private:
     std::vector<std::wstring> args_;

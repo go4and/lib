@@ -16,7 +16,6 @@ struct arg_type;
 
 template<class F, int N>
 struct arg_type<F, false, N> {
-    typedef boost::tuples::null_type type;
 };
 
 template<class F>
@@ -57,20 +56,24 @@ struct traits {
 };
 
 template<class F>
-class invoker {
+class invoker : public pre_program {
 public:
     typedef traits<F> traits_type;
     static const size_t arity = traits_type::arity;
-    typedef boost::array<program, arity> args_type;
+    typedef boost::array<pre_program_ptr, arity> args_type;
 
-    explicit invoker(const F & f, const std::vector<program> & args)
+    explicit invoker(const F & f, std::vector<pre_program*> & args)
         : f_(f)
     {
         BOOST_ASSERT(args.size() == arity);
-        std::copy(args.begin(), args.end(), args_.begin());
+        for(size_t i = 0; i != args_.size(); ++i)
+        {
+            args_[i].reset(args[i]);
+            args[i] = 0;
+        }
     }
     
-    variable operator()(void * context, variable * stack) const
+    variable run(void * context, variable * stack) const
     {
         return execute(f_, context, stack);
     }
@@ -87,7 +90,7 @@ private:
     execute(const U & u, void * context, variable * stack) const
     {
         return u(context,
-                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0](context, stack)));
+                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0]->run(context, stack)));
     }
 
     template<class U>
@@ -95,8 +98,8 @@ private:
     execute(const U & u, void * context, variable * stack) const
     {
         return u(context,
-                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0](context, stack)),
-                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1](context, stack)));
+                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0]->run(context, stack)),
+                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1]->run(context, stack)));
     }
 
     template<class U>
@@ -104,9 +107,9 @@ private:
     execute(const U & u, void * context, variable * stack) const
     {
         return u(context,
-                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0](context, stack)),
-                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1](context, stack)),
-                 convert<typename traits_type::template arg_type<2>::type>::apply(args_[2](context, stack)));
+                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0]->run(context, stack)),
+                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1]->run(context, stack)),
+                 convert<typename traits_type::template arg_type<2>::type>::apply(args_[2]->run(context, stack)));
     }
 
     template<class U>
@@ -114,10 +117,10 @@ private:
     execute(const U & u, void * context, variable * stack) const
     {
         return u(context,
-                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0](context, stack)),
-                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1](context, stack)),
-                 convert<typename traits_type::template arg_type<2>::type>::apply(args_[2](context, stack)),
-                 convert<typename traits_type::template arg_type<3>::type>::apply(args_[3](context, stack)));
+                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0]->run(context, stack)),
+                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1]->run(context, stack)),
+                 convert<typename traits_type::template arg_type<2>::type>::apply(args_[2]->run(context, stack)),
+                 convert<typename traits_type::template arg_type<3>::type>::apply(args_[3]->run(context, stack)));
     }
 
     template<class U>
@@ -125,11 +128,11 @@ private:
     execute(const U & u, void * context, variable * stack) const
     {
         return u(context,
-                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0](context, stack)),
-                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1](context, stack)),
-                 convert<typename traits_type::template arg_type<2>::type>::apply(args_[2](context, stack)),
-                 convert<typename traits_type::template arg_type<3>::type>::apply(args_[3](context, stack)),
-                 convert<typename traits_type::template arg_type<4>::type>::apply(args_[4](context, stack)));
+                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0]->run(context, stack)),
+                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1]->run(context, stack)),
+                 convert<typename traits_type::template arg_type<2>::type>::apply(args_[2]->run(context, stack)),
+                 convert<typename traits_type::template arg_type<3>::type>::apply(args_[3]->run(context, stack)),
+                 convert<typename traits_type::template arg_type<4>::type>::apply(args_[4]->run(context, stack)));
     }
 
     F f_;
@@ -141,9 +144,9 @@ class func_compiler {
 public:
     func_compiler(const F & f) : f_(f) {}
 
-    program operator()(const std::vector<program> & args, const function_lookup & lookup) const
+    pre_program * operator()(std::vector<pre_program*> & args, const function_lookup & lookup) const
     {
-        return invoker<F>(f_, args);
+        return new invoker<F>(f_, args);
     }
 private:
     F f_;

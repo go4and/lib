@@ -22,8 +22,19 @@ typedef boost::function<variable(void*, variable*)> program;
 typedef boost::function<func(const std::wstring&, size_t)> function_lookup;
 typedef boost::function<program(const function_lookup & lookup)> compiler;
 
+class pre_program : public boost::noncopyable {
+public:
+    virtual variable run(void * context, variable * stack) const = 0;
+
+    virtual ~pre_program()
+    {
+    }
+};
+
+typedef std::unique_ptr<pre_program> pre_program_ptr;
+
 struct func {
-    typedef boost::function<program(const std::vector<program>&, const function_lookup&)> function_type;
+    typedef boost::function<pre_program*(std::vector<pre_program*>&, const function_lookup&)> function_type;
 
     function_type function;
     int arity;

@@ -8,15 +8,20 @@
 
 namespace calc {
 
-compiler parse(const std::wstring & str)
+compiler builder::parse(const std::wstring & str)
 {
     try {
         compiler result;
-        parser parser;
-        parser.parse(str, result);
+        parser_.parse(str, result);
         return result;
     } catch(build_exception &) {
         throw;
+    } catch(empty_input_exception &) {
+        throw build_exception() << mstd::make_error_message("Empty input");
+    } catch(lexer_exception & exc) {
+        throw build_exception() << mstd::make_error_message(exc.message() + L": " + exc.data());
+    } catch(parser_exception & exc) {
+        throw build_exception() << mstd::make_error_message(exc.message() + L": " + exc.data());
     } catch(boost::exception & e) {
         mstd::rethrow<build_exception>(e);
 #if !defined(I3D_OS_S3E)
@@ -27,7 +32,7 @@ compiler parse(const std::wstring & str)
     }
 }
 
-program build(const environment & env, const std::wstring & str)
+program builder::build(const environment & env, const std::wstring & str)
 {
     try {
         return parse(str)(boost::bind(&environment::find, &env, _1, _2));
