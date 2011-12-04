@@ -78,7 +78,7 @@ public:
     {
 #ifdef BOOST_WINDOWS
         QueryPerformanceCounter(&value_);
-#elif defined CLOCK_THREAD_CPUTIME_ID
+#elif defined(CLOCK_THREAD_CPUTIME_ID)
         clock_gettime(CLOCK_THREAD_CPUTIME_ID, &value_);
 #else
         value_.tv_sec = value_.tv_nsec = 0;

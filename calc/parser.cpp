@@ -2,12 +2,12 @@
 
 #include "fwd.hpp"
 #include "environment.hpp"
-#include "exception.hpp"
+#include "error.hpp"
 
 #include "calc_exprLexer.h"
 #include "calc_exprParser.h"
 
-#include "expression.hpp"
+#include "parser.hpp"
 
 namespace calc {
 
@@ -24,7 +24,7 @@ std::wstring getText(pANTLR3_BASE_TREE tree)
 }
 
 template<class holded>
-class delete_with_me : public mstd::reference_counter<delete_with_me<holded> > {
+class delete_with_me : public mstd::reference_counter<delete_with_me<holded>, mstd::delete_disposer, size_t> {
 public:
     explicit delete_with_me(holded * h)
         : holded_(h)
@@ -57,14 +57,14 @@ private:
 
 class pre_compiler : public boost::noncopyable {
 public:
-    virtual pre_program * compile(const function_lookup & lookup) const = 0;
+    virtual pre_program * compile(const function_lookup & lookup, error & err) const = 0;
 
     virtual ~pre_compiler()
     {
     }    
 };
 
-typedef std::unique_ptr<pre_compiler> pre_compiler_ptr;
+typedef std::auto_ptr<pre_compiler> pre_compiler_ptr;
 
 void makeCompiler(pANTLR3_BASE_TREE tree, pre_compiler_ptr & out);
 
@@ -88,9 +88,12 @@ template<class Program>
 struct UnaryCompiler : public pre_compiler {
     pre_compiler_ptr lhs;
 
-    pre_program * compile(const function_lookup & lookup) const
+    pre_program * compile(const function_lookup & lookup, error & err) const
     {
-        return new Program(lhs->compile(lookup));
+        std::auto_ptr<pre_program> result(lhs->compile(lookup, err));
+        if(err)
+            return 0;
+        return new Program(result.release());
     }
 };
 
@@ -158,9 +161,15 @@ struct BinaryCompiler : public pre_compiler {
     pre_compiler_ptr lhs;
     pre_compiler_ptr rhs;
 
-    pre_program * compile(const function_lookup & lookup) const
+    pre_program * compile(const function_lookup & lookup, error & err) const
     {
-        return new Program(lhs->compile(lookup), rhs->compile(lookup));
+        std::auto_ptr<pre_program> plhs(lhs->compile(lookup, err));
+        if(err)
+            return 0;
+        std::auto_ptr<pre_program> prhs(rhs->compile(lookup, err));
+        if(err)
+            return 0;
+        return new Program(plhs.release(), prhs.release());
     }
 };
 
@@ -198,7 +207,7 @@ struct ValueCompiler : public pre_compiler {
     {
     }
     
-    pre_program * compile(const function_lookup & lookup) const
+    pre_program * compile(const function_lookup & lookup, error & err) const
     {
         return new ValueProgram<Value>(value);
     }
@@ -229,21 +238,41 @@ private:
 
 struct InvokationCompiler : public pre_compiler {
     std::wstring name;
-    std::vector<pre_compiler_ptr> args;
+    std::vector<pre_compiler*> args;
 
-    pre_program * compile(const function_lookup & lookup) const
+    pre_program * compile(const function_lookup & lookup, error & err) const
     {
         func d = lookup(name, args.size());
         if(d.function.empty())
-            throw undefined_function(mstd::utf8(name));
+        {
+            err.init(error_undefined_function).function_name(name);
+            return 0;
+        }
         if(static_cast<size_t>(d.arity) != args.size())
-            throw invalid_arity(mstd::utf8(name), d.arity, args.size());
+        {
+            err.init(error_invalid_arity).function_name(name).function_arity(d.arity).expected_arity(args.size());
+            return 0;
+        }
         std::vector<pre_program*> p;
         delete_non_zero dnz(p);
         p.reserve(args.size());
-        for(std::vector<pre_compiler_ptr>::const_iterator i = args.begin(), end = args.end(); i != end; ++i)
-            p.push_back((*i)->compile(lookup));
-        return d.function(p, lookup);
+        for(std::vector<pre_compiler*>::const_iterator i = args.begin(), end = args.end(); i != end; ++i)
+        {
+            p.push_back((*i)->compile(lookup, err));
+            if(err)
+                return 0;
+        }
+        std::auto_ptr<pre_program> result(d.function(p, lookup, err));
+        if(err)
+            return 0;
+        return result.release();
+    }
+    
+    ~InvokationCompiler()
+    {
+        for(std::vector<pre_compiler*>::iterator i = args.begin(), end = args.end(); i != end; ++i)
+            if(*i)
+                delete *i;
     }
 };
 
@@ -253,9 +282,13 @@ void makeInvokation(pANTLR3_BASE_TREE tree, pre_compiler_ptr & out)
     out.reset(result = new InvokationCompiler);
     result->name = getText(tree);
     size_t count = tree->getChildCount(tree);
-    result->args.resize(count);
+    result->args.reserve(count);
+    pre_compiler_ptr temp;
     for(size_t i = 0; i != count; ++i)
-        makeCompiler(childAt(tree, i), result->args[i]);
+    {
+        makeCompiler(childAt(tree, i), temp);
+        result->args.push_back(temp.release());
+    }
 }
 
 struct mod {
@@ -492,9 +525,12 @@ public:
     {
     }
 
-    program operator()(const function_lookup & lookup) const
+    program operator()(const function_lookup & lookup, error & err) const
     {
-        return wrap_program(impl_->compile(lookup));
+        std::auto_ptr<pre_program> p(impl_->compile(lookup, err));
+        if(err)
+            return program();
+        return wrap_program(p.release());
     }
 private:
     pre_compiler * impl_;
@@ -504,24 +540,7 @@ private:
 struct parse_context {
     const char * input;
     size_t inputLen;
-    boost::function<void()> error;
-};
-
-template<class Exception>
-class throw_exception {
-public:
-    throw_exception(const std::wstring & message, const std::wstring & data)
-        : message_(message), data_(data)
-    {
-    }
-
-    void operator()() const
-    {
-        throw Exception(message_, data_);
-    }
-private:
-    std::wstring message_;
-    std::wstring data_;
+    error * err;
 };
 
 const char * eatUtf8Middle(const char * inp)
@@ -554,97 +573,67 @@ void lexer_recognition_error(pANTLR3_BASE_RECOGNIZER recognizer, pANTLR3_UINT8 *
     pANTLR3_LEXER lexer = static_cast<pANTLR3_LEXER>(recognizer->super);
     pANTLR3_EXCEPTION ex = lexer->rec->state->exception;
 
-    context.error = throw_exception<lexer_exception>(mstd::deutf8(mstd::pointer_cast<const char *>(ex->message)), make_data(recognizer, context.input + ex->charPositionInLine));
+    context.err->init(error_lexer).location(make_data(recognizer, context.input + ex->charPositionInLine)).message(mstd::deutf8(mstd::pointer_cast<const char *>(ex->message)));
 }
 
 void display_recognition_error(struct ANTLR3_BASE_RECOGNIZER_struct * recognizer, uint8_t ** tokenNames)
 {
     parse_context & context = *static_cast<parse_context*>(recognizer->state->userp);
-    if(!context.error.empty())
+    if(*context.err)
         return;
 
     pANTLR3_EXCEPTION ex = recognizer->state->exception;
-    pANTLR3_PARSER parser = static_cast<pANTLR3_PARSER>(recognizer->super);
-    pANTLR3_INT_STREAM is = parser->tstream->istream;
-
-    /*
-        theToken    = (pANTLR3_COMMON_TOKEN)(recognizer->state->exception->token);
-        ttext	    = theToken->toString(theToken);
-
-        if  (theToken != NULL)
-        {
-            if (theToken->type == ANTLR3_TOKEN_EOF)
-            {
-                ANTLR3_FPRINTF(stderr, ", at <EOF>");
-            }
-            else
-            {
-                // Guard against null text in a token
-                //
-                ANTLR3_FPRINTF(stderr, "\n    near %s\n    ", ttext == NULL ? (pANTLR3_UINT8)"<no text for the token>" : ttext->chars);
-            }
-        }
-        break;
-    default:
-        ANTLR3_FPRINTF(stderr, "Base recognizer function displayRecognitionError called by unknown parser type - provide override for this function\n");
-        return;
-        break;
-    }
-    */
-    wchar_t buf[0x40];
 
     switch (ex->type) {
     case ANTLR3_UNWANTED_TOKEN_EXCEPTION:
-        wcscpy(buf, L"Extraneous input");
+        context.err->init(error_extraneous_input);
         break;
     case ANTLR3_MISSING_TOKEN_EXCEPTION:
     case ANTLR3_MISMATCHED_TOKEN_EXCEPTION:
-        if(ex->type == ANTLR3_MISSING_TOKEN_EXCEPTION)
-            wcscpy(buf, L"Missing ");
-        else
-            wcscpy(buf, L"Expected ");
+        context.err->init(ex->type == ANTLR3_MISSING_TOKEN_EXCEPTION ? error_missing_token : error_mismatched_token);
         if(tokenNames == NULL)
-        {
-            wcscat(buf, L"token (");
-            mstd::itoa(ex->expecting, buf + wcslen(buf));
-            wcscat(buf, L")");
-        } else if(ex->expecting == ANTLR3_TOKEN_EOF)
-            wcscat(buf, L"<EOF>");
+            context.err->token_id(ex->expecting);
+        else if(ex->expecting == ANTLR3_TOKEN_EOF)
+            context.err->token_eof(true);
         else {
+            wchar_t buf[0x20];
             const char * token = mstd::pointer_cast<const char*>(tokenNames[ex->expecting]);
-            *mstd::deutf8(token, token + strlen(token), buf + wcslen(buf)) = 0;
+            *mstd::deutf8(token, token + strlen(token), buf) = 0;
+
+            context.err->token_value(buf);
         }
         break;
     case ANTLR3_RECOGNITION_EXCEPTION:
-        wcscpy(buf, L"Recognition error");    
+        context.err->init(error_recognition);
         break;
     case ANTLR3_NO_VIABLE_ALT_EXCEPTION:
-        wcscpy(buf, L"Cannot match to any predicted input");
+        context.err->init(error_no_viable_alt);
         break;
     case ANTLR3_MISMATCHED_SET_EXCEPTION:
-        wcscpy(buf, L"Mismatched set");
+        context.err->init(error_mismatched_set);
         break;
     case ANTLR3_EARLY_EXIT_EXCEPTION:
-        wcscpy(buf, L"Missing elements set");
+        context.err->init(error_early_exit);
         break;
     default:
-        wcscpy(buf, L"Syntax error");
+        context.err->init(error_syntax);
         break;
     }
-
-    context.error = throw_exception<parser_exception>(buf, make_data(recognizer, context.input + is->index(is)));
 }
 
 }
 
-void parser::parse(const std::wstring & inp, compiler & result)
+void parser::parse(const std::wstring & inp, compiler & result, error & err)
 {
     char * buffer;
     char * end;
     {
         size_t ilen = inp.length();
         if(!ilen)
-            throw empty_input_exception();
+        {
+            err.init(error_empty_input);
+            return;
+        }
         const wchar_t * idata = inp.c_str();
         buffer_.resize(ilen * mstd::max_utf8_length + 1);
         buffer = &buffer_[0];
@@ -666,22 +655,13 @@ void parser::parse(const std::wstring & inp, compiler & result)
         parser_ = calc_exprParserNew(tokens_);
         parser_->pParser->rec->displayRecognitionError = display_recognition_error;
     }
-    parse_context context = { buffer, end - buffer };
+    parse_context context = { buffer, end - buffer, &err };
     lex_->pLexer->rec->state->userp = &context;
     parser_->pParser->rec->state->userp = &context;
 
     calc_exprParser_start_return ret = parser_->start(parser_);
-    if(!context.error.empty())
-        context.error();
-
-//    pANTLR3_STRING str = ret.tree->toStringTree(ret.tree);
-//    pANTLR3_STRING ustr = str->toUTF8(str);
-
-//    const char * xx = (const char*)ustr->chars;
-
-//    printf("tree: %s\n", xx);
-
-//    outTree(0, ret.tree);
+    if(err)
+        return;
 
     pre_compiler_ptr preResult;
     makeCompiler(childAt(ret.tree, 0), preResult);

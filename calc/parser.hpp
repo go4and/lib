@@ -10,6 +10,8 @@ struct ANTLR3_BASE_RECOGNIZER_struct;
 
 namespace calc {
 
+class error;
+
 class parser : public boost::noncopyable {
 public:
     parser()
@@ -17,7 +19,7 @@ public:
     {
     }
 
-    CALC_DECL void parse(const std::wstring & inp, compiler & result);
+    CALC_DECL void parse(const std::wstring & inp, compiler & result, error & err);
 
     CALC_DECL ~parser();
 private:

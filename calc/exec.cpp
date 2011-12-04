@@ -1,6 +1,6 @@
 #include "pch.hpp"
 
-#include "exception.hpp"
+#include "error.hpp"
 
 #include "exec.hpp"
 
@@ -21,7 +21,7 @@ public:
         } catch(calc::division_by_zero_exception &) {
             throw calc::exec_exception() << mstd::error_message("Division by zero");
         } catch(boost::exception & e) {
-            mstd::rethrow<calc::exec_exception>(e);
+            throw calc::exec_exception(e);
         } catch(std::exception &) {
             throw calc::exec_exception() << mstd::error_message("Unknown error");
         }

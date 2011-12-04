@@ -1,6 +1,7 @@
 #pragma once
 
 #if !defined(BUILDING_CALC)
+#include <memory>
 #include <vector>
 
 #include <boost/cstdint.hpp>
@@ -16,11 +17,12 @@ namespace calc {
 class environment;
 struct func;
 
+class error;
 typedef boost::int64_t number;
 typedef boost::variant<number, std::wstring> variable;
 typedef boost::function<variable(void*, variable*)> program;
 typedef boost::function<func(const std::wstring&, size_t)> function_lookup;
-typedef boost::function<program(const function_lookup & lookup)> compiler;
+typedef boost::function<program(const function_lookup & lookup, error & err)> compiler;
 
 class pre_program : public boost::noncopyable {
 public:
@@ -31,10 +33,10 @@ public:
     }
 };
 
-typedef std::unique_ptr<pre_program> pre_program_ptr;
+typedef std::auto_ptr<pre_program> pre_program_ptr;
 
 struct func {
-    typedef boost::function<pre_program*(std::vector<pre_program*>&, const function_lookup&)> function_type;
+    typedef boost::function<pre_program*(std::vector<pre_program*>&, const function_lookup&, error & err)> function_type;
 
     function_type function;
     int arity;

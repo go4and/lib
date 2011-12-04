@@ -144,7 +144,7 @@ class func_compiler {
 public:
     func_compiler(const F & f) : f_(f) {}
 
-    pre_program * operator()(std::vector<pre_program*> & args, const function_lookup & lookup) const
+    pre_program * operator()(std::vector<pre_program*> & args, const function_lookup & lookup, error & err) const
     {
         return new invoker<F>(f_, args);
     }

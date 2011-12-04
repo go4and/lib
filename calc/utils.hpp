@@ -46,7 +46,7 @@ public:
     explicit stack_arg(size_t idx)
         : idx_(idx) {}
 
-    pre_program * operator()(const std::vector<pre_program*>&, const function_lookup&) const
+    pre_program * operator()(const std::vector<pre_program*>&, const function_lookup&, error & err) const
     {
         return new stack_arg_program(idx_);
     }
