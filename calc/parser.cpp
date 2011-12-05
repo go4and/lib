@@ -23,8 +23,10 @@ std::wstring getText(pANTLR3_BASE_TREE tree)
     return mstd::deutf8(mstd::pointer_cast<const char*>(tree->getText(tree)->chars));
 }
 
+typedef mstd::atomic<size_t> counter;
+
 template<class holded>
-class delete_with_me : public mstd::reference_counter<delete_with_me<holded>, mstd::delete_disposer, size_t> {
+class delete_with_me : public mstd::reference_counter<delete_with_me<holded>, mstd::delete_disposer, counter> {
 public:
     explicit delete_with_me(holded * h)
         : holded_(h)
@@ -553,7 +555,7 @@ const char * eatUtf8Middle(const char * inp)
     }
 }
 
-std::wstring make_data(pANTLR3_BASE_RECOGNIZER recognizer, const char * at)
+std::string make_data(pANTLR3_BASE_RECOGNIZER recognizer, const char * at)
 {
     parse_context & context = *static_cast<parse_context*>(recognizer->state->userp);
 
@@ -563,7 +565,7 @@ std::wstring make_data(pANTLR3_BASE_RECOGNIZER recognizer, const char * at)
         at = context.input + context.inputLen;
     size_t prefixLen = std::min<size_t>(at - context.input, 0x20);
     const char * start = eatUtf8Middle(at - prefixLen);
-    return mstd::deutf8(start, at - start) + L"<--!!!-->" + mstd::deutf8(at, std::min<size_t>(0x20, context.input + context.inputLen - at));
+    return std::string(start, at - start) + "<--!!!-->" + std::string(at, std::min<size_t>(0x20, context.input + context.inputLen - at));
 }
 
 void lexer_recognition_error(pANTLR3_BASE_RECOGNIZER recognizer, pANTLR3_UINT8 * tokenNames)
@@ -573,7 +575,7 @@ void lexer_recognition_error(pANTLR3_BASE_RECOGNIZER recognizer, pANTLR3_UINT8 *
     pANTLR3_LEXER lexer = static_cast<pANTLR3_LEXER>(recognizer->super);
     pANTLR3_EXCEPTION ex = lexer->rec->state->exception;
 
-    context.err->init(error_lexer).location(make_data(recognizer, context.input + ex->charPositionInLine)).message(mstd::deutf8(mstd::pointer_cast<const char *>(ex->message)));
+    context.err->init(error_lexer).location(make_data(recognizer, context.input + ex->charPositionInLine)).message(mstd::pointer_cast<const char *>(ex->message));
 }
 
 void display_recognition_error(struct ANTLR3_BASE_RECOGNIZER_struct * recognizer, uint8_t ** tokenNames)
@@ -595,13 +597,8 @@ void display_recognition_error(struct ANTLR3_BASE_RECOGNIZER_struct * recognizer
             context.err->token_id(ex->expecting);
         else if(ex->expecting == ANTLR3_TOKEN_EOF)
             context.err->token_eof(true);
-        else {
-            wchar_t buf[0x20];
-            const char * token = mstd::pointer_cast<const char*>(tokenNames[ex->expecting]);
-            *mstd::deutf8(token, token + strlen(token), buf) = 0;
-
-            context.err->token_value(buf);
-        }
+        else
+            context.err->token_value(mstd::pointer_cast<const char*>(tokenNames[ex->expecting]));
         break;
     case ANTLR3_RECOGNITION_EXCEPTION:
         context.err->init(error_recognition);
@@ -623,6 +620,19 @@ void display_recognition_error(struct ANTLR3_BASE_RECOGNIZER_struct * recognizer
 
 }
 
+void parser::parse(const std::string & inp, compiler & result, error & err)
+{
+    size_t ilen = inp.length();
+    if(!ilen)
+    {
+        err.init(error_empty_input);
+        return;
+    }
+    buffer_.resize(ilen + 1);
+    memcpy(&buffer_[0], inp.c_str(), ilen + 1);
+    do_parse(ilen, result, err);
+}
+
 void parser::parse(const std::wstring & inp, compiler & result, error & err)
 {
     char * buffer;
@@ -640,22 +650,27 @@ void parser::parse(const std::wstring & inp, compiler & result, error & err)
         end = mstd::utf8(idata, idata + ilen, buffer);
         *end = 0;
     }
+    do_parse(end - buffer, result, err);
+}
 
+void parser::do_parse(size_t len, compiler & result, error & err)
+{  
+    char * buffer = &buffer_[0];
     if(input_)
     {
-        input_->reuse(input_, pANTLR3_UINT8(buffer), end - buffer, pANTLR3_UINT8("expression"));
+        input_->reuse(input_, pANTLR3_UINT8(buffer), len, pANTLR3_UINT8("expression"));
         lex_->reset(lex_);
         tokens_->reset(tokens_);
         parser_->reset(parser_);
     } else {
-        input_ = antlr3StringStreamNew(pANTLR3_UINT8(buffer), ANTLR3_ENC_UTF8, end - buffer, pANTLR3_UINT8("expression"));
+        input_ = antlr3StringStreamNew(pANTLR3_UINT8(buffer), ANTLR3_ENC_UTF8, len, pANTLR3_UINT8("expression"));
         lex_ = calc_exprLexerNew(input_);
         lex_->pLexer->rec->displayRecognitionError = lexer_recognition_error;
         tokens_ = antlr3CommonTokenStreamSourceNew(ANTLR3_SIZE_HINT, TOKENSOURCE(lex_));
         parser_ = calc_exprParserNew(tokens_);
         parser_->pParser->rec->displayRecognitionError = display_recognition_error;
     }
-    parse_context context = { buffer, end - buffer, &err };
+    parse_context context = { buffer, len, &err };
     lex_->pLexer->rec->state->userp = &context;
     parser_->pParser->rec->state->userp = &context;
 

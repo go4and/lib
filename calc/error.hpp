@@ -25,8 +25,8 @@ enum error_code {
 };
 
 #define CALC_ERROR_PARAMETERS \
-    ((std::wstring, function_name))((size_t, function_arity))((std::wstring, location))((size_t, expected_arity)) \
-    ((std::wstring, token_value))((bool, token_eof))((uint32_t, token_id))((std::wstring, message))
+    ((std::wstring, function_name))((size_t, function_arity))((std::string, location))((size_t, expected_arity)) \
+    ((std::string, token_value))((bool, token_eof))((uint32_t, token_id))((std::string, message))
 
 class error {
 private:

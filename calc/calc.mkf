@@ -12,12 +12,11 @@ subprojects {
 files
 {
     [include]
-build.hpp          environment.hpp    exec.hpp           identifier.hpp     sign.hpp
-config.hpp         environment_op.hpp expression.hpp     utils.hpp
-conversion.hpp     exception.hpp      fwd.hpp            pch.hpp
+build.hpp          conversion.hpp     environment_op.hpp exec.hpp           parser.hpp         sign.hpp
+config.hpp         environment.hpp    error.hpp          fwd.hpp            pch.hpp            utils.hpp
 calc_exprLexer.h  calc_exprParser.h
 	
     [src]
-build.cpp       environment.cpp exec.cpp        expression.cpp  pch.cpp         utils.cpp
+build.cpp       environment.cpp error.cpp       exec.cpp        parser.cpp      pch.cpp         utils.cpp
 calc_exprLexer.c  calc_exprParser.c
 }

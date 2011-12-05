@@ -14,7 +14,22 @@ compiler builder::parse(const std::wstring & str, error & err)
     return result;
 }
 
+compiler builder::parse(const std::string & str, error & err)
+{
+    compiler result;
+    parser_.parse(str, result, err);
+    return result;
+}
+
 program builder::build(const environment & env, const std::wstring & str, error & err)
+{
+    compiler c = parse(str, err);
+    if(err)
+        return program();
+    return c(boost::bind(&environment::find, &env, _1, _2), err);
+}
+
+program builder::build(const environment & env, const std::string & str, error & err)
 {
     compiler c = parse(str, err);
     if(err)

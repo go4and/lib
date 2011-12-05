@@ -8,7 +8,6 @@ includepath .
 files
 {
     [include]
-build.hpp          environment.hpp    exec.hpp           sign.hpp
-config.hpp         environment_op.hpp expression.hpp     utils.hpp
-conversion.hpp     exception.hpp      fwd.hpp            
+build.hpp          conversion.hpp     environment_op.hpp exec.hpp           parser.hpp         sign.hpp
+config.hpp         environment.hpp    error.hpp          fwd.hpp            pch.hpp            utils.hpp
 }	

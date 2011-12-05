@@ -20,9 +20,12 @@ public:
     }
 
     CALC_DECL void parse(const std::wstring & inp, compiler & result, error & err);
+    CALC_DECL void parse(const std::string & inp, compiler & result, error & err);
 
     CALC_DECL ~parser();
 private:
+    void do_parse(size_t len, compiler & result, error & err);
+
     pANTLR3_INPUT_STREAM input_;
     pcalc_exprLexer lex_;
     pANTLR3_COMMON_TOKEN_STREAM tokens_;
