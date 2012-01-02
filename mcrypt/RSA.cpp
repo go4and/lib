@@ -220,6 +220,14 @@ static std::vector<char> process(Func func, const char * src, size_t len, ::RSA 
     return result;
 }
 
+template<class Func>
+static size_t process(Func func, const char * src, size_t len, char * out, ::RSA * rsa, int padding)
+{
+    int sz = func(static_cast<int>(len), mstd::pointer_cast<const unsigned char*>(src), mstd::pointer_cast<unsigned char*>(out), rsa, padding);
+    checkError(sz);
+    return sz;
+}
+
 std::vector<char> RSA::publicEncrypt(const char * src, size_t len, Padding padding) const
 {
     return process(&RSA_public_encrypt, src, len, impl_, getPadding(padding, true));
@@ -238,6 +246,16 @@ std::vector<char> RSA::privateEncrypt(const char * src, size_t len, Padding padd
 std::vector<char> RSA::privateDecrypt(const char * src, size_t len, Padding padding) const
 {
     return process(&RSA_private_decrypt, src, len, impl_, getPadding(padding, true));
+}
+
+size_t RSA::privateDecrypt(const char * src, size_t len, char * out, Padding padding) const
+{
+    return process(&RSA_private_decrypt, src, len, out, impl_, getPadding(padding, true));
+}
+
+size_t RSA::privateEncrypt(const char * src, size_t len, char * out, Padding padding) const
+{
+    return process(&RSA_private_encrypt, src, len, out, impl_, getPadding(padding, false));
 }
 
 size_t getPaddingTail(int padding)

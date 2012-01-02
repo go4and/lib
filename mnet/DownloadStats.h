@@ -11,7 +11,7 @@ struct DownloadStats {
 
     boost::posix_time::time_duration elapsed;
 
-    int progress() const { return actualFileSize > 0 ? std::min(static_cast<int>((downloaded * 100.) / actualFileSize), 100) : 0; }
+    int progress() const { return actualFileSize > 0 ? (std::min)(static_cast<int>((downloaded * 100.) / actualFileSize), 100) : 0; }
 };
 
 }

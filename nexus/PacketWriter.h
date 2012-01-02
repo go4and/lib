@@ -64,4 +64,10 @@ inline void writePacked(char *& p, boost::uint32_t size)
     }
 }
 
+size_t compressSize(size_t len);
+size_t compressSize(const char * begin, const char * end);
+
+size_t compress(const char * begin, const char * end, char * out, size_t outSize);
+std::string compress(const std::string & input);
+
 }

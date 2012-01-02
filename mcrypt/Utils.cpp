@@ -6,10 +6,6 @@
 
 namespace mcrypt {
 
-    namespace detail {
-        const char * hexTable = "0123456789abcdef";
-    }
-
 void bfcrypt(const std::string & password, const char * begin, const char * end, std::vector<char> & output)
 {
     output.resize(4 + (end - begin + 7) / 8 * 8);

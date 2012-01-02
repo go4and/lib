@@ -52,6 +52,11 @@ public:
         queue_.push_back(task);
     }
 
+    void cancelAll()
+    {
+        cancelAll_ = true;
+    }
+
     ~AsyncHTTP()
     {
         thread_.interrupt();
@@ -59,6 +64,7 @@ public:
     }
 
     AsyncHTTP()
+        : cancelAll_(false)
     {
         thread_ = boost::thread(&AsyncHTTP::execute, this);
     }
@@ -82,9 +88,13 @@ private:
                     tasks.insert(tasks.end(), queue_.begin(), queue_.end());
                     queue_.clear();
                 }
-                // MLOG_DEBUG("start tasks: " << oldTasks << " vs " << tasks.size());
-                for(size_t i = oldTasks, size = tasks.size(); i != size; ++i)
-                    tasks[i]->start(*multi);
+                bool cancel = cancelAll_.cas(false, true);
+                if(!cancel)
+                {
+                    for(size_t i = oldTasks, size = tasks.size(); i != size; ++i)
+                        tasks[i]->start(*multi);
+                } else
+                    tasks.clear();
                 int rh = 0;
                 // MLOG_DEBUG("performing curl");
                 for(;;)
@@ -149,6 +159,7 @@ private:
     boost::thread thread_;
     boost::mutex mutex_;
     std::vector<AsyncTaskPtr> queue_;
+    mstd::atomic<bool> cancelAll_;
 };
 
 class DownloadTask : public AsyncTask {
@@ -583,6 +594,13 @@ void setProxy(const Proxy & proxy)
 void setUIEnqueuer(const UIEnqueuer & enqueuer)
 {
     HTTP::instance().setUIEnqueuer(enqueuer);
+}
+
+void cancelAll()
+{
+    MLOG_DEBUG("cancelAll()");
+
+    HTTP::instance().asyncHTTP().cancelAll();
 }
 
 void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const std::string & cookies)

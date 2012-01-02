@@ -12,7 +12,6 @@
 		C36A1541143D828500185523 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C36A1540143D828500185523 /* mstd.dylib */; };
 		C3F10D841352FDE600D8C945 /* Config.h in Headers */ = {isa = PBXBuildFile; fileRef = C3F10D701352FDE600D8C945 /* Config.h */; };
 		C3F10D851352FDE600D8C945 /* Defines.h in Headers */ = {isa = PBXBuildFile; fileRef = C3F10D711352FDE600D8C945 /* Defines.h */; };
-		C3F10D861352FDE600D8C945 /* Dumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3F10D721352FDE600D8C945 /* Dumper.cpp */; };
 		C3F10D871352FDE600D8C945 /* Dumper.h in Headers */ = {isa = PBXBuildFile; fileRef = C3F10D731352FDE600D8C945 /* Dumper.h */; };
 		C3F10D881352FDE600D8C945 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3F10D741352FDE600D8C945 /* Logger.cpp */; };
 		C3F10D891352FDE600D8C945 /* Logger.h in Headers */ = {isa = PBXBuildFile; fileRef = C3F10D751352FDE600D8C945 /* Logger.h */; };
@@ -29,13 +28,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C35853A2143F61CF0018E602 /* MacUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MacUtils.mm; path = MacUtils.mm; sourceTree = SOURCE_ROOT; };
+		C35853A2143F61CF0018E602 /* MacUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacUtils.mm; sourceTree = SOURCE_ROOT; };
 		C35853A4143F62FB0018E602 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C36A1540143D828500185523 /* mstd.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3F10D4F1352FCE200D8C945 /* mlog.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3F10D701352FDE600D8C945 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = SOURCE_ROOT; };
 		C3F10D711352FDE600D8C945 /* Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = SOURCE_ROOT; };
-		C3F10D721352FDE600D8C945 /* Dumper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dumper.cpp; sourceTree = SOURCE_ROOT; };
 		C3F10D731352FDE600D8C945 /* Dumper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dumper.h; sourceTree = SOURCE_ROOT; };
 		C3F10D741352FDE600D8C945 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = SOURCE_ROOT; };
 		C3F10D751352FDE600D8C945 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = SOURCE_ROOT; };
@@ -88,7 +86,6 @@
 				C35853A2143F61CF0018E602 /* MacUtils.mm */,
 				C3F10D701352FDE600D8C945 /* Config.h */,
 				C3F10D711352FDE600D8C945 /* Defines.h */,
-				C3F10D721352FDE600D8C945 /* Dumper.cpp */,
 				C3F10D731352FDE600D8C945 /* Dumper.h */,
 				C3F10D741352FDE600D8C945 /* Logger.cpp */,
 				C3F10D751352FDE600D8C945 /* Logger.h */,
@@ -178,7 +175,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3F10D861352FDE600D8C945 /* Dumper.cpp in Sources */,
 				C3F10D881352FDE600D8C945 /* Logger.cpp in Sources */,
 				C3F10D8B1352FDE600D8C945 /* Manager.cpp in Sources */,
 				C3F10D8D1352FDE600D8C945 /* Output.cpp in Sources */,

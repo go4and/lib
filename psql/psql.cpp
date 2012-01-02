@@ -6,6 +6,8 @@
 
 #include <boost/date_time/posix_time/posix_time_io.hpp>
 
+#include <libpq-fe.h>
+
 #include <mstd/hton.hpp>
 #include <mstd/null.hpp>
 #include <mstd/pointer_cast.hpp>
@@ -17,6 +19,8 @@
 #include "psql.h"
 
 MLOG_DECLARE_LOGGER(psql);
+
+int	psqlPQntuples(const PGresult *res);
 
 namespace psql {
 
@@ -581,7 +585,7 @@ bool Result::success() const
     return status == PGRES_COMMAND_OK || status == PGRES_TUPLES_OK || status == PGRES_COPY_IN || status == PGRES_COPY_OUT;
 }
 
-ExecStatusType Result::status() const
+int Result::status() const
 {
     return PQresultStatus(value_);
 }

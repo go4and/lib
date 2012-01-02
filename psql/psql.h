@@ -11,11 +11,13 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/logic/tribool.hpp>
 
-#include <libpq-fe.h>
-
 #include <mstd/cstdint.hpp>
 #include <mstd/exception.hpp>
 #include <mstd/move.hpp>
+
+typedef unsigned int Oid;
+typedef struct pg_conn PGconn;
+typedef struct pg_result PGresult;
 
 namespace psql {
 
@@ -30,7 +32,7 @@ class Result;
 class ParametricExecution;
 
 class ConnStatusTag;
-typedef boost::error_info<ConnStatusTag, ConnStatusType> ConnStatus;
+typedef boost::error_info<ConnStatusTag, int> ConnStatus;
 
 class PGConnHolder : private boost::noncopyable {
 public:
@@ -297,7 +299,7 @@ private:
 
     bool success() const;
     const char * error() const;
-    ExecStatusType status() const;
+    int status() const;
 
     PGresult * value_;
     mutable size_t width_;
