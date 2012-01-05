@@ -6,6 +6,8 @@
 #include <boost/optional.hpp>
 #endif
 
+#include "config.hpp"
+
 namespace calc {
 
 enum error_code {
@@ -59,7 +61,7 @@ public:
         return code_ != error_none ? &dummy::nonnull : 0;
     }
 
-    void out(std::ostream & out) const;
+    CALC_DECL void out(std::ostream & out) const;
 
     #define CALC_ERROR_PUBLIC_FUNCTIONS_IMPL(type, name) \
     const type * name() const \

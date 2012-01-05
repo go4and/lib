@@ -10,7 +10,42 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="build.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="calc_exprLexer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="calc_exprParser.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="environment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="error.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="exec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="build.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="calc_exprLexer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="calc_exprParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="config.hpp">
@@ -25,16 +60,16 @@
     <ClInclude Include="environment_op.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="exception.hpp">
+    <ClInclude Include="error.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="exec.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="expression.hpp">
+    <ClInclude Include="fwd.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fwd.hpp">
+    <ClInclude Include="parser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pch.hpp">
@@ -46,37 +81,5 @@
     <ClInclude Include="utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="calc_exprLexer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="calc_exprParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="build.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="environment.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="exec.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="expression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="calc_exprLexer.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="calc_exprParser.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
