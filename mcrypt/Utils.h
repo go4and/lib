@@ -5,6 +5,8 @@
 #include <vector>
 
 #include <boost/optional.hpp>
+
+#include <mstd/itoa.hpp>
 #endif
 
 #include "Config.h"
@@ -12,8 +14,6 @@
 namespace mcrypt {
 
     namespace detail {
-        extern MCRYPT_DECL const char * hexTable;
-
         template<class Out, class Input>
         Out visualizeImpl(const Input & data)
         {
@@ -22,8 +22,8 @@ namespace mcrypt {
             for(typename Input::const_iterator i = data.begin(), end = data.end(); i != end; ++i)
             {
                 unsigned char b = *i;
-                result.push_back(hexTable[b >> 4]);
-                result.push_back(hexTable[b & 0xf]);
+                result.push_back(mstd::hex_table[b >> 4]);
+                result.push_back(mstd::hex_table[b & 0xf]);
             }
             return result;
         }

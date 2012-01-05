@@ -10,9 +10,6 @@
 		C3161E67135776A20001E128 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E66135776A20001E128 /* libz.dylib */; };
 		C3161E69135776AA0001E128 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E68135776AA0001E128 /* libcrypto.dylib */; };
 		C3161E6B135776B10001E128 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E6A135776B10001E128 /* libssl.dylib */; };
-		C3161E84135776EF0001E128 /* mcrypt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E77135776CE0001E128 /* mcrypt.dylib */; };
-		C3161E85135776EF0001E128 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E7A135776CE0001E128 /* mlog.dylib */; };
-		C3161E86135776EF0001E128 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E7D135776CE0001E128 /* mstd.dylib */; };
 		C35AA4C913538DD100649921 /* AsyncGuard.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4A713538DD100649921 /* AsyncGuard.h */; };
 		C35AA4CA13538DD100649921 /* AsyncOperations.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4A813538DD100649921 /* AsyncOperations.h */; };
 		C35AA4CB13538DD100649921 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4A913538DD100649921 /* Buffer.cpp */; };
@@ -47,60 +44,16 @@
 		C35AA4EA13538DD100649921 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4C813538DD100649921 /* Utils.h */; };
 		C366148213FA83C1001F51AA /* REST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C366148013FA83C1001F51AA /* REST.cpp */; };
 		C366148313FA83C1001F51AA /* REST.h in Headers */ = {isa = PBXBuildFile; fileRef = C366148113FA83C1001F51AA /* REST.h */; };
+		C36A4273148D184F00E9CF52 /* PacketWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C36A4272148D184F00E9CF52 /* PacketWriter.cpp */; };
+		C3E76580148F3A450069EAFA /* mcrypt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E7657D148F3A450069EAFA /* mcrypt.dylib */; };
+		C3E76581148F3A450069EAFA /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E7657E148F3A450069EAFA /* mlog.dylib */; };
+		C3E76582148F3A450069EAFA /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E7657F148F3A450069EAFA /* mstd.dylib */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		C3161E76135776CE0001E128 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3161E6C135776CE0001E128 /* mcrypt.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C3389CEB135383290010E3BF;
-			remoteInfo = mcrypt;
-		};
-		C3161E79135776CE0001E128 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3161E6F135776CE0001E128 /* mlog.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C3F10D4F1352FCE200D8C945;
-			remoteInfo = mlog;
-		};
-		C3161E7C135776CE0001E128 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3161E72135776CE0001E128 /* mstd.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C32455981352A6B900999158;
-			remoteInfo = mstd;
-		};
-		C3161E7E135776E10001E128 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3161E6F135776CE0001E128 /* mlog.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C3F10D4E1352FCE200D8C945;
-			remoteInfo = mlog;
-		};
-		C3161E80135776E10001E128 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3161E72135776CE0001E128 /* mstd.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C32455971352A6B900999158;
-			remoteInfo = mstd;
-		};
-		C3161E82135776E10001E128 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3161E6C135776CE0001E128 /* mcrypt.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C3389CEA135383290010E3BF;
-			remoteInfo = mcrypt;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		C3161E66135776A20001E128 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		C3161E68135776AA0001E128 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		C3161E6A135776B10001E128 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
-		C3161E6C135776CE0001E128 /* mcrypt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mcrypt.xcodeproj; path = ../mcrypt/mcrypt.xcodeproj; sourceTree = SOURCE_ROOT; };
-		C3161E6F135776CE0001E128 /* mlog.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mlog.xcodeproj; path = ../mlog/mlog.xcodeproj; sourceTree = SOURCE_ROOT; };
-		C3161E72135776CE0001E128 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = SOURCE_ROOT; };
 		C3389D63135388960010E3BF /* nexus.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = nexus.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C35AA4A713538DD100649921 /* AsyncGuard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncGuard.h; sourceTree = SOURCE_ROOT; };
 		C35AA4A813538DD100649921 /* AsyncOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncOperations.h; sourceTree = SOURCE_ROOT; };
@@ -136,6 +89,10 @@
 		C35AA4C813538DD100649921 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = SOURCE_ROOT; };
 		C366148013FA83C1001F51AA /* REST.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = REST.cpp; sourceTree = SOURCE_ROOT; };
 		C366148113FA83C1001F51AA /* REST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REST.h; sourceTree = SOURCE_ROOT; };
+		C36A4272148D184F00E9CF52 /* PacketWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketWriter.cpp; sourceTree = SOURCE_ROOT; };
+		C3E7657D148F3A450069EAFA /* mcrypt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mcrypt.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3E7657E148F3A450069EAFA /* mlog.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3E7657F148F3A450069EAFA /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,9 +100,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3161E84135776EF0001E128 /* mcrypt.dylib in Frameworks */,
-				C3161E85135776EF0001E128 /* mlog.dylib in Frameworks */,
-				C3161E86135776EF0001E128 /* mstd.dylib in Frameworks */,
+				C3E76580148F3A450069EAFA /* mcrypt.dylib in Frameworks */,
+				C3E76581148F3A450069EAFA /* mlog.dylib in Frameworks */,
+				C3E76582148F3A450069EAFA /* mstd.dylib in Frameworks */,
 				C3161E67135776A20001E128 /* libz.dylib in Frameworks */,
 				C3161E69135776AA0001E128 /* libcrypto.dylib in Frameworks */,
 				C3161E6B135776B10001E128 /* libssl.dylib in Frameworks */,
@@ -155,36 +112,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C3161E6D135776CE0001E128 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C3161E77135776CE0001E128 /* mcrypt.dylib */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		C3161E70135776CE0001E128 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C3161E7A135776CE0001E128 /* mlog.dylib */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		C3161E73135776CE0001E128 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C3161E7D135776CE0001E128 /* mstd.dylib */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		C3389D58135388960010E3BF = {
 			isa = PBXGroup;
 			children = (
-				C3161E6C135776CE0001E128 /* mcrypt.xcodeproj */,
-				C3161E6F135776CE0001E128 /* mlog.xcodeproj */,
-				C3161E72135776CE0001E128 /* mstd.xcodeproj */,
+				C3E7657D148F3A450069EAFA /* mcrypt.dylib */,
+				C3E7657E148F3A450069EAFA /* mlog.dylib */,
+				C3E7657F148F3A450069EAFA /* mstd.dylib */,
 				C3389D65135388960010E3BF /* nexus */,
 				C3389D64135388960010E3BF /* Products */,
 				C3161E66135776A20001E128 /* libz.dylib */,
@@ -204,6 +137,7 @@
 		C3389D65135388960010E3BF /* nexus */ = {
 			isa = PBXGroup;
 			children = (
+				C36A4272148D184F00E9CF52 /* PacketWriter.cpp */,
 				C35AA4A713538DD100649921 /* AsyncGuard.h */,
 				C35AA4A813538DD100649921 /* AsyncOperations.h */,
 				C35AA4A913538DD100649921 /* Buffer.cpp */,
@@ -286,9 +220,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				C3161E7F135776E10001E128 /* PBXTargetDependency */,
-				C3161E81135776E10001E128 /* PBXTargetDependency */,
-				C3161E83135776E10001E128 /* PBXTargetDependency */,
 			);
 			name = nexus;
 			productName = nexus;
@@ -314,50 +245,12 @@
 			mainGroup = C3389D58135388960010E3BF;
 			productRefGroup = C3389D64135388960010E3BF /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = C3161E6D135776CE0001E128 /* Products */;
-					ProjectRef = C3161E6C135776CE0001E128 /* mcrypt.xcodeproj */;
-				},
-				{
-					ProductGroup = C3161E70135776CE0001E128 /* Products */;
-					ProjectRef = C3161E6F135776CE0001E128 /* mlog.xcodeproj */;
-				},
-				{
-					ProductGroup = C3161E73135776CE0001E128 /* Products */;
-					ProjectRef = C3161E72135776CE0001E128 /* mstd.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				C3389D62135388960010E3BF /* nexus */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		C3161E77135776CE0001E128 /* mcrypt.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = mcrypt.dylib;
-			remoteRef = C3161E76135776CE0001E128 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		C3161E7A135776CE0001E128 /* mlog.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = mlog.dylib;
-			remoteRef = C3161E79135776CE0001E128 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		C3161E7D135776CE0001E128 /* mstd.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = mstd.dylib;
-			remoteRef = C3161E7C135776CE0001E128 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C3389D5F135388960010E3BF /* Sources */ = {
@@ -378,28 +271,11 @@
 				C35AA4E713538DD100649921 /* StackStream.cpp in Sources */,
 				C35AA4E913538DD100649921 /* Utils.cpp in Sources */,
 				C366148213FA83C1001F51AA /* REST.cpp in Sources */,
+				C36A4273148D184F00E9CF52 /* PacketWriter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		C3161E7F135776E10001E128 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = mlog;
-			targetProxy = C3161E7E135776E10001E128 /* PBXContainerItemProxy */;
-		};
-		C3161E81135776E10001E128 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = mstd;
-			targetProxy = C3161E80135776E10001E128 /* PBXContainerItemProxy */;
-		};
-		C3161E83135776E10001E128 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = mcrypt;
-			targetProxy = C3161E82135776E10001E128 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C3389D6F135388960010E3BF /* Debug */ = {

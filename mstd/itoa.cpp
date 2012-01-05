@@ -19,8 +19,9 @@ const char * initBlocks()
 }
 
 MSTD_DECL const char * const digitBlocks = initBlocks();
-MSTD_DECL const char * const hexTable = "0123456789abcdef";
 
 }
+
+MSTD_DECL const char * const hex_table = "0123456789abcdef";
 
 }

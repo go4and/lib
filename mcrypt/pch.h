@@ -51,10 +51,8 @@ namespace std { class runtime_error : public exception { public: runtime_error(c
 #include <openssl/sha.h>
 
 #include <mstd/cstdint.hpp>
-#if 0
-#include <mstd/exception.hpp>
-#endif
 #include <mstd/handle_base.hpp>
+#include <mstd/itoa.hpp>
 #include <mstd/pointer_cast.hpp>
 #include <mstd/reference_counter.hpp>
 #include <mstd/strings.hpp>

@@ -6,6 +6,7 @@
 
 #include <iosfwd>
 
+#include <mstd/itoa.hpp>
 #include <mstd/utf8.hpp>
 #include <mstd/strings.hpp>
 #endif
@@ -13,8 +14,6 @@
 #include "Config.h"
 
 namespace mlog {
-
-extern MLOG_DECL const char * const hexTable;
 
 template<class Iterator>
 class Dumper {
@@ -29,15 +28,16 @@ public:
     template<class Ch, class Tr>
     void operator()(std::basic_ostream<Ch, Tr> & out) const
     {
+        const char * ht = mstd::hex_table;
         Iterator i = begin_;
         if(i != end_)
         {
             unsigned char c = static_cast<unsigned char>(*i);
-            out << static_cast<Ch>(hexTable[c >> 4]) << static_cast<Ch>(hexTable[c & 0xf]);
+            out << static_cast<Ch>(ht[c >> 4]) << static_cast<Ch>(ht[c & 0xf]);
             for(++i; i != end_; ++i)
             {
                 unsigned char c = static_cast<unsigned char>(*i);
-                out << static_cast<Ch>(' ') << static_cast<Ch>(hexTable[c >> 4]) << static_cast<Ch>(hexTable[c & 0xf]);
+                out << static_cast<Ch>(' ') << static_cast<Ch>(ht[c >> 4]) << static_cast<Ch>(ht[c & 0xf]);
             }
         }
     }

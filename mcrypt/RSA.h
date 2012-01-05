@@ -65,23 +65,36 @@ public:
 
     inline std::vector<char> publicDecrypt(const char * begin, const char * end, Padding padding = pdDefault) const
     {
-        return publicEncrypt(begin, end - begin, padding);
+        return publicDecrypt(begin, end - begin, padding);
     }
 
     inline std::vector<char> privateEncrypt(const char * begin, const char * end, Padding padding = pdDefault) const
     {
-        return publicEncrypt(begin, end - begin, padding);
+        return privateEncrypt(begin, end - begin, padding);
+    }
+
+    inline size_t privateEncrypt(const char * begin, const char * end, char * out, Padding padding = pdDefault) const
+    {
+        return privateEncrypt(begin, end - begin, out, padding);
     }
 
     inline std::vector<char> privateDecrypt(const char * begin, const char * end, Padding padding = pdDefault) const
     {
-        return publicEncrypt(begin, end - begin, padding);
+        return privateDecrypt(begin, end - begin, padding);
+    }
+
+    inline size_t privateDecrypt(const char * begin, const char * end, char * out, Padding padding = pdDefault) const
+    {
+        return privateDecrypt(begin, end - begin, out, padding);
     }
 
     std::vector<char> publicEncrypt(const char * src, size_t len, Padding padding = pdDefault) const;
     std::vector<char> publicDecrypt(const char * src, size_t len, Padding padding = pdDefault) const;
     std::vector<char> privateEncrypt(const char * src, size_t len, Padding padding = pdDefault) const;
     std::vector<char> privateDecrypt(const char * src, size_t len, Padding padding = pdDefault) const;
+
+    size_t privateDecrypt(const char * src, size_t len, char * out, Padding padding = pdDefault) const;
+    size_t privateEncrypt(const char * src, size_t len, char * out, Padding padding = pdDefault) const;
 
     inline std::vector<char> publicEncryptEx(const std::vector<char> & src, Padding padding = pdDefault) const
     {

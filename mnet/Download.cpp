@@ -521,6 +521,7 @@ Download::Download(const std::string & url, const boost::filesystem::wpath & loc
 
 Download::~Download()
 {
+    impl_.reset();
 }
 
 void Download::cleanup()

@@ -39,7 +39,11 @@ public:
 
     inline int64_t nanoseconds()
     {
-        return get<boost::mpl::integral_c<int64_t, 1000000000> >();
+#ifdef BOOST_WINDOWS
+        return value_ * 100;
+#else
+        return value_;
+#endif    
     }
 
     performance_interval & operator+=(performance_interval rhs)
@@ -54,9 +58,7 @@ private:
     inline int64_t get()
     {
 #ifdef BOOST_WINDOWS
-        LARGE_INTEGER freq;
-        QueryPerformanceFrequency(&freq);
-        return value_ * PS::value / freq.QuadPart;
+        return value_ / boost::mpl::integral_c<int64_t, 10000000 / PS::value>::value;
 #else
         return value_ / boost::mpl::integral_c<int64_t, 1000000000 / PS::value>::value;
 #endif    
@@ -77,7 +79,14 @@ public:
     void reset()
     {
 #ifdef BOOST_WINDOWS
-        QueryPerformanceCounter(&value_);
+        FILETIME t1, t2, t3, t4;
+        GetThreadTimes(GetCurrentThread(), &t1, &t2, &t3, &t4);
+        value_.LowPart = t3.dwLowDateTime;
+        value_.HighPart = t3.dwHighDateTime;
+        LARGE_INTEGER t;
+        t.LowPart = t4.dwLowDateTime;
+        t.HighPart = t4.dwHighDateTime;
+        value_.QuadPart += t.QuadPart;
 #elif defined(CLOCK_THREAD_CPUTIME_ID)
         clock_gettime(CLOCK_THREAD_CPUTIME_ID, &value_);
 #else

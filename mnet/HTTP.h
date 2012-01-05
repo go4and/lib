@@ -45,6 +45,7 @@ void getJSONAsync(const std::string & url, const AsyncXmlHandler & handler, cons
 void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const std::string & cookie = std::string());
 void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const ProgressHandler & progress, const std::string & cookie = std::string());
 void getDataExAsync(const std::string & url, const AsyncDataExHandler & handler, const std::string & cookie = std::string());
+void cancelAll();
 
 int getRemoteFileSizeEx(std::string & uri, filesize_t & out);
 

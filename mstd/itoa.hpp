@@ -18,12 +18,13 @@
 
 namespace mstd {
 
+    extern MSTD_DECL const char * const hex_table;
+
     namespace detail {
         const size_t blockLen = 4;
         const size_t blockPow = 10000;
 
         extern MSTD_DECL const char * const digitBlocks;
-        extern MSTD_DECL const char * const hexTable;
 
         template<class T, class Char>
         Char * pitoa(T i, Char * buf)
@@ -71,7 +72,7 @@ itoa16(T i, Char * buf)
     Char * p = buf;
     if(i) {
         while(i) {
-            *p++ = detail::hexTable[i & 0xf];
+            *p++ = hex_table[i & 0xf];
             i >>= 4;
         }
         std::reverse(buf, p);
