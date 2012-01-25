@@ -151,34 +151,23 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="build.hpp" />
-    <ClInclude Include="calc_exprLexer.h" />
-    <ClInclude Include="calc_exprParser.h" />
-    <ClInclude Include="config.hpp" />
-    <ClInclude Include="conversion.hpp" />
-    <ClInclude Include="environment.hpp" />
-    <ClInclude Include="environment_op.hpp" />
-    <ClInclude Include="exception.hpp" />
-    <ClInclude Include="exec.hpp" />
-    <ClInclude Include="expression.hpp" />
-    <ClInclude Include="fwd.hpp" />
-    <ClInclude Include="pch.hpp" />
-    <ClInclude Include="sign.hpp" />
-    <ClInclude Include="utils.hpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="build.cpp" />
     <ClCompile Include="calc_exprLexer.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Dll|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Static Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="calc_exprParser.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Dll|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Static Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="environment.cpp" />
+    <ClCompile Include="error.cpp" />
     <ClCompile Include="exec.cpp" />
-    <ClCompile Include="expression.cpp" />
+    <ClCompile Include="parser.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Dll|Win32'">Create</PrecompiledHeader>
@@ -191,6 +180,22 @@
     <ProjectReference Include="..\mstd\mstd.vcxproj">
       <Project>{91a6efe6-7ad6-41c8-8f64-99ce5a77e70c}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="build.hpp" />
+    <ClInclude Include="calc_exprLexer.h" />
+    <ClInclude Include="calc_exprParser.h" />
+    <ClInclude Include="config.hpp" />
+    <ClInclude Include="conversion.hpp" />
+    <ClInclude Include="environment.hpp" />
+    <ClInclude Include="environment_op.hpp" />
+    <ClInclude Include="error.hpp" />
+    <ClInclude Include="exec.hpp" />
+    <ClInclude Include="fwd.hpp" />
+    <ClInclude Include="parser.hpp" />
+    <ClInclude Include="pch.hpp" />
+    <ClInclude Include="sign.hpp" />
+    <ClInclude Include="utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
