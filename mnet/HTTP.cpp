@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "CurlUtils.h"
+#include "JSON.h"
 
 #include "HTTP.h"
 
@@ -632,10 +633,8 @@ boost::property_tree::ptree parseJSON(const std::string& data)
 {
     std::istringstream inp(data);
     boost::property_tree::ptree result;
-    try {
-        boost::property_tree::read_json(inp, result);
-    } catch(boost::property_tree::json_parser_error&) {
-    }
+    ParseError err;
+    parseJSON(data, result, err);
     return result;
 }
 

@@ -4,6 +4,8 @@
 
 #include <curl/curl.h>
 
+#include <yajl/yajl_parse.h>
+
 #include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -18,7 +20,6 @@
 #include <boost/intrusive/set.hpp>
 
 #include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
 #include <boost/scope_exit.hpp>

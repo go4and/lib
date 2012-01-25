@@ -151,6 +151,7 @@
     <ClCompile Include="CurlUtils.cpp" />
     <ClCompile Include="Download.cpp" />
     <ClCompile Include="HTTP.cpp" />
+    <ClCompile Include="JSON.cpp" />
     <ClCompile Include="pch\pch.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -168,6 +169,7 @@
     <ClInclude Include="DownloadDefines.h" />
     <ClInclude Include="DownloadStats.h" />
     <ClInclude Include="HTTP.h" />
+    <ClInclude Include="JSON.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

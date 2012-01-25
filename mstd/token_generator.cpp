@@ -6,8 +6,6 @@
 
 #if !defined(_STLP_NO_IOSTREAMS)
 
-#include <boost/random.hpp>
-
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 
 #include <boost/thread/tss.hpp>
