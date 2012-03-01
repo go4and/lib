@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C309539214D00A3F00B7E185 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C309539014D00A3F00B7E185 /* mlog.dylib */; };
+		C309539314D00A3F00B7E185 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C309539114D00A3F00B7E185 /* mstd.dylib */; };
 		C346423813D3306700716430 /* CurlUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346422F13D3306700716430 /* CurlUtils.cpp */; };
 		C346423913D3306700716430 /* CurlUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423013D3306700716430 /* CurlUtils.h */; };
 		C346423A13D3306700716430 /* Download.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346423113D3306700716430 /* Download.cpp */; };
@@ -17,14 +19,14 @@
 		C346423F13D3306700716430 /* HTTP.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423613D3306700716430 /* HTTP.h */; };
 		C346424013D3306700716430 /* pch.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423713D3306700716430 /* pch.h */; };
 		C346433813D3336B00716430 /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C346433713D3336B00716430 /* libcurl.4.dylib */; };
-		C369C34A14037BBE00C509EC /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C369C34814037BBE00C509EC /* mlog.dylib */; };
-		C369C34B14037BBE00C509EC /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C369C34914037BBE00C509EC /* mstd.dylib */; };
+		C37D388614CFEA5400A5E13D /* libyajl.2.0.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C37D388514CFEA5400A5E13D /* libyajl.2.0.4.dylib */; };
 		C3B8CA4114C77100004BDE52 /* JSON.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B8CA3F14C77100004BDE52 /* JSON.cpp */; };
 		C3B8CA4214C77100004BDE52 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = C3B8CA4014C77100004BDE52 /* JSON.h */; };
-		C3B8CA4414C772C8004BDE52 /* libyajl.2.0.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B8CA4314C772C8004BDE52 /* libyajl.2.0.3.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C309539014D00A3F00B7E185 /* mlog.dylib */ = {isa = PBXFileReference; lastKnownFileType = file; name = mlog.dylib; path = ../../../../_build/Release/mlog.dylib; sourceTree = "<group>"; };
+		C309539114D00A3F00B7E185 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = mstd.dylib; path = ../../../../_build/Release/mstd.dylib; sourceTree = "<group>"; };
 		C346422F13D3306700716430 /* CurlUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CurlUtils.cpp; sourceTree = "<group>"; };
 		C346423013D3306700716430 /* CurlUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurlUtils.h; sourceTree = "<group>"; };
 		C346423113D3306700716430 /* Download.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Download.cpp; sourceTree = "<group>"; };
@@ -35,11 +37,9 @@
 		C346423613D3306700716430 /* HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTP.h; sourceTree = "<group>"; };
 		C346423713D3306700716430 /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = "<group>"; };
 		C346433713D3336B00716430 /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.4.dylib; path = /opt/local/lib/libcurl.4.dylib; sourceTree = "<absolute>"; };
-		C369C34814037BBE00C509EC /* mlog.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		C369C34914037BBE00C509EC /* mstd.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C37D388514CFEA5400A5E13D /* libyajl.2.0.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libyajl.2.0.4.dylib; path = ../../../../../../../opt/local/lib/libyajl.2.0.4.dylib; sourceTree = "<group>"; };
 		C3B8CA3F14C77100004BDE52 /* JSON.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSON.cpp; sourceTree = "<group>"; };
 		C3B8CA4014C77100004BDE52 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
-		C3B8CA4314C772C8004BDE52 /* libyajl.2.0.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libyajl.2.0.3.dylib; path = ../../../../../../../opt/local/lib/libyajl.2.0.3.dylib; sourceTree = "<group>"; };
 		D2AAC09D05546B4700DB518D /* mnet.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mnet.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -48,9 +48,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3B8CA4414C772C8004BDE52 /* libyajl.2.0.3.dylib in Frameworks */,
-				C369C34A14037BBE00C509EC /* mlog.dylib in Frameworks */,
-				C369C34B14037BBE00C509EC /* mstd.dylib in Frameworks */,
+				C309539214D00A3F00B7E185 /* mlog.dylib in Frameworks */,
+				C309539314D00A3F00B7E185 /* mstd.dylib in Frameworks */,
+				C37D388614CFEA5400A5E13D /* libyajl.2.0.4.dylib in Frameworks */,
 				C346433813D3336B00716430 /* libcurl.4.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,7 +69,9 @@
 		0867D691FE84028FC02AAC07 /* mnet */ = {
 			isa = PBXGroup;
 			children = (
-				C3B8CA4314C772C8004BDE52 /* libyajl.2.0.3.dylib */,
+				C309539014D00A3F00B7E185 /* mlog.dylib */,
+				C309539114D00A3F00B7E185 /* mstd.dylib */,
+				C37D388514CFEA5400A5E13D /* libyajl.2.0.4.dylib */,
 				C346433713D3336B00716430 /* libcurl.4.dylib */,
 				C346425913D3314900716430 /* Dependencies */,
 				08FB77ACFE841707C02AAC07 /* Source */,
@@ -99,8 +101,6 @@
 		C346425913D3314900716430 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				C369C34814037BBE00C509EC /* mlog.dylib */,
-				C369C34914037BBE00C509EC /* mstd.dylib */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -197,6 +197,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
+					"\"$(SRCROOT)/../../../../_build/Release\"",
 				);
 			};
 			name = Debug;
@@ -210,6 +211,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
+					"\"$(SRCROOT)/../../../../_build/Release\"",
 				);
 				STRIP_INSTALLED_PRODUCT = YES;
 				STRIP_STYLE = "non-global";

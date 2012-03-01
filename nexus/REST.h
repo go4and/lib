@@ -12,6 +12,7 @@ class RESTRequest {
 public:
     RESTRequest(const std::string & base);
 
+    void addString(const std::string & value) { str_ += value; }
     void addParam(const std::string & param, const std::string & value);
     void addParam(const std::string & param, const char * value);
     void addParam(const char * param, const std::string & value);
@@ -22,9 +23,5 @@ private:
     std::string url_;
     std::string str_;
 };
-
-MSTD_DEFINE_ENUM_EX(SocialNetwork, sn_, (vkont)(mailru));
-
-const std::string & socialRequestBase(SocialNetwork type);
 
 }

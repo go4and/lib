@@ -75,11 +75,4 @@ const std::string & RESTRequest::url(const char * apiSecret)
     return url_;
 }
 
-const std::string & socialRequestBase(SocialNetwork type)
-{
-    static const std::string vkontURL = "http://api.vkontakte.ru/api.php?";
-    static const std::string mailRuURL = "http://www.appsmail.ru/platform/api?";
-    return type == sn_vkont ? vkontURL : mailRuURL;
-}
-
 }

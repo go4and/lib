@@ -505,7 +505,7 @@
 					"-lboost_system-mt-d",
 					"-lboost_thread-mt-d",
 				);
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Debug;
@@ -531,7 +531,7 @@
 					"-lboost_system-mt",
 					"-lboost_thread-mt",
 				);
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Release;

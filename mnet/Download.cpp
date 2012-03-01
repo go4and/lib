@@ -451,7 +451,7 @@ private:
                     maxChunk = *i;
             }
             filesize_t chunkSize = maxChunk->end - maxChunk->begin;
-            if(chunkSize > 10000) // do not split small chunks
+            if(chunkSize > 1 << 20) // do not split small chunks
             {
                 size_t l = n - (p - freeChunks) + 1;
                 filesize_t blockSize = chunkSize / l;

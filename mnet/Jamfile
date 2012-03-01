@@ -11,5 +11,5 @@ lib boost_filesystem : : <name>boost_filesystem <variant>release ;
 lib boost_filesystem : : <name>boost_filesystem <variant>profile ;
 
 
-lib mnet : [ glob *.cpp ] boost_thread boost_system ../mstd /site-config//libcurl ;
+lib mnet : [ glob *.cpp ] boost_thread boost_system ../mstd /site-config//libcurl /site-config//yajl ;
 
