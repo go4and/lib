@@ -80,10 +80,11 @@ public:
     explicit user_function_compiler(const std::vector<std::wstring> & args, const compiler & f)
         : args_(args), f_(f) {}
 
-    pre_program * operator()(std::vector<pre_program*> & args, const function_lookup & lookup, error & err) const
+    pre_program * operator()(std::vector<pre_program*> & args, const compiler_context & context) const
     {
-        program p = f_(user_function_lookup(args_, lookup), err);
-        return !err ? new user_function_invoker(boost::move(p), args) : 0;
+        compiler_context newContext = { user_function_lookup(args_, context.lookup), context.err, context.plugin };
+        program p = f_(newContext);
+        return !context.err ? new user_function_invoker(boost::move(p), args) : 0;
     }
 private:
     std::vector<std::wstring> args_;

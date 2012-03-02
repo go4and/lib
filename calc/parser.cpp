@@ -59,7 +59,7 @@ private:
 
 class pre_compiler : public boost::noncopyable {
 public:
-    virtual pre_program * compile(const function_lookup & lookup, error & err) const = 0;
+    virtual pre_program * compile(const compiler_context & context) const = 0;
 
     virtual ~pre_compiler()
     {
@@ -90,10 +90,10 @@ template<class Program>
 struct UnaryCompiler : public pre_compiler {
     pre_compiler_ptr lhs;
 
-    pre_program * compile(const function_lookup & lookup, error & err) const
+    pre_program * compile(const compiler_context & context) const
     {
-        std::auto_ptr<pre_program> result(lhs->compile(lookup, err));
-        if(err)
+        std::auto_ptr<pre_program> result(lhs->compile(context));
+        if(context.err)
             return 0;
         return new Program(result.release());
     }
@@ -163,13 +163,13 @@ struct BinaryCompiler : public pre_compiler {
     pre_compiler_ptr lhs;
     pre_compiler_ptr rhs;
 
-    pre_program * compile(const function_lookup & lookup, error & err) const
+    pre_program * compile(const compiler_context & context) const
     {
-        std::auto_ptr<pre_program> plhs(lhs->compile(lookup, err));
-        if(err)
+        std::auto_ptr<pre_program> plhs(lhs->compile(context));
+        if(context.err)
             return 0;
-        std::auto_ptr<pre_program> prhs(rhs->compile(lookup, err));
-        if(err)
+        std::auto_ptr<pre_program> prhs(rhs->compile(context));
+        if(context.err)
             return 0;
         return new Program(plhs.release(), prhs.release());
     }
@@ -209,7 +209,7 @@ struct ValueCompiler : public pre_compiler {
     {
     }
     
-    pre_program * compile(const function_lookup & lookup, error & err) const
+    pre_program * compile(const compiler_context & context) const
     {
         return new ValueProgram<Value>(value);
     }
@@ -242,17 +242,17 @@ struct InvokationCompiler : public pre_compiler {
     std::wstring name;
     std::vector<pre_compiler*> args;
 
-    pre_program * compile(const function_lookup & lookup, error & err) const
+    pre_program * compile(const compiler_context & context) const
     {
-        func d = lookup(name, args.size());
+        func d = context.lookup(name, args.size());
         if(d.function.empty())
         {
-            err.init(error_undefined_function).function_name(name);
+            context.err.init(error_undefined_function).function_name(name);
             return 0;
         }
         if(static_cast<size_t>(d.arity) != args.size())
         {
-            err.init(error_invalid_arity).function_name(name).function_arity(d.arity).expected_arity(args.size());
+            context.err.init(error_invalid_arity).function_name(name).function_arity(d.arity).expected_arity(args.size());
             return 0;
         }
         std::vector<pre_program*> p;
@@ -260,12 +260,12 @@ struct InvokationCompiler : public pre_compiler {
         p.reserve(args.size());
         for(std::vector<pre_compiler*>::const_iterator i = args.begin(), end = args.end(); i != end; ++i)
         {
-            p.push_back((*i)->compile(lookup, err));
-            if(err)
+            p.push_back((*i)->compile(context));
+            if(context.err)
                 return 0;
         }
-        std::auto_ptr<pre_program> result(d.function(p, lookup, err));
-        if(err)
+        std::auto_ptr<pre_program> result(d.function(p, context));
+        if(context.err)
             return 0;
         return result.release();
     }
@@ -402,6 +402,31 @@ std::wstring parseString(pANTLR3_UINT8 inp)
     return result;
 }
 
+struct PluginCompiler : public pre_compiler {
+    std::wstring value;
+
+    explicit PluginCompiler(const std::wstring & v)
+        : value(v)
+    {
+    }
+    
+    pre_program * compile(const compiler_context & context) const
+    {
+        if(context.plugin)
+            return (*context.plugin)(value);
+        else {
+            context.err.init(error_no_plugin_provided);
+            return 0;
+        }
+    }
+};
+
+void makePluginCompiler(pANTLR3_UINT8 inp, pre_compiler_ptr & out)
+{
+    const char * temp = mstd::pointer_cast<const char*>(inp);
+    out.reset(new PluginCompiler(mstd::deutf8(temp)));
+}
+
 void makeCompiler(pANTLR3_BASE_TREE tree, pre_compiler_ptr & out)
 {
     pANTLR3_COMMON_TOKEN token = tree->getToken(tree);
@@ -488,6 +513,9 @@ void makeCompiler(pANTLR3_BASE_TREE tree, pre_compiler_ptr & out)
     case T_SHIFT_RIGHT:
         makeBinaryCompiler<BinaryProgram<shift_right<number>, number> >(tree, out);
         break;
+    case T_CB_EXPR:
+        makePluginCompiler(tree->getText(tree)->chars, out);
+        break;
     default:
         std::cout << "unknown token: " << token->type << std::endl;
         BOOST_ASSERT(false);
@@ -527,10 +555,10 @@ public:
     {
     }
 
-    program operator()(const function_lookup & lookup, error & err) const
+    program operator()(const compiler_context & context) const
     {
-        std::auto_ptr<pre_program> p(impl_->compile(lookup, err));
-        if(err)
+        std::auto_ptr<pre_program> p(impl_->compile(context));
+        if(context.err)
             return program();
         return wrap_program(p.release());
     }

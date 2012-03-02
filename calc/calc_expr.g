@@ -30,6 +30,7 @@ factor: T_NUMBER
       | T_MINUS^ factor 
       | '+'! factor
       | T_HASH^ factor
+      | T_CB_EXPR^
       ;
 
 invokation: T_IDENTIFIER^ (('('! paramList ')'!)|('['! paramList ']'!))? ;
@@ -63,6 +64,8 @@ T_LESS: '<' ;
 T_GREATER: '>' ;
 T_CONCAT: '..' ;
 T_HASH: '#' ;
+T_CB_EXPR: '{' CB_EXPR_GUTS '}' ;
+fragment CB_EXPR_GUTS: ( T_ASTRING | T_QSTRING | (~('{'|'}'|'"'|'\'')) )* ;
 
 fragment
 LETTER

@@ -62,6 +62,9 @@ void error::out(std::ostream & out) const
     case error_syntax:
         out << "syntax";
         break;
+    case error_no_plugin_provided:
+        out << "no plugin provided";
+        break;
     }
     #define CALC_ERROR_OUT_IMPL(type, name) if(BOOST_PP_CAT(name, _)) out_value(out << ", " << BOOST_PP_STRINGIZE(name) << ": ", *BOOST_PP_CAT(name, _));
     #define CALC_ERROR_OUT(r, data, p) CALC_ERROR_OUT_IMPL p

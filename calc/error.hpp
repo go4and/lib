@@ -24,6 +24,7 @@ enum error_code {
     error_mismatched_set,
     error_early_exit,
     error_syntax,
+    error_no_plugin_provided,
 };
 
 #define CALC_ERROR_PARAMETERS \
@@ -93,95 +94,6 @@ inline std::ostream & operator<<(std::ostream & out, const error & err)
     err.out(out);
     return out;
 }
-
-/*
-class parse_exception : public exception {
-};
-
-class empty_input_exception : public exception {
-};
-
-class lexer_exception : public exception {
-public:
-    lexer_exception(const std::wstring & message, const std::wstring & data)
-        : message_(message), data_(data)
-    {
-    }
-
-    const std::wstring & message() const { return message_; }
-    const std::wstring & data() const { return data_; }
-    
-    virtual ~lexer_exception() throw() {}
-private:
-    std::wstring message_;
-    std::wstring data_;
-};
-
-class parser_exception : public exception {
-public:
-    parser_exception(const std::wstring & message, const std::wstring & data)
-        : message_(message), data_(data)
-    {
-    }
-
-    const std::wstring & message() const { return message_; }
-    const std::wstring & data() const { return data_; }
-    
-    virtual ~parser_exception() throw() {}
-private:
-    std::wstring message_;
-    std::wstring data_;
-};
-
-class invalid_function : public parse_exception {
-public:
-    explicit invalid_function(const std::string & name)
-        : name_(name) {}
-
-    ~invalid_function() throw() {}
-
-    const std::string & name() const
-    {
-        return name_;
-    }
-private:
-    std::string name_;
-};
-
-class undefined_function : public invalid_function {
-public:
-    explicit undefined_function(const std::string & name)
-        : invalid_function(name) {}
-
-    const char * what() const throw()
-    {
-        return "undefined function";
-    }
-};
-
-class invalid_arity : public invalid_function {
-public:
-    invalid_arity(const std::string & name, int expected, int found)
-        : invalid_function(name), expected_(expected), found_(found) {}
-        
-    int expected() const
-    {
-        return expected_;
-    }
-    
-    int found() const
-    {
-        return found_;
-    }
-
-    const char * what() const throw()
-    {
-        return "invalid function arity";
-    }
-private:
-    int expected_;
-    int found_;
-};*/
 
 class exception : public boost::exception {
 };

@@ -21,20 +21,22 @@ compiler builder::parse(const std::string & str, error & err)
     return result;
 }
 
-program builder::build(const environment & env, const std::wstring & str, error & err)
+program builder::build(const environment & env, const std::wstring & str, error & err, const plugin_compiler * plugin)
 {
     compiler c = parse(str, err);
     if(err)
         return program();
-    return c(boost::bind(&environment::find, &env, _1, _2), err);
+    compiler_context context = { boost::bind(&environment::find, &env, _1, _2), err, plugin };
+    return c(context);
 }
 
-program builder::build(const environment & env, const std::string & str, error & err)
+program builder::build(const environment & env, const std::string & str, error & err, const plugin_compiler * plugin)
 {
     compiler c = parse(str, err);
     if(err)
         return program();
-    return c(boost::bind(&environment::find, &env, _1, _2), err);
+    compiler_context context = { boost::bind(&environment::find, &env, _1, _2), err, plugin };
+    return c(context);
 }
 
 }
