@@ -3,8 +3,8 @@
 #if !defined(BUILDING_CALC)
 #include <boost/algorithm/string/case_conv.hpp>
 
-#include <boost/spirit/home/phoenix/core/argument.hpp>
-#include <boost/spirit/home/phoenix/stl/container.hpp>
+#include <boost/phoenix/core/argument.hpp>
+#include <boost/phoenix/stl/container.hpp>
 
 #include <boost/array.hpp>
 #include <boost/unordered_map.hpp>

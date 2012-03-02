@@ -412,8 +412,8 @@ struct PluginCompiler : public pre_compiler {
     
     pre_program * compile(const compiler_context & context) const
     {
-        if(context.plugin)
-            return (*context.plugin)(value);
+        if(!context.plugin.empty())
+            return context.plugin(value, context);
         else {
             context.err.init(error_no_plugin_provided);
             return 0;

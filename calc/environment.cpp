@@ -82,7 +82,8 @@ public:
 
     pre_program * operator()(std::vector<pre_program*> & args, const compiler_context & context) const
     {
-        compiler_context newContext = { user_function_lookup(args_, context.lookup), context.err, context.plugin };
+        function_lookup lookup = user_function_lookup(args_, context.lookup);
+        compiler_context newContext = { lookup, context.err, context.plugin };
         program p = f_(newContext);
         return !context.err ? new user_function_invoker(boost::move(p), args) : 0;
     }

@@ -17,18 +17,19 @@ namespace calc {
 class environment;
 class pre_program;
 struct func;
+struct compiler_context;
 
 class error;
 typedef boost::int64_t number;
 typedef boost::variant<number, std::wstring> variable;
 typedef boost::function<variable(void*, variable*)> program;
 typedef boost::function<func(const std::wstring&, size_t)> function_lookup;
-typedef boost::function<pre_program*(const std::wstring&)> plugin_compiler;
+typedef boost::function<pre_program*(const std::wstring&, const compiler_context & context)> plugin_compiler;
 
 struct compiler_context {
     const function_lookup & lookup;
     error & err;
-    const plugin_compiler * plugin;
+    const plugin_compiler & plugin;
 };
 
 typedef boost::function<program(const compiler_context & context)> compiler;
