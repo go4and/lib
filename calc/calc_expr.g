@@ -65,7 +65,7 @@ T_GREATER: '>' ;
 T_CONCAT: '..' ;
 T_HASH: '#' ;
 T_CB_EXPR: '{' CB_EXPR_GUTS '}' ;
-fragment CB_EXPR_GUTS: ( T_ASTRING | T_QSTRING | (~('{'|'}'|'"'|'\'')) )* ;
+fragment CB_EXPR_GUTS: ( T_ASTRING | T_QSTRING | (~('{'|'}'|'"'|'\'')) | T_CB_EXPR )* ;
 
 fragment
 LETTER
