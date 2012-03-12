@@ -1,6 +1,10 @@
 #pragma once
 
 #ifndef MNET_BUILDING
+#include <boost/function.hpp>
+
+#include <boost/filesystem/path.hpp>
+
 #include <boost/property_tree/ptree.hpp>
 #endif
 
