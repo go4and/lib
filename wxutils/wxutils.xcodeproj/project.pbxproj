@@ -1,0 +1,469 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C3A2980F13E0A3B100F7FC1B /* UIEnqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */; };
+		C3A2981013E0A3B100F7FC1B /* UIEnqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */; };
+		C3EDA4E9138839D1002FAF3C /* Any.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4CB138839D1002FAF3C /* Any.h */; };
+		C3EDA4EA138839D1002FAF3C /* AttachData.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4CC138839D1002FAF3C /* AttachData.h */; };
+		C3EDA4EB138839D1002FAF3C /* CanvasUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4CD138839D1002FAF3C /* CanvasUtils.cpp */; };
+		C3EDA4EC138839D1002FAF3C /* CanvasUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4CE138839D1002FAF3C /* CanvasUtils.h */; };
+		C3EDA4ED138839D1002FAF3C /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4CF138839D1002FAF3C /* Colors.cpp */; };
+		C3EDA4EE138839D1002FAF3C /* Colors.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4D0138839D1002FAF3C /* Colors.h */; };
+		C3EDA4EF138839D1002FAF3C /* Config.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4D1138839D1002FAF3C /* Config.h */; };
+		C3EDA4F0138839D1002FAF3C /* FilePicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4D2138839D1002FAF3C /* FilePicker.cpp */; };
+		C3EDA4F1138839D1002FAF3C /* FilePicker.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4D3138839D1002FAF3C /* FilePicker.h */; };
+		C3EDA4F2138839D1002FAF3C /* Icon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4D4138839D1002FAF3C /* Icon.cpp */; };
+		C3EDA4F3138839D1002FAF3C /* Icon.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4D5138839D1002FAF3C /* Icon.h */; };
+		C3EDA4F4138839D1002FAF3C /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4D6138839D1002FAF3C /* Image.cpp */; };
+		C3EDA4F5138839D1002FAF3C /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4D7138839D1002FAF3C /* Image.h */; };
+		C3EDA4F6138839D1002FAF3C /* Instance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4D8138839D1002FAF3C /* Instance.cpp */; };
+		C3EDA4F7138839D1002FAF3C /* Instance.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4D9138839D1002FAF3C /* Instance.h */; };
+		C3EDA4F8138839D1002FAF3C /* OpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4DA138839D1002FAF3C /* OpenGL.cpp */; };
+		C3EDA4F9138839D1002FAF3C /* OpenGL.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4DB138839D1002FAF3C /* OpenGL.h */; };
+		C3EDA4FA138839D1002FAF3C /* pch.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4DC138839D1002FAF3C /* pch.h */; };
+		C3EDA4FB138839D1002FAF3C /* RectUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4DD138839D1002FAF3C /* RectUtils.cpp */; };
+		C3EDA4FC138839D1002FAF3C /* RectUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4DE138839D1002FAF3C /* RectUtils.h */; };
+		C3EDA4FD138839D1002FAF3C /* ScopedDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4DF138839D1002FAF3C /* ScopedDialog.cpp */; };
+		C3EDA4FE138839D1002FAF3C /* ScopedDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4E0138839D1002FAF3C /* ScopedDialog.h */; };
+		C3EDA4FF138839D1002FAF3C /* Separator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4E1138839D1002FAF3C /* Separator.cpp */; };
+		C3EDA500138839D1002FAF3C /* Separator.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4E2138839D1002FAF3C /* Separator.h */; };
+		C3EDA501138839D1002FAF3C /* Widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4E3138839D1002FAF3C /* Widget.cpp */; };
+		C3EDA502138839D1002FAF3C /* Widget.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4E4138839D1002FAF3C /* Widget.h */; };
+		C3EDA503138839D1002FAF3C /* WindowUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4E5138839D1002FAF3C /* WindowUtils.cpp */; };
+		C3EDA504138839D1002FAF3C /* WindowUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4E6138839D1002FAF3C /* WindowUtils.h */; };
+		C3EDA59B13894D87002FAF3C /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3EDA59A13894D87002FAF3C /* OpenGL.framework */; };
+		C3EDA5AC13894DD1002FAF3C /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3EDA5A913894DC0002FAF3C /* mstd.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C3EDA5A813894DC0002FAF3C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3EDA5A413894DC0002FAF3C /* mstd.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C32455981352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C3EDA5AA13894DC8002FAF3C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3EDA5A413894DC0002FAF3C /* mstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C32455971352A6B900999158;
+			remoteInfo = mstd;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIEnqueue.cpp; sourceTree = "<group>"; };
+		C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIEnqueue.h; sourceTree = "<group>"; };
+		C3EDA4C8138839A3002FAF3C /* wxutils.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = wxutils.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3EDA4CB138839D1002FAF3C /* Any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Any.h; sourceTree = "<group>"; };
+		C3EDA4CC138839D1002FAF3C /* AttachData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachData.h; sourceTree = "<group>"; };
+		C3EDA4CD138839D1002FAF3C /* CanvasUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasUtils.cpp; sourceTree = "<group>"; };
+		C3EDA4CE138839D1002FAF3C /* CanvasUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasUtils.h; sourceTree = "<group>"; };
+		C3EDA4CF138839D1002FAF3C /* Colors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Colors.cpp; sourceTree = "<group>"; };
+		C3EDA4D0138839D1002FAF3C /* Colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
+		C3EDA4D1138839D1002FAF3C /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
+		C3EDA4D2138839D1002FAF3C /* FilePicker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FilePicker.cpp; sourceTree = "<group>"; };
+		C3EDA4D3138839D1002FAF3C /* FilePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilePicker.h; sourceTree = "<group>"; };
+		C3EDA4D4138839D1002FAF3C /* Icon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Icon.cpp; sourceTree = "<group>"; };
+		C3EDA4D5138839D1002FAF3C /* Icon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Icon.h; sourceTree = "<group>"; };
+		C3EDA4D6138839D1002FAF3C /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Image.cpp; sourceTree = "<group>"; };
+		C3EDA4D7138839D1002FAF3C /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
+		C3EDA4D8138839D1002FAF3C /* Instance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Instance.cpp; sourceTree = "<group>"; };
+		C3EDA4D9138839D1002FAF3C /* Instance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Instance.h; sourceTree = "<group>"; };
+		C3EDA4DA138839D1002FAF3C /* OpenGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGL.cpp; sourceTree = "<group>"; };
+		C3EDA4DB138839D1002FAF3C /* OpenGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGL.h; sourceTree = "<group>"; };
+		C3EDA4DC138839D1002FAF3C /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = "<group>"; };
+		C3EDA4DD138839D1002FAF3C /* RectUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RectUtils.cpp; sourceTree = "<group>"; };
+		C3EDA4DE138839D1002FAF3C /* RectUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RectUtils.h; sourceTree = "<group>"; };
+		C3EDA4DF138839D1002FAF3C /* ScopedDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScopedDialog.cpp; sourceTree = "<group>"; };
+		C3EDA4E0138839D1002FAF3C /* ScopedDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScopedDialog.h; sourceTree = "<group>"; };
+		C3EDA4E1138839D1002FAF3C /* Separator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Separator.cpp; sourceTree = "<group>"; };
+		C3EDA4E2138839D1002FAF3C /* Separator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Separator.h; sourceTree = "<group>"; };
+		C3EDA4E3138839D1002FAF3C /* Widget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Widget.cpp; sourceTree = "<group>"; };
+		C3EDA4E4138839D1002FAF3C /* Widget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Widget.h; sourceTree = "<group>"; };
+		C3EDA4E5138839D1002FAF3C /* WindowUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WindowUtils.cpp; sourceTree = "<group>"; };
+		C3EDA4E6138839D1002FAF3C /* WindowUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowUtils.h; sourceTree = "<group>"; };
+		C3EDA59A13894D87002FAF3C /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		C3EDA5A413894DC0002FAF3C /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D2AAC09B05546B4700DB518D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3EDA5AC13894DD1002FAF3C /* mstd.dylib in Frameworks */,
+				C3EDA59B13894D87002FAF3C /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DDFF38A45A11DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3EDA4C8138839A3002FAF3C /* wxutils.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* wxutils */ = {
+			isa = PBXGroup;
+			children = (
+				C3EDA59F13894DB1002FAF3C /* Dependencies */,
+				5073E0CA09E734BC00EC74B6 /* Configuration Files */,
+				08FB77ACFE841707C02AAC07 /* Source */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DDFF38A45A11DB9C8B /* Products */,
+			);
+			name = wxutils;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				C3EDA59A13894D87002FAF3C /* OpenGL.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		08FB77ACFE841707C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */,
+				C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */,
+				C3EDA4CB138839D1002FAF3C /* Any.h */,
+				C3EDA4CC138839D1002FAF3C /* AttachData.h */,
+				C3EDA4CD138839D1002FAF3C /* CanvasUtils.cpp */,
+				C3EDA4CE138839D1002FAF3C /* CanvasUtils.h */,
+				C3EDA4CF138839D1002FAF3C /* Colors.cpp */,
+				C3EDA4D0138839D1002FAF3C /* Colors.h */,
+				C3EDA4D1138839D1002FAF3C /* Config.h */,
+				C3EDA4D2138839D1002FAF3C /* FilePicker.cpp */,
+				C3EDA4D3138839D1002FAF3C /* FilePicker.h */,
+				C3EDA4D4138839D1002FAF3C /* Icon.cpp */,
+				C3EDA4D5138839D1002FAF3C /* Icon.h */,
+				C3EDA4D6138839D1002FAF3C /* Image.cpp */,
+				C3EDA4D7138839D1002FAF3C /* Image.h */,
+				C3EDA4D8138839D1002FAF3C /* Instance.cpp */,
+				C3EDA4D9138839D1002FAF3C /* Instance.h */,
+				C3EDA4DA138839D1002FAF3C /* OpenGL.cpp */,
+				C3EDA4DB138839D1002FAF3C /* OpenGL.h */,
+				C3EDA4DC138839D1002FAF3C /* pch.h */,
+				C3EDA4DD138839D1002FAF3C /* RectUtils.cpp */,
+				C3EDA4DE138839D1002FAF3C /* RectUtils.h */,
+				C3EDA4DF138839D1002FAF3C /* ScopedDialog.cpp */,
+				C3EDA4E0138839D1002FAF3C /* ScopedDialog.h */,
+				C3EDA4E1138839D1002FAF3C /* Separator.cpp */,
+				C3EDA4E2138839D1002FAF3C /* Separator.h */,
+				C3EDA4E3138839D1002FAF3C /* Widget.cpp */,
+				C3EDA4E4138839D1002FAF3C /* Widget.h */,
+				C3EDA4E5138839D1002FAF3C /* WindowUtils.cpp */,
+				C3EDA4E6138839D1002FAF3C /* WindowUtils.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		5073E0CA09E734BC00EC74B6 /* Configuration Files */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Configuration Files";
+			sourceTree = "<group>";
+		};
+		C3EDA59F13894DB1002FAF3C /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				C3EDA5A413894DC0002FAF3C /* mstd.xcodeproj */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		C3EDA5A513894DC0002FAF3C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3EDA5A913894DC0002FAF3C /* mstd.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC09905546B4700DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3EDA4E9138839D1002FAF3C /* Any.h in Headers */,
+				C3EDA4EA138839D1002FAF3C /* AttachData.h in Headers */,
+				C3EDA4EC138839D1002FAF3C /* CanvasUtils.h in Headers */,
+				C3EDA4EE138839D1002FAF3C /* Colors.h in Headers */,
+				C3EDA4EF138839D1002FAF3C /* Config.h in Headers */,
+				C3EDA4F1138839D1002FAF3C /* FilePicker.h in Headers */,
+				C3EDA4F3138839D1002FAF3C /* Icon.h in Headers */,
+				C3EDA4F5138839D1002FAF3C /* Image.h in Headers */,
+				C3EDA4F7138839D1002FAF3C /* Instance.h in Headers */,
+				C3EDA4F9138839D1002FAF3C /* OpenGL.h in Headers */,
+				C3EDA4FA138839D1002FAF3C /* pch.h in Headers */,
+				C3EDA4FC138839D1002FAF3C /* RectUtils.h in Headers */,
+				C3EDA4FE138839D1002FAF3C /* ScopedDialog.h in Headers */,
+				C3EDA500138839D1002FAF3C /* Separator.h in Headers */,
+				C3EDA502138839D1002FAF3C /* Widget.h in Headers */,
+				C3EDA504138839D1002FAF3C /* WindowUtils.h in Headers */,
+				C3A2981013E0A3B100F7FC1B /* UIEnqueue.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC09C05546B4700DB518D /* wxutils */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB916008733D950010E9CD /* Build configuration list for PBXNativeTarget "wxutils" */;
+			buildPhases = (
+				D2AAC09905546B4700DB518D /* Headers */,
+				D2AAC09B05546B4700DB518D /* Frameworks */,
+				D2AAC09A05546B4700DB518D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C3EDA5AB13894DC8002FAF3C /* PBXTargetDependency */,
+			);
+			name = wxutils;
+			productName = libwxutils;
+			productReference = C3EDA4C8138839A3002FAF3C /* wxutils.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 1DEB916408733D950010E9CD /* Build configuration list for PBXProject "wxutils" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 0867D691FE84028FC02AAC07 /* wxutils */;
+			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C3EDA5A513894DC0002FAF3C /* Products */;
+					ProjectRef = C3EDA5A413894DC0002FAF3C /* mstd.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				D2AAC09C05546B4700DB518D /* wxutils */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C3EDA5A913894DC0002FAF3C /* mstd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mstd.dylib;
+			remoteRef = C3EDA5A813894DC0002FAF3C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC09A05546B4700DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3EDA4EB138839D1002FAF3C /* CanvasUtils.cpp in Sources */,
+				C3EDA4ED138839D1002FAF3C /* Colors.cpp in Sources */,
+				C3EDA4F0138839D1002FAF3C /* FilePicker.cpp in Sources */,
+				C3EDA4F2138839D1002FAF3C /* Icon.cpp in Sources */,
+				C3EDA4F4138839D1002FAF3C /* Image.cpp in Sources */,
+				C3EDA4F6138839D1002FAF3C /* Instance.cpp in Sources */,
+				C3EDA4F8138839D1002FAF3C /* OpenGL.cpp in Sources */,
+				C3EDA4FB138839D1002FAF3C /* RectUtils.cpp in Sources */,
+				C3EDA4FD138839D1002FAF3C /* ScopedDialog.cpp in Sources */,
+				C3EDA4FF138839D1002FAF3C /* Separator.cpp in Sources */,
+				C3EDA501138839D1002FAF3C /* Widget.cpp in Sources */,
+				C3EDA503138839D1002FAF3C /* WindowUtils.cpp in Sources */,
+				C3A2980F13E0A3B100F7FC1B /* UIEnqueue.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C3EDA5AB13894DC8002FAF3C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mstd;
+			targetProxy = C3EDA5AA13894DC8002FAF3C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB916108733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+			};
+			name = Debug;
+		};
+		1DEB916208733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				STRIP_INSTALLED_PRODUCT = YES;
+				STRIP_STYLE = "non-global";
+			};
+			name = Release;
+		};
+		1DEB916508733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pch.h;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/..";
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-std=c++0x",
+					"-DBOOST_SYSTEM_NO_DEPRECATED",
+					"-I/opt/local/lib/wx/include/osx_cocoa-unicode-2.9",
+					"-I/opt/local/include/wx-2.9",
+					"-D_FILE_OFFSET_BITS=64",
+					"-DWXUSINGDLL",
+					"-D__WXMAC__",
+					"-D__WXOSX__",
+					"-D__WXOSX_COCOA__",
+				);
+				OTHER_LDFLAGS = (
+					"-L/opt/local/lib",
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					AudioToolbox,
+					"-framework",
+					System,
+					"-framework",
+					OpenGL,
+					"-framework",
+					QuickTime,
+					"-lwx_osx_cocoau_xrc-2.9",
+					"-lwx_osx_cocoau_webview-2.9",
+					"-lwx_osx_cocoau_html-2.9",
+					"-lwx_osx_cocoau_qa-2.9",
+					"-lwx_osx_cocoau_adv-2.9",
+					"-lwx_osx_cocoau_core-2.9",
+					"-lwx_baseu_xml-2.9",
+					"-lwx_baseu_net-2.9",
+					"-lwx_baseu-2.9",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = wxutils;
+				SDKROOT = macosx10.6;
+				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+			};
+			name = Debug;
+		};
+		1DEB916608733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = pch.h;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/..";
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-I/usr/local/wxWidgets/include/release",
+					"-D_FILE_OFFSET_BITS=64",
+					"-D_LARGE_FILES",
+					"-D__WXMAC__",
+				);
+				OTHER_LDFLAGS = (
+					"-single_module",
+					"-headerpad_max_install_names",
+					"-lboost_system-mt",
+					"-lboost_filesystem-mt",
+					"-lwx_base_carbonu-2.8",
+					"-lwx_macu_core-2.8",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = wxutils;
+				SDKROOT = macosx10.6;
+				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB916008733D950010E9CD /* Build configuration list for PBXNativeTarget "wxutils" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916108733D950010E9CD /* Debug */,
+				1DEB916208733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB916408733D950010E9CD /* Build configuration list for PBXProject "wxutils" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916508733D950010E9CD /* Debug */,
+				1DEB916608733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

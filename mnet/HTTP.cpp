@@ -209,11 +209,11 @@ private:
 
 class GetDataAsync : public DownloadTask {
 public:
-    GetDataAsync(const std::string & url, const AsyncDataHandler & handler, const ProgressHandler & progressHandler, const std::string & cookies)
-        : DownloadTask(url, cookies, progressHandler), handler_(handler) {}
-
-    GetDataAsync(const std::string & url, const AsyncDataExHandler & handler, const ProgressHandler & progressHandler, const std::string & cookies)
-        : DownloadTask(url, cookies, progressHandler), handlerEx_(handler) {}
+    GetDataAsync(const Request & request)
+        : DownloadTask(request.url(), request.cookies(), request.progressHandler()),
+          handler_(request.dataHandler()), handlerEx_(request.dataExHandler()),
+          postData_(request.postData())
+    {}
 
     void doStart()
     {
@@ -226,6 +226,12 @@ public:
             curl_easy_setopt(curl_, CURLOPT_WRITEHEADER, self);
             curl_easy_setopt(curl_, CURLOPT_HEADER, 0);
             curl_easy_setopt(curl_, CURLOPT_HEADERFUNCTION, &GetDataAsync::writeHeader);
+        }
+        if(postData_)
+        {
+            curl_easy_setopt(curl_, CURLOPT_POST, 1L);
+            curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, postData_->data());
+            curl_easy_setopt(curl_, CURLOPT_POSTFIELDSIZE, static_cast<long>(postData_->size()));
         }
         MLOG_DEBUG("GetDataAsync::doStart, done");
     }
@@ -257,6 +263,7 @@ private:
     AsyncDataExHandler handlerEx_;
     std::string data_;
     std::string header_;
+    PostDataPtr postData_;
 };
 
 class GetFileAsync : public DownloadTask {
@@ -604,20 +611,6 @@ void cancelAll()
     HTTP::instance().asyncHTTP().cancelAll();
 }
 
-void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const std::string & cookies)
-{
-    MLOG_DEBUG("getDataAsync(" << url << ", " << cookies << ')');
-
-    HTTP::instance().asyncHTTP().addTask(new GetDataAsync(url, handler, ProgressHandler(), cookies));
-}
-
-void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const ProgressHandler & progress, const std::string & cookies)
-{
-    MLOG_DEBUG("getDataAsync(" << url << ", " << cookies << ')');
-
-    HTTP::instance().asyncHTTP().addTask(new GetDataAsync(url, handler, progress, cookies));
-}
-
 boost::property_tree::ptree parseXml(const std::string& data)
 {
     std::istringstream inp(data);
@@ -631,7 +624,6 @@ boost::property_tree::ptree parseXml(const std::string& data)
 
 boost::property_tree::ptree parseJSON(const std::string& data)
 {
-    std::istringstream inp(data);
     boost::property_tree::ptree result;
     ParseError err;
     parseJSON(data, result, err);
@@ -657,7 +649,7 @@ struct JSONParser {
 template<class Parser>
 class GetTreeAsyncHandler {
 public:
-    explicit GetTreeAsyncHandler(const AsyncXmlHandler & handler)
+    explicit GetTreeAsyncHandler(const AsyncPTreeHandler & handler)
         : handler_(handler) {}
     
     void operator()(int ec, const std::string & data) const
@@ -670,19 +662,19 @@ public:
             handler_(ec, boost::property_tree::ptree());
     }
 private:
-    AsyncXmlHandler handler_;
+    AsyncPTreeHandler handler_;
 };
 
 }
 
-void getXmlAsync(const std::string & url, const AsyncXmlHandler & handler, const std::string & cookies)
+Request & Request::xmlHandler(const AsyncPTreeHandler & value)
 {
-    getDataAsync(url, GetTreeAsyncHandler<XmlParser>(handler), cookies);
+    return dataHandler(GetTreeAsyncHandler<XmlParser>(value));
 }
 
-void getJSONAsync(const std::string & url, const AsyncXmlHandler & handler, const std::string & cookies)
+Request & Request::jsonHandler(const AsyncPTreeHandler & value)
 {
-    getDataAsync(url, GetTreeAsyncHandler<JSONParser>(handler), cookies);
+    return dataHandler(GetTreeAsyncHandler<JSONParser>(value));
 }
 
 void getFileAsync(const std::string & url, const boost::filesystem::wpath & path, const AsyncHandler & handler)
@@ -709,102 +701,16 @@ int getRemoteFileSizeEx(std::string& uri, filesize_t & out)
     return HTTP::instance().getRemoteFileSizeEx(uri, out);
 }
 
-}
-
-#if 0
-
-size_t curl_null_write_function(void *ptr, size_t size, size_t nmemb, void* stream){  
-	return nmemb * size;  
-}  
-
-http_t::http_t()
+void Request::run()
 {
-	update_configuration();
-    ::config::addConfigListener(boost::bind(&http_t::update_configuration, this));
+    MLOG_DEBUG("Request::run(" << *this << ')');
+
+    HTTP::instance().asyncHTTP().addTask(new GetDataAsync(*this));
 }
 
-boost::property_tree::ptree http_t::getXml(const std::string & url, const std::string & cookies)
+std::ostream & operator<<(std::ostream & out, const Request & request)
 {
-    return parseXml(get(url, cookies));
+    return out << "[url=" << request.url() << ", cookies=" << request.cookies() << "]";
 }
 
-void dummyProgress(size_t)
-{
 }
-
-void http_t::getDataExAsync(const std::string & url, const AsyncDataExHandler & handler, const std::string & cookies)
-{
-    AsyncHTTP::instance().addTask(new GetDataAsync(url, handler, cookies));
-}
-
-
-std::string http_t::get(const std::string& url, const std::string& cookies)
-{
-    std::string result;
-	GetEx data = { url, cookies, &result };
-	getEx(data);
-    if(http_error(data.headerData))
-    {
-        char buf[0x20];
-        throw http_t::exception() << mstd::error_message(std::string("http error: ") + mstd::itoa(data.headerData.status_code, buf));
-    }
-    return result;
-}
-
-http_header_data_t http_t::parse_header(const std::string& header)
-{
-    MLOG_MESSAGE(Debug, "parse_header(" << header << ')');
-    
-    http_header_data_t hd;
-
-	hd.content_length = 0;
-	hd.content_type = "";
-	hd.status_code = 0;
-
-	{
-		std::stringstream ss(header);
-		std::string status_str;
-		getline(ss, status_str);
-
-		match_results<string::const_iterator> mr;
-		if(regex_search(header, mr, regex(".+?\\s([0-9]+?)\\s(.+?)$"))){
-			string code_str = string(mr[1].first, mr[1].second);
-			string descr_str = string(mr[2].first, mr[2].second);
-			hd.status_code = lexical_cast<int>(code_str);
-			hd.status_string = descr_str;
-		}
-
-	}
-
-	{
-		match_results<string::const_iterator> mr;
-		if(regex_search(header, mr, regex("Content-Length:\\s([0-9].+?)$"))){
-			string size_str = string(mr[1].first, mr[1].second);
-			try {
-				hd.content_length = lexical_cast<long long>(size_str);
-			} catch(bad_cast&) {}
-		}
-	} 
-
-
-	{
-		match_results<string::const_iterator> mr;
-		if(regex_search(header, mr, regex("Content-Type:\\s(.+?)$"))){
-			string str = string(mr[1].first, mr[1].second);
-			hd.content_type = str;
-		}						
-	} 
-
-	/*
-	   // for parser debugging 
-	log() << "\nheader_data::code : " << hd.status_code << endl
-		  << "header_data::descr : " << hd.status_string << endl
-		  << "header_data::content_length : " << hd.content_length << endl
-		  << "header_data::content_type : " << hd.content_type << endl;
-    */
-
-	return hd;
-
-}
-
-#endif

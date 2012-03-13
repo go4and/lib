@@ -1,0 +1,7 @@
+lib user32 : : <name>user32 ;
+lib gdi32 : : <name>gdi32 ;
+lib kernel32 : : <name>kernel32 ;
+
+lib wxutils : [ glob *.cpp ] user32 gdi32 kernel32 ;
+
+

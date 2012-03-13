@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C309539214D00A3F00B7E185 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C309539014D00A3F00B7E185 /* mlog.dylib */; };
-		C309539314D00A3F00B7E185 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C309539114D00A3F00B7E185 /* mstd.dylib */; };
 		C346423813D3306700716430 /* CurlUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346422F13D3306700716430 /* CurlUtils.cpp */; };
 		C346423913D3306700716430 /* CurlUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423013D3306700716430 /* CurlUtils.h */; };
 		C346423A13D3306700716430 /* Download.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346423113D3306700716430 /* Download.cpp */; };
@@ -19,14 +17,14 @@
 		C346423F13D3306700716430 /* HTTP.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423613D3306700716430 /* HTTP.h */; };
 		C346424013D3306700716430 /* pch.h in Headers */ = {isa = PBXBuildFile; fileRef = C346423713D3306700716430 /* pch.h */; };
 		C346433813D3336B00716430 /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C346433713D3336B00716430 /* libcurl.4.dylib */; };
+		C352FF43150E84FB00895884 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C352FF41150E84FB00895884 /* mlog.dylib */; };
+		C352FF44150E84FB00895884 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C352FF42150E84FB00895884 /* mstd.dylib */; };
 		C37D388614CFEA5400A5E13D /* libyajl.2.0.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C37D388514CFEA5400A5E13D /* libyajl.2.0.4.dylib */; };
 		C3B8CA4114C77100004BDE52 /* JSON.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B8CA3F14C77100004BDE52 /* JSON.cpp */; };
 		C3B8CA4214C77100004BDE52 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = C3B8CA4014C77100004BDE52 /* JSON.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C309539014D00A3F00B7E185 /* mlog.dylib */ = {isa = PBXFileReference; lastKnownFileType = file; name = mlog.dylib; path = ../../../../_build/Release/mlog.dylib; sourceTree = "<group>"; };
-		C309539114D00A3F00B7E185 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = mstd.dylib; path = ../../../../_build/Release/mstd.dylib; sourceTree = "<group>"; };
 		C346422F13D3306700716430 /* CurlUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CurlUtils.cpp; sourceTree = "<group>"; };
 		C346423013D3306700716430 /* CurlUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurlUtils.h; sourceTree = "<group>"; };
 		C346423113D3306700716430 /* Download.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Download.cpp; sourceTree = "<group>"; };
@@ -37,6 +35,8 @@
 		C346423613D3306700716430 /* HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTP.h; sourceTree = "<group>"; };
 		C346423713D3306700716430 /* pch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.h; sourceTree = "<group>"; };
 		C346433713D3336B00716430 /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.4.dylib; path = /opt/local/lib/libcurl.4.dylib; sourceTree = "<absolute>"; };
+		C352FF41150E84FB00895884 /* mlog.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C352FF42150E84FB00895884 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C37D388514CFEA5400A5E13D /* libyajl.2.0.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libyajl.2.0.4.dylib; path = ../../../../../../../opt/local/lib/libyajl.2.0.4.dylib; sourceTree = "<group>"; };
 		C3B8CA3F14C77100004BDE52 /* JSON.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSON.cpp; sourceTree = "<group>"; };
 		C3B8CA4014C77100004BDE52 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
@@ -48,8 +48,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C309539214D00A3F00B7E185 /* mlog.dylib in Frameworks */,
-				C309539314D00A3F00B7E185 /* mstd.dylib in Frameworks */,
+				C352FF43150E84FB00895884 /* mlog.dylib in Frameworks */,
+				C352FF44150E84FB00895884 /* mstd.dylib in Frameworks */,
 				C37D388614CFEA5400A5E13D /* libyajl.2.0.4.dylib in Frameworks */,
 				C346433813D3336B00716430 /* libcurl.4.dylib in Frameworks */,
 			);
@@ -69,8 +69,8 @@
 		0867D691FE84028FC02AAC07 /* mnet */ = {
 			isa = PBXGroup;
 			children = (
-				C309539014D00A3F00B7E185 /* mlog.dylib */,
-				C309539114D00A3F00B7E185 /* mstd.dylib */,
+				C352FF41150E84FB00895884 /* mlog.dylib */,
+				C352FF42150E84FB00895884 /* mstd.dylib */,
 				C37D388514CFEA5400A5E13D /* libyajl.2.0.4.dylib */,
 				C346433713D3336B00716430 /* libcurl.4.dylib */,
 				C346425913D3314900716430 /* Dependencies */,
@@ -235,7 +235,7 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -245,7 +245,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = mnet;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Debug;
@@ -266,7 +266,7 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -276,7 +276,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = mnet;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Release;

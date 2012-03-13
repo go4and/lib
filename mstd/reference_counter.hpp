@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <boost/cstdint.hpp>
 
 #include "config.hpp"

@@ -215,10 +215,10 @@ T str2int10_checked(const wchar_t * c)
 
 template<class T, class Ch>
 typename boost::disable_if<boost::is_signed<T>, T>::type
-str2int16(const Ch * inp, size_t len)
+str2int16(const Ch * inp, const Ch * end)
 {
     T result = 0;
-    for(const Ch * end = inp + len; inp != end; ++inp)
+    for(; inp != end; ++inp)
     {
         result = result << 4;
         Ch ch = *inp;
@@ -234,11 +234,10 @@ str2int16(const Ch * inp, size_t len)
 
 template<class T, class Ch>
 typename boost::enable_if<boost::is_signed<T>, T>::type
-str2int16(const Ch * inp, size_t len)
+str2int16(const Ch * inp, const Ch * end)
 {
     T result = 0;
     T sign = 1;
-    const Ch * end = inp + len;
     if(inp != end && *inp == '-')
     {
         sign = -1;
@@ -258,14 +257,20 @@ str2int16(const Ch * inp, size_t len)
     return result * sign;
 }
 
+template<class T, class Ch>
+inline T str2int16(const Ch * begin, size_t len)
+{
+    return str2int16<T>(begin, begin + len);
+}
+
 template<class T>
-T str2int16(const wchar_t * c)
+inline T str2int16(const wchar_t * c)
 {
     return str2int16<T>(c, wcslen(c));
 }
 
 template<class T>
-T str2int16(const char * c)
+inline T str2int16(const char * c)
 {
     return str2int16<T>(c, strlen(c));
 }
