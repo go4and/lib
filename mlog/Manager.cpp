@@ -222,6 +222,21 @@ private:
     FILE * handle_;
 };
 
+#if BOOST_WINDOWS
+class VCOutputDevice {
+public:
+    void operator()(const char * out, size_t len)
+    {
+        buffer_.clear();
+        mstd::deutf8(out, out + len, std::back_inserter(buffer_));
+        buffer_.push_back(0);
+        OutputDebugString(&buffer_[0]);
+    }
+private:
+    std::vector<wchar_t> buffer_;
+};
+#endif
+
 class SyslogLogDevice {
 public:
     void operator()(const char * out, size_t len)
@@ -462,6 +477,10 @@ LogDevice * createDevice(const std::string & name, const std::string & value)
         device = CFileLogDevice(stderr);
     else if(value == "syslog")
         device = SyslogLogDevice();
+#if BOOST_WINDOWS
+    else if(value == "vcoutput")
+        device = VCOutputDevice();
+#endif
     else if(value == "null")
         device = NullLogDevice();
     else if(boost::starts_with(value, "file("))

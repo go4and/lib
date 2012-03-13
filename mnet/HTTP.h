@@ -128,7 +128,7 @@ inline void getDataAsync(const std::string & url, const AsyncDataHandler & handl
     Request().url(url).cookies(cookies).dataHandler(handler).run();
 }
 
-inline void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const ProgressHandler & progress, const std::string & cookies)
+inline void getDataAsync(const std::string & url, const AsyncDataHandler & handler, const ProgressHandler & progress, const std::string & cookies = std::string())
 {
     Request().url(url).cookies(cookies).progressHandler(progress).dataHandler(handler).run();
 }

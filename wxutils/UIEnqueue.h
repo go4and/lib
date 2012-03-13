@@ -54,6 +54,8 @@ void uiEnqueue(const F & f)
 }
 
 struct UIEnqueuer {
+    typedef void result_type;
+
     template<class F>
     void operator()(const F & f) const
     {
