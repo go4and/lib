@@ -73,17 +73,25 @@ struct make_null {
     static T null() { return T(); }
 };
 
-template<class T, class R, R (*Closer)(T)>
-struct global_fun_traits {
-    static bool is_null(const T & handle) { return handle == null(); }
-
+template<class T>
+struct trite_null_provider {
     static const T & null() {
         static const T nV = T();
         return nV;
     }
+};
 
+template<class T, class R, R (*Closer)(T), template<class Arg> class NullProvider = trite_null_provider>
+struct global_fun_traits : public comparable_traits<NullProvider<T> >{
     static void close(const T & handle) { Closer(handle); }
 };
+
+#ifdef BOOST_WINDOWS
+template<class T, class R, R (__stdcall *Closer)(T), template<class Arg> class NullProvider = trite_null_provider>
+struct global_fun_traits_std : public comparable_traits<NullProvider<T> >{
+    static void close(const T & handle) { Closer(handle); }
+};
+#endif
 
 template<class Handle, class Traits, template<class H, class T> class HandleOwningPolicy = member_owning_policy>
 class handle_base : public HandleOwningPolicy<Handle, Traits>, private boost::noncopyable {
