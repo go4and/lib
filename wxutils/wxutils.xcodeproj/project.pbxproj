@@ -356,8 +356,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/..";
+				LD_DYLIB_INSTALL_NAME = "@executable_path/wxutils.dylib";
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -418,22 +419,47 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/..";
+				LD_DYLIB_INSTALL_NAME = "@executable_path/wxutils.dylib";
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
 				OTHER_CPLUSPLUSFLAGS = (
-					"-I/usr/local/wxWidgets/include/release",
+					"$(OTHER_CFLAGS)",
+					"-std=c++0x",
+					"-DBOOST_SYSTEM_NO_DEPRECATED",
+					"-I/opt/local/lib/wx/include/osx_cocoa-unicode-2.9",
+					"-I/opt/local/include/wx-2.9",
 					"-D_FILE_OFFSET_BITS=64",
-					"-D_LARGE_FILES",
+					"-DWXUSINGDLL",
 					"-D__WXMAC__",
+					"-D__WXOSX__",
+					"-D__WXOSX_COCOA__",
 				);
 				OTHER_LDFLAGS = (
-					"-single_module",
-					"-headerpad_max_install_names",
-					"-lboost_system-mt",
-					"-lboost_filesystem-mt",
-					"-lwx_base_carbonu-2.8",
-					"-lwx_macu_core-2.8",
+					"-L/opt/local/lib",
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					AudioToolbox,
+					"-framework",
+					System,
+					"-framework",
+					OpenGL,
+					"-framework",
+					QuickTime,
+					"-lwx_osx_cocoau_xrc-2.9",
+					"-lwx_osx_cocoau_webview-2.9",
+					"-lwx_osx_cocoau_html-2.9",
+					"-lwx_osx_cocoau_qa-2.9",
+					"-lwx_osx_cocoau_adv-2.9",
+					"-lwx_osx_cocoau_core-2.9",
+					"-lwx_baseu_xml-2.9",
+					"-lwx_baseu_net-2.9",
+					"-lwx_baseu-2.9",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = wxutils;
