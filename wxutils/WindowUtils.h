@@ -9,7 +9,7 @@ namespace wxutils {
 
 WXUTILS_DECL void activate(wxTopLevelWindow * window);
 
-WXUTILS_DECL void fitSize(wxWindow * window, bool width, bool height);
+WXUTILS_DECL void fitSize(wxWindow * window, bool width = true, bool height = true);
 inline void fitWidth(wxWindow * window) { fitSize(window, true, false); }
 inline void fitHeight(wxWindow * window) { fitSize(window, false, true); }
 

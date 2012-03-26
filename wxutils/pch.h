@@ -4,6 +4,10 @@
 
 #include <boost/config.hpp>
 
+#ifdef __OBJC__
+#include <Cocoa/Cocoa.h>
+#endif
+
 #if BOOST_WINDOWS
 #include <Windows.h>
 #endif
