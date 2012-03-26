@@ -21,7 +21,7 @@ void activate(wxTopLevelWindow * window)
 }
 #endif
 
-void fitWidth(wxWindow * rparent)
+void fitSize(wxWindow * rparent, bool width, bool height)
 {
     wxWindow * root = 0;
 
@@ -34,9 +34,20 @@ void fitWidth(wxWindow * rparent)
         {
             const wxSize size = root->GetSizer()->ComputeFittingWindowSize(root);
             const wxSize wsize = root->GetSize();
-            root->SetSizeHints(size.x, wxDefaultCoord, root->GetMaxWidth(), wxDefaultCoord);
+            int minX = wxDefaultCoord, minY = wxDefaultCoord, maxX = wxDefaultCoord, maxY = wxDefaultCoord;
+            if(width)
+            {
+                minX = size.x;
+                maxX = root->GetMaxWidth();
+            }
+            if(height)
+            {
+                minY = size.y;
+                maxY = root->GetMaxHeight();
+            }
+            root->SetSizeHints(minX, minY, maxX, maxY);
             if(!rparent)
-                root->SetSize(std::max(size.x, wsize.x), wsize.y);
+                root->SetSize(width ? std::max(size.x, wsize.x) : wsize.x, height ? std::max(size.y, wsize.y) : wsize.y);
         }
         root->Refresh(true);
     }
