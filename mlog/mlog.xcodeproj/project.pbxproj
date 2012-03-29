@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C309539514D00A5900B7E185 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C309539414D00A5900B7E185 /* mstd.dylib */; };
+		5603967E1524733C00014312 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5603967D1524733C00014312 /* mstd.dylib */; };
 		C35853A3143F61CF0018E602 /* MacUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = C35853A2143F61CF0018E602 /* MacUtils.mm */; };
 		C35853A5143F62FB0018E602 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C35853A4143F62FB0018E602 /* Foundation.framework */; };
 		C3F10D841352FDE600D8C945 /* Config.h in Headers */ = {isa = PBXBuildFile; fileRef = C3F10D701352FDE600D8C945 /* Config.h */; };
@@ -28,7 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C309539414D00A5900B7E185 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = mstd.dylib; path = ../../_build/Release/mstd.dylib; sourceTree = "<group>"; };
+		5603967D1524733C00014312 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C35853A2143F61CF0018E602 /* MacUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacUtils.mm; sourceTree = SOURCE_ROOT; };
 		C35853A4143F62FB0018E602 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C3F10D4F1352FCE200D8C945 /* mlog.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -54,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C309539514D00A5900B7E185 /* mstd.dylib in Frameworks */,
+				5603967E1524733C00014312 /* mstd.dylib in Frameworks */,
 				C35853A5143F62FB0018E602 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -65,7 +65,7 @@
 		C3F10D441352FCE200D8C945 = {
 			isa = PBXGroup;
 			children = (
-				C309539414D00A5900B7E185 /* mstd.dylib */,
+				5603967D1524733C00014312 /* mstd.dylib */,
 				C35853A4143F62FB0018E602 /* Foundation.framework */,
 				C3F10D511352FCE200D8C945 /* Sources */,
 				C3F10D501352FCE200D8C945 /* Products */,
@@ -258,6 +258,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				LIBRARY_SEARCH_PATHS = "$(LIBRARY)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -269,6 +270,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				LIBRARY_SEARCH_PATHS = "$(LIBRARY)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
