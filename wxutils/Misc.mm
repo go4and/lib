@@ -10,4 +10,11 @@ void activate(wxTopLevelWindow * window)
     window->SetFocus();
 }
 
+wxRect desktopRect()
+{
+    NSScreen * screen = [NSScreen mainScreen];
+    NSRect rect = [screen frame];
+    return wxRect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+}
+
 }
