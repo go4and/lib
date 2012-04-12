@@ -5,7 +5,7 @@
 
 #include "config.hpp"
 
-#ifndef __S3E__
+#if !defined(__S3E__) && !defined(__ANDROID__)
 #include "atomic.hpp"
 #endif
 
