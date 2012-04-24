@@ -433,7 +433,7 @@
 		C324558F1352A6B900999158 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = IP;
 			};
 			buildConfigurationList = C32455921352A6B900999158 /* Build configuration list for PBXProject "mstd" */;
@@ -499,6 +499,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(INCLUDE)";
 				LD_DYLIB_INSTALL_NAME = "@executable_path/mstd.dylib";
+				LIBRARY_SEARCH_PATHS = "${LIBRARY}";
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				OTHER_LDFLAGS = (
 					"-lboost_filesystem-mt-d",
@@ -524,6 +525,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(INCLUDE)";
 				LD_DYLIB_INSTALL_NAME = "@executable_path/mstd.dylib";
+				LIBRARY_SEARCH_PATHS = "${LIBRARY}";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				OTHER_LDFLAGS = (
@@ -540,6 +542,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SHARED_PRECOMPS_DIR = "$(SYMROOT)";
 			};
 			name = Debug;
 		};
@@ -547,6 +550,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SHARED_PRECOMPS_DIR = "$(SYMROOT)";
 			};
 			name = Release;
 		};
@@ -560,7 +564,7 @@
 				C32455A51352A6B900999158 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		C32455A61352A6B900999158 /* Build configuration list for PBXNativeTarget "mstd" */ = {
 			isa = XCConfigurationList;
@@ -569,7 +573,7 @@
 				C32455A81352A6B900999158 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

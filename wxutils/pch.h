@@ -4,6 +4,10 @@
 
 #include <boost/config.hpp>
 
+#ifdef __OBJC__
+#include <Cocoa/Cocoa.h>
+#endif
+
 #if BOOST_WINDOWS
 #include <Windows.h>
 #endif
@@ -28,7 +32,6 @@
 #include <GL/gl.h>
 #endif
 
-#include <wx/wxprec.h>
 #include <wx/filepicker.h>
 #include <wx/gbsizer.h>
 #include <wx/image.h>

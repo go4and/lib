@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C3A2980F13E0A3B100F7FC1B /* UIEnqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */; };
 		C3A2981013E0A3B100F7FC1B /* UIEnqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */; };
+		C3E07A1C1520EDC900E1F9FF /* Misc.mm in Sources */ = {isa = PBXBuildFile; fileRef = C3E07A1B1520EDC900E1F9FF /* Misc.mm */; };
 		C3EDA4E9138839D1002FAF3C /* Any.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4CB138839D1002FAF3C /* Any.h */; };
 		C3EDA4EA138839D1002FAF3C /* AttachData.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4CC138839D1002FAF3C /* AttachData.h */; };
 		C3EDA4EB138839D1002FAF3C /* CanvasUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4CD138839D1002FAF3C /* CanvasUtils.cpp */; };
@@ -61,6 +62,7 @@
 /* Begin PBXFileReference section */
 		C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIEnqueue.cpp; sourceTree = "<group>"; };
 		C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIEnqueue.h; sourceTree = "<group>"; };
+		C3E07A1B1520EDC900E1F9FF /* Misc.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Misc.mm; sourceTree = "<group>"; };
 		C3EDA4C8138839A3002FAF3C /* wxutils.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = wxutils.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EDA4CB138839D1002FAF3C /* Any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Any.h; sourceTree = "<group>"; };
 		C3EDA4CC138839D1002FAF3C /* AttachData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachData.h; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				C3EDA4E4138839D1002FAF3C /* Widget.h */,
 				C3EDA4E5138839D1002FAF3C /* WindowUtils.cpp */,
 				C3EDA4E6138839D1002FAF3C /* WindowUtils.h */,
+				C3E07A1B1520EDC900E1F9FF /* Misc.mm */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				C3EDA501138839D1002FAF3C /* Widget.cpp in Sources */,
 				C3EDA503138839D1002FAF3C /* WindowUtils.cpp in Sources */,
 				C3A2980F13E0A3B100F7FC1B /* UIEnqueue.cpp in Sources */,
+				C3E07A1C1520EDC900E1F9FF /* Misc.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,8 +350,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -355,11 +359,15 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/..";
+				HEADER_SEARCH_PATHS = (
+					"/opt/local/include/wx-2.9",
+					"/opt/local/lib/wx/include/osx_cocoa-unicode-2.9",
+					"$(PROJECT_DIR)/..",
+				);
 				LD_DYLIB_INSTALL_NAME = "@executable_path/wxutils.dylib";
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -402,7 +410,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = wxutils;
 				SDKROOT = macosx10.6;
-				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Debug;
 		};
@@ -410,19 +418,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				CONFIGURATION_TEMP_DIR = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pch.h;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/..";
+				HEADER_SEARCH_PATHS = (
+					"/opt/local/include/wx-2.9",
+					"/opt/local/lib/wx/include/osx_cocoa-unicode-2.9",
+					"$(PROJECT_DIR)/..",
+				);
 				LD_DYLIB_INSTALL_NAME = "@executable_path/wxutils.dylib";
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OBJROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION).$(PROJECT_NAME)$(EFFECTIVE_PLATFORM_NAME)";
+				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-std=c++0x",
@@ -464,7 +476,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = wxutils;
 				SDKROOT = macosx10.6;
-				SYMROOT = "$(PROJECT_DIR)/../../_build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Release;
 		};

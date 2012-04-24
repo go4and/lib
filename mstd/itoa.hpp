@@ -195,8 +195,20 @@ T str2int10(const char * c)
     return str2int10_i1<T, boost::mpl::false_>(c, c + strlen(c));
 }
 
-template<class T, class C>
+template<class T>
+T str2int10(char * c)
+{
+    return str2int10_i1<T, boost::mpl::false_>(c, c + strlen(c));
+}
+
+template<class T>
 T str2int10_checked(const char * c)
+{
+    return str2int10_i1<T, boost::mpl::true_>(c, c + strlen(c));
+}
+
+template<class T>
+T str2int10_checked(char * c)
 {
     return str2int10_i1<T, boost::mpl::true_>(c, c + strlen(c));
 }
@@ -207,8 +219,20 @@ T str2int10(const wchar_t * c)
     return str2int10_i1<T, boost::mpl::false_>(c, c + wcslen(c));
 }
 
-template<class T, class C>
+template<class T>
 T str2int10_checked(const wchar_t * c)
+{
+    return str2int10_i1<T, boost::mpl::true_>(c, c + wcslen(c));
+}
+
+template<class T>
+T str2int10(wchar_t * c)
+{
+    return str2int10_i1<T, boost::mpl::false_>(c, c + wcslen(c));
+}
+
+template<class T>
+T str2int10_checked(wchar_t * c)
 {
     return str2int10_i1<T, boost::mpl::true_>(c, c + wcslen(c));
 }
