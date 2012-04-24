@@ -16,13 +16,13 @@ public:
     explicit user_function_lookup(const std::vector<std::wstring> & names, const function_lookup & lookup)
         : names_(names), lookup_(lookup) {}
 
-    func operator()(const std::wstring & name, size_t arity) const
+    func operator()(const std::wstring & name, size_t arity, bool lookupArguments) const
     {
         std::vector<std::wstring>::const_iterator begin = names_.begin(), end = names_.end();
-        std::vector<std::wstring>::const_iterator i = arity == 0 ? std::find(begin, end, name) : end;
+        std::vector<std::wstring>::const_iterator i = arity == 0 && lookupArguments ? std::find(begin, end, name) : end;
         if(i == end)
         {
-            return lookup_(name, arity);
+            return lookup_(name, arity, false);
         } else {
             return func(stack_arg(i - begin), 0);
         }
@@ -127,6 +127,12 @@ func environment::do_find(const Map::key_type & key) const
     Map::const_iterator i = map_.find(key);
     if(i == map_.end())
     {
+        if(!lookup_.empty())
+        {
+            func result = lookup_(key.first, key.second, true);
+            if(!result.function.empty())
+                return result;
+        }
         if(parent_)
             return parent_->do_find(key);
         else

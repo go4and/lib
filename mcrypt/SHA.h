@@ -38,5 +38,8 @@ MCRYPT_DECL boost::optional<SHADigest> shaFile(const boost::filesystem::path & p
 
 MCRYPT_DECL SHADigest shaString(const std::string & input);
 MCRYPT_DECL SHADigest shaBuffer(const void * data, size_t len);
-    
+
+std::string toBase64(const SHADigest & digest, bool url = false);
+SHADigest fromBase64(const std::string & string);
+
 }

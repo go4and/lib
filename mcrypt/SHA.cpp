@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#include "Base64.h"
+
 #include "SHA.h"
 
 namespace mcrypt {
@@ -105,6 +107,32 @@ SHADigest shaBuffer(const void * data, size_t len)
     SHADigest digest;
     sha.digest(digest);
     return digest;
+}
+
+namespace {
+
+const size_t base64length = (SHADigest::static_size + 2) / 3 * 4;
+
+}
+
+std::string toBase64(const SHADigest & digest, bool url)
+{
+    std::string result = base64(&digest[0], digest.size(), url);
+    BOOST_ASSERT(result[result.length() - 1] == '=');
+    result.resize(result.length() - 1);
+    return result;
+}
+
+SHADigest fromBase64(const std::string & string)
+{
+    BOOST_ASSERT(string.length() == base64length - 1);
+    char temp[base64length];
+    memcpy(temp, string.c_str(), base64length - 1);
+    temp[base64length - 1] = '=';
+    SHADigest result;
+    size_t len = debase64(temp, base64length, &result[0]);
+    BOOST_ASSERT(len == result.size());
+    return result;
 }
 
 }

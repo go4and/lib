@@ -49,12 +49,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(BUILD_OUTPUT)/$(Configuration)</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(BUILD_OUTPUT)/$(Configuration).$(ProjectName)</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(BUILD_OUTPUT)/$(Configuration)</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(BUILD_OUTPUT)/$(Configuration).$(ProjectName)</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release Dll|Win32'">$(BUILD_OUTPUT)/$(Configuration)</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release Dll|Win32'">$(BUILD_OUTPUT)/$(Configuration).$(ProjectName)</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(BUILD_OUTPUT)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(BUILD_OUTPUT)\$(Configuration).$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(BUILD_OUTPUT)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(BUILD_OUTPUT)\$(Configuration).$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release Dll|Win32'">$(BUILD_OUTPUT)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release Dll|Win32'">$(BUILD_OUTPUT)\$(Configuration).$(ProjectName)\</IntDir>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
@@ -119,6 +119,7 @@
     <ClCompile Include="IoThreadPool.cpp" />
     <ClCompile Include="PacketPacker.cpp" />
     <ClCompile Include="PacketReader.cpp" />
+    <ClCompile Include="PacketWriter.cpp" />
     <ClCompile Include="pch\pch.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -94,8 +94,11 @@ private:
                 {
                     for(size_t i = oldTasks, size = tasks.size(); i != size; ++i)
                         tasks[i]->start(*multi);
-                } else
+                } else {
+                    for(auto i = tasks.begin(), end = tasks.end(); i != end; ++i)
+                        (*i)->done(600 + CURLE_ABORTED_BY_CALLBACK);
                     tasks.clear();
+                }
                 int rh = 0;
                 // MLOG_DEBUG("performing curl");
                 for(;;)
@@ -711,6 +714,18 @@ void Request::run()
 std::ostream & operator<<(std::ostream & out, const Request & request)
 {
     return out << "[url=" << request.url() << ", cookies=" << request.cookies() << "]";
+}
+
+std::string escapeUrl(const std::string & url)
+{
+    char * temp = curl_easy_escape(0, url.c_str(), url.length());
+    if(temp)
+    {
+        std::string result(temp);
+        curl_free(temp);
+        return result;
+    } else
+        return std::string();
 }
 
 }

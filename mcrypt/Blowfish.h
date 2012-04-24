@@ -22,8 +22,8 @@ public:
     void encryptChunk(boost::uint32_t * data) const;
     void decryptChunk(boost::uint32_t * data) const;
 
-    void encrypt(const char * begin, const char * end, char * out) const;
-    void decrypt(const char * begin, const char * end, char * out) const;
+    void encrypt(const char * begin, const char * end, void * out);
+    void decrypt(const char * begin, const char * end, void * out);
 
     void restart();
 
@@ -37,6 +37,7 @@ private:
     
     boost::scoped_ptr<Key> key_;
     int num_;
+    unsigned char ivec_[8];
 };
 
 }
