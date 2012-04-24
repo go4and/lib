@@ -3,7 +3,7 @@ file(GLOB cppfiles "*.cpp")
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   list(APPEND cppfiles MacUtils.mm)
 
-macro(FIND_AND_ADD_FRAMEWORK fwname appname)
+  macro(FIND_AND_ADD_FRAMEWORK fwname appname)
     find_library(FRAMEWORK_${fwname}
         NAMES ${fwname}
         PATHS ${CMAKE_OSX_SYSROOT}/System/Library
@@ -15,8 +15,7 @@ macro(FIND_AND_ADD_FRAMEWORK fwname appname)
         TARGET_LINK_LIBRARIES(${appname} ${FRAMEWORK_${fwname}})
         # MESSAGE(STATUS "Framework ${fwname} found at ${FRAMEWORK_${fwname}}")
     endif()
-endmacro(FIND_AND_ADD_FRAMEWORK)
-
+  endmacro(FIND_AND_ADD_FRAMEWORK)
 
 endif()
 
