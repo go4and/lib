@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include <Foundation/Foundation.h>
 
 namespace mlog {

@@ -32,7 +32,6 @@
 #include <GL/gl.h>
 #endif
 
-#include <wx/wxprec.h>
 #include <wx/filepicker.h>
 #include <wx/gbsizer.h>
 #include <wx/image.h>
