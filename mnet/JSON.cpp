@@ -115,8 +115,32 @@ void parseJSON(const char * data, size_t len, boost::property_tree::ptree & tree
         unsigned char * err = yajl_get_error(*hand, 1, mstd::pointer_cast<const unsigned char*>(data), len);
         error.init(mstd::pointer_cast<char*>(err));
         yajl_free_error(*hand, err);
+        tree.clear();
     } else
         error.reset();
+}
+
+void parseJSON(const boost::filesystem::path & path, boost::property_tree::ptree & tree, ParseError & error)
+{
+    FILE * file = mstd::wfopen(path, "rb");
+    if(file)
+    {
+        struct _stat64 stat;
+        if(!_fstat64(_fileno(file), &stat))
+        {
+            size_t size = static_cast<size_t>(stat.st_size);
+            if(size)
+            {
+                std::vector<char> buffer(size);
+                fread(&buffer[0], 1, size, file);
+                parseJSON(&buffer[0], size, tree, error);
+            } else
+                parseJSON(0, 0, tree, error);
+        } else
+            error.init("Unable to get file size");
+        fclose(file);
+    } else
+        error.init("Unable to open file");
 }
 
 }

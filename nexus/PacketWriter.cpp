@@ -25,14 +25,14 @@ std::string compress(const std::string & input)
     return std::string(out, out + size);
 }
 
-size_t compress(const char * begin, const char * end, char * out, size_t outSize)
+size_t compress(const void * data, size_t len, void * out, size_t outSize)
 {
     z_stream stream;
     memset(&stream, 0, sizeof(stream));
-    stream.next_in = mstd::pointer_cast<Bytef*>(const_cast<char*>(begin));
-    stream.avail_in = end - begin;
+    stream.next_in = static_cast<Bytef*>(const_cast<void*>(data));
+    stream.avail_in = len;
     
-    stream.next_out = mstd::pointer_cast<Bytef*>(out);
+    stream.next_out = static_cast<Bytef*>(out);
     stream.avail_out = outSize;
     
     if(deflateInit(&stream, 1) != Z_OK)
@@ -54,6 +54,14 @@ size_t compress(const char * begin, const char * end, char * out, size_t outSize
     }
 
     return stream.total_out;
+}
+
+void compress(const void * data, size_t len, std::vector<char> & out)
+{
+    size_t size = compressSize(len);
+    out.resize(size);
+    size = compress(data, len, &out[0], size);
+    out.resize(size);
 }
 
 }

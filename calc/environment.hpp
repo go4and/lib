@@ -3,9 +3,6 @@
 #if !defined(BUILDING_CALC)
 #include <boost/algorithm/string/case_conv.hpp>
 
-#include <boost/phoenix/core/argument.hpp>
-#include <boost/phoenix/stl/container.hpp>
-
 #include <boost/array.hpp>
 #include <boost/unordered_map.hpp>
 #endif
@@ -18,8 +15,8 @@ namespace calc {
 
 class CALC_DECL environment : public boost::noncopyable {
 public:
-    explicit environment(const environment * parent = 0)
-        : parent_(parent) {}
+    explicit environment(const environment * parent = 0, const function_lookup & lookup = function_lookup())
+        : parent_(parent), lookup_(lookup) {}
 
     template<class F>
     void add(const std::wstring & name, const F & f)
@@ -65,6 +62,7 @@ private:
 
     const environment * parent_;
     Map map_;
+    function_lookup lookup_;
 };
 
 }

@@ -48,5 +48,6 @@ private:
 
 void parseJSON(const char * data, size_t len, boost::property_tree::ptree & tree, ParseError & error);
 inline void parseJSON(const std::string & str, boost::property_tree::ptree & tree, ParseError & error) { parseJSON(str.c_str(), str.length(), tree, error); }
+void parseJSON(const boost::filesystem::path & path, boost::property_tree::ptree & tree, ParseError & error);
 
 }

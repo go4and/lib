@@ -15,6 +15,7 @@ Blowfish::Blowfish(const std::string & pass)
     : key_(new Key()), num_(0)
 {
     BF_set_key(&key_->value_, static_cast<int>(pass.size()), reinterpret_cast<const unsigned char*>(pass.c_str()));
+    memset(ivec_, 0, 8);
 }
 
 Blowfish::~Blowfish() {}
@@ -29,23 +30,21 @@ void Blowfish::encryptChunk(boost::uint32_t * data) const
     BF_encrypt(reinterpret_cast<BF_LONG*>(data), &key_->value_);
 }
 
-void process(const char * begin, const char * end, char * out, BF_KEY * key, int enc)
+void process(const char * begin, const char * end, void * out, BF_KEY * key, unsigned char * ivec, int enc)
 {
-    unsigned char ivec[8];
-    memset(ivec, 0, 8);
     BF_cbc_encrypt(mstd::pointer_cast<const unsigned char *>(begin),
-                   mstd::pointer_cast<unsigned char *>(out),
+                   static_cast<unsigned char *>(out),
                    end - begin, key, ivec, enc);
 }
 
-void Blowfish::encrypt(const char * begin, const char * end, char * out) const
+void Blowfish::encrypt(const char * begin, const char * end, void * out)
 {
-    return process(begin, end, out, &key_->value_, BF_ENCRYPT);
+    return process(begin, end, out, &key_->value_, ivec_, BF_ENCRYPT);
 }
 
-void Blowfish::decrypt(const char * begin, const char * end, char * out) const
+void Blowfish::decrypt(const char * begin, const char * end, void * out)
 {
-    return process(begin, end, out, &key_->value_, BF_DECRYPT);
+    return process(begin, end, out, &key_->value_, ivec_, BF_DECRYPT);
 }
 
 void Blowfish::restart()

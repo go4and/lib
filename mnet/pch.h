@@ -6,6 +6,8 @@
 
 #include <yajl/yajl_parse.h>
 
+#include <sys/stat.h>
+
 #include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_ptr.hpp>

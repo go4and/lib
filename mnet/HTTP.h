@@ -142,4 +142,6 @@ void cancelAll();
 
 int getRemoteFileSizeEx(std::string & uri, filesize_t & out);
 
+std::string escapeUrl(const std::string & url);
+
 }

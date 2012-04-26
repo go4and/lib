@@ -131,4 +131,7 @@ struct bool_translator_base {
 typedef bool_translator_base<char> bool_translator;
 typedef bool_translator_base<wchar_t> wbool_translator;
 
+void convert(const boost::property_tree::ptree & in, boost::property_tree::wptree & out);
+void convert(const boost::property_tree::wptree & in, boost::property_tree::ptree & out);
+
 }

@@ -67,7 +67,11 @@ inline void writePacked(char *& p, boost::uint32_t size)
 size_t compressSize(size_t len);
 size_t compressSize(const char * begin, const char * end);
 
-size_t compress(const char * begin, const char * end, char * out, size_t outSize);
+size_t compress(const void * data, size_t len, void * out, size_t outSize);
+inline size_t compress(const char * begin, const char * end, char * out, size_t outSize) { return compress(begin, end - begin, out, outSize); }
 std::string compress(const std::string & input);
+
+void compress(const void * data, size_t len, std::vector<char> & out);
+inline void compress(const std::vector<char> & input, std::vector<char> & out) { compress(&input[0], input.size(), out); }
 
 }
