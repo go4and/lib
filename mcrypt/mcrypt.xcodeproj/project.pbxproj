@@ -28,7 +28,7 @@
 		C3389D2D1353839C0010E3BF /* TEA.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D181353839C0010E3BF /* TEA.h */; };
 		C3389D2E1353839C0010E3BF /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D191353839C0010E3BF /* Utils.cpp */; };
 		C3389D2F1353839C0010E3BF /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D1A1353839C0010E3BF /* Utils.h */; };
-		C366758F145C14560054FD84 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C366758E145C14560054FD84 /* mstd.dylib */; };
+		C3B8C2B41546BCE100E14219 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B8C2B31546BCE100E14219 /* mstd.dylib */; };
 		C3DB2FA61394BA9B00A8CB1B /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */; };
 /* End PBXBuildFile section */
 
@@ -55,7 +55,7 @@
 		C3389D181353839C0010E3BF /* TEA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEA.h; sourceTree = SOURCE_ROOT; };
 		C3389D191353839C0010E3BF /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = SOURCE_ROOT; };
 		C3389D1A1353839C0010E3BF /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = SOURCE_ROOT; };
-		C366758E145C14560054FD84 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = mstd.dylib; path = ../../../../_build/Debug/mstd.dylib; sourceTree = "<group>"; };
+		C3B8C2B31546BCE100E14219 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = mstd.dylib; path = ../../_build/Debug/mstd.dylib; sourceTree = "<group>"; };
 		C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.1.0.0.dylib; path = /opt/local/lib/libcrypto.1.0.0.dylib; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -64,7 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C366758F145C14560054FD84 /* mstd.dylib in Frameworks */,
+				C3B8C2B41546BCE100E14219 /* mstd.dylib in Frameworks */,
 				C3DB2FA61394BA9B00A8CB1B /* libcrypto.1.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -75,9 +75,8 @@
 		C3389CE0135383290010E3BF = {
 			isa = PBXGroup;
 			children = (
-				C366758E145C14560054FD84 /* mstd.dylib */,
-				C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */,
-				C3389CED135383290010E3BF /* mcrypt */,
+				C3B8C2B21546BCD100E14219 /* Dependencies */,
+				C3389CED135383290010E3BF /* Sources */,
 				C3389CEC135383290010E3BF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,7 +89,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C3389CED135383290010E3BF /* mcrypt */ = {
+		C3389CED135383290010E3BF /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				C3389D061353839C0010E3BF /* Base64.cpp */,
@@ -115,7 +114,17 @@
 				C3389D191353839C0010E3BF /* Utils.cpp */,
 				C3389D1A1353839C0010E3BF /* Utils.h */,
 			);
+			name = Sources;
 			path = mcrypt;
+			sourceTree = "<group>";
+		};
+		C3B8C2B21546BCD100E14219 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				C3B8C2B31546BCE100E14219 /* mstd.dylib */,
+				C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */,
+			);
+			name = Dependencies;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,7 +243,7 @@
 					"-lboost_system-mt-d",
 					"-lboost_filesystem-mt-d",
 				);
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Debug;
@@ -264,7 +273,7 @@
 					"-lboost_system-mt",
 					"-lboost_filesystem-mt",
 				);
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Release;
@@ -276,10 +285,6 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../_build/Debug\"",
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -291,10 +296,6 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../_build/Debug\"",
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

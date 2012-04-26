@@ -115,14 +115,9 @@
 		C3389D58135388960010E3BF = {
 			isa = PBXGroup;
 			children = (
-				C3E7657D148F3A450069EAFA /* mcrypt.dylib */,
-				C3E7657E148F3A450069EAFA /* mlog.dylib */,
-				C3E7657F148F3A450069EAFA /* mstd.dylib */,
-				C3389D65135388960010E3BF /* nexus */,
+				C3B8C2AC1546BA6B00E14219 /* Dependencies */,
+				C3389D65135388960010E3BF /* Source */,
 				C3389D64135388960010E3BF /* Products */,
-				C3161E66135776A20001E128 /* libz.dylib */,
-				C3161E68135776AA0001E128 /* libcrypto.dylib */,
-				C3161E6A135776B10001E128 /* libssl.dylib */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,7 +129,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C3389D65135388960010E3BF /* nexus */ = {
+		C3389D65135388960010E3BF /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				C36A4272148D184F00E9CF52 /* PacketWriter.cpp */,
@@ -173,7 +168,21 @@
 				C35AA4C713538DD100649921 /* Utils.cpp */,
 				C35AA4C813538DD100649921 /* Utils.h */,
 			);
+			name = Source;
 			path = nexus;
+			sourceTree = "<group>";
+		};
+		C3B8C2AC1546BA6B00E14219 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				C3161E66135776A20001E128 /* libz.dylib */,
+				C3161E68135776AA0001E128 /* libcrypto.dylib */,
+				C3161E6A135776B10001E128 /* libssl.dylib */,
+				C3E7657D148F3A450069EAFA /* mcrypt.dylib */,
+				C3E7657E148F3A450069EAFA /* mlog.dylib */,
+				C3E7657F148F3A450069EAFA /* mstd.dylib */,
+			);
+			name = Dependencies;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,7 +313,7 @@
 					"-lboost_system-mt-d",
 					"-lboost_thread-mt-d",
 				);
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Debug;
@@ -328,7 +337,7 @@
 				);
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Release;

@@ -272,4 +272,6 @@ NEXUS_DECL std::string decompress(const char * input, size_t size);
 inline std::string decompress(const std::vector<char> & input) { return input.empty() ? std::string() : decompress(&input[0], input.size()); }
 NEXUS_DECL std::string decompress(const Buffer & input);
 
+NEXUS_DECL void decompress(const void * input, size_t size, std::vector<char> & out);
+
 }
