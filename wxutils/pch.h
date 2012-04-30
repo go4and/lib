@@ -32,10 +32,13 @@
 #include <GL/gl.h>
 #endif
 
+#include <wx/dc.h>
 #include <wx/filepicker.h>
 #include <wx/gbsizer.h>
+#include <wx/icon.h>
 #include <wx/image.h>
 #include <wx/msgdlg.h>
+#include <wx/stattext.h>
 #include <wx/timer.h>
 
 #include <mstd/cstdint.hpp>
