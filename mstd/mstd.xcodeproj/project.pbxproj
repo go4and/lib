@@ -95,6 +95,10 @@
 		C346433F13D3339000716430 /* filesystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346433C13D3339000716430 /* filesystem.cpp */; };
 		C346434013D3339000716430 /* process.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C346433D13D3339000716430 /* process.cpp */; };
 		C346434113D3339000716430 /* process.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C346433E13D3339000716430 /* process.hpp */; };
+		C375FDA515490C250009748B /* disposers.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C375FDA015490C250009748B /* disposers.hpp */; };
+		C375FDA615490C250009748B /* indexed_map.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C375FDA115490C250009748B /* indexed_map.hpp */; };
+		C375FDA715490C250009748B /* ptree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C375FDA215490C250009748B /* ptree.cpp */; };
+		C375FDA815490C250009748B /* ptree.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C375FDA315490C250009748B /* ptree.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -187,6 +191,10 @@
 		C346433C13D3339000716430 /* filesystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filesystem.cpp; sourceTree = SOURCE_ROOT; };
 		C346433D13D3339000716430 /* process.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = process.cpp; sourceTree = SOURCE_ROOT; };
 		C346433E13D3339000716430 /* process.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = process.hpp; sourceTree = SOURCE_ROOT; };
+		C375FDA015490C250009748B /* disposers.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = disposers.hpp; path = disposers.hpp; sourceTree = "SOURCE_ROOT"; };
+		C375FDA115490C250009748B /* indexed_map.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = indexed_map.hpp; path = indexed_map.hpp; sourceTree = "SOURCE_ROOT"; };
+		C375FDA215490C250009748B /* ptree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ptree.cpp; path = ptree.cpp; sourceTree = "SOURCE_ROOT"; };
+		C375FDA315490C250009748B /* ptree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ptree.hpp; path = ptree.hpp; sourceTree = "SOURCE_ROOT"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +227,11 @@
 		C324559A1352A6B900999158 /* mstd */ = {
 			isa = PBXGroup;
 			children = (
+				C375FDA015490C250009748B /* disposers.hpp */,
+				C375FDA115490C250009748B /* indexed_map.hpp */,
+				C375FDA215490C250009748B /* ptree.cpp */,
+				C375FDA315490C250009748B /* ptree.hpp */,
+				C375FDA415490C250009748B /* xml.cpp */,
 				C346433C13D3339000716430 /* filesystem.cpp */,
 				C346433D13D3339000716430 /* process.cpp */,
 				C346433E13D3339000716430 /* process.hpp */,
@@ -298,7 +311,6 @@
 				C324562F1352A9C800999158 /* type_id.hpp */,
 				C32456301352A9C800999158 /* utf8.hpp */,
 				C32456311352A9C800999158 /* wide_stream.hpp */,
-				C32456321352A9C800999158 /* xml.cpp */,
 				C32456331352A9C800999158 /* xml.hpp */,
 			);
 			path = mstd;
@@ -404,6 +416,9 @@
 				C32456871352A9C800999158 /* wide_stream.hpp in Headers */,
 				C32456891352A9C800999158 /* xml.hpp in Headers */,
 				C346434113D3339000716430 /* process.hpp in Headers */,
+				C375FDA515490C250009748B /* disposers.hpp in Headers */,
+				C375FDA615490C250009748B /* indexed_map.hpp in Headers */,
+				C375FDA815490C250009748B /* ptree.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,6 +491,7 @@
 				C32456881352A9C800999158 /* xml.cpp in Sources */,
 				C346433F13D3339000716430 /* filesystem.cpp in Sources */,
 				C346434013D3339000716430 /* process.cpp in Sources */,
+				C375FDA715490C250009748B /* ptree.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

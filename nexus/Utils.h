@@ -14,4 +14,7 @@ NEXUS_DECL void listen(boost::asio::ip::tcp::acceptor & acceptor, const boost::a
 NEXUS_DECL void listen(boost::asio::ip::tcp::acceptor & acceptor, unsigned short port);
 NEXUS_DECL void setupSocket(boost::asio::ip::tcp::socket & socket, int sendBufferSize, int recvBufferSize);
 
+NEXUS_DECL std::string escapeXml(const std::string & input);
+inline std::string escaleHtml(const std::string & input) { return escapeXml(input); }
+
 }

@@ -3,6 +3,8 @@
 #ifndef MCRYPT_BUILDING
 #include <string>
 #include <vector>
+
+#include <boost/assert.hpp>
 #endif
 
 #include "Config.h"

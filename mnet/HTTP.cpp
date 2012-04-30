@@ -95,7 +95,7 @@ private:
                     for(size_t i = oldTasks, size = tasks.size(); i != size; ++i)
                         tasks[i]->start(*multi);
                 } else {
-                    for(auto i = tasks.begin(), end = tasks.end(); i != end; ++i)
+                    for(std::vector<AsyncTaskPtr>::iterator i = tasks.begin(), end = tasks.end(); i != end; ++i)
                         (*i)->done(600 + CURLE_ABORTED_BY_CALLBACK);
                     tasks.clear();
                 }

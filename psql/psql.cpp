@@ -26,6 +26,8 @@ namespace psql {
 
 namespace {
 
+boost::posix_time::ptime timeStart(boost::gregorian::date(2000, boost::date_time::Jan, 1));
+
 void write2(char *& pos, int16_t value)
 {
     *mstd::pointer_cast<int16_t*>(pos) = mstd::hton(value);
@@ -87,8 +89,10 @@ int Connection::wait(bool reading)
 Connection::Connection(const std::string & cmd)
     : PGConnHolder(cmd)
 {
-    if(!conn() || PQstatus(conn()) == CONNECTION_BAD)
+    if(!conn())
         BOOST_THROW_EXCEPTION(ConnectionException());
+    if(PQstatus(conn()) == CONNECTION_BAD)
+        BOOST_THROW_EXCEPTION(ConnectionException() << mstd::error_message(PQerrorMessage(conn())));
 
     PostgresPollingStatusType status = PGRES_POLLING_WRITING;
     while(status != PGRES_POLLING_OK)
@@ -132,6 +136,31 @@ void Connection::checkResult(const char * query, Result & result, bool canHaveEr
     }
 }
 
+Result Connection::exec(const char * query, const ParametricExecution & pe, bool canHaveErrors)
+{
+    MLOG_DEBUG("exec(" << query << ")");
+
+    values_.clear();
+    lengths_.clear();
+    pe.fill(values_, lengths_);
+    size_t size = values_.size();
+
+    if(size > formats_.size())
+    {
+        size_t oldSize = formats_.size();
+        formats_.resize(size);
+        std::fill_n(formats_.begin() + oldSize, size - oldSize, 1);
+    }
+
+    boost::posix_time::ptime start = boost::posix_time::microsec_clock::universal_time();
+    Result result(PQexecParams(conn(), query, size, 0, &values_[0], &lengths_[0], &formats_[0], 1));
+    checkResult(query, result, canHaveErrors, start);
+
+    MLOG_MESSAGE(Debug, "exec succeeded");
+
+    return result;
+}
+
 Result Connection::exec(const char * query, bool canHaveErrors)
 {
     MLOG_MESSAGE(Debug, "exec(" << query << ")");
@@ -144,11 +173,6 @@ Result Connection::exec(const char * query, bool canHaveErrors)
     return move(result);
 }
 
-Result Connection::exec(const std::string & query, bool canHaveErrors)
-{
-    return exec(query.c_str(), canHaveErrors);
-}
-
 void Connection::execVoid(const char * query, bool canHaveErrors)
 {
     MLOG_MESSAGE(Debug, "execVoid(" << query << ")");
@@ -158,11 +182,6 @@ void Connection::execVoid(const char * query, bool canHaveErrors)
     checkResult(query, result, canHaveErrors, start);
 
     MLOG_MESSAGE(Debug, "exec succeeded");
-}
-
-void Connection::execVoid(const std::string & query, bool canHaveErrors)
-{
-    execVoid(query.c_str(), canHaveErrors);
 }
 
 void Connection::copyBegin(const char * query, bool canHaveErrors)
@@ -188,11 +207,6 @@ void Connection::copyStartRow(int16_t columns)
     if(copyData_->left() < 2)
         copyFlushBuffer();
     write2(copyData_->pos, columns);
-}
-
-void Connection::copyBegin(const std::string & query, bool canHaveErrors)
-{
-    copyBegin(query.c_str(), canHaveErrors);
 }
 
 void Connection::copySendBuffer(const char * begin, int len)
@@ -287,39 +301,6 @@ Result Connection::copyEnd()
     return move(result);
 }
 
-Result Connection::exec(const char * query, size_t size, const char * const * values, int * lengths, bool canHaveErrors)
-{
-    MLOG_MESSAGE(Debug, "exec(" << query << ", " << size << ")");
-    
-    int * formats = static_cast<int*>(alloca(size * sizeof(int)));
-    std::fill_n(formats, size, 1);
-
-    boost::posix_time::ptime start = boost::posix_time::microsec_clock::universal_time();
-    Result result(PQexecParams(conn(), query, size, 0,
-                               values, lengths, formats, 1));
-
-    checkResult(query, result, canHaveErrors, start);
-
-    MLOG_MESSAGE(Debug, "exec succeeded");
-    return move(result);
-}
-
-void Connection::execVoid(const char * query, size_t size, const char * const * values, int * lengths, bool canHaveErrors)
-{
-    MLOG_MESSAGE(Debug, "execVoid(" << query << ", " << size << ")");
-    
-    int * formats = static_cast<int*>(alloca(size * sizeof(int)));
-    std::fill_n(formats, size, 1);
-
-    boost::posix_time::ptime start = boost::posix_time::microsec_clock::universal_time();
-    Result result(PQexecParams(conn(), query, size, 0,
-                               values, lengths, formats, 0));
-
-    checkResult(query, result, canHaveErrors, start);
-
-    MLOG_MESSAGE(Debug, "exec succeeded");
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 // class Transaction
 ////////////////////////////////////////////////////////////////////////////////
@@ -363,32 +344,39 @@ Transaction::~Transaction()
 ////////////////////////////////////////////////////////////////////////////////
 
 ParametricExecution::ParametricExecution(Connection & conn)
-    : conn_(conn) {}
+    : conn_(conn), tail_(&head_), out_(tail_->begin()), extraBuffers_(0), extraBuffersTail_(&extraBuffers_)
+{
+}
+
+void ParametricExecution::freeExtraBuffers()
+{
+    void * p = extraBuffers_;
+    while(p)
+    {
+        void * n = *static_cast<void**>(p);
+        delete [] static_cast<char*>(p);
+        p = n;
+    }
+}
 
 ParametricExecution::~ParametricExecution()
 {
-    for(std::vector<char*>::const_iterator i = buffers_.begin(), end = buffers_.end(); i != end; ++i)
-        delete [] *i;
 }
 
 void ParametricExecution::clear()
 {
-    longInts_.clear();
-    ints_.clear();
-    smallInts_.clear();
-    values_.clear();
-    lengths_.clear();
-    for(std::vector<char*>::const_iterator i = buffers_.begin(), end = buffers_.end(); i != end; ++i)
-        delete [] *i;
-    buffers_.clear();
+    head_.clear();
+    tail_ = &head_;
+    out_ = tail_->begin();
+    freeExtraBuffers();
+    extraBuffersTail_ = &extraBuffers_;
 }
 
 Result ParametricExecution::exec(const char * query, bool canHaveErrors)
 {
     MLOG_MESSAGE(Debug, "param exec: " << query);
 
-    size_t size = values_.size();
-    return conn_.exec(query, size, !size ? 0 : &values_[0], !size ? 0 : &lengths_[0], canHaveErrors);
+    return conn_.exec(query, *this, canHaveErrors);
 }
 
 Result ParametricExecution::exec(const std::string & query, bool canHaveErrors)
@@ -400,8 +388,7 @@ void ParametricExecution::execVoid(const char * query, bool canHaveErrors)
 {
     MLOG_MESSAGE(Debug, "param exec: " << query);
 
-    size_t size = values_.size();
-    conn_.execVoid(query, size, !size ? 0 : &values_[0], !size ? 0 : &lengths_[0], canHaveErrors);
+    conn_.exec(query, *this, canHaveErrors);
 }
 
 void ParametricExecution::execVoid(const std::string & query, bool canHaveErrors)
@@ -409,33 +396,61 @@ void ParametricExecution::execVoid(const std::string & query, bool canHaveErrors
     execVoid(query.c_str(), canHaveErrors);
 }
 
-size_t ParametricExecution::size() const
+void ParametricExecution::addParam(const boost::posix_time::ptime & value)
 {
-    return values_.size();
-}
-
-void ParametricExecution::addParam(boost::int64_t value)
-{
-    longInts_.push_back(mstd::hton(value));
-    addImpl(&longInts_.back());
-}
-
-void ParametricExecution::addParam(boost::int32_t value)
-{
-    ints_.push_back(mstd::hton(value));
-    addImpl(&ints_.back());
-}
-
-void ParametricExecution::addParam(boost::int16_t value)
-{
-    smallInts_.push_back(mstd::hton(value));
-    addImpl(&smallInts_.back());
+    addParam((value - timeStart).total_microseconds());
 }
 
 void ParametricExecution::addParam(const char *value, size_t length)
 {
-    values_.push_back(value);
-    lengths_.push_back(length);
+    ensure(4 + sizeof(value));
+    *out_++ = 0x80 | ((length & 0x3f000000) >> 24);
+    memcpy(out_, &length, 3);
+    out_ += 3;
+    memcpy(out_, &value, sizeof(value));
+    out_ += sizeof(value);
+}
+
+void ParametricExecution::fill(std::vector<const char*> & values, std::vector<int> & lengths) const
+{
+    const PEChunk * c = &head_;
+    while(c)
+    {
+        const char * inp = c->begin(), * end = c == tail_ ? out_ :  c->end();
+        while(inp != end)
+        {
+            unsigned char x = *inp;
+            ++inp;
+            if(x == 0xff)
+                break;
+            else if(x & 0x80)
+            {
+                size_t length = 0;
+                memcpy(&length, inp, 3);
+                inp += 3;
+                length |= (x & 0x3f) << 24;
+                const char * address;
+                memcpy(&address, inp, sizeof(address));
+                inp += sizeof(address);
+                values.push_back(address);
+                lengths.push_back(length);
+            } else {
+                values.push_back(inp);
+                lengths.push_back(x);
+                inp += x;
+            }
+        }
+        c = c->next();
+    }
+}
+
+char * ParametricExecution::allocBuffer(size_t size)
+{
+    char * result = new char[size + sizeof(void*)];
+    *extraBuffersTail_ = result;
+    extraBuffersTail_ = mstd::pointer_cast<void**>(result);
+    *extraBuffersTail_ = 0;
+    return result + sizeof(void*);
 }
 
 void ParametricExecution::addArray(const std::pair<const char*, const char*> * value, size_t size)
@@ -448,8 +463,7 @@ void ParametricExecution::addArray(const std::pair<const char*, const char*> * v
     for(iterator i = value; i != end; ++i)
         bufferSize += i->second - i->first;
     
-    char * temp = new char[bufferSize]; // TODO
-    buffers_.push_back(temp);
+    char * temp = allocBuffer(bufferSize);
     char * out = temp;
 
     write4(out, 1);
@@ -479,8 +493,7 @@ void ParametricExecution::addArray(const std::string * value, size_t size)
     for(iterator i = value; i != end; ++i)
         bufferSize += i->length();
 
-    char * temp = new char[bufferSize]; // TODO
-    buffers_.push_back(temp);
+    char * temp = allocBuffer(bufferSize);
     char * out = temp;
 
     write4(out, 1);
@@ -502,8 +515,7 @@ void ParametricExecution::addArray(const std::string * value, size_t size)
 
 void ParametricExecution::addArray(const boost::int64_t * value, size_t size)
 {
-    char * temp = new char[size * 12 + 20]; // TODO
-    buffers_.push_back(temp);
+    char * temp = allocBuffer(size * 12 + 20);
     char * out = temp;
 
     write4(out, 1);
@@ -523,8 +535,7 @@ void ParametricExecution::addArray(const boost::int64_t * value, size_t size)
 
 void ParametricExecution::addArray(const boost::int32_t * value, size_t size)
 {
-    char * temp = new char[size * 8 + 20]; // TODO
-    buffers_.push_back(temp);
+    char * temp = allocBuffer(size * 8 + 20);
     char * out = temp;
 
     write4(out, 1);
@@ -544,8 +555,7 @@ void ParametricExecution::addArray(const boost::int32_t * value, size_t size)
 
 void ParametricExecution::addArray(const boost::int16_t * value, size_t size)
 {
-    char * temp = new char[size * 6 + 20]; // TODO
-    buffers_.push_back(temp);
+    char * temp = allocBuffer(size * 6 + 20);
     char * out = temp;
 
     write4(out, 1);
@@ -668,6 +678,17 @@ const char * ResultRowRef::asCString(size_t index) const
     if(oid != oidText && oid != oidVarChar)
         BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidText));
     return static_cast<const char*>(data);
+}
+
+boost::posix_time::ptime ResultRowRef::asTime(size_t index) const
+{
+    const void * data = PQgetvalue(result_, index_, index);
+    Oid oid = PQftype(result_, index);
+    if(oid != oidTimestamp)
+        BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidTimestamp));
+    int64_t value = mstd::ntoh(*static_cast<const boost::int64_t*>(data));
+    int64_t mul = (boost::posix_time::microseconds::traits_type::res_adjust() / 1000000);
+    return timeStart + boost::posix_time::time_duration(0, 0, 0, value * mul);
 }
 
 ByteArray ResultRowRef::asArray(size_t index) const

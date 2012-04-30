@@ -8,6 +8,15 @@ MLOG_DECLARE_LOGGER(nexus_utils);
 
 namespace nexus {
 
+namespace {
+
+const char * const AMP = "&amp;";
+const char * const QUOT = "&quot;";
+const char * const GT = "&gt;";
+const char * const LT = "&lt;";
+
+}
+
 void listen(boost::asio::ip::tcp::acceptor & acceptor, unsigned short port)
 {
     listen(acceptor, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port));
@@ -67,5 +76,27 @@ void setupSocket(boost::asio::ip::tcp::socket & socket, int sendBufferSize, int 
         MLOG_MESSAGE(Info, "new socket options, send: " << sends.value() << ", recv: " << recvs.value());
     }
 }
+
+std::string escapeXml(const std::string & input)
+{
+    const char * p = input.c_str(), * i = p;
+    std::string result;
+    for(; *i; ++i)
+    {
+        char ch = *i;
+        const char * img = ch == '&' ? AMP : ch == '"' ? QUOT : ch == '>' ? GT : ch == '<' ? LT : NULL;
+        if(img)
+        {
+            if(i != p)
+                result.append(p, i - p);
+            result += img;
+            p = i + 1;
+        }
+    }
+    if(i != p)
+        result.append(p, i - p);
+    return result;
+}
+
 
 }
