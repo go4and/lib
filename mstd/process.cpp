@@ -62,13 +62,34 @@ void execute_file(const boost::filesystem::wpath & path)
     parent.remove_filename();
     CreateProcessW(NULL, const_cast<wchar_t*>(wfname(path).c_str()), NULL, NULL, true, 0, NULL, wfname(parent).c_str(), &si, &pi);
 #else
-    std::string fname = apifname(path).c_str();
+    std::string fname = apifname(path);
     if(!vfork())
     {
         execl(fname.c_str(), NULL, NULL);
         _exit(0);
     }
 #endif
+}
+
+void execute_file(const boost::filesystem::wpath & path, const std::vector<std::wstring> & arguments)
+{
+    std::string fname = apifname(path);
+    std::vector<std::string> args;
+    args.reserve(arguments.size());
+    std::vector<char*> argv;
+    argv.reserve(arguments.size() + 2);
+    argv.push_back(const_cast<char*>(fname.c_str()));
+    for(std::vector<std::wstring>::const_iterator i = arguments.begin(), end = arguments.end(); i != end; ++i)
+    {
+        args.push_back(utf8(*i));
+        argv.push_back(const_cast<char*>(args.back().c_str()));
+    }
+    argv.push_back(0);
+    if(!vfork())
+    {
+        execv(fname.c_str(), &argv[0]);
+        _exit(0);
+    }
 }
 
 void make_executable(const boost::filesystem::wpath & path, bool user, bool group, bool other)

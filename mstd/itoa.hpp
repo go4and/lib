@@ -237,15 +237,15 @@ T str2int10_checked(wchar_t * c)
     return str2int10_i1<T, boost::mpl::true_>(c, c + wcslen(c));
 }
 
-template<class T, class Ch>
+template<class T, class It, class Value>
 typename boost::disable_if<boost::is_signed<T>, T>::type
-str2int16(const Ch * inp, const Ch * end)
+inline str2int16_impl(It inp, const It & end, Value * value)
 {
     T result = 0;
     for(; inp != end; ++inp)
     {
         result = result << 4;
-        Ch ch = *inp;
+        Value ch = *inp;
         if(ch <= '9')
             result += (ch - '0');
         else if(ch <= 'F')
@@ -256,9 +256,9 @@ str2int16(const Ch * inp, const Ch * end)
     return result;
 }
 
-template<class T, class Ch>
+template<class T, class It, class Value>
 typename boost::enable_if<boost::is_signed<T>, T>::type
-str2int16(const Ch * inp, const Ch * end)
+inline str2int16_impl(It inp, const It & end, Value * value)
 {
     T result = 0;
     T sign = 1;
@@ -270,7 +270,7 @@ str2int16(const Ch * inp, const Ch * end)
     for(; inp != end; ++inp)
     {
         result = result << 4;
-        Ch ch = *inp;
+        Value ch = *inp;
         if(ch <= '9')
             result += (ch - '0');
         else if(ch <= L'F')
@@ -281,8 +281,14 @@ str2int16(const Ch * inp, const Ch * end)
     return result * sign;
 }
 
-template<class T, class Ch>
-inline T str2int16(const Ch * begin, size_t len)
+template<class T, class It>
+inline T str2int16(const It & inp, const It & end)
+{
+    return str2int16_impl<T>(inp, end, &*inp);
+}
+
+template<class T, class It>
+inline T str2int16(const It & begin, size_t len)
 {
     return str2int16<T>(begin, begin + len);
 }
