@@ -225,14 +225,21 @@ private:
 #if BOOST_WINDOWS
 class VCOutputDevice {
 public:
+    VCOutputDevice()
+        : mutex_(new boost::mutex)
+    {
+    }
+
     void operator()(const char * out, size_t len)
     {
+        boost::lock_guard<boost::mutex> lock(*mutex_);
         buffer_.clear();
         mstd::deutf8(out, out + len, std::back_inserter(buffer_));
         buffer_.push_back(0);
         OutputDebugString(&buffer_[0]);
     }
 private:
+    boost::shared_ptr<boost::mutex> mutex_;
     std::vector<wchar_t> buffer_;
 };
 #endif

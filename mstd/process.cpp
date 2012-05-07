@@ -71,8 +71,34 @@ void execute_file(const boost::filesystem::wpath & path)
 #endif
 }
 
+#if BOOST_WINDOWS
+std::wstring escape(const std::wstring & input)
+{
+    if(input.empty())
+        return L"\"\"";
+    else {
+        bool quote = std::find(input.begin(), input.end(), ' ') != input.end() || std::find(input.begin(), input.end(), '\t') != input.end();
+
+        std::wstring result;
+        if(quote)
+            result += L'\"';
+        for(std::wstring::const_iterator i = input.begin(), end = input.end(); i != end; ++i)
+        {
+            if(*i == L'\"')
+                result += L'\\';
+            result += *i;
+        }   
+
+        if(quote)
+            result += L'\"';
+        return result;
+    }
+}
+#endif
+
 void execute_file(const boost::filesystem::wpath & path, const std::vector<std::wstring> & arguments)
 {
+#if !BOOST_WINDOWS
     std::string fname = apifname(path);
     std::vector<std::string> args;
     args.reserve(arguments.size());
@@ -90,6 +116,27 @@ void execute_file(const boost::filesystem::wpath & path, const std::vector<std::
         execv(fname.c_str(), &argv[0]);
         _exit(0);
     }
+#else
+    STARTUPINFOW si;
+    PROCESS_INFORMATION pi;
+    HANDLE ipipe = 0, opipe = 0;
+    CreatePipe(&ipipe, &opipe, 0, 0);
+    memset(&si, 0, sizeof(si));
+    si.hStdInput = ipipe;
+    si.hStdOutput = si.hStdError = opipe;
+    memset(&pi, 0, sizeof(pi));
+    si.cb = sizeof(si);
+    boost::filesystem::wpath parent = path;
+    parent.remove_filename();
+    std::wstring command = escape(wfname(path));
+    for(std::vector<std::wstring>::const_iterator i = arguments.begin(), end = arguments.end(); i != end; ++i)
+    {
+        command += L' ';
+        command += escape(*i);
+    }
+
+    CreateProcessW(NULL, const_cast<wchar_t*>(command.c_str()), NULL, NULL, true, 0, NULL, wfname(parent).c_str(), &si, &pi);    
+#endif
 }
 
 void make_executable(const boost::filesystem::wpath & path, bool user, bool group, bool other)
