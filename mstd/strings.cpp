@@ -5,10 +5,14 @@
 
 #include <boost/config.hpp>
 
+#if !defined(MSTD_USE_PBUFFER)
+
 #if !BOOST_WINDOWS && !__S3E__
 #  define MSTD_USE_PBUFFER 1
 #else
 #  define MSTD_USE_PBUFFER 0
+#endif
+
 #endif
 
 #if MSTD_USE_PBUFFER

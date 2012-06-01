@@ -48,7 +48,7 @@ private:
         }
     private:    
         typedef boost::mt19937 generator_type;
-        typedef boost::uniform_int<> distribution_type;
+        typedef boost::random::uniform_int_distribution<> distribution_type;
 
         const char * chars_;
         generator_type generator_;

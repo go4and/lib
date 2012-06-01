@@ -1,2 +1,4 @@
-build_msqlite_xcode
-lib
+/build_msqlite_xcode
+/lib
+/libs
+/obj

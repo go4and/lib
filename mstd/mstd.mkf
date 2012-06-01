@@ -1,5 +1,5 @@
 includepath .
-includepath /usr/local/boost
+includepath ../../marmalade/boost
 
 files
 {

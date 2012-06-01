@@ -22,6 +22,8 @@
 #include "linux32.hpp"
 #elif __x86_64__
 #include "linux64.hpp"
+#else
+#include "linux_common.hpp"
 #endif
 
 #else

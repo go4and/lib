@@ -71,7 +71,7 @@ private:
     } \
     /**/
 #else
-#define MLOG_DECLARE_LOGGER(name) namespace { mlog::Logger & logger = *static_cast<mlog::Logger*>(0); }
+#define MLOG_DECLARE_LOGGER(name) 
 #endif
 
 #if !MLOG_NO_LOGGING

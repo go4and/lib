@@ -3,7 +3,8 @@
 #include <limits>
 
 #include <boost/noncopyable.hpp>
-#include <boost/random.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 
 #include "config.hpp"
 
@@ -18,26 +19,24 @@ public:
 
     generator(boost::mt19937::result_type seed)
         : rng_(seed),
-          dist_(std::numeric_limits<result_type>::min(), std::numeric_limits<result_type>::max()),
-          impl_(&rng_, dist_) {}
+          dist_(std::numeric_limits<result_type>::min(), std::numeric_limits<result_type>::max())
+    {}
 
     generator()
         : rng_(seed()),
-          dist_(std::numeric_limits<result_type>::min(), std::numeric_limits<result_type>::max()),
-          impl_(&rng_, dist_) {}
+          dist_(std::numeric_limits<result_type>::min(), std::numeric_limits<result_type>::max())
+    {}
 
     result_type operator()()
     {
-        return impl_();
+        return dist_(rng_);
     }
 private:
     typedef boost::mt19937 generator_type;
-    typedef boost::uniform_int<result_type> distribution_type;
-    typedef boost::variate_generator<boost::mt19937*, boost::uniform_int<result_type> > implementation_type;
+    typedef boost::random::uniform_int_distribution<result_type> distribution_type;
 
     generator_type rng_;
     distribution_type dist_;
-    implementation_type impl_;
 };
 
 }
