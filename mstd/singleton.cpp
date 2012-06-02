@@ -31,7 +31,7 @@ void MSTD_STDCALL call_once(once_flag & flag, void (MSTD_STDCALL *f)())
             {
 #if BOOST_WINDOWS
                 SwitchToThread();
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) || defined(ANDROID)
                 sched_yield();
 #else
                 pthread_yield();
