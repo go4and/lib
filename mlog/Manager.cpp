@@ -207,7 +207,7 @@ public:
     {
     }
     
-    void operator()(const char * str, size_t len)
+    void operator()(LogLevel level, const char * str, size_t len)
     {
         size_t wr = fwrite(str, 1, len, handle_);
         BOOST_VERIFY(wr == len);
@@ -230,7 +230,7 @@ public:
     {
     }
 
-    void operator()(const char * out, size_t len)
+    void operator()(LogLevel level, const char * out, size_t len)
     {
         boost::lock_guard<boost::mutex> lock(*mutex_);
         buffer_.clear();
@@ -244,16 +244,42 @@ private:
 };
 #endif
 
+#if defined(ANDROID)
+android_LogPriority androidLogPriority[] =
+    { ANDROID_LOG_FATAL, ANDROID_LOG_FATAL, ANDROID_LOG_FATAL,
+      ANDROID_LOG_ERROR,
+      ANDROID_LOG_WARN,
+      ANDROID_LOG_INFO,
+      ANDROID_LOG_DEBUG,
+      ANDROID_LOG_VERBOSE,
+    };
+
+class AndroidLogDevice {
+public:
+    AndroidLogDevice(const std::string & tag)
+        : tag_(tag)
+    {
+    }
+
+    void operator()(LogLevel level, const char * out, size_t len)
+    {
+        __android_log_write(androidLogPriority[level], tag_.c_str(), out);
+    }
+private:
+    std::string tag_;
+};
+#endif
+
 class SyslogLogDevice {
 public:
-    void operator()(const char * out, size_t len)
+    void operator()(LogLevel level, const char * out, size_t len)
     {
     }
 };
 
 class NullLogDevice {
 public:
-    void operator()(const char * out, size_t len)
+    void operator()(LogLevel level, const char * out, size_t len)
     {
     }
 };
@@ -395,13 +421,13 @@ public:
         out << boost::posix_time::microsec_clock::local_time();
         out << " ==============" << std::endl;
         std::string message = out.str();
-        (*this)(message.c_str(), message.length());
+        (*this)(llNotice, message.c_str(), message.length());
     }
     
-    void operator()(const char * out, size_t len)
+    void operator()(LogLevel level, const char * out, size_t len)
     {
         boost::lock_guard<boost::mutex> guard(mutex_);
-        CFileLogDevice::operator ()(out, len);
+        CFileLogDevice::operator ()(level, out, len);
         current_ += len;
         checkLimit();
     }
@@ -461,9 +487,9 @@ public:
     explicit SharedDevice(F * f)
         : f_(f) {}
 
-    void operator()(const char * out, size_t len) const
+    void operator()(LogLevel level, const char * out, size_t len) const
     {
-        (*f_)(out, len);
+        (*f_)(level, out, len);
     }
 private:
     boost::shared_ptr<F> f_;
@@ -504,7 +530,16 @@ LogDevice * createDevice(const std::string & name, const std::string & value)
             boost::trim(args);
         }
         device = shared(new FileLogDevice(args, threshold, 5));
-    } else
+    }
+#if defined(ANDROID)
+    else if(boost::starts_with(value, "android_log("))
+    {
+        if(value[value.length() - 1] != ')')
+            BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Android log device syntax: android_log(tag)"));
+        device = AndroidLogDevice(value.substr(12, value.length() - 13));
+    }
+#endif
+    else
         BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown log device: " + value));
     
     return new LogDevice(name, device);
@@ -563,7 +598,7 @@ void Manager::setListener(LogLevel level, const Listener & listener)
     listener_ = listener;
 }
 
-void Manager::output(const char * logger, const mstd::pbuffer & buf)
+void Manager::output(const char * logger, const Buffer & buf)
 {
     if(realtime_)
     {
@@ -587,9 +622,9 @@ void Manager::output(const char * logger, const mstd::pbuffer & buf)
     }
 }
 
-void Manager::process(Devices & devices, const char * logger, const mstd::pbuffer & buf, Listener & listener, bool & listenerChecked)
+void Manager::process(Devices & devices, const char * logger, const Buffer & buf, Listener & listener, bool & listenerChecked)
 {
-    char * p = buf->ptr();
+    char * p = bufferData(buf);
     uint32_t group = *mstd::pointer_cast<uint32_t*>(p);
     p += sizeof(group);
     LogLevel level = *mstd::pointer_cast<LogLevel*>(p);
@@ -680,7 +715,9 @@ Manager::Manager()
       devices_(new Devices(1, DeviceGroup(1, LogDevicePtr(new LogDevice("console", CFileLogDevice(stdout)))))),
       threadStarted_(false), realtime_(false)
 {
+#if MLOG_USE_BUFFERS
     mstd::buffers::instance();
+#endif
     levelName(llError);
 }
 

@@ -4,34 +4,29 @@
 
 #include <sched.h>
 
-#define MSTD_DEFINE_ATOMICS(SIZE, SUFFIX) \
-template<> \
-inline size_to_int<SIZE>::type atomic_cas<SIZE>(volatile void* ptr, size_to_int<SIZE>::type value, size_to_int<SIZE>::type cmp) \
-{ \
-    return __sync_val_compare_and_swap(static_cast<volatile size_to_int<SIZE>::type *>(ptr), cmp, value); \
-} \
-\
-template<> \
-inline size_to_int<SIZE>::type atomic_add<SIZE>(volatile void* ptr, size_to_int<SIZE>::type value) \
-{ \
-   return __sync_fetch_and_add(static_cast<volatile size_to_int<SIZE>::type *>(ptr), value); \
-} \
-\
-template<> \
-inline size_to_int<SIZE>::type atomic_read_write<SIZE>(volatile void* ptr, size_to_int<SIZE>::type value) \
-{ \
-    typedef size_to_int<SIZE>::type value_type; \
-    value_type result; \
-    __asm__ __volatile__("lock\nxchg" SUFFIX " %0, %1" \
-                          : "=r"(result), "=m"(*static_cast<volatile value_type*>(ptr)) \
-                          : "0"(value) \
-                          : "memory"); \
-   return result; \
-}
-
 namespace mstd { namespace detail {
 
-inline void memory_fence() { __asm__ __volatile__("": : :"memory"); }
+template<size_t Size>
+struct atomic_helper {
+    typedef typename size_to_int<Size>::type int_type;
+
+    static int_type add(volatile int_type * ptr, int_type value)
+    {
+        return __sync_fetch_and_add(ptr, value);
+    }
+
+    static int_type cas(volatile int_type * ptr, int_type newval, int_type oldval)
+    {
+        return __sync_val_compare_and_swap(ptr, oldval, newval);
+    }
+
+    static int_type read_write(volatile int_type * ptr, int_type value)
+    {
+        return __sync_lock_test_and_set(ptr, value);
+    }
+};
+
+inline void memory_fence() { __sync_synchronize(); }
 
 inline void yield()
 {
@@ -41,7 +36,7 @@ inline void yield()
 inline void pause(boost::uint32_t delay)
 {
     while(delay--)
-       __asm__ __volatile__("pause;");
+       __sync_synchronize();
 }
 
 template<size_t size>
@@ -49,14 +44,14 @@ inline typename size_to_int<size>::type atomic_read(const volatile void * ptr)
 {
     typedef typename size_to_int<size>::type value_type;
     value_type result = *static_cast<const volatile value_type*>(ptr);
-    memory_fence();
+    __sync_synchronize();
     return result;
 }
 
 template<size_t size>
 inline void atomic_write(volatile void * ptr, typename size_to_int<size>::type value)
 {
-    memory_fence();
+    __sync_synchronize();
     *static_cast<volatile typename size_to_int<size>::type*>(ptr) = value;
 }
 

@@ -15,13 +15,19 @@
 
 #include <mstd/atomic.hpp>
 #include <mstd/cstdint.hpp>
+
+#include "Config.h"
+
+#if MLOG_USE_BUFFERS
 #include <mstd/buffers.hpp>
+#else
+#include <mstd/rc_buffer.hpp>
+#endif
+
 #include <mstd/exception.hpp>
 #include <mstd/reference_counter.hpp>
 #include <mstd/singleton.hpp>
 #endif
-
-#include "Config.h"
 
 #include "Defines.h"
 
@@ -75,7 +81,7 @@ class Logger;
 
 class MLOG_DECL LogDevice : public LogParticipant, public mstd::reference_counter<LogDevice> {
 public:
-    typedef boost::function<void(const char * msg, size_t len)> Device;
+    typedef boost::function<void(LogLevel level, const char * msg, size_t len)> Device;
 
     explicit LogDevice(const std::string & name, const Device & device)
         : LogParticipant(llDebug), name_(name), device_(device) {}
@@ -88,7 +94,7 @@ public:
     void output(LogLevel level, const char * msg, size_t len)
     {
         if(enabled(level))
-            device_(msg, len);
+            device_(level, msg, len);
     }
 private:
     std::string name_;
@@ -106,7 +112,7 @@ public:
 
     void setAppName(const char * appname);
     void setup(const std::string & expr);
-    void output(const char * logger, const mstd::pbuffer & buf);
+    void output(const char * logger, const Buffer & buf);
     void setListener(LogLevel level, const Listener & listener);
 private:
     Manager();
@@ -128,9 +134,9 @@ private:
     typedef std::vector<LogDevicePtr> DeviceGroup;
     typedef std::vector<DeviceGroup> Devices;
     typedef boost::shared_ptr<Devices> SharedDevices;
-    typedef std::vector<std::pair<const char *, mstd::pbuffer> > Queue;
+    typedef std::vector<std::pair<const char *, Buffer> > Queue;
 
-    void process(Devices & devices, const char * logger, const mstd::pbuffer & buffer, Listener & listener, bool & listenerChecked);
+    void process(Devices & devices, const char * logger, const Buffer & buffer, Listener & listener, bool & listenerChecked);
 
     detail::LoggerImpl rootLogger_;
     Loggers loggers_;

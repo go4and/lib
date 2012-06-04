@@ -12,6 +12,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/size_t.hpp>
 
+#include <boost/static_assert.hpp>
+
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 
@@ -43,7 +45,7 @@ struct atomic_base {
     atomic_base(Value value)
         : value_(value) {}
 
-    Value value_;
+    volatile Value value_;
 };
 
 #if __GNUC__ || __SUNPRO_CC
@@ -108,7 +110,7 @@ public:
     {
         typedef typename atomic_size_helper<value_type, boost::is_integral<value_type>::value>::type size;
 
-        return value_type(atomic_add<sizeof(value_type)>(&this->value_, value * size::value));
+        return value_type(helper::add(static_cast<volatile int_type*>(static_cast<volatile void*>(&this->value_)), value * size::value));
     }
 
     value_type increment() {
@@ -122,12 +124,13 @@ public:
 
     value_type read_write(value_type value)
     {
-        return value_type(atomic_read_write<sizeof(value_type)>(&this->value_, word_type(value)));
+        return value_type(helper::read_write(static_cast<volatile int_type*>(static_cast<volatile void*>(&this->value_)), word_type(value)));
     }
 
     value_type cas(value_type value, value_type cmp)
     {
-        return value_type(atomic_cas<sizeof(value_type)>(&this->value_, word_type(value), word_type(cmp)));
+        BOOST_STATIC_ASSERT(sizeof(int_type) == sizeof(this->value_));
+        return value_type(helper::cas(static_cast<volatile int_type*>(static_cast<volatile void*>(&this->value_)), word_type(value), word_type(cmp)));
     }
 
     operator value_type() const volatile
@@ -183,6 +186,7 @@ public:
 private:
     typedef typename size_to_word<sizeof(value_type)>::type word_type;
     typedef typename size_to_int<sizeof(value_type)>::type int_type;
+    typedef typename detail::atomic_helper<sizeof(value_type)> helper;
 };
 
 }

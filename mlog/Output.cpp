@@ -87,15 +87,20 @@ public:
         std::streambuf::setp(begin, begin + bufferSize);
     }
 
-    mstd::pbuffer buffer(uint32_t group, mlog::LogLevel level)
+    mlog::Buffer buffer(uint32_t group, mlog::LogLevel level)
     {
         size_t size = 0;
         for(Buffer * c = buffer_.next; c; c = c->next)
             ++size;
         size_t pos = pptr() - &cur_->data[0];
         size = size * bufferSize + pos;
-        mstd::pbuffer result = mstd::buffers::instance().take(size + sizeof(size_t) + sizeof(group) + sizeof(level));
-        char * p = result->ptr();
+        size_t resultSize = size + sizeof(size_t) + sizeof(group) + sizeof(level) + 1;
+#if MLOG_USE_BUFFERS
+        mstd::pbuffer result = mstd::buffers::instance().take(resultSize);
+#else
+        mstd::rc_buffer result(resultSize);
+#endif
+        char * p = bufferData(result);
         *mstd::pointer_cast<uint32_t*>(p) = group;
         p += sizeof(group);
         *mstd::pointer_cast<LogLevel*>(p) = level;
@@ -106,13 +111,15 @@ public:
         {
             if(!c->next)
             {
-                memcpy(p, &c->data[0], pos);
+                memcpy(p, &c->data[0], pos);                
+                p += pos;
                 break;
             } else {
                 memcpy(p, &c->data[0], bufferSize);
                 p += bufferSize;
             }
         }
+        *p = 0;
         return result;
     }
 private:

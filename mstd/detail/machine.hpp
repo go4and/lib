@@ -18,13 +18,7 @@
 
 #elif __linux__ || __FreeBSD__ || __APPLE__
 
-#if __i386__
-#include "linux32.hpp"
-#elif __x86_64__
-#include "linux64.hpp"
-#else
 #include "linux_common.hpp"
-#endif
 
 #else
 
@@ -53,7 +47,7 @@ inline typename size_to_int<S>::type generic_modify(volatile void *ptr, F f)
     while(true)
     {
         result = *static_cast<volatile value_type*>(ptr);
-        if(atomic_cas<S>(ptr, f(result), result) == result) 
+        if(atomic_helper<S>::cas(static_cast<volatile value_type*>(ptr), f(result), result) == result) 
             break;
         b.wait();
     }
@@ -74,18 +68,6 @@ public:
 private:
     Value value_;
 };
-
-template<size_t size>
-inline typename size_to_int<size>::type atomic_add(volatile void * ptr, typename size_to_int<size>::type value)
-{
-    return generic_modify<size>(ptr, Append<typename size_to_int<size>::type>(value));
-}
-
-template<size_t size>
-inline typename size_to_int<size>::type atomic_read_write(volatile void * ptr, typename size_to_int<size>::type value)
-{
-    return generic_modify<size>(ptr, Set<typename size_to_int<size>::type>(value));
-}
 
 #undef MSTD_MACHINE_COMMON_PROCESSING
 

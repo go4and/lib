@@ -41,9 +41,14 @@ namespace detail {
 
 class MSTD_DECL buffer : public boost::noncopyable, public mstd::reference_counter<buffer, detail::buffer_releaser> {
 public:
-    char * ptr()
+    inline char * ptr()
     {
         return mstd::pointer_cast<char*>(this) + sizeof(*this);
+    }
+
+    inline char * data()
+    {
+        return ptr();
     }
 
     size_t buffer_size() const;    

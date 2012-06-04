@@ -51,12 +51,25 @@
 
 #include <boost/thread.hpp>
 
+#ifdef ANDROID
+#include <android/log.h>
+#endif
+
+#include "Config.h"
+
 #include <mstd/atomic.hpp>
+
+#if MLOG_USE_BUFFERS
 #include <mstd/buffers.hpp>
+#else
+#include <mstd/rc_buffer.hpp>
+#endif
+
 #include <mstd/cstdint.hpp>
 #include <mstd/exception.hpp>
 #include <mstd/filesystem.hpp>
 #include <mstd/itoa.hpp>
+#include <mstd/pointer_cast.hpp>
 #include <mstd/reference_counter.hpp>
 #include <mstd/reverse_lock.hpp>
 #include <mstd/singleton.hpp>

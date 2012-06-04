@@ -11,15 +11,6 @@ template<> struct size_to_int<4> { typedef boost::uint32_t type; };
 template<> struct size_to_int<8> { typedef boost::uint64_t type; };
 
 template<size_t size>
-typename size_to_int<size>::type atomic_add(volatile void *, typename size_to_int<size>::type);
-
-template<size_t size>
-typename size_to_int<size>::type atomic_read_write(volatile void *, typename size_to_int<size>::type);
-
-template<size_t size>
-typename size_to_int<size>::type atomic_cas(volatile void *, typename size_to_int<size>::type, typename size_to_int<size>::type);
-
-template<size_t size>
 typename size_to_int<size>::type atomic_read(const volatile void *);
 
 template<size_t size>
