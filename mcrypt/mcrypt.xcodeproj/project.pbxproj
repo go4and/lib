@@ -28,9 +28,26 @@
 		C3389D2D1353839C0010E3BF /* TEA.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D181353839C0010E3BF /* TEA.h */; };
 		C3389D2E1353839C0010E3BF /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D191353839C0010E3BF /* Utils.cpp */; };
 		C3389D2F1353839C0010E3BF /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D1A1353839C0010E3BF /* Utils.h */; };
-		C3B8C2B41546BCE100E14219 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B8C2B31546BCE100E14219 /* mstd.dylib */; };
+		C3B64CCD157C65DA00F20E55 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B64CCA157C659500F20E55 /* mstd.dylib */; };
 		C3DB2FA61394BA9B00A8CB1B /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C3B64CC9157C659500F20E55 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3B64CC5157C659500F20E55 /* mstd.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C32455981352A6B900999158;
+			remoteInfo = mstd;
+		};
+		C3B64CCB157C659E00F20E55 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3B64CC5157C659500F20E55 /* mstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C32455971352A6B900999158;
+			remoteInfo = mstd;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		C3389CEB135383290010E3BF /* mcrypt.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mcrypt.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +72,7 @@
 		C3389D181353839C0010E3BF /* TEA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEA.h; sourceTree = SOURCE_ROOT; };
 		C3389D191353839C0010E3BF /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = SOURCE_ROOT; };
 		C3389D1A1353839C0010E3BF /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = SOURCE_ROOT; };
+		C3B64CC5157C659500F20E55 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = "<group>"; };
 		C3B8C2B31546BCE100E14219 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = mstd.dylib; path = ../../_build/Debug/mstd.dylib; sourceTree = "<group>"; };
 		C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.1.0.0.dylib; path = /opt/local/lib/libcrypto.1.0.0.dylib; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
@@ -64,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3B8C2B41546BCE100E14219 /* mstd.dylib in Frameworks */,
+				C3B64CCD157C65DA00F20E55 /* mstd.dylib in Frameworks */,
 				C3DB2FA61394BA9B00A8CB1B /* libcrypto.1.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,9 +136,18 @@
 			path = mcrypt;
 			sourceTree = "<group>";
 		};
+		C3B64CC6157C659500F20E55 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3B64CCA157C659500F20E55 /* mstd.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		C3B8C2B21546BCD100E14219 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				C3B64CC5157C659500F20E55 /* mstd.xcodeproj */,
 				C3B8C2B31546BCE100E14219 /* mstd.dylib */,
 				C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */,
 			);
@@ -163,6 +190,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C3B64CCC157C659E00F20E55 /* PBXTargetDependency */,
 			);
 			name = mcrypt;
 			productName = mcrypt;
@@ -188,12 +216,28 @@
 			mainGroup = C3389CE0135383290010E3BF;
 			productRefGroup = C3389CEC135383290010E3BF /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C3B64CC6157C659500F20E55 /* Products */;
+					ProjectRef = C3B64CC5157C659500F20E55 /* mstd.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				C3389CEA135383290010E3BF /* mcrypt */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C3B64CCA157C659500F20E55 /* mstd.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = mstd.dylib;
+			remoteRef = C3B64CC9157C659500F20E55 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C3389CE7135383290010E3BF /* Sources */ = {
@@ -213,6 +257,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C3B64CCC157C659E00F20E55 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = mstd;
+			targetProxy = C3B64CCB157C659E00F20E55 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C3389CF7135383290010E3BF /* Debug */ = {

@@ -373,7 +373,7 @@ private:
 
     inline void ensure(size_t len)
     {
-        if(tail_->end() - out_ < len)
+        if(static_cast<size_t>(tail_->end() - out_) < len)
         {
             if(out_ != tail_->end())
                 *out_ = 0xff;
