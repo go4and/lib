@@ -20,6 +20,14 @@
 #  endif
 #endif
 
+#if !defined(MLOG_USE_MARKUP)
+#  if !BOOST_WINDOWS && !defined(__APPLE__) && !defined(ANDROID)
+#    define MLOG_USE_MARKUP 1
+#  else
+#    define MLOG_USE_MARKUP 0
+#  endif
+#endif
+
 #if MLOG_USE_BUFFERS
 #include <mstd/buffers.hpp>
 namespace mlog {

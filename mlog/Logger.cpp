@@ -2,12 +2,6 @@
 
 #if !MLOG_NO_LOGGING
 
-#if !BOOST_WINDOWS && !defined(__APPLE__)
-#define MLOG_USE_MARKUP 1
-#else
-#define MLOG_USE_MARKUP 0
-#endif
-
 #include "Logger.h"
 
 #include "Utils.h"
