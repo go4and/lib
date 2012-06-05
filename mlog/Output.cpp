@@ -173,7 +173,7 @@ void OStreamPool::release(std::ostream * stream)
 
 void Output::send(uint32_t group, LogLevel level, const char * logger)
 {
-#if !defined(BOOST_WINDOWS) && !defined(__APPLE__)
+#if MLOG_USE_MARKUP
     (*out_) << "\033[0m";
 #endif
     (*out_) << '\n';
