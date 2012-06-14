@@ -33,7 +33,7 @@ wxPoint getTextSize(wxDC & canvas, const wxString & str)
 
 long getTextHeight(wxDC & canvas)
 {
-    return getTextSize(canvas, L" ").y - 6;
+    return getTextSize(canvas, L" ").y - 2;
 }
 
 #if BOOST_WINDOWS
