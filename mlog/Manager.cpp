@@ -270,6 +270,25 @@ private:
 };
 #endif
 
+#if defined(__APPLE__)
+void nslogWrite(LogLevel level, const char * out, size_t len);
+
+class NSLogDevice {
+public:
+    NSLogDevice()
+    {
+    }
+
+    void operator()(LogLevel level, const char * out, size_t len)
+    {
+        nslogWrite(level, out, len);
+    }
+private:
+    boost::shared_ptr<boost::mutex> mutex_;
+    std::vector<wchar_t> buffer_;
+};
+#endif
+
 class SyslogLogDevice {
 public:
     void operator()(LogLevel level, const char * out, size_t len)
@@ -531,6 +550,12 @@ LogDevice * createDevice(const std::string & name, const std::string & value)
         }
         device = shared(new FileLogDevice(args, threshold, 5));
     }
+#if defined(__APPLE__)
+    else if(value == "nslog()")
+    {
+        device = NSLogDevice();
+    }
+#endif
 #if defined(ANDROID)
     else if(boost::starts_with(value, "android_log("))
     {

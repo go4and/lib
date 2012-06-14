@@ -6,6 +6,8 @@ LOCAL_MODULE := mlog
 
 LOCAL_CFLAGS := -DBOOST_SYSTEM_NO_DEPRECATED -DMLOG_USE_BUFFERS=0 -D__GLIBC__
 
+include ../AndroidLogs.mk
+
 LOCAL_CPP_FEATURES := exceptions rtti
 
 LOCAL_C_INCLUDES := $(BOOST_ROOT) ..

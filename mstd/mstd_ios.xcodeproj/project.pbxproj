@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		C33180F2156B95C60067468B /* math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C33180F1156B95C60067468B /* math.hpp */; };
 		C35DD9E6156BA240003316BF /* linux_common.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C35DD9DE156BA240003316BF /* linux_common.hpp */; };
-		C35DD9E7156BA240003316BF /* linux32.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C35DD9DF156BA240003316BF /* linux32.hpp */; };
-		C35DD9E8156BA240003316BF /* linux64.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C35DD9E0156BA240003316BF /* linux64.hpp */; };
 		C35DD9E9156BA240003316BF /* machine_fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C35DD9E1156BA240003316BF /* machine_fwd.hpp */; };
 		C35DD9EA156BA240003316BF /* machine.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C35DD9E2156BA240003316BF /* machine.hpp */; };
 		C35DD9EB156BA240003316BF /* waiter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C35DD9E3156BA240003316BF /* waiter.hpp */; };
@@ -23,6 +21,9 @@
 		C38F34F8156BBAD5005036B0 /* enum_utils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C38F34F5156BBAD4005036B0 /* enum_utils.hpp */; };
 		C38F34F9156BBAD5005036B0 /* filesystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C38F34F6156BBAD4005036B0 /* filesystem.cpp */; };
 		C38F34FA156BBAD5005036B0 /* filesystem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C38F34F7156BBAD4005036B0 /* filesystem.hpp */; };
+		C3D4507B15846189002107A6 /* rc_buffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3D4507815846189002107A6 /* rc_buffer.hpp */; };
+		C3D4507C15846189002107A6 /* singleton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3D4507915846189002107A6 /* singleton.cpp */; };
+		C3D4507D15846189002107A6 /* singleton.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3D4507A15846189002107A6 /* singleton.hpp */; };
 		C3EFF53E156AD4630069B5BD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3EFF53D156AD4630069B5BD /* Foundation.framework */; };
 		C3EFF558156AD5120069B5BD /* strings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EFF555156AD5120069B5BD /* strings.cpp */; };
 		C3EFF559156AD5120069B5BD /* strings.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3EFF556156AD5120069B5BD /* strings.hpp */; };
@@ -38,8 +39,6 @@
 /* Begin PBXFileReference section */
 		C33180F1156B95C60067468B /* math.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = SOURCE_ROOT; };
 		C35DD9DE156BA240003316BF /* linux_common.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = linux_common.hpp; path = detail/linux_common.hpp; sourceTree = "<group>"; };
-		C35DD9DF156BA240003316BF /* linux32.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = linux32.hpp; path = detail/linux32.hpp; sourceTree = "<group>"; };
-		C35DD9E0156BA240003316BF /* linux64.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = linux64.hpp; path = detail/linux64.hpp; sourceTree = "<group>"; };
 		C35DD9E1156BA240003316BF /* machine_fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = machine_fwd.hpp; path = detail/machine_fwd.hpp; sourceTree = "<group>"; };
 		C35DD9E2156BA240003316BF /* machine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = machine.hpp; path = detail/machine.hpp; sourceTree = "<group>"; };
 		C35DD9E3156BA240003316BF /* waiter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = waiter.hpp; path = detail/waiter.hpp; sourceTree = "<group>"; };
@@ -52,6 +51,9 @@
 		C38F34F5156BBAD4005036B0 /* enum_utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = enum_utils.hpp; sourceTree = SOURCE_ROOT; };
 		C38F34F6156BBAD4005036B0 /* filesystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filesystem.cpp; sourceTree = SOURCE_ROOT; };
 		C38F34F7156BBAD4005036B0 /* filesystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = filesystem.hpp; sourceTree = SOURCE_ROOT; };
+		C3D4507815846189002107A6 /* rc_buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rc_buffer.hpp; sourceTree = SOURCE_ROOT; };
+		C3D4507915846189002107A6 /* singleton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = singleton.cpp; sourceTree = SOURCE_ROOT; };
+		C3D4507A15846189002107A6 /* singleton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = singleton.hpp; sourceTree = SOURCE_ROOT; };
 		C3EFF53A156AD4630069B5BD /* libmstd_ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmstd_ios.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EFF53D156AD4630069B5BD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C3EFF555156AD5120069B5BD /* strings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = strings.cpp; sourceTree = SOURCE_ROOT; };
@@ -81,8 +83,6 @@
 			isa = PBXGroup;
 			children = (
 				C35DD9DE156BA240003316BF /* linux_common.hpp */,
-				C35DD9DF156BA240003316BF /* linux32.hpp */,
-				C35DD9E0156BA240003316BF /* linux64.hpp */,
 				C35DD9E1156BA240003316BF /* machine_fwd.hpp */,
 				C35DD9E2156BA240003316BF /* machine.hpp */,
 				C35DD9E3156BA240003316BF /* waiter.hpp */,
@@ -96,7 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				C35DD9EF156BA244003316BF /* detail */,
-				C3EFF53F156AD4630069B5BD /* mstd_ios */,
+				C3EFF53F156AD4630069B5BD /* Sources */,
 				C3EFF53C156AD4630069B5BD /* Frameworks */,
 				C3EFF53B156AD4630069B5BD /* Products */,
 			);
@@ -118,9 +118,12 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		C3EFF53F156AD4630069B5BD /* mstd_ios */ = {
+		C3EFF53F156AD4630069B5BD /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C3D4507815846189002107A6 /* rc_buffer.hpp */,
+				C3D4507915846189002107A6 /* singleton.cpp */,
+				C3D4507A15846189002107A6 /* singleton.hpp */,
 				C38F34F5156BBAD4005036B0 /* enum_utils.hpp */,
 				C38F34F6156BBAD4005036B0 /* filesystem.cpp */,
 				C38F34F7156BBAD4005036B0 /* filesystem.hpp */,
@@ -139,6 +142,7 @@
 				C3EFF556156AD5120069B5BD /* strings.hpp */,
 				C3EFF557156AD5120069B5BD /* utf8.hpp */,
 			);
+			name = Sources;
 			path = mstd_ios;
 			sourceTree = "<group>";
 		};
@@ -156,8 +160,6 @@
 				C3EFF566156AD6150069B5BD /* itoa.hpp in Headers */,
 				C33180F2156B95C60067468B /* math.hpp in Headers */,
 				C35DD9E6156BA240003316BF /* linux_common.hpp in Headers */,
-				C35DD9E7156BA240003316BF /* linux32.hpp in Headers */,
-				C35DD9E8156BA240003316BF /* linux64.hpp in Headers */,
 				C35DD9E9156BA240003316BF /* machine_fwd.hpp in Headers */,
 				C35DD9EA156BA240003316BF /* machine.hpp in Headers */,
 				C35DD9EB156BA240003316BF /* waiter.hpp in Headers */,
@@ -167,6 +169,8 @@
 				C35DD9F7156BB1C0003316BF /* threads.hpp in Headers */,
 				C38F34F8156BBAD5005036B0 /* enum_utils.hpp in Headers */,
 				C38F34FA156BBAD5005036B0 /* filesystem.hpp in Headers */,
+				C3D4507B15846189002107A6 /* rc_buffer.hpp in Headers */,
+				C3D4507D15846189002107A6 /* singleton.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +232,7 @@
 				C35DD9F2156BAB55003316BF /* random.cpp in Sources */,
 				C35DD9F6156BB1C0003316BF /* threads.cpp in Sources */,
 				C38F34F9156BBAD5005036B0 /* filesystem.cpp in Sources */,
+				C3D4507C15846189002107A6 /* singleton.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

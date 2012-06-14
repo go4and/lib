@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#include "Defines.h"
+
 #include <Foundation/Foundation.h>
 
 namespace mlog {
@@ -22,6 +24,15 @@ std::string documentsFolder()
     std::string result = doDocumentsFolder();
     [pool release];
     return result;
+}
+
+void nslogWrite(LogLevel level, const char * out, size_t len)
+{
+    @autoreleasepool {
+        NSString * string = [[NSString alloc] initWithBytes:out length:len encoding:NSUTF8StringEncoding];
+        NSLog(@"%@", string);
+        [string release];
+    }
 }
 
 }

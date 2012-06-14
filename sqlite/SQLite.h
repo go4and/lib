@@ -76,6 +76,7 @@ public:
     void bindInt64(int index, int64_t value);
     void bindInt(int index, int32_t value);
     void bindString(int index, const std::string & value);
+    void bindString(int index, const char * value);
     void bindBlob(int index, const char * data, int len);
     inline void bindBlob(int index, const Blob & blob) { bindBlob(index, blob.data, blob.len); }
     

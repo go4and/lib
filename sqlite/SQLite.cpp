@@ -231,6 +231,11 @@ void Statement::bindInt64(int index, int64_t value)
     sqlite3_bind_int64(handle_, index, value);
 }
 
+void Statement::bindString(int index, const char * value)
+{
+    sqlite3_bind_text(handle_, index, value, strlen(value), SQLITE_STATIC);
+}
+
 void Statement::bindString(int index, const std::string & value)
 {
     sqlite3_bind_text(handle_, index, value.c_str(), value.length(), SQLITE_STATIC);
