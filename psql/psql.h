@@ -338,7 +338,9 @@ public:
         addImpl(mstd::hton(value));
     }
 
-    void addParam(bool value)
+    template<class T>
+    typename boost::enable_if<boost::is_same<T, bool>, void>::type
+    addParam(T value)
     {
         addImpl(static_cast<uint8_t>(value));
     }
