@@ -358,8 +358,14 @@ public:
         addArray(value.empty() ? 0 : &value[0], value.size());
     }
 
-    void addArray(const std::pair<const char*, const char*> * value, size_t count);
-    void addArray(const std::string * value, size_t count);
+    template<class T>
+    void addArray(const std::vector<T> & value, Oid oid)
+    {
+        addArray(value.empty() ? 0 : &value[0], value.size(), oid);
+    }
+
+    void addArray(const std::pair<const char*, const char*> * value, size_t count, Oid oid = oidText);
+    void addArray(const std::string * value, size_t count, Oid oid = oidText);
     void addArray(const boost::int64_t * value, size_t count);
     void addArray(const boost::int32_t * value, size_t count);
     void addArray(const boost::int16_t * value, size_t count);
@@ -436,5 +442,7 @@ class OidTag;
 typedef boost::error_info<OidTag, Oid> OidInfo;
 class ExpectedOidTag;
 typedef boost::error_info<ExpectedOidTag, Oid> ExpectedOidInfo;
+class ColumnTag;
+typedef boost::error_info<ColumnTag, size_t> ColumnInfo;
 
 }

@@ -203,7 +203,7 @@
 		C3389CE2135383290010E3BF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = IP;
 			};
 			buildConfigurationList = C3389CE5135383290010E3BF /* Build configuration list for PBXProject "mcrypt" */;
@@ -337,6 +337,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				LD_DYLIB_INSTALL_NAME = "@executable_path/$(TARGET_NAME).dylib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -348,6 +349,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				LD_DYLIB_INSTALL_NAME = "@executable_path/$(TARGET_NAME).dylib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

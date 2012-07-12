@@ -453,7 +453,7 @@ char * ParametricExecution::allocBuffer(size_t size)
     return result + sizeof(void*);
 }
 
-void ParametricExecution::addArray(const std::pair<const char*, const char*> * value, size_t size)
+void ParametricExecution::addArray(const std::pair<const char*, const char*> * value, size_t size, Oid oid)
 {
     typedef const std::pair<const char*, const char*> * iterator;
 
@@ -468,7 +468,7 @@ void ParametricExecution::addArray(const std::pair<const char*, const char*> * v
 
     write4(out, 1);
     write4(out, 1);
-    write4(out, psql::oidText);
+    write4(out, oid);
     write4(out, size);
     write4(out, 1);
 
@@ -483,7 +483,7 @@ void ParametricExecution::addArray(const std::pair<const char*, const char*> * v
     addParam(temp, out - temp);
 }
 
-void ParametricExecution::addArray(const std::string * value, size_t size)
+void ParametricExecution::addArray(const std::string * value, size_t size, Oid oid)
 {
     typedef const std::string * iterator;
 
@@ -498,7 +498,7 @@ void ParametricExecution::addArray(const std::string * value, size_t size)
 
     write4(out, 1);
     write4(out, 1);
-    write4(out, psql::oidText);
+    write4(out, oid);
     write4(out, size);
     write4(out, 1);
 
@@ -644,30 +644,35 @@ const void * ResultRowRef::raw(size_t index) const
     return PQgetvalue(result_, index_, index);
 }
 
+namespace {
+
+inline void checkOid(PGresult * result, size_t index, Oid expectedOid)
+{
+    Oid oid = PQftype(result, index);
+    if(oid != expectedOid)
+        BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidInt32) << ColumnInfo(index));
+}
+
+}
+
 boost::int16_t ResultRowRef::asInt16(size_t index) const
 {
     const void * data = PQgetvalue(result_, index_, index);
-    Oid oid = PQftype(result_, index);
-    if(oid != oidInt16)
-        BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidInt16));
+    checkOid(result_, index, oidInt16);
     return mstd::ntoh(*static_cast<const boost::int16_t*>(data));
 }
 
 boost::int32_t ResultRowRef::asInt32(size_t index) const
 {
     const void * data = PQgetvalue(result_, index_, index);
-    Oid oid = PQftype(result_, index);
-    if(oid != oidInt32)
-        BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidInt32));
+    checkOid(result_, index, oidInt32);
     return mstd::ntoh(*static_cast<const boost::int32_t*>(data));
 }
 
 boost::int64_t ResultRowRef::asInt64(size_t index) const
 {
     const void * data = PQgetvalue(result_, index_, index);
-    Oid oid = PQftype(result_, index);
-    if(oid != oidInt64)
-        BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidInt64));
+    checkOid(result_, index, oidInt64);
     return mstd::ntoh(*static_cast<const boost::int64_t*>(data));
 }
 
@@ -676,16 +681,14 @@ const char * ResultRowRef::asCString(size_t index) const
     const void * data = PQgetvalue(result_, index_, index);
     Oid oid = PQftype(result_, index);
     if(oid != oidText && oid != oidVarChar)
-        BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidText));
+        BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidText) << ColumnInfo(index));
     return static_cast<const char*>(data);
 }
 
 boost::posix_time::ptime ResultRowRef::asTime(size_t index) const
 {
     const void * data = PQgetvalue(result_, index_, index);
-    Oid oid = PQftype(result_, index);
-    if(oid != oidTimestamp)
-        BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidTimestamp));
+    checkOid(result_, index, oidTimestamp);
     int64_t value = mstd::ntoh(*static_cast<const boost::int64_t*>(data));
     int64_t mul = (boost::posix_time::microseconds::traits_type::res_adjust() / 1000000);
     return timeStart + boost::posix_time::time_duration(0, 0, 0, value * mul);
@@ -694,9 +697,7 @@ boost::posix_time::ptime ResultRowRef::asTime(size_t index) const
 ByteArray ResultRowRef::asArray(size_t index) const
 {
     const void * data = PQgetvalue(result_, index_, index);
-    Oid oid = PQftype(result_, index);
-    if(oid != oidByteArray)
-        BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidByteArray));
+    checkOid(result_, index, oidByteArray);
     return ByteArray(PQgetlength(result_, index_, index), static_cast<const char*>(data));
 }
 

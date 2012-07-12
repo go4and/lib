@@ -151,7 +151,7 @@
 		C3389D3E135388790010E3BF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = IP;
 			};
 			buildConfigurationList = C3389D41135388790010E3BF /* Build configuration list for PBXProject "psql" */;

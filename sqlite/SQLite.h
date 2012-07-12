@@ -50,10 +50,24 @@ private:
     std::string message_;
 };
 
+inline std::ostream & operator<<(std::ostream & out, const ErrorCode & ec)
+{
+    if(ec)
+        return out << "{err=" << ec.err() << ",message=" << ec.message() << '}';
+    else
+        return out << "{no error}";
+}
+
 struct Blob {
     const char * data;
     int len;
 };
+
+inline Blob blob(const char * data, int len)
+{
+    Blob result = { data, len };
+    return result;
+}
 
 class Statement : private boost::noncopyable {
 public:

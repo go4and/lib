@@ -133,5 +133,33 @@ typedef bool_translator_base<wchar_t> wbool_translator;
 
 void convert(const boost::property_tree::ptree & in, boost::property_tree::wptree & out);
 void convert(const boost::property_tree::wptree & in, boost::property_tree::ptree & out);
+void dumpTree(std::ostream & out, const boost::property_tree::ptree & tree, int ident = 0);
+void dumpTree(std::ostream & out, const boost::property_tree::wptree & tree, int ident = 0);
+
+template<class PTree>
+class PTreeDump {
+public:
+    explicit PTreeDump(const PTree & tree)
+        : tree_(tree)
+    {
+    }
+
+    void dump(std::ostream & out) const
+    {
+        dumpTree(out, tree_);
+    }
+private:
+    const PTree & tree_;
+};
+
+template<class PTree>
+std::ostream & operator<<(std::ostream & out, const PTreeDump<PTree> & dump)
+{
+    dump.dump(out);
+    return out;
+}
+
+inline PTreeDump<boost::property_tree::ptree> dump(const boost::property_tree::ptree & tree) { return PTreeDump<boost::property_tree::ptree>(tree); }
+inline PTreeDump<boost::property_tree::wptree> dump(const boost::property_tree::wptree & tree) { return PTreeDump<boost::property_tree::wptree>(tree); }
 
 }

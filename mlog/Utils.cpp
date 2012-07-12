@@ -63,12 +63,12 @@ void OutNow::operator ()(std::wostream & out) const
     outNow(out);
 }
 
-void setup(const char * variable, const char * appname)
+bool setup(const char * variable, const char * appname)
 {
-    setupFromFile(getenv(variable), appname);
+    return setupFromFile(getenv(variable), appname);
 }
     
-void setupFromFile(const char * filename, const char * appname)
+bool setupFromFile(const char * filename, const char * appname)
 {
     Manager & man = Manager::instance();
     man.setAppName(appname);
@@ -91,8 +91,10 @@ void setupFromFile(const char * filename, const char * appname)
                     } catch(std::exception &) {
                     }
             }
+            return true;
         }
     }
+    return false;
 }
 
 }

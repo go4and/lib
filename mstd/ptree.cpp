@@ -24,4 +24,18 @@ void convert(const boost::property_tree::wptree & in, boost::property_tree::ptre
     }
 }
 
+void dumpTree(std::ostream & out, const boost::property_tree::ptree & tree, int ident)
+{
+    if(!tree.data().empty())
+        out << ": '" << tree.data() << "'";
+    out << std::endl;
+    for(boost::property_tree::ptree::const_iterator i = tree.begin(), end = tree.end(); i != end; ++i)
+    {
+        for(int j = 0; j != ident; ++j)
+            out << ' ';
+        out << '"' << i->first << '"';
+        dumpTree(out, i->second, ident + 2);
+    }
+}
+
 }

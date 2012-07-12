@@ -54,6 +54,12 @@ void putString(std::streambuf * buf, const std::string & str)
 
 #define PUT_ARRAY(t) buf->sputn(t, sizeof(t) - 1)
 
+#if MLOG_USE_MARKUP
+#  define PUT_MARKUP_ARRAY(t) PUT_ARRAY(t)
+#else
+#  define PUT_MARKUP_ARRAY(t)
+#endif
+
 }
 
 void Logger::outputHeader(std::ostream & out, mlog::LogLevel level)
@@ -68,34 +74,24 @@ void Logger::outputHeader(std::ostream & out, mlog::LogLevel level)
 
     putString(buf, data.name);
 
-#if MLOG_USE_MARKUP
-    PUT_ARRAY("\033[0m");
-#endif
+    PUT_MARKUP_ARRAY("\033[0m");
 
     PUT_ARRAY(" [");
-#if MLOG_USE_MARKUP
-    PUT_ARRAY("\033[36m");
-#endif
-    out << mstd::this_thread_id();
-#if MLOG_USE_MARKUP
-    PUT_ARRAY("\033[0m");
-#endif
+    PUT_MARKUP_ARRAY("\033[36m");
+    mstd::thread_id tid = mstd::this_thread_id();
+    out << tid;
+    PUT_MARKUP_ARRAY("\033[0m");
+
     PUT_ARRAY("] ");
-#if MLOG_USE_MARKUP
-    PUT_ARRAY("\033[34;1m");
-#endif
+
+    PUT_MARKUP_ARRAY("\033[34;1m");
     out << mlog::onow();
-#if MLOG_USE_MARKUP
-    PUT_ARRAY("\033[0m");
-#endif
+    PUT_MARKUP_ARRAY("\033[0m");
+
     PUT_ARRAY(" <");
-#if MLOG_USE_MARKUP
-    PUT_ARRAY("\033[32;1m");
-#endif
+    PUT_MARKUP_ARRAY("\033[32;1m");
     putString(buf, name_);
-#if MLOG_USE_MARKUP
-    PUT_ARRAY("\033[0m");
-#endif
+    PUT_MARKUP_ARRAY("\033[0m");
     PUT_ARRAY("> ");
 
 #if MLOG_USE_MARKUP

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C319523015A2A0CC002E5C47 /* ptree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C319522E15A2A0CC002E5C47 /* ptree.cpp */; };
+		C319523115A2A0CC002E5C47 /* ptree.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C319522F15A2A0CC002E5C47 /* ptree.hpp */; };
 		C33180F2156B95C60067468B /* math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C33180F1156B95C60067468B /* math.hpp */; };
 		C35DD9E6156BA240003316BF /* linux_common.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C35DD9DE156BA240003316BF /* linux_common.hpp */; };
 		C35DD9E9156BA240003316BF /* machine_fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C35DD9E1156BA240003316BF /* machine_fwd.hpp */; };
@@ -37,6 +39,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C319522E15A2A0CC002E5C47 /* ptree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ptree.cpp; sourceTree = SOURCE_ROOT; };
+		C319522F15A2A0CC002E5C47 /* ptree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ptree.hpp; sourceTree = SOURCE_ROOT; };
 		C33180F1156B95C60067468B /* math.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = SOURCE_ROOT; };
 		C35DD9DE156BA240003316BF /* linux_common.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = linux_common.hpp; path = detail/linux_common.hpp; sourceTree = "<group>"; };
 		C35DD9E1156BA240003316BF /* machine_fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = machine_fwd.hpp; path = detail/machine_fwd.hpp; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 		C3EFF53F156AD4630069B5BD /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C319522E15A2A0CC002E5C47 /* ptree.cpp */,
+				C319522F15A2A0CC002E5C47 /* ptree.hpp */,
 				C3D4507815846189002107A6 /* rc_buffer.hpp */,
 				C3D4507915846189002107A6 /* singleton.cpp */,
 				C3D4507A15846189002107A6 /* singleton.hpp */,
@@ -171,6 +177,7 @@
 				C38F34FA156BBAD5005036B0 /* filesystem.hpp in Headers */,
 				C3D4507B15846189002107A6 /* rc_buffer.hpp in Headers */,
 				C3D4507D15846189002107A6 /* singleton.hpp in Headers */,
+				C319523115A2A0CC002E5C47 /* ptree.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +240,7 @@
 				C35DD9F6156BB1C0003316BF /* threads.cpp in Sources */,
 				C38F34F9156BBAD5005036B0 /* filesystem.cpp in Sources */,
 				C3D4507C15846189002107A6 /* singleton.cpp in Sources */,
+				C319523015A2A0CC002E5C47 /* ptree.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
