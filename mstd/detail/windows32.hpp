@@ -2,13 +2,115 @@
 #error Dont include this file directly, use common.hpp
 #endif
 
+#include <Windows.h>
+
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
 
 namespace mstd { namespace detail {
-    #include "windows32_asm.hpp"
 
 inline void memory_fence() { _ReadWriteBarrier(); }
+
+template<size_t Size>
+struct atomic_helper;
+
+template<>
+struct atomic_helper<4> {
+    typedef size_to_int<4>::type int_type;
+
+    static int_type add(volatile int_type * ptr, int_type value)
+    {
+        return InterlockedExchangeAdd(ptr, value);
+    }
+
+    static int_type cas(volatile int_type * ptr, int_type newval, int_type oldval)
+    {
+        return InterlockedCompareExchange(ptr, newval, oldval);
+    }
+
+    static int_type read_write(volatile int_type * ptr, int_type value)
+    {
+        return InterlockedExchangeAdd(ptr, value);
+    }
+};
+
+inline __declspec(naked) boost::uint64_t atomic_add8(volatile boost::uint64_t * ptr, boost::uint64_t value)
+{
+    __asm {
+        ALIGN 4
+        push ebx
+        push edi
+        mov edi, 12[esp]
+        mov eax, [edi]
+        mov edx, 4[edi]
+mloop:
+        mov ebx, 16[esp]
+        mov ecx, 20[esp]
+        add ebx, eax
+        adc ecx, edx
+        lock cmpxchg8b qword ptr [edi]
+        jnz mloop
+        pop edi
+        pop ebx
+        ret
+    }
+}
+
+inline __declspec(naked) boost::uint64_t atomic_cas8(volatile void *, boost::uint64_t, boost::uint64_t)
+{
+    __asm {
+        push ebx
+            push edi
+            mov edi, 12[esp]
+        mov ebx, 16[esp]
+        mov ecx, 20[esp]
+        mov eax, 24[esp]
+        mov edx, 28[esp]
+        lock cmpxchg8b qword ptr [edi]
+        pop edi
+            pop ebx
+            ret
+    }
+}
+
+inline __declspec(naked) boost::uint64_t atomic_read_write8(volatile boost::uint64_t * ptr, boost::uint64_t value)
+{
+    __asm {
+        push ebx
+        push edi
+        mov edi, 12[esp]
+        mov ebx, 16[esp]
+        mov ecx, 20[esp]
+        mov eax, [edi]
+        mov edx, 4[edi]
+mloop:
+        lock cmpxchg8b qword ptr [edi]
+        jnz mloop
+        pop edi
+        pop ebx
+        ret
+    }
+}
+
+template<>
+struct atomic_helper<8> {
+    typedef size_to_int<8>::type int_type;
+
+    static inline int_type add(volatile int_type * ptr, int_type value)
+    {
+        return atomic_add8(ptr, value);
+    }
+
+    static inline int_type cas(volatile void * ptr, int_type newval, int_type oldval)
+    {
+        return atomic_cas8(ptr, newval, oldval);
+    }
+
+    static inline int_type read_write(volatile int_type * ptr, int_type value)
+    {
+        return atomic_read_write8(ptr, value);
+    }
+};
 
 template<size_t size>
 inline typename size_to_int<size>::type atomic_read(const volatile void * ptr)
@@ -25,55 +127,6 @@ inline void atomic_write(volatile void * ptr, typename size_to_int<size>::type v
     memory_fence();
     *static_cast<volatile typename size_to_int<size>::type*>(ptr) = value;
 }
-
-#define MSTD_DETAIL_DEFINE_ATOMICS(SIZE, AREGISTER, CREGISTER) \
-template<> \
-inline size_to_int<SIZE>::type atomic_cas<SIZE>(volatile void * p, size_to_int<SIZE>::type value, size_to_int<SIZE>::type comparand) \
-{ \
-    size_to_int<SIZE>::type result; \
-    __asm \
-    { \
-       __asm mov edx, p \
-       __asm mov CREGISTER, value \
-       __asm mov AREGISTER, comparand \
-       __asm lock cmpxchg [edx], CREGISTER \
-       __asm mov result, AREGISTER \
-    } \
-    return result; \
-} \
-\
-template<> \
-inline size_to_int<SIZE>::type atomic_add<SIZE>(volatile void * p, size_to_int<SIZE>::type value) \
-{ \
-    size_to_int<SIZE>::type result; \
-    __asm { \
-        __asm mov edx, p \
-        __asm mov AREGISTER, value \
-        __asm lock xadd [edx], AREGISTER \
-        __asm mov result, AREGISTER \
-    } \
-    return result; \
-}\
-\
-template<> \
-inline size_to_int<SIZE>::type atomic_read_write<SIZE>(volatile void * p, size_to_int<SIZE>::type value) \
-{ \
-    size_to_int<SIZE>::type result; \
-    __asm \
-    { \
-        __asm mov edx, p \
-        __asm mov AREGISTER, value \
-        __asm lock xchg [edx], AREGISTER \
-        __asm mov result, AREGISTER \
-    } \
-    return result; \
-}
-
-MSTD_DETAIL_DEFINE_ATOMICS(1, al, cl)
-MSTD_DETAIL_DEFINE_ATOMICS(2, ax, cx)
-MSTD_DETAIL_DEFINE_ATOMICS(4, eax, ecx)
-
-#undef MSTD_DETAIL_DEFINE_ATOMICS
 
 void yield();
 
