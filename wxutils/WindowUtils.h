@@ -16,4 +16,6 @@ inline void fitHeight(wxWindow * window) { fitSize(window, false, true); }
 WXUTILS_DECL wxTopLevelWindow * root(wxWindow * window);
 WXUTILS_DECL wxRect desktopRect();
 
+WXUTILS_DECL wxFont defaultGuiFont();
+
 }
