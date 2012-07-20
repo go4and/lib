@@ -71,7 +71,21 @@ BIGNUM * extractBignum(std::vector<char>::const_iterator & i, std::vector<char>:
 
 RSAPtr RSA::generateKey(int num, unsigned long e, const mcrypt::RSA::GenerateListener & listener)
 {
-    return RSAPtr(new RSA(RSA_generate_key(num, e, invokeListener, const_cast<void*>(static_cast<const void*>(&listener)))));
+    return RSAPtr(new RSA(RSA_generate_key(num, e, !listener.empty() ? invokeListener : 0, !listener.empty() ? const_cast<void*>(static_cast<const void*>(&listener)) : 0)));
+}
+
+RSAPtr RSA::createFromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen)
+{
+    BNHolder bn(BN_bin2bn(n, nlen, 0));
+    BNHolder be(BN_bin2bn(e, elen, 0));
+
+    ::RSA * impl = RSA_new();
+    if(!impl)
+        handleError();
+    impl->n = bn.release();
+    impl->e = be.release();
+
+    return RSAPtr(new RSA(impl));
 }
 
 RSAPtr RSA::createFromPublicKey(const std::vector<char> & src)
@@ -171,7 +185,13 @@ int RSA::size() const
     return RSA_size(impl_);
 }
 
-typedef vector<BIGNUM*> BigNums;
+void RSA::extractN(std::vector<char> & out)
+{
+    out.resize(BN_num_bytes(impl_->n));
+    BN_bn2bin(impl_->n, mstd::pointer_cast<unsigned char*>(&out[0]));
+}
+
+typedef std::vector<BIGNUM*> BigNums;
 
 std::vector<char> packBigNums(const BigNums & nums)
 {
@@ -256,6 +276,11 @@ size_t RSA::privateDecrypt(const char * src, size_t len, char * out, Padding pad
 size_t RSA::privateEncrypt(const char * src, size_t len, char * out, Padding padding) const
 {
     return process(&RSA_private_encrypt, src, len, out, impl_, getPadding(padding, false));
+}
+
+size_t RSA::publicEncrypt(const char * src, size_t len, char * out, Padding padding) const
+{
+    return process(&RSA_public_encrypt, src, len, out, impl_, getPadding(padding, true));
 }
 
 size_t getPaddingTail(int padding)

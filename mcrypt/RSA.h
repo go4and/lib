@@ -35,8 +35,11 @@ public:
     static RSAPtr createFromPublicKey(const std::vector<char> & src);
     static RSAPtr createFromPrivateKey(const std::vector<char> & src);
     static RSAPtr createFromPublicPem(const void * buffer, size_t len);
+    static RSAPtr createFromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen);
     
     int size() const;
+
+    void extractN(std::vector<char> & out);
     
     inline std::vector<char> publicEncrypt(const std::vector<char> & src, Padding padding = pdDefault) const
     {
@@ -93,6 +96,12 @@ public:
     std::vector<char> privateEncrypt(const char * src, size_t len, Padding padding = pdDefault) const;
     std::vector<char> privateDecrypt(const char * src, size_t len, Padding padding = pdDefault) const;
 
+    inline size_t publicEncrypt(const char * begin, const char * end, char * out, Padding padding = pdDefault) const
+    {
+        return publicEncrypt(begin, end - begin, out, padding);
+    }
+    
+    size_t publicEncrypt(const char * src, size_t len, char * out, Padding padding = pdDefault) const;
     size_t privateDecrypt(const char * src, size_t len, char * out, Padding padding = pdDefault) const;
     size_t privateEncrypt(const char * src, size_t len, char * out, Padding padding = pdDefault) const;
 

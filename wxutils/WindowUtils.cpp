@@ -67,6 +67,25 @@ wxRect desktopRect()
     return wxRect(GetSystemMetrics(SM_XVIRTUALSCREEN), GetSystemMetrics(SM_YVIRTUALSCREEN),
                   GetSystemMetrics(SM_CXVIRTUALSCREEN), GetSystemMetrics(SM_CYVIRTUALSCREEN));
 }
+
+wxFont defaultGuiFont()
+{
+    wxFont font;
+
+    HFONT hFont = (HFONT) ::GetStockObject(DEFAULT_GUI_FONT);
+    if ( hFont )
+    {
+        LOGFONT lf;
+        if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )
+        {
+            wxNativeFontInfo info;
+            info.lf = lf;
+            font.Create(info);
+        }
+    }
+
+    return font;
+}
 #endif
 
 }

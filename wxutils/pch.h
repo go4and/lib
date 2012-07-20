@@ -34,6 +34,7 @@
 
 #include <wx/dc.h>
 #include <wx/filepicker.h>
+#include <wx/fontutil.h>
 #include <wx/gbsizer.h>
 #include <wx/icon.h>
 #include <wx/image.h>
