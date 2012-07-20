@@ -11,10 +11,36 @@ public:
     BF_KEY value_;
 };
 
-Blowfish::Blowfish(const std::string & pass)
-    : key_(new Key()), num_(0)
+Blowfish::Blowfish(const std::string & password)
 {
-    BF_set_key(&key_->value_, static_cast<int>(pass.size()), reinterpret_cast<const unsigned char*>(pass.c_str()));
+    init(mstd::pointer_cast<const unsigned char*>(password.c_str()), password.size());
+}
+
+Blowfish::Blowfish(const std::vector<unsigned char> & password)
+{
+    init(&password[0], password.size());
+}
+
+Blowfish::Blowfish(const std::vector<char> & password)
+{
+    init(mstd::pointer_cast<const unsigned char*>(&password[0]), password.size());
+}
+
+Blowfish::Blowfish(const char * password, size_t len)
+{
+    init(mstd::pointer_cast<const unsigned char*>(password), len);
+}
+
+Blowfish::Blowfish(unsigned char * password, size_t len)
+{
+    init(password, len);
+}
+
+void Blowfish::init(const unsigned char * password, size_t len)
+{
+    key_.reset(new Key());
+    num_ = 0;
+    BF_set_key(&key_->value_, static_cast<int>(len), mstd::pointer_cast<const unsigned char*>(password));
     memset(ivec_, 0, 8);
 }
 
