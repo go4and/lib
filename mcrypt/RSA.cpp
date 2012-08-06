@@ -167,6 +167,21 @@ RSAPtr RSA::createFromPublicPem(const void * buf, size_t len)
     throw RSAException(0);
 }
 
+RSAPtr RSA::createFromPUBKEY(const void * buf, size_t len)
+{
+    BIO * bmem = BIO_new_mem_buf(const_cast<void*>(buf), static_cast<int>(len));
+    ::RSA * rsa = d2i_RSA_PUBKEY_bio(bmem, 0);
+    BIO_free_all(bmem);
+
+    if(rsa)
+    {
+        RSAPtr result(new RSA(rsa));
+        return result;
+    } else
+        handleError();
+    throw RSAException(0);
+}
+
 RSA::RSA(::RSA * impl)
     : impl_(impl)
 {
@@ -348,6 +363,24 @@ std::vector<char> RSA::privateEncryptEx(const char * src, size_t len, Padding pa
 std::vector<char> RSA::privateDecryptEx(const char * src, size_t len, Padding padding) const
 {
     return processEx(&RSA_private_decrypt, src, len, impl_, false, getPadding(padding, true));
+}
+
+int getType(SignType type)
+{
+    switch(type) {
+    case stSHA1:
+        return NID_sha1;
+    case stMD5:
+        return NID_md5;
+    }
+    return 0;
+}
+
+bool RSA::verify(SignType type, const char * message, size_t messageLen, const char * sign, size_t signLen)
+{
+    return RSA_verify(getType(type),
+                      mstd::pointer_cast<const unsigned char*>(message), messageLen, 
+                      mstd::pointer_cast<const unsigned char*>(sign), signLen, impl_) != 0;
 }
 
 std::vector<char> RSA::extractPublicKey() const

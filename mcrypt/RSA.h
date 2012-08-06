@@ -27,6 +27,11 @@ enum Padding {
     pdPKCS1_OAEP,
 };
 
+enum SignType {
+    stSHA1,
+    stMD5,
+};
+
 class MCRYPT_DECL RSA : private boost::noncopyable, public mstd::reference_counter<RSA> {
 public:
     typedef boost::function<void(int, int)> GenerateListener;
@@ -35,6 +40,7 @@ public:
     static RSAPtr createFromPublicKey(const std::vector<char> & src);
     static RSAPtr createFromPrivateKey(const std::vector<char> & src);
     static RSAPtr createFromPublicPem(const void * buffer, size_t len);
+    static RSAPtr createFromPUBKEY(const void * buf, size_t len);
     static RSAPtr createFromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen);
     
     int size() const;
@@ -149,6 +155,8 @@ public:
     std::vector<char> publicDecryptEx(const char * src, size_t len, Padding padding = pdDefault) const;
     std::vector<char> privateEncryptEx(const char * src, size_t len, Padding padding = pdDefault) const;
     std::vector<char> privateDecryptEx(const char * src, size_t len, Padding padding = pdDefault) const;
+
+    bool verify(SignType type, const char * message, size_t messageLen, const char * sign, size_t signLen);
 
     std::vector<char> extractPrivateKey() const;
     std::vector<char> extractPublicKey() const;

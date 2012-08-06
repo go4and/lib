@@ -193,7 +193,7 @@ public:
         if(!active_)
         {
             active_ = true;
-            thread_ = boost::move(boost::thread(&Impl::execute, this));
+            thread_ = boost::thread(&Impl::execute, this);
         }
     }
 

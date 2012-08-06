@@ -53,7 +53,7 @@ public:
     {
         boost::posix_time::ptime now = boost::posix_time::microsec_clock::universal_time();
         out = (now - boost::posix_time::ptime(boost::gregorian::date(1970, boost::date_time::Jan, 1))).total_milliseconds();
-        thread_ = boost::move(boost::thread(&tickThread));
+        thread_ = boost::thread(&tickThread);
     }
 private:
     boost::thread thread_;

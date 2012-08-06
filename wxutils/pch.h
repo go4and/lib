@@ -2,6 +2,8 @@
 #pragma once
 #endif
 
+#include <wchar.h>
+
 #include <boost/config.hpp>
 
 #ifdef __OBJC__

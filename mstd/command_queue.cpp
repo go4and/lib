@@ -8,7 +8,7 @@ namespace mstd {
 
 command_queue::command_queue()
 {
-    thread_ = move(boost::thread(&command_queue::execute, this));
+    thread_ = boost::thread(&command_queue::execute, this);
 }
 
 command_queue::~command_queue()
