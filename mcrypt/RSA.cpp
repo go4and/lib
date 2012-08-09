@@ -370,6 +370,8 @@ int getType(SignType type)
     switch(type) {
     case stSHA1:
         return NID_sha1;
+    case stSHA1WithRSA:
+        return NID_sha1WithRSA;
     case stMD5:
         return NID_md5;
     }
@@ -378,9 +380,11 @@ int getType(SignType type)
 
 bool RSA::verify(SignType type, const char * message, size_t messageLen, const char * sign, size_t signLen)
 {
-    return RSA_verify(getType(type),
-                      mstd::pointer_cast<const unsigned char*>(message), messageLen, 
-                      mstd::pointer_cast<const unsigned char*>(sign), signLen, impl_) != 0;
+    int otype = getType(type);
+    int result = RSA_verify(otype,
+                            mstd::pointer_cast<const unsigned char*>(message), messageLen, 
+                            mstd::pointer_cast<const unsigned char*>(sign), signLen, impl_);
+    return result != 0;
 }
 
 std::vector<char> RSA::extractPublicKey() const

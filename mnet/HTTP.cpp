@@ -215,8 +215,29 @@ public:
     GetDataAsync(const Request & request)
         : DownloadTask(request.url(), request.cookies(), request.progressHandler()),
           handler_(request.dataHandler()), handlerEx_(request.dataExHandler()),
-          postData_(request.postData())
-    {}
+          postData_(request.postData()), headers_(0)
+    {
+        const std::vector<std::string> & headers = request.headers();
+        for(std::vector<std::string>::const_iterator i = headers.begin(), end = headers.end(); i != end; ++i)
+        {
+            curl_slist * item = new curl_slist;
+            item->data = strdup(i->c_str());
+            item->next = headers_;            
+            headers_ = item;
+        }
+    }
+    
+    ~GetDataAsync()
+    {
+        while(headers_)
+        {
+            curl_slist * item = headers_;
+            headers_ = item->next;
+
+            free(item->data);
+            delete item;
+        }
+    }
 
     void doStart()
     {
@@ -230,6 +251,8 @@ public:
             curl_easy_setopt(curl_, CURLOPT_HEADER, 0);
             curl_easy_setopt(curl_, CURLOPT_HEADERFUNCTION, &GetDataAsync::writeHeader);
         }
+        if(headers_)
+            curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, headers_);
         if(postData_)
         {
             curl_easy_setopt(curl_, CURLOPT_POST, 1L);
@@ -267,6 +290,7 @@ private:
     std::string data_;
     std::string header_;
     PostDataPtr postData_;
+    curl_slist * headers_;
 };
 
 class GetFileAsync : public DownloadTask {

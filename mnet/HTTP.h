@@ -93,6 +93,7 @@ public:
     Request & jsonHandler(const AsyncPTreeHandler & value);
     Request & postData(const void * data, size_t len) { return postData(makePostData(data, len)); }
     Request & postData(const PostDataPtr & data) { postData_ = data; return *this; }
+    Request & header(const std::string & line) { headers_.push_back(line); return *this; }
 
     const std::string & url() const { return url_; }
     const std::string & cookies() const { return cookies_; }
@@ -100,11 +101,13 @@ public:
     const AsyncDataHandler & dataHandler() const { return handler_; }
     const AsyncDataExHandler & dataExHandler() const { return handlerEx_; }
     const PostDataPtr & postData() const { return postData_; }
+    const std::vector<std::string> & headers() const { return headers_; }
 
     void run();
 private:
     std::string url_;
     std::string cookies_;
+    std::vector<std::string> headers_;
     ProgressHandler progress_;
     AsyncDataHandler handler_;
     AsyncDataExHandler handlerEx_;

@@ -29,6 +29,7 @@ enum Padding {
 
 enum SignType {
     stSHA1,
+    stSHA1WithRSA,
     stMD5,
 };
 
