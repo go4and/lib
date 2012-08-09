@@ -365,24 +365,30 @@ std::vector<char> RSA::privateDecryptEx(const char * src, size_t len, Padding pa
     return processEx(&RSA_private_decrypt, src, len, impl_, false, getPadding(padding, true));
 }
 
-int getType(SignType type)
+const EVP_MD * getDigest(SignType type)
 {
     switch(type) {
     case stSHA1:
-        return NID_sha1;
-    case stSHA1WithRSA:
-        return NID_sha1WithRSA;
+        return EVP_sha1();
     case stMD5:
-        return NID_md5;
+        return EVP_md5();
     }
     return 0;
 }
 
 bool RSA::verify(SignType type, const char * message, size_t messageLen, const char * sign, size_t signLen)
 {
-    int otype = getType(type);
-    int result = RSA_verify(otype,
-                            mstd::pointer_cast<const unsigned char*>(message), messageLen, 
+    const EVP_MD * md = getDigest(type);
+
+    EVP_MD_CTX ctx;
+    EVP_DigestInit(&ctx, md);
+	EVP_DigestUpdate(&ctx, message, messageLen);
+    size_t outLen = EVP_MD_size(md);
+    unsigned char * out = static_cast<unsigned char*>(alloca(outLen));
+	EVP_DigestFinal(&ctx, out, 0);
+
+    int result = RSA_verify(EVP_MD_type(md),
+                            out, outLen, 
                             mstd::pointer_cast<const unsigned char*>(sign), signLen, impl_);
     return result != 0;
 }
