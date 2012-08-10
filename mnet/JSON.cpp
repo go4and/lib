@@ -125,6 +125,7 @@ void parseJSON(const boost::filesystem::path & path, boost::property_tree::ptree
     FILE * file = mstd::wfopen(path, "rb");
     if(file)
     {
+        
 #if BOOST_WINDOWS
         struct _stat64 stat;
         if(!_fstat64(_fileno(file), &stat))

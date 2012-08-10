@@ -167,6 +167,28 @@ RSAPtr RSA::createFromPublicPem(const void * buf, size_t len)
     throw RSAException(0);
 }
 
+RSAPtr RSA::createFromPrivatePem(const void * buf, size_t len)
+{
+    BIO * bmem = BIO_new_mem_buf(const_cast<void*>(buf), static_cast<int>(len));
+    EVP_PKEY * key = PEM_read_bio_PrivateKey(bmem, 0, 0, 0);
+    BIO_free_all(bmem);
+
+    if(key)
+    {
+        ::RSA * rsa = extractRsa(key);
+        if(key)
+            EVP_PKEY_free(key);
+        if(rsa)
+        {
+            RSAPtr result(new RSA(rsa));
+            return result;
+        } else
+            handleError();
+    } else
+        handleError();
+    throw RSAException(0);
+}
+
 RSAPtr RSA::createFromPUBKEY(const void * buf, size_t len)
 {
     BIO * bmem = BIO_new_mem_buf(const_cast<void*>(buf), static_cast<int>(len));

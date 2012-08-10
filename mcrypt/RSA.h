@@ -39,6 +39,8 @@ public:
     static RSAPtr generateKey(int num, unsigned long e, const GenerateListener & listener);
     static RSAPtr createFromPublicKey(const std::vector<char> & src);
     static RSAPtr createFromPrivateKey(const std::vector<char> & src);
+
+    static RSAPtr createFromPrivatePem(const void * buffer, size_t len);
     static RSAPtr createFromPublicPem(const void * buffer, size_t len);
     static RSAPtr createFromPUBKEY(const void * buf, size_t len);
     static RSAPtr createFromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen);

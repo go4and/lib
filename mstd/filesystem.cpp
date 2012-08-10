@@ -2,9 +2,12 @@
 
 #if !BOOST_WINDOWS
 #include <stdio.h>
+
+#include <sys/stat.h>
 #endif
 
 #include "filesystem.hpp"
+#include "rc_buffer.hpp"
 
 namespace mstd {
 
@@ -17,6 +20,38 @@ FILE * wfopen(const boost::filesystem::wpath & path, const char * mode)
 #else
     return fopen(mstd::apifname(path).c_str(), mode);
 #endif
+}
+
+off_t file_size(FILE * file)
+{
+#if BOOST_WINDOWS
+    struct _stat64 stat;
+    if(!_fstat64(_fileno(file), &stat))
+#else
+    struct stat stat;
+    if(!fstat(fileno(file), &stat))
+#endif
+        return stat.st_size;
+    else
+        return -1;
+}
+
+rc_buffer load_file(const boost::filesystem::wpath & path)
+{
+    FILE * file = wfopen(path, "rb");
+    if(file)
+    {
+        off_t size = file_size(file);
+        if(size >= 0)
+        {
+            rc_buffer result(size);
+            size_t read = fread(result.data(), 1, size, file);
+            if(read == size)
+                return result;
+        }
+    }
+
+    return rc_buffer();
 }
 
 }
