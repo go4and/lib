@@ -11,26 +11,6 @@ const char * base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw
 
 }
 
-std::string oldbase64(const void * buf, size_t len)
-{
-    BIO *bmem, *b64;
-    BUF_MEM *bptr;
-
-    b64 = BIO_new(BIO_f_base64());
-    bmem = BIO_new(BIO_s_mem());
-    b64 = BIO_push(b64, bmem);
-    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-    BIO_write(b64, buf, static_cast<int>(len));
-    BOOST_VERIFY(BIO_flush(b64) > 0);
-    BIO_get_mem_ptr(b64, &bptr);
-
-    std::string result(bptr->data, bptr->data + bptr->length);
-
-    BIO_free_all(b64);
-
-    return result;
-}
-
 std::string base64(const void * rbuf, size_t len, bool url)
 {
     const char * chars = url ? base64urlChars : base64chars;
@@ -66,7 +46,6 @@ std::string base64(const void * rbuf, size_t len, bool url)
         result[w++] = chars[((v & 0xf00) >> 6) | ((v >> 22) & 0x03)];
         result[w++] = '=';
     }
-    BOOST_ASSERT(result == oldbase64(rbuf, len));
     return result;
 }
 

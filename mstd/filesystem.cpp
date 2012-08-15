@@ -45,7 +45,7 @@ rc_buffer load_file(const boost::filesystem::wpath & path)
         if(size >= 0)
         {
             rc_buffer result(size);
-            size_t read = fread(result.data(), 1, size, file);
+            off_t read = fread(result.data(), 1, size, file);
             if(read == size)
                 return result;
         }
