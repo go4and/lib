@@ -34,7 +34,7 @@ struct atomic_helper<4> {
     }
 };
 
-inline __declspec(naked) boost::uint64_t atomic_add8(volatile boost::uint64_t * ptr, boost::uint64_t value)
+inline __declspec(naked) boost::uint64_t atomic_add8(volatile boost::uint64_t *, boost::uint64_t)
 {
     __asm {
         ALIGN 4
@@ -60,20 +60,20 @@ inline __declspec(naked) boost::uint64_t atomic_cas8(volatile void *, boost::uin
 {
     __asm {
         push ebx
-            push edi
-            mov edi, 12[esp]
+        push edi
+        mov edi, 12[esp]
         mov ebx, 16[esp]
         mov ecx, 20[esp]
         mov eax, 24[esp]
         mov edx, 28[esp]
         lock cmpxchg8b qword ptr [edi]
         pop edi
-            pop ebx
-            ret
+        pop ebx
+        ret
     }
 }
 
-inline __declspec(naked) boost::uint64_t atomic_read_write8(volatile boost::uint64_t * ptr, boost::uint64_t value)
+inline __declspec(naked) boost::uint64_t atomic_read_write8(volatile boost::uint64_t *, boost::uint64_t)
 {
     __asm {
         push ebx

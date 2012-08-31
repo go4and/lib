@@ -2,9 +2,9 @@
 
 #if !BOOST_WINDOWS
 #include <stdio.h>
+#endif
 
 #include <sys/stat.h>
-#endif
 
 #include "filesystem.hpp"
 #include "rc_buffer.hpp"
@@ -22,7 +22,7 @@ FILE * wfopen(const boost::filesystem::wpath & path, const char * mode)
 #endif
 }
 
-off_t file_size(FILE * file)
+std::streamsize file_size(FILE * file)
 {
 #if BOOST_WINDOWS
     struct _stat64 stat;

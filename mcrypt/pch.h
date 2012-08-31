@@ -14,10 +14,10 @@
 
 #include <string.h>
 
-#if BOOST_MSVC && !defined(_CPPUNWIND)
+/*#if BOOST_MSVC && !defined(_CPPUNWIND)
 #include <exception>
 namespace std { class runtime_error : public exception { public: runtime_error(const char *) {} }; }
-#endif
+#endif*/
 
 #include <algorithm>
 #include <string>
@@ -34,9 +34,12 @@ namespace std { class runtime_error : public exception { public: runtime_error(c
 #include <boost/scoped_ptr.hpp>
 #include <boost/static_assert.hpp>
 
+#include <boost/filesystem/path.hpp>
 #if !_STLP_NO_IOSTREAMS
 #include <boost/filesystem/fstream.hpp>
 #endif
+
+#include <boost/mpl/or.hpp>
 
 #include <openssl/bio.h>
 #include <openssl/blowfish.h>

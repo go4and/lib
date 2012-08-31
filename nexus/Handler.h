@@ -52,7 +52,8 @@ public:
             allocationFailed(size, buffer_size);
 #endif
 
-        BOOST_ASSERT(!strict && size <= buffer_size);
+        BOOST_ASSERT(size <= buffer_size);
+        BOOST_ASSERT(!strict);
         return ::operator new(size);
     }
 
