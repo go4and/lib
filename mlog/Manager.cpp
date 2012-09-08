@@ -28,51 +28,6 @@ private:
     MSTD_SINGLETON_DECLARATION(Data);
 };
 
-}
-
-template<class Devices, class F>
-bool setupDevice(Devices & devices, const std::string & name, const F & f, boost::mutex::scoped_lock & lock)
-{
-    for(typename Devices::iterator i = devices.begin(); i != devices.end(); ++i)
-        for(typename Devices::value_type::iterator j = i->begin(); j != i->end(); ++j)
-            if((*j)->name() == name)
-            {
-                f(devices, i, j);
-                return true;
-            }
-    return false;
-}
-
-void Manager::setup(const std::string & expr)
-{
-    std::string::size_type dp = expr.find('.');
-    if(dp == std::string::npos)
-        BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Invalid setup syntax - '.' expected"));
-    std::string::size_type ep = expr.find('=', dp);
-    if(ep == std::string::npos)
-        BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Invalid setup syntax - '=' expected"));
-    std::string name = expr.substr(0, dp);
-    boost::trim(name);
-    std::string prop = expr.substr(dp + 1, ep - dp - 1);
-    boost::trim(prop);
-    std::string value = expr.substr(ep + 1);
-    boost::trim(value);
-    
-    boost::mutex::scoped_lock lock(mutex_);
-    if(name == "device")
-        setupDevice(prop, value, lock);
-    else if(name == "manager")
-    {
-        if(prop == "realtime")
-            realtime_ = value == "1" || value == "true";
-    } else if(prop == "level")
-        setupLevel(name, value, lock);
-    else if(prop == "group")
-        setupGroup(name, value, lock);
-    else
-        BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown command: " + expr));
-}
-
 template<class Type>
 class Updater {
 public:
@@ -97,90 +52,12 @@ private:
     Type value_;
 };
 
-template<class F>
-void Manager::setup(const std::string & name, const F & f, boost::mutex::scoped_lock & lock)
-{
-    if(name.empty())
-    {
-        f(rootLogger_);
-        BOOST_FOREACH(const Loggers::value_type & i, loggers_)
-            f(const_cast<detail::LoggerImpl&>(i.second));
-    } else {
-        SharedDevices newDevices(new Devices(*devices_));
-        if(mlog::setupDevice(*newDevices, name, f, lock))
-            devices_ = newDevices;
-        else
-            f(registerLogger(name, lock));
-    }
 }
 
-void Manager::setupLevel(const std::string & name, const std::string & value, boost::mutex::scoped_lock & lock)
-{
-    LogLevel level;
-    if(value == "emergency")
-        level = llEmergency;
-    else if(value == "alert")
-        level = llAlert;
-    else if(value == "critical")
-        level = llCritical;
-    else if(value == "error")
-        level = llError;
-    else if(value == "warning")
-        level = llWarning;
-    else if(value == "notice")
-        level = llNotice;
-    else if(value == "info")
-        level = llInfo;
-    else if(value == "debug")
-        level = llDebug;
-    else {
-        BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown log level: " + value));
-        std::terminate();
-    }
-
-    setup(name, Updater<LogLevel>(&detail::LoggerImpl::level, level), lock);
-}
-
-class UpdateGroup {
-public:
-    explicit UpdateGroup(boost::uint32_t group)
-        : group_(group) {}
-
-    template<class D, class I, class J>
-    void operator()(D& d, I i, J j) const
-    {
-        if(static_cast<boost::uint32_t>(i - d.begin()) != group_)
-        {
-            typename std::iterator_traits<J>::value_type t = *j;
-            i->erase(j);
-            if(d.size() <= group_)
-                d.resize(group_ + 1);
-            d[group_].push_back(t);
-        }
-    }
-
-    void operator()(detail::LoggerImpl & logger) const
-    {
-        logger.group(group_);
-    }
-private:
-    boost::uint32_t group_;
-};
-
-void Manager::setupGroup(const std::string & name, const std::string & value, boost::mutex::scoped_lock & lock)
-{
-    uint32_t group = mstd::str2int10<uint32_t>(value);
-
-    if(name.empty())
-    {
-        rootLogger_.group(group);
-        BOOST_FOREACH(const Loggers::value_type & i, loggers_)
-            const_cast<detail::LoggerImpl&>(i.second).group(group);
-    } else
-        registerLogger(name, lock).group(group);
-
-    setup(name, UpdateGroup(group), lock);
-}
+#if defined(__APPLE__)
+void nslogWrite(LogLevel level, const char * out, size_t len);
+extern std::string documentsFolder();
+#endif
 
 namespace {
 
@@ -198,16 +75,42 @@ private:
     std::string name_;
 };
 
-}
+class MLOG_DECL LogDevice : public LogParticipant, public mstd::reference_counter<LogDevice> {
+public:
+    explicit LogDevice()
+        : LogParticipant(llDebug) {}
 
-class CFileLogDevice {
+    void name(const std::string & value)
+    {
+        name_ = value;
+    }
+
+    const std::string & name() const
+    {
+        return name_;
+    }
+
+    void output(LogLevel level, const char * msg, size_t len)
+    {
+        if(enabled(level))
+            doOutput(level, msg, len);
+    }
+private:
+    virtual void doOutput(LogLevel level, const char * msg, size_t len) = 0;
+
+    std::string name_;
+};
+
+typedef boost::intrusive_ptr<LogDevice> LogDevicePtr;
+
+class CFileLogDevice : public LogDevice {
 public:
     explicit CFileLogDevice(FILE * handle)
         : handle_(handle)
     {
     }
     
-    void operator()(LogLevel level, const char * str, size_t len)
+    void doOutput(LogLevel level, const char * str, size_t len)
     {
         size_t wr = fwrite(str, 1, len, handle_);
         BOOST_VERIFY(wr == len);
@@ -226,20 +129,19 @@ private:
 class VCOutputDevice {
 public:
     VCOutputDevice()
-        : mutex_(new boost::mutex)
     {
     }
 
-    void operator()(LogLevel level, const char * out, size_t len)
+    void doOutput(LogLevel level, const char * out, size_t len)
     {
-        boost::lock_guard<boost::mutex> lock(*mutex_);
+        boost::lock_guard<boost::mutex> lock(mutex_);
         buffer_.clear();
         mstd::deutf8(out, out + len, std::back_inserter(buffer_));
         buffer_.push_back(0);
         OutputDebugString(&buffer_[0]);
     }
 private:
-    boost::shared_ptr<boost::mutex> mutex_;
+    boost::mutex mutex_;
     std::vector<wchar_t> buffer_;
 };
 #endif
@@ -271,34 +173,22 @@ private:
 #endif
 
 #if defined(__APPLE__)
-void nslogWrite(LogLevel level, const char * out, size_t len);
-
-class NSLogDevice {
+class NSLogDevice : public LogDevice {
 public:
     NSLogDevice()
     {
     }
 
-    void operator()(LogLevel level, const char * out, size_t len)
+    void doOutput(LogLevel level, const char * out, size_t len)
     {
         nslogWrite(level, out, len);
     }
-private:
-    boost::shared_ptr<boost::mutex> mutex_;
-    std::vector<wchar_t> buffer_;
 };
 #endif
 
-class SyslogLogDevice {
+class NullLogDevice : public LogDevice {
 public:
-    void operator()(LogLevel level, const char * out, size_t len)
-    {
-    }
-};
-
-class NullLogDevice {
-public:
-    void operator()(LogLevel level, const char * out, size_t len)
+    void doOutput(LogLevel level, const char * out, size_t len)
     {
     }
 };
@@ -380,8 +270,6 @@ std::string documentsFolder()
     else
         return "My Documents";
 }
-#elif defined(__APPLE__)
-extern std::string documentsFolder();
 #endif
 
 std::string parse(const std::string & fname)
@@ -427,7 +315,7 @@ std::string parse(const std::string & fname)
     return result;
 }
 
-class FileLogDevice : private FileHolder, private CFileLogDevice {
+class FileLogDevice : private FileHolder, public CFileLogDevice {
 public:
     explicit FileLogDevice(const std::string & fname, size_t threshold, size_t count)
         : FileHolder(parse(fname)), CFileLogDevice(handle()), threshold_(threshold), count_(count)
@@ -440,13 +328,13 @@ public:
         out << boost::posix_time::microsec_clock::local_time();
         out << " ==============" << std::endl;
         std::string message = out.str();
-        (*this)(llNotice, message.c_str(), message.length());
+        doOutput(llNotice, message.c_str(), message.length());
     }
     
-    void operator()(LogLevel level, const char * out, size_t len)
+    void doOutput(LogLevel level, const char * out, size_t len)
     {
         boost::lock_guard<boost::mutex> guard(mutex_);
-        CFileLogDevice::operator ()(level, out, len);
+        CFileLogDevice::doOutput(level, out, len);
         current_ += len;
         checkLimit();
     }
@@ -500,41 +388,19 @@ private:
     size_t count_;
 };
 
-template<class F>
-class SharedDevice {
-public:
-    explicit SharedDevice(F * f)
-        : f_(f) {}
-
-    void operator()(LogLevel level, const char * out, size_t len) const
-    {
-        (*f_)(level, out, len);
-    }
-private:
-    boost::shared_ptr<F> f_;
-};
-
-template<class F>
-SharedDevice<F> shared(F * f)
-{
-    return SharedDevice<F>(f);
-}
-
 LogDevice * createDevice(const std::string & name, const std::string & value)
 {
-    LogDevice::Device device;
+    LogDevice * device = 0;
     if(value == "stdout")
-        device = CFileLogDevice(stdout);
+        device = new CFileLogDevice(stdout);
     else if(value == "stderr")
-        device = CFileLogDevice(stderr);
-    else if(value == "syslog")
-        device = SyslogLogDevice();
+        device = new CFileLogDevice(stderr);
 #if BOOST_WINDOWS
     else if(value == "vcoutput")
         device = VCOutputDevice();
 #endif
     else if(value == "null")
-        device = NullLogDevice();
+        device = new NullLogDevice();
     else if(boost::starts_with(value, "file("))
     {
         if(value[value.length() - 1] != ')')
@@ -548,12 +414,12 @@ LogDevice * createDevice(const std::string & name, const std::string & value)
             args.erase(p);
             boost::trim(args);
         }
-        device = shared(new FileLogDevice(args, threshold, 5));
+        device = new FileLogDevice(args, threshold, 5);
     }
 #if defined(__APPLE__)
     else if(value == "nslog()")
     {
-        device = NSLogDevice();
+        device = new NSLogDevice();
     }
 #endif
 #if defined(ANDROID)
@@ -567,7 +433,8 @@ LogDevice * createDevice(const std::string & name, const std::string & value)
     else
         BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown log device: " + value));
     
-    return new LogDevice(name, device);
+    device->name(name);
+    return device;
 }
 
 struct EraseDevice {
@@ -592,83 +459,71 @@ private:
     LogDevicePtr device_;
 };
 
-void Manager::setupDevice(const std::string & prop, const std::string & value, boost::mutex::scoped_lock & lock)
-{
-    SharedDevices newDevices(new Devices(*devices_));
-    if(prop == "remove")
-    {
-        if(value == "*")
-            Devices(1).swap(*newDevices);
-        else {
-            if(!mlog::setupDevice(*newDevices, value, EraseDevice(), lock))
-                BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown log device: " + value));
-        }
-    } else {
-        LogDevicePtr newDevice(createDevice(prop, value));
+class UpdateGroup {
+public:
+    explicit UpdateGroup(boost::uint32_t group)
+        : group_(group) {}
 
-        if(!mlog::setupDevice(*newDevices, prop, ChangeDevice(newDevice), lock))
+    template<class D, class I, class J>
+    void operator()(D& d, I i, J j) const
+    {
+        if(static_cast<boost::uint32_t>(i - d.begin()) != group_)
         {
-            newDevices->resize(std::max(static_cast<size_t>(1), newDevices->size()));
-            (*newDevices)[0].push_back(newDevice);
+            typename std::iterator_traits<J>::value_type t = *j;
+            i->erase(j);
+            if(d.size() <= group_)
+                d.resize(group_ + 1);
+            d[group_].push_back(t);
         }
     }
 
-    devices_ = newDevices;
-}
-
-void Manager::setListener(LogLevel level, const Listener & listener)
-{
-    boost::lock_guard<boost::mutex> lock(mutex_);
-    listenerLevel_ = level;
-    listener_ = listener;
-}
-
-void Manager::output(const char * logger, const Buffer & buf)
-{
-    if(realtime_)
+    void operator()(detail::LoggerImpl & logger) const
     {
-        boost::lock_guard<boost::mutex> lock(mutex_);
-        queue_.push_back(Queue::value_type(logger, buf));
-        cond_.notify_one();
-        if(!threadStarted_)
-        {
-            threadStarted_ = true;
-            thread_ = boost::thread(&Manager::execute, this);
-        }
-    } else {
-        SharedDevices devices;
-        {
-            boost::lock_guard<boost::mutex> lock(mutex_);
-            devices = devices_;
-        }
-        Listener listener;
-        bool listenerChecked = false;
-        process(*devices, logger, buf, listener, listenerChecked);
+        logger.group(group_);
     }
-}
+private:
+    boost::uint32_t group_;
+};
 
-void Manager::process(Devices & devices, const char * logger, const Buffer & buf, Listener & listener, bool & listenerChecked)
-{
-    char * p = bufferData(buf);
-    uint32_t group = *mstd::pointer_cast<uint32_t*>(p);
-    p += sizeof(group);
-    LogLevel level = *mstd::pointer_cast<LogLevel*>(p);
-    p += sizeof(level);
-    size_t len = *mstd::pointer_cast<size_t*>(p);
-    p += sizeof(len);
+typedef std::vector<LogDevicePtr> DeviceGroup;
 
-    DeviceGroup & devs = devices[0];
-    DeviceGroup::iterator i = devs.begin();
-    DeviceGroup::iterator end = devs.end();
-    for(; i != end; ++i)
+class Devices : public mstd::reference_counter<Devices> {
+public:
+    Devices(bool withConsole)
     {
-        LogDevice & device = **i;
-        device.output(level, p, len);
+        if(withConsole)
+        {
+            DeviceGroup dg;
+            LogDevicePtr device(new CFileLogDevice(stdout));
+            device->name("console");
+            dg.push_back(device);
+            groups_.push_back(dg);
+        } else
+            groups_.resize(1);
     }
 
-    if(group && group < devices.size())
+    template<class F>
+    bool setup(const std::string & name, const F & f, boost::mutex::scoped_lock & lock)
     {
-        DeviceGroup & devs = devices[group];
+        for(std::vector<DeviceGroup>::iterator i = groups_.begin(); i != groups_.end(); ++i)
+            for(DeviceGroup::iterator j = i->begin(); j != i->end(); ++j)
+                if((*j)->name() == name)
+                {
+                    f(groups_, i, j);
+                    return true;
+                }
+        return false;
+    }
+
+    void append(const LogDevicePtr & device)
+    {
+        groups_.resize(std::max(static_cast<size_t>(1), groups_.size()));
+        groups_[0].push_back(device);
+    }
+
+    inline void output(uint32_t group, LogLevel level, const char * p, size_t len)
+    {
+        DeviceGroup & devs = groups_[0];
         DeviceGroup::iterator i = devs.begin();
         DeviceGroup::iterator end = devs.end();
         for(; i != end; ++i)
@@ -676,58 +531,292 @@ void Manager::process(Devices & devices, const char * logger, const Buffer & buf
             LogDevice & device = **i;
             device.output(level, p, len);
         }
-    }
 
-    if(level <= listenerLevel_)
-    {
-        if(!listenerChecked)
+        if(group && group < groups_.size())
         {
-            boost::lock_guard<boost::mutex> lock(mutex_);
-            listener = listener_;
-            listenerChecked = true;
-        }
-        if(!listener.empty())
-            listener(group, level, logger, p, len);
-    }
-}
-
-void Manager::execute()
-{
-    Queue queue;
-    try {
-        boost::unique_lock<boost::mutex> lock(mutex_);
-        while(!boost::this_thread::interruption_requested())
-        {
-            if(queue_.empty())
-                cond_.wait(lock);
-            else {
-                queue.swap(queue_);
-                SharedDevices devices = devices_;
-                mstd::reverse_lock<boost::unique_lock<boost::mutex> > rlock(lock);
-                Listener listener;
-                bool listenerChecked = false;
-                for(Queue::const_iterator q = queue.begin(), qend = queue.end(); q != qend; ++q)
-                    process(*devices, q->first, q->second, listener, listenerChecked);
-                queue.clear();
+            DeviceGroup & devs = groups_[group];
+            DeviceGroup::iterator i = devs.begin();
+            DeviceGroup::iterator end = devs.end();
+            for(; i != end; ++i)
+            {
+                LogDevice & device = **i;
+                device.output(level, p, len);
             }
         }
-    } catch(boost::thread_interrupted&) {
     }
-}    
+private:
+    std::vector<DeviceGroup> groups_;
+};
+
+typedef boost::intrusive_ptr<Devices> DevicesPtr;
+
+}
+
+class Manager::Impl {
+public:
+    Impl()
+        : rootLogger_(llWarning), devices_(new Devices(true)), threadStarted_(false), realtime_(false)
+    {
+    }
+
+    ~Impl()
+    {
+        if(threadStarted_)
+        {
+            for(;;)
+            {
+                {
+                    boost::lock_guard<boost::mutex> lock(mutex_);
+                    if(queue_.empty())
+                        break;
+                }
+                boost::this_thread::yield();
+            }
+            thread_.interrupt();
+            cond_.notify_one();
+            thread_.join();
+        }
+    }
+
+    void setListener(LogLevel level, const Listener & listener)
+    {
+        boost::lock_guard<boost::mutex> lock(mutex_);
+        listenerLevel_ = level;
+        listener_ = listener;
+    }
+
+    void setup(const std::string & expr)
+    {
+        std::string::size_type dp = expr.find('.');
+        if(dp == std::string::npos)
+            BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Invalid setup syntax - '.' expected"));
+        std::string::size_type ep = expr.find('=', dp);
+        if(ep == std::string::npos)
+            BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Invalid setup syntax - '=' expected"));
+        std::string name = expr.substr(0, dp);
+        boost::trim(name);
+        std::string prop = expr.substr(dp + 1, ep - dp - 1);
+        boost::trim(prop);
+        std::string value = expr.substr(ep + 1);
+        boost::trim(value);
+        
+        boost::mutex::scoped_lock lock(mutex_);
+        if(name == "device")
+            setupDevice(prop, value, lock);
+        else if(name == "manager")
+        {
+            if(prop == "realtime")
+                realtime_ = value == "1" || value == "true";
+        } else if(prop == "level")
+            setupLevel(name, value, lock);
+        else if(prop == "group")
+            setupGroup(name, value, lock);
+        else
+            BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown command: " + expr));
+    }
+
+    void output(const char * logger, const Buffer & buf)
+    {
+        if(realtime_)
+        {
+            boost::lock_guard<boost::mutex> lock(mutex_);
+            queue_.push_back(Queue::value_type(logger, buf));
+            cond_.notify_one();
+            if(!threadStarted_)
+            {
+                threadStarted_ = true;
+                thread_ = boost::thread(&Impl::execute, this);
+            }
+        } else {
+            DevicesPtr devices;
+            {
+                boost::lock_guard<boost::mutex> lock(mutex_);
+                devices = devices_;
+            }
+            Listener listener;
+            bool listenerChecked = false;
+            process(*devices, logger, buf, listener, listenerChecked);
+        }
+    }
+
+    detail::LoggerImpl & registerLogger(const std::string & name)
+    {
+        boost::mutex::scoped_lock lock(mutex_);
+        return registerLogger(name, lock);
+    }
+
+    detail::LoggerImpl & registerLogger(const std::string & name, boost::mutex::scoped_lock & lock)
+    {
+        Loggers::iterator i = loggers_.find(name);
+        if(i == loggers_.end())
+            i = loggers_.insert(Loggers::value_type(name, detail::LoggerImpl(rootLogger_.level()))).first;
+        
+        return const_cast<detail::LoggerImpl&>(i->second);
+    }
+private:
+    typedef boost::unordered_map<std::string, detail::LoggerImpl> Loggers;
+    typedef std::vector<std::pair<const char *, Buffer> > Queue;
+
+    void setupGroup(const std::string & name, const std::string & value, boost::mutex::scoped_lock & lock)
+    {
+        uint32_t group = mstd::str2int10<uint32_t>(value);
+
+        if(name.empty())
+        {
+            rootLogger_.group(group);
+            BOOST_FOREACH(const Loggers::value_type & i, loggers_)
+                const_cast<detail::LoggerImpl&>(i.second).group(group);
+        } else
+            registerLogger(name, lock).group(group);
+
+        setup(name, UpdateGroup(group), lock);
+    }
+
+    void setupDevice(const std::string & prop, const std::string & value, boost::mutex::scoped_lock & lock)
+    {
+        DevicesPtr newDevices(new Devices(*devices_));
+        if(prop == "remove")
+        {
+            if(value == "*")
+                newDevices.reset(new Devices(false));
+            else {
+                if(!newDevices->setup(value, EraseDevice(), lock))
+                    BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown log device: " + value));
+            }
+        } else {
+            LogDevicePtr newDevice(createDevice(prop, value));
+
+            if(!newDevices->setup(prop, ChangeDevice(newDevice), lock))
+                newDevices->append(newDevice);
+        }
+
+        devices_ = newDevices;
+    }
+
+    void process(Devices & devices, const char * logger, const Buffer & buf, Listener & listener, bool & listenerChecked)
+    {
+        char * p = bufferData(buf);
+        uint32_t group = *mstd::pointer_cast<uint32_t*>(p);
+        p += sizeof(group);
+        LogLevel level = *mstd::pointer_cast<LogLevel*>(p);
+        p += sizeof(level);
+        size_t len = *mstd::pointer_cast<size_t*>(p);
+        p += sizeof(len);
+
+        devices.output(group, level, p, len);
+
+        if(level <= listenerLevel_)
+        {
+            if(!listenerChecked)
+            {
+                boost::lock_guard<boost::mutex> lock(mutex_);
+                listener = listener_;
+                listenerChecked = true;
+            }
+            if(!listener.empty())
+                listener(group, level, logger, p, len);
+        }
+    }
+
+    void execute()
+    {
+        Queue queue;
+        try {
+            boost::unique_lock<boost::mutex> lock(mutex_);
+            while(!boost::this_thread::interruption_requested())
+            {
+                if(queue_.empty())
+                    cond_.wait(lock);
+                else {
+                    queue.swap(queue_);
+                    DevicesPtr devices = devices_;
+                    mstd::reverse_lock<boost::unique_lock<boost::mutex> > rlock(lock);
+                    Listener listener;
+                    bool listenerChecked = false;
+                    for(Queue::const_iterator q = queue.begin(), qend = queue.end(); q != qend; ++q)
+                        process(*devices, q->first, q->second, listener, listenerChecked);
+                    queue.clear();
+                }
+            }
+        } catch(boost::thread_interrupted&) {
+        }
+    }    
+
+    template<class F>
+    void setup(const std::string & name, const F & f, boost::mutex::scoped_lock & lock)
+    {
+        if(name.empty())
+        {
+            f(rootLogger_);
+            BOOST_FOREACH(const Loggers::value_type & i, loggers_)
+                f(const_cast<detail::LoggerImpl&>(i.second));
+        } else {
+            DevicesPtr newDevices(new Devices(*devices_));
+            if(newDevices->setup(name, f, lock))
+                devices_ = newDevices;
+            else
+                f(registerLogger(name, lock));
+        }
+    }
+
+    void setupLevel(const std::string & name, const std::string & value, boost::mutex::scoped_lock & lock)
+    {
+        LogLevel level;
+        if(value == "emergency")
+            level = llEmergency;
+        else if(value == "alert")
+            level = llAlert;
+        else if(value == "critical")
+            level = llCritical;
+        else if(value == "error")
+            level = llError;
+        else if(value == "warning")
+            level = llWarning;
+        else if(value == "notice")
+            level = llNotice;
+        else if(value == "info")
+            level = llInfo;
+        else if(value == "debug")
+            level = llDebug;
+        else {
+            BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown log level: " + value));
+            std::terminate();
+        }
+
+        setup(name, Updater<LogLevel>(&detail::LoggerImpl::level, level), lock);
+    }
+
+    detail::LoggerImpl rootLogger_;
+    Loggers loggers_;
+    DevicesPtr devices_;
+    boost::mutex mutex_;
+    boost::condition_variable cond_;
+    LogLevel listenerLevel_;
+    Listener listener_;
+    Queue queue_;
+    boost::thread thread_;
+    bool threadStarted_;
+    bool realtime_;
+};
+
+void Manager::setup(const std::string & expr)
+{
+    impl_->setup(expr);
+}
+
+void Manager::setListener(LogLevel level, const Listener & listener)
+{
+    impl_->setListener(level, listener);
+}
+
+void Manager::output(const char * logger, const Buffer & buf)
+{
+    impl_->output(logger, buf);
+}
     
 detail::LoggerImpl & Manager::registerLogger(const std::string & name)
 {
-    boost::mutex::scoped_lock lock(mutex_);
-    return registerLogger(name, lock);
-}
-
-detail::LoggerImpl & Manager::registerLogger(const std::string & name, boost::mutex::scoped_lock & lock)
-{
-    Loggers::iterator i = loggers_.find(name);
-    if(i == loggers_.end())
-        i = loggers_.insert(Loggers::value_type(name, detail::LoggerImpl(rootLogger_.level()))).first;
-    
-    return const_cast<detail::LoggerImpl&>(i->second);
+    return impl_->registerLogger(name);
 }
 
 void Manager::setAppName(const char * value)
@@ -736,9 +825,7 @@ void Manager::setAppName(const char * value)
 }
 
 Manager::Manager()
-    : rootLogger_(llWarning),
-      devices_(new Devices(1, DeviceGroup(1, LogDevicePtr(new LogDevice("console", CFileLogDevice(stdout)))))),
-      threadStarted_(false), realtime_(false)
+    : impl_(new Impl)
 {
 #if MLOG_USE_BUFFERS
     mstd::buffers::instance();
@@ -748,21 +835,7 @@ Manager::Manager()
 
 Manager::~Manager()
 {
-    if(threadStarted_)
-    {
-        for(;;)
-        {
-            {
-                boost::lock_guard<boost::mutex> lock(mutex_);
-                if(queue_.empty())
-                    break;
-            }
-            boost::this_thread::yield();
-        }
-        thread_.interrupt();
-        cond_.notify_one();
-        thread_.join();
-    }
+    impl_.reset();
 }
 
 MSTD_SINGLETON_IMPLEMENTATION(Manager);

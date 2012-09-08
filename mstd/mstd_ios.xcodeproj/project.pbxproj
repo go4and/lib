@@ -52,6 +52,7 @@
 		C35DD9F1156BAB55003316BF /* random.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = random.hpp; sourceTree = SOURCE_ROOT; };
 		C35DD9F4156BB1C0003316BF /* threads.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = threads.cpp; sourceTree = SOURCE_ROOT; };
 		C35DD9F5156BB1C0003316BF /* threads.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = threads.hpp; sourceTree = SOURCE_ROOT; };
+		C38D64B915F85BBC00CD0414 /* decline.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = decline.py; path = ../../../decline.py; sourceTree = "<group>"; };
 		C38F34F5156BBAD4005036B0 /* enum_utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = enum_utils.hpp; sourceTree = SOURCE_ROOT; };
 		C38F34F6156BBAD4005036B0 /* filesystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filesystem.cpp; sourceTree = SOURCE_ROOT; };
 		C38F34F7156BBAD4005036B0 /* filesystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = filesystem.hpp; sourceTree = SOURCE_ROOT; };
@@ -99,6 +100,7 @@
 		C3EFF52F156AD4630069B5BD = {
 			isa = PBXGroup;
 			children = (
+				C38D64B915F85BBC00CD0414 /* decline.py */,
 				C35DD9EF156BA244003316BF /* detail */,
 				C3EFF53F156AD4630069B5BD /* Sources */,
 				C3EFF53C156AD4630069B5BD /* Frameworks */,

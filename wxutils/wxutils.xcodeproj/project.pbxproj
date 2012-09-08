@@ -359,8 +359,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/opt/local/include/wx-2.9",
-					"/opt/local/lib/wx/include/osx_cocoa-unicode-2.9",
+					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
 				LD_DYLIB_INSTALL_NAME = "@executable_path/wxutils.dylib";
@@ -425,8 +424,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/opt/local/include/wx-2.9",
-					"/opt/local/lib/wx/include/osx_cocoa-unicode-2.9",
+					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
 				LD_DYLIB_INSTALL_NAME = "@executable_path/wxutils.dylib";

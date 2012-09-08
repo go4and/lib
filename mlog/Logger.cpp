@@ -3,6 +3,7 @@
 #if !MLOG_NO_LOGGING
 
 #include "Logger.h"
+#include "Manager.h"
 
 #include "Utils.h"
 
@@ -60,6 +61,11 @@ void putString(std::streambuf * buf, const std::string & str)
 #  define PUT_MARKUP_ARRAY(t)
 #endif
 
+}
+
+Logger::Logger(const std::string & name)
+    : name_(name), impl_(Manager::instance().registerLogger(name))
+{
 }
 
 void Logger::outputHeader(std::ostream & out, mlog::LogLevel level)

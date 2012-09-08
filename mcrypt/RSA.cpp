@@ -153,7 +153,7 @@ RSAPtr RSA::createFromPublicPem(const void * buf, size_t len)
 
     if(key)
     {
-        ::RSA * rsa = extractRsa(key);
+        ::RSA * rsa = extractRsa(key);
         if(key)
             EVP_PKEY_free(key);
         if(rsa)
@@ -411,7 +411,7 @@ bool RSA::verify(SignType type, const char * message, size_t messageLen, const c
 
     int result = RSA_verify(EVP_MD_type(md),
                             out, outLen, 
-                            mstd::pointer_cast<const unsigned char*>(sign), signLen, impl_);
+                            mstd::pointer_cast<unsigned char*>(const_cast<char*>(sign)), signLen, impl_);
     return result != 0;
 }
 

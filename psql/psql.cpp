@@ -4,7 +4,7 @@
 #include <WinSock2.h>
 #endif
 
-#include <boost/date_time/posix_time/posix_time_io.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <libpq-fe.h>
 
