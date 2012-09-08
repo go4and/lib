@@ -85,7 +85,7 @@ inline std::string apifname(const boost::filesystem::wpath & path)
 }
 
 FILE * wfopen(const boost::filesystem::wpath & path, const char * mode);
-off_t file_size(FILE * file);
+std::streamsize file_size(FILE * file);
 
 class rc_buffer;
 rc_buffer load_file(const boost::filesystem::wpath & path);

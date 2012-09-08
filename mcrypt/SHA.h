@@ -32,9 +32,11 @@ private:
     boost::scoped_ptr<Context> context_;
 };
 
+#if !_STLP_NO_IOSTREAMS
 MCRYPT_DECL boost::optional<SHADigest> shaFile(const std::wstring & filename);
 MCRYPT_DECL boost::optional<SHADigest> shaFile(const boost::filesystem::wpath & path);
 MCRYPT_DECL boost::optional<SHADigest> shaFile(const boost::filesystem::path & path);
+#endif
 
 MCRYPT_DECL SHADigest shaString(const std::string & input);
 MCRYPT_DECL SHADigest shaBuffer(const void * data, size_t len);
