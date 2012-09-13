@@ -95,6 +95,8 @@ public:
         if(enabled(level))
             doOutput(level, msg, len);
     }
+
+    virtual ~LogDevice() {}
 private:
     virtual void doOutput(LogLevel level, const char * msg, size_t len) = 0;
 
