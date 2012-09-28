@@ -41,7 +41,7 @@ rc_buffer load_file(const boost::filesystem::wpath & path)
     FILE * file = wfopen(path, "rb");
     if(file)
     {
-        off_t size = file_size(file);
+        off_t size = static_cast<off_t>(file_size(file));
         if(size >= 0)
         {
             rc_buffer result(size);
