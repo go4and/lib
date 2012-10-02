@@ -406,7 +406,7 @@
 					"-lwx_baseu-2.9",
 				);
 				PRODUCT_NAME = wxutils;
-				SDKROOT = "";
+				SDKROOT = macosx10.7;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Debug;
@@ -470,7 +470,7 @@
 					"-lwx_baseu-2.9",
 				);
 				PRODUCT_NAME = wxutils;
-				SDKROOT = "";
+				SDKROOT = macosx10.7;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Release;

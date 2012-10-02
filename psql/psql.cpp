@@ -153,7 +153,7 @@ Result Connection::exec(const char * query, const ParametricExecution & pe, bool
     }
 
     boost::posix_time::ptime start = boost::posix_time::microsec_clock::universal_time();
-    Result result(PQexecParams(conn(), query, size, 0, &values_[0], &lengths_[0], &formats_[0], 1));
+    Result result(PQexecParams(conn(), query, static_cast<int>(size), 0, &values_[0], &lengths_[0], &formats_[0], 1));
     checkResult(query, result, canHaveErrors, start);
 
     MLOG_MESSAGE(Debug, "exec succeeded");
@@ -222,7 +222,7 @@ void Connection::copySendBuffer(const char * begin, int len)
 void Connection::copyFlushBuffer()
 {
     char * begin = copyData_->buffer;
-    int len = copyData_->pos - begin;
+    int len = static_cast<int>(copyData_->pos - begin);
     if(len)
     {
         copySendBuffer(begin, len);
@@ -258,7 +258,7 @@ void Connection::copyPut(const char * value, size_t len)
 {
     if(copyData_->left() < 4)
         copyFlushBuffer();
-    write4(copyData_->pos, len);
+    write4(copyData_->pos, static_cast<int>(len));
     size_t left = copyData_->left();
     if(left >= len)
     {
@@ -276,7 +276,7 @@ void Connection::copyPut(const char * value, size_t len)
         copyData_->pos += len;
     } else {
         copyFlushBuffer();
-        copySendBuffer(value, len);
+        copySendBuffer(value, static_cast<int>(len));
     }
 }
 
@@ -433,7 +433,7 @@ void ParametricExecution::fill(std::vector<const char*> & values, std::vector<in
                 memcpy(&address, inp, sizeof(address));
                 inp += sizeof(address);
                 values.push_back(address);
-                lengths.push_back(length);
+                lengths.push_back(static_cast<int>(length));
             } else {
                 values.push_back(inp);
                 lengths.push_back(x);
@@ -469,13 +469,13 @@ void ParametricExecution::addArray(const std::pair<const char*, const char*> * v
     write4(out, 1);
     write4(out, 1);
     write4(out, oid);
-    write4(out, size);
+    write4(out, static_cast<int32_t>(size));
     write4(out, 1);
 
     for(; value != end; ++value)
     {
         size_t len = value->second - value->first;
-        write4(out, len);
+        write4(out, static_cast<int32_t>(len));
         memcpy(out, value->first, len);
         out += len;
     }
@@ -499,13 +499,13 @@ void ParametricExecution::addArray(const std::string * value, size_t size, Oid o
     write4(out, 1);
     write4(out, 1);
     write4(out, oid);
-    write4(out, size);
+    write4(out, static_cast<int32_t>(size));
     write4(out, 1);
 
     for(; value != end; ++value)
     {
         size_t len = value->length();
-        write4(out, len);
+        write4(out, static_cast<int32_t>(len));
         memcpy(out, value->c_str(), len);
         out += len;
     }
@@ -521,7 +521,7 @@ void ParametricExecution::addArray(const boost::int64_t * value, size_t size)
     write4(out, 1);
     write4(out, 1);
     write4(out, psql::oidInt64);
-    write4(out, size);
+    write4(out, static_cast<int32_t>(size));
     write4(out, 1);
 
     for(const boost::int64_t * end = value + size; value != end; ++value)
@@ -541,7 +541,7 @@ void ParametricExecution::addArray(const boost::int32_t * value, size_t size)
     write4(out, 1);
     write4(out, 1);
     write4(out, psql::oidInt32);
-    write4(out, size);
+    write4(out, static_cast<int32_t>(size));
     write4(out, 1);
 
     for(const boost::int32_t * end = value + size; value != end; ++value)
@@ -561,7 +561,7 @@ void ParametricExecution::addArray(const boost::int16_t * value, size_t size)
     write4(out, 1);
     write4(out, 1);
     write4(out, psql::oidInt16);
-    write4(out, size);
+    write4(out, static_cast<int32_t>(size));
     write4(out, 1);
 
     for(const boost::int16_t * end = value + size; value != end; ++value)
@@ -617,7 +617,7 @@ Result::reference Result::at(size_t index) const
 
 Oid Result::type(size_t index) const
 {
-    return PQftype(value_, index);
+    return PQftype(value_, static_cast<int>(index));
 }
 
 size_t Result::columns() const
@@ -641,14 +641,14 @@ ResultRowRef::ResultRowRef(PGresult *result, size_t index, size_t size)
 
 const void * ResultRowRef::raw(size_t index) const
 {
-    return PQgetvalue(result_, index_, index);
+    return PQgetvalue(result_, static_cast<int>(index_), static_cast<int>(index));
 }
 
 namespace {
 
 inline void checkOid(PGresult * result, size_t index, Oid expectedOid)
 {
-    Oid oid = PQftype(result, index);
+    Oid oid = PQftype(result, static_cast<int>(index));
     if(oid != expectedOid)
         BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidInt32) << ColumnInfo(index));
 }
@@ -657,29 +657,29 @@ inline void checkOid(PGresult * result, size_t index, Oid expectedOid)
 
 boost::int16_t ResultRowRef::asInt16(size_t index) const
 {
-    const void * data = PQgetvalue(result_, index_, index);
+    const void * data = raw(index);
     checkOid(result_, index, oidInt16);
     return mstd::ntoh(*static_cast<const boost::int16_t*>(data));
 }
 
 boost::int32_t ResultRowRef::asInt32(size_t index) const
 {
-    const void * data = PQgetvalue(result_, index_, index);
+    const void * data = raw(index);
     checkOid(result_, index, oidInt32);
     return mstd::ntoh(*static_cast<const boost::int32_t*>(data));
 }
 
 boost::int64_t ResultRowRef::asInt64(size_t index) const
 {
-    const void * data = PQgetvalue(result_, index_, index);
+    const void * data = raw(index);
     checkOid(result_, index, oidInt64);
     return mstd::ntoh(*static_cast<const boost::int64_t*>(data));
 }
 
 const char * ResultRowRef::asCString(size_t index) const
 {
-    const void * data = PQgetvalue(result_, index_, index);
-    Oid oid = PQftype(result_, index);
+    const void * data = raw(index);
+    Oid oid = PQftype(result_, static_cast<int>(index));
     if(oid != oidText && oid != oidVarChar)
         BOOST_THROW_EXCEPTION(InvalidTypeException() << OidInfo(oid) << ExpectedOidInfo(oidText) << ColumnInfo(index));
     return static_cast<const char*>(data);
@@ -687,7 +687,7 @@ const char * ResultRowRef::asCString(size_t index) const
 
 boost::posix_time::ptime ResultRowRef::asTime(size_t index) const
 {
-    const void * data = PQgetvalue(result_, index_, index);
+    const void * data = raw(index);
     checkOid(result_, index, oidTimestamp);
     int64_t value = mstd::ntoh(*static_cast<const boost::int64_t*>(data));
     int64_t mul = (boost::posix_time::microseconds::traits_type::res_adjust() / 1000000);
@@ -696,19 +696,19 @@ boost::posix_time::ptime ResultRowRef::asTime(size_t index) const
 
 ByteArray ResultRowRef::asArray(size_t index) const
 {
-    const void * data = PQgetvalue(result_, index_, index);
+    const void * data = raw(index);
     checkOid(result_, index, oidByteArray);
-    return ByteArray(PQgetlength(result_, index_, index), static_cast<const char*>(data));
+    return ByteArray(static_cast<int>(length(index)), static_cast<const char*>(data));
 }
 
 size_t ResultRowRef::length(size_t index) const
 {
-    return PQgetlength(result_, index_, index);
+    return PQgetlength(result_, static_cast<int>(index_), static_cast<int>(index));
 }
 
 bool ResultRowRef::null(size_t index) const
 {
-    return PQgetisnull(result_, index_, index) != 0;
+    return PQgetisnull(result_, static_cast<int>(index_), static_cast<int>(index)) != 0;
 }
 
 size_t ResultRowRef::size() const
