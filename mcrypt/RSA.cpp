@@ -393,14 +393,17 @@ const EVP_MD * getDigest(SignType type)
     case stMD5:
         return EVP_md5();
     }
+    BOOST_ASSERT(false);
     return 0;
 }
 
 bool RSA::verify(SignType type, const char * message, size_t messageLen, const char * sign, size_t signLen)
 {
     const EVP_MD * md = getDigest(type);
+    BOOST_ASSERT(md);
 
     EVP_MD_CTX ctx;
+    memset(&ctx, 0, sizeof(ctx));
     EVP_DigestInit(&ctx, md);
 	EVP_DigestUpdate(&ctx, message, messageLen);
     size_t outLen = EVP_MD_size(md);
