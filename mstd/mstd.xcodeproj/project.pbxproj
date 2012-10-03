@@ -95,7 +95,6 @@
 		C375FDA515490C250009748B /* disposers.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C375FDA015490C250009748B /* disposers.hpp */; };
 		C375FDA615490C250009748B /* indexed_map.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C375FDA115490C250009748B /* indexed_map.hpp */; };
 		C375FDA715490C250009748B /* ptree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C375FDA215490C250009748B /* ptree.cpp */; };
-		C375FDA815490C250009748B /* ptree.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C375FDA315490C250009748B /* ptree.hpp */; };
 		C3E91BF515DCD697001F15B9 /* xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3E91BF415DCD697001F15B9 /* xml.cpp */; };
 /* End PBXBuildFile section */
 
@@ -412,7 +411,6 @@
 				C346434113D3339000716430 /* process.hpp in Headers */,
 				C375FDA515490C250009748B /* disposers.hpp in Headers */,
 				C375FDA615490C250009748B /* indexed_map.hpp in Headers */,
-				C375FDA815490C250009748B /* ptree.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,7 +440,7 @@
 		C324558F1352A6B900999158 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = IP;
 			};
 			buildConfigurationList = C32455921352A6B900999158 /* Build configuration list for PBXProject "mstd" */;
@@ -516,7 +514,7 @@
 					"-lboost_system-mt-d",
 					"-lboost_thread-mt-d",
 				);
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Debug;
@@ -543,7 +541,7 @@
 					"-lboost_system-mt",
 					"-lboost_thread-mt",
 				);
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Release;
@@ -551,6 +549,7 @@
 		C32455A71352A6B900999158 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				LD_DYLIB_INSTALL_NAME = "@executable_path/$(EXECUTABLE_PATH)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)";
@@ -560,6 +559,7 @@
 		C32455A81352A6B900999158 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				LD_DYLIB_INSTALL_NAME = "@executable_path/$(EXECUTABLE_PATH)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)";

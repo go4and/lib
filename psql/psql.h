@@ -239,6 +239,7 @@ public:
     void copyPutInt16(int16_t value);
     void copyPutInt32(int32_t value);
     void copyPutInt64(int64_t value);
+    void copyPutPTime(const boost::posix_time::ptime & value);
     void copyPut(const char * value, size_t len);
 
     Result copyEnd();

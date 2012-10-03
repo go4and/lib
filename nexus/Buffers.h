@@ -4,6 +4,7 @@
 
 #include <deque>
 
+#include <boost/array.hpp>
 #include <boost/asio/buffer.hpp>
 
 #endif

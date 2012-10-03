@@ -128,7 +128,7 @@ private:
 };
 
 #if BOOST_WINDOWS
-class VCOutputDevice {
+class VCOutputDevice : public LogDevice {
 public:
     VCOutputDevice()
     {
@@ -399,7 +399,7 @@ LogDevice * createDevice(const std::string & name, const std::string & value)
         device = new CFileLogDevice(stderr);
 #if BOOST_WINDOWS
     else if(value == "vcoutput")
-        device = VCOutputDevice();
+        device = new VCOutputDevice();
 #endif
     else if(value == "null")
         device = new NullLogDevice();

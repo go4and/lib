@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#pragma warning(disable: 4996)
+
 #include "CurlUtils.h"
 #include "JSON.h"
 
