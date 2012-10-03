@@ -254,6 +254,11 @@ void Connection::copyPutInt64(int64_t value)
     write8(copyData_->pos, value);
 }
 
+void Connection::copyPutPTime(const boost::posix_time::ptime & value)
+{
+    copyPutInt64((value - timeStart).total_microseconds());
+}
+
 void Connection::copyPut(const char * value, size_t len)
 {
     if(copyData_->left() < 4)
