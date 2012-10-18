@@ -7,6 +7,12 @@
 #pragma warning(disable: 4512)
 #endif
 
+#if defined(__APPLE__)
+#include <malloc/malloc.h>
+#else
+#include <malloc.h>
+#endif
+
 #include <vector>
 
 #include <iostream>
@@ -21,6 +27,33 @@
 #include "buffers.hpp"
 
 namespace mstd {
+
+namespace {
+
+atomic<size_t> reserved_(0);
+
+struct allocator {
+    typedef std::size_t size_type;
+    typedef std::ptrdiff_t difference_type;
+
+    static char * malloc BOOST_PREVENT_MACRO_SUBSTITUTION(const size_type bytes)
+    {
+        void * result = ::malloc(bytes);
+        reserved_ += malloc_size(result);
+        return static_cast<char*>(result);
+    }
+
+    static void free BOOST_PREVENT_MACRO_SUBSTITUTION(char * const block)
+    {
+        if(block)
+        {
+            reserved_ -= malloc_size(block);
+            ::free(block);
+        }
+    }
+};
+
+}
 
 class pool {
 public:
@@ -59,17 +92,14 @@ public:
 
     inline void release(buffer * buf);
 private:
-    typedef boost::pool<boost::default_user_allocator_new_delete> impl_type;
+    typedef boost::pool<allocator> impl_type;
     impl_type impl_;
     buffers::impl * buffers_;
     mstd::atomic<size_t> used_;
     mstd::atomic<size_t> allocations_;
 };
 
-size_t buffer::buffer_size() const
-{
-    return pool_->get_requested_size() - sizeof(*this);
-}
+namespace {
 
 class pending_release {
 public:
@@ -105,6 +135,13 @@ private:
     size_t total_;
     std::vector<buffer*> buffers_;
 };
+
+}
+
+size_t buffer::buffer_size() const
+{
+    return pool_->get_requested_size() - sizeof(*this);
+}
 
 class buffers::impl {
 public:
@@ -180,6 +217,11 @@ public:
     size_t allocated()
     {
         return allocated_;
+    }
+
+    size_t reserved()
+    {
+        return reserved_;
     }
 
     void status(std::ostream & out)
@@ -304,6 +346,11 @@ size_t buffers::allocated() const
     return impl_->allocated();
 }
 
+size_t buffers::reserved() const
+{
+    return impl_->reserved();
+}
+
 pbuffer buffers::take(size_t size)
 {
     buffer * temp = impl_->take(size);
@@ -358,6 +405,17 @@ void buffer_releaser::operator()(buffer * buf) const
         delete [] pointer_cast<char*>(buf);
 }
 
+}
+
+size_t malloc_size(void * ptr)
+{
+#if defined(BOOST_WINDOWS)
+    return _msize(ptr);
+#elif defined(__APPLE__)
+    return ::malloc_size(ptr);
+#else
+    return malloc_usable_size(ptr);
+#endif
 }
 
 }

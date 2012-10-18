@@ -69,6 +69,7 @@ class MSTD_DECL buffers : public mstd::singleton<buffers> {
 public:
     size_t pools() const;
     size_t allocated() const;
+    size_t reserved() const;
 
     pbuffer take(size_t size);
 
@@ -104,5 +105,7 @@ private:
     buffers::impl & bufs_;
     mstd::lock_guard<mstd::mutex> guard_;
 };
+
+size_t malloc_size(void * ptr);
 
 }
