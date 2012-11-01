@@ -24,6 +24,7 @@ public:
     static inline Seconds seconds() { return static_cast<Seconds>(milliseconds() / 1000); }
     static inline boost::posix_time::ptime posixNow() { return posix(milliseconds()); }
 
+    static void start();
     static const boost::posix_time::ptime & timeStart();
 };
 

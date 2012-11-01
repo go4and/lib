@@ -26,6 +26,8 @@ namespace psql {
 
 namespace {
 
+mstd::atomic<size_t> allocated_(0);
+
 boost::posix_time::ptime timeStart(boost::gregorian::date(2000, boost::date_time::Jan, 1));
 
 void write2(char *& pos, int16_t value)
@@ -44,6 +46,19 @@ void write8(char *& pos, int64_t value)
 {
     *mstd::pointer_cast<int64_t*>(pos) = mstd::hton(value);
     pos += 8;
+}
+
+char * newBuffer(size_t len)
+{
+    char * result = static_cast<char*>(malloc(len));
+    allocated_ += mstd::malloc_size(result);
+    return result;
+}
+
+void deleteBuffer(char * buffer)
+{
+    allocated_ -= mstd::malloc_size(buffer);
+    free(buffer);
 }
 
 }
@@ -359,13 +374,14 @@ void ParametricExecution::freeExtraBuffers()
     while(p)
     {
         void * n = *static_cast<void**>(p);
-        delete [] static_cast<char*>(p);
+        deleteBuffer(static_cast<char*>(p));
         p = n;
     }
 }
 
 ParametricExecution::~ParametricExecution()
 {
+    freeExtraBuffers();
 }
 
 void ParametricExecution::clear()
@@ -451,7 +467,7 @@ void ParametricExecution::fill(std::vector<const char*> & values, std::vector<in
 
 char * ParametricExecution::allocBuffer(size_t size)
 {
-    char * result = new char[size + sizeof(void*)];
+    char * result = newBuffer(size + sizeof(void*));
     *extraBuffersTail_ = result;
     extraBuffersTail_ = mstd::pointer_cast<void**>(result);
     *extraBuffersTail_ = 0;
@@ -719,6 +735,11 @@ bool ResultRowRef::null(size_t index) const
 size_t ResultRowRef::size() const
 {
     return size_;
+}
+
+size_t allocated()
+{
+    return allocated_;
 }
 
 }

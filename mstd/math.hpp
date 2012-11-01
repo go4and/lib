@@ -43,6 +43,12 @@ inline auto length(const O & o) -> decltype(std::sqrt(sqr(o.x) + sqr(o.y)))
     return std::sqrt(sqr(o.x) + sqr(o.y));
 }
 
+template<class O>
+inline O rot90(const O & o)
+{
+    return O(-o.y, o.x);
+}
+
 template<class P>
 inline P normalize(const P & p)
 {

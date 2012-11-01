@@ -446,4 +446,6 @@ typedef boost::error_info<ExpectedOidTag, Oid> ExpectedOidInfo;
 class ColumnTag;
 typedef boost::error_info<ColumnTag, size_t> ColumnInfo;
 
+size_t allocated();
+
 }
