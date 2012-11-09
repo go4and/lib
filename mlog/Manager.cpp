@@ -158,14 +158,14 @@ android_LogPriority androidLogPriority[] =
       ANDROID_LOG_VERBOSE,
     };
 
-class AndroidLogDevice {
+class AndroidLogDevice : public LogDevice {
 public:
     AndroidLogDevice(const std::string & tag)
         : tag_(tag)
     {
     }
 
-    void operator()(LogLevel level, const char * out, size_t len)
+    void doOutput(LogLevel level, const char * out, size_t len)
     {
         __android_log_write(androidLogPriority[level], tag_.c_str(), out);
     }
@@ -429,7 +429,7 @@ LogDevice * createDevice(const std::string & name, const std::string & value)
     {
         if(value[value.length() - 1] != ')')
             BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Android log device syntax: android_log(tag)"));
-        device = AndroidLogDevice(value.substr(12, value.length() - 13));
+        device = new AndroidLogDevice(value.substr(12, value.length() - 13));
     }
 #endif
     else
