@@ -63,9 +63,11 @@ public:
 
     ~AsyncHTTP()
     {
-        boost::lock_guard<boost::mutex> lock(mutex_);
-        condition_.notify_one();
         thread_.interrupt();
+        {
+            boost::lock_guard<boost::mutex> lock(mutex_);
+            condition_.notify_one();
+        }
         thread_.join();
     }
 
