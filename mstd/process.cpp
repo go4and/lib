@@ -46,7 +46,7 @@ boost::filesystem::wpath executable_path()
     char buf[0x100 + 1];
     ssize_t size = readlink("/proc/self/exe", buf, sizeof(buf));
     buf[size] = 0;
-    return boost::filesystem::wpath(mstd::deutf8(buf));
+    return boost::filesystem::path(buf);
 #endif
 }
 
