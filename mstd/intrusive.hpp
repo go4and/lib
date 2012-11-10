@@ -141,4 +141,86 @@ struct make_intrusive_set {
             > type;
 };
 
+template<class Extractor, class EqualTo = std::equal_to<typename Extractor::result_type> >
+class extractor_equal {
+public:
+    typedef typename Extractor::result_type key_type;
+    
+    extractor_equal(const Extractor & extractor = Extractor(), const EqualTo & equal_to = EqualTo())
+        : extractor_(extractor), equal_to_(equal_to) {}
+    
+    template<class T>
+    bool operator()(const T & lhs, const T & rhs) const
+    {
+        return equal_to_(extractor_(lhs), extractor_(rhs));
+    }
+    
+    template<class T>
+    bool operator()(const key_type & lhs, const T & rhs) const
+    {
+        return equal_to_(lhs, extractor_(rhs));
+    }
+    
+    template<class T>
+    bool operator()(const T & lhs, const key_type & rhs) const
+    {
+        return equal_to_(extractor_(lhs), rhs);
+    }
+
+    template<class T>
+    bool operator()(const key_type & lhs, const key_type & rhs) const
+    {
+        return equal_to_(lhs, rhs);
+    }
+private:
+    Extractor extractor_;
+    EqualTo equal_to_;
+};
+
+template<class Extractor, class Hasher = boost::hash<typename Extractor::result_type> >
+class extractor_hash {
+public:
+    typedef typename Extractor::result_type key_type;
+    
+    extractor_hash(const Extractor & extractor = Extractor(), const Hasher & hasher = Hasher())
+        : extractor_(extractor), hasher_(hasher) {}
+    
+    template<class T>
+    bool operator()(const T & lhs, const T & rhs) const
+    {
+        return hasher_(extractor_(lhs), extractor_(rhs));
+    }
+    
+    template<class T>
+    bool operator()(const key_type & lhs, const T & rhs) const
+    {
+        return hasher_(lhs, extractor_(rhs));
+    }
+    
+    template<class T>
+    bool operator()(const T & lhs, const key_type & rhs) const
+    {
+        return hasher_(extractor_(lhs), rhs);
+    }
+
+    template<class T>
+    bool operator()(const key_type & lhs, const key_type & rhs) const
+    {
+        return hasher_(lhs, rhs);
+    }
+private:
+    Extractor extractor_;
+    Hasher hasher_;
+};
+
+template<class T, class Extractor, boost::intrusive::unordered_set_member_hook<> T::*hook = &T::setHook>
+struct make_intrusive_unordered_set {
+    typedef boost::intrusive::unordered_set<
+                T,
+                boost::intrusive::member_hook<T, boost::intrusive::unordered_set_member_hook<>, hook>,
+                boost::intrusive::equal<extractor_equal<Extractor> >,
+                boost::intrusive::hash<extractor_hash<Extractor> >
+            > type;
+};
+
 }

@@ -146,6 +146,11 @@ void make_executable(const boost::filesystem::wpath & path, bool user, bool grou
     struct stat st;
     if(!stat(executable.c_str(), &st))
         chmod(executable.c_str(), st.st_mode | (user ? S_IXUSR : 0) | (group ? S_IXGRP : 0) | (other ? S_IXOTH : 0));
+#else
+    (void)path;
+    (void)user;
+    (void)group;
+    (void)other;
 #endif
 }
 

@@ -1,5 +1,10 @@
 #pragma once
 
+#ifndef NEXUS_BUILDING
+#include <boost/date_time/posix_time/ptime.hpp>
+#include <boost/date_time/posix_time/posix_time_duration.hpp>
+#endif
+
 namespace boost {
     namespace posix_time {
         class ptime;
@@ -19,6 +24,7 @@ public:
     static inline Seconds seconds() { return static_cast<Seconds>(milliseconds() / 1000); }
     static inline boost::posix_time::ptime posixNow() { return posix(milliseconds()); }
 
+    static void start();
     static const boost::posix_time::ptime & timeStart();
 };
 

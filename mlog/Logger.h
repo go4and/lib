@@ -13,18 +13,15 @@
 #endif
 
 #include "Config.h"
-
-#include "Manager.h"
+#include "Defines.h"
+#include "LoggerImpl.h"
 
 namespace mlog {
 
 class MLOG_DECL Logger : public boost::noncopyable {
 public:
 #if !MLOG_NO_LOGGING
-    explicit Logger(const std::string & name)
-        : name_(name)
-        , impl_(Manager::instance().registerLogger(name))
-         {}
+    explicit Logger(const std::string & name);
 #endif
 
 #if !MLOG_NO_LOGGING
@@ -33,7 +30,7 @@ public:
         return name_.c_str();
     }
 
-    mlog::LogLevel level() const
+    LogLevel level() const
     {
         return impl_.level();
     }

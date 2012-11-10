@@ -49,11 +49,16 @@ public:
         return thread_.joinable();
     }
 
-    Ticker()
+    void start()
     {
         boost::posix_time::ptime now = boost::posix_time::microsec_clock::universal_time();
         out = (now - boost::posix_time::ptime(boost::gregorian::date(1970, boost::date_time::Jan, 1))).total_milliseconds();
+
         thread_ = boost::thread(&tickThread);
+    }
+
+    Ticker()
+    {
     }
 private:
     boost::thread thread_;
@@ -68,16 +73,15 @@ Milliseconds Clock::milliseconds()
     return out;
 }
 
-boost::posix_time::ptime makeTimeStart()
-{
-    while(!ticker.dummy());
-    return boost::posix_time::ptime(boost::gregorian::date(1970, boost::date_time::Jan, 1));
-}
-
 const boost::posix_time::ptime & Clock::timeStart()
 {
-    static const boost::posix_time::ptime result(makeTimeStart());
+    static const boost::posix_time::ptime result(boost::gregorian::date(1970, boost::date_time::Jan, 1));
     return result;
+}
+
+void Clock::start()
+{
+    ticker.start();
 }
 
 }

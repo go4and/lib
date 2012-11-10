@@ -10,48 +10,17 @@
 		C35AA50C135391D500649921 /* psql.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA50A135391D500649921 /* psql.cpp */; };
 		C35AA50D135391D500649921 /* psql.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA50B135391D500649921 /* psql.h */; };
 		C3660D5913F5A1FB001F51AA /* libpq.5.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */; };
-		C38B10DF135778F900F7A097 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C38B10D6135778E200F7A097 /* mlog.dylib */; };
-		C38B10E0135778F900F7A097 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C38B10D9135778E200F7A097 /* mstd.dylib */; };
+		C3E91C0815DCD999001F15B9 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E91C0615DCD999001F15B9 /* mlog.dylib */; };
+		C3E91C0915DCD999001F15B9 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E91C0715DCD999001F15B9 /* mstd.dylib */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		C38B10D5135778E200F7A097 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C38B10CE135778E200F7A097 /* mlog.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C3F10D4F1352FCE200D8C945;
-			remoteInfo = mlog;
-		};
-		C38B10D8135778E200F7A097 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C38B10D1135778E200F7A097 /* mstd.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C32455981352A6B900999158;
-			remoteInfo = mstd;
-		};
-		C38B10DB135778EB00F7A097 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C38B10D1135778E200F7A097 /* mstd.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C32455971352A6B900999158;
-			remoteInfo = mstd;
-		};
-		C38B10DD135778EB00F7A097 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C38B10CE135778E200F7A097 /* mlog.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C3F10D4E1352FCE200D8C945;
-			remoteInfo = mlog;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		C3389D47135388790010E3BF /* psql.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = psql.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C35AA50A135391D500649921 /* psql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = psql.cpp; sourceTree = SOURCE_ROOT; };
 		C35AA50B135391D500649921 /* psql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psql.h; sourceTree = SOURCE_ROOT; };
 		C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpq.5.3.dylib; path = /opt/local/lib/postgresql90/libpq.5.3.dylib; sourceTree = "<absolute>"; };
-		C38B10CE135778E200F7A097 /* mlog.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mlog.xcodeproj; path = ../mlog/mlog.xcodeproj; sourceTree = SOURCE_ROOT; };
-		C38B10D1135778E200F7A097 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = SOURCE_ROOT; };
+		C3E91C0615DCD999001F15B9 /* mlog.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3E91C0715DCD999001F15B9 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,8 +28,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C38B10DF135778F900F7A097 /* mlog.dylib in Frameworks */,
-				C38B10E0135778F900F7A097 /* mstd.dylib in Frameworks */,
+				C3E91C0815DCD999001F15B9 /* mlog.dylib in Frameworks */,
+				C3E91C0915DCD999001F15B9 /* mstd.dylib in Frameworks */,
 				C3660D5913F5A1FB001F51AA /* libpq.5.3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,8 +40,8 @@
 		C3389D3C135388790010E3BF = {
 			isa = PBXGroup;
 			children = (
-				C38B10CE135778E200F7A097 /* mlog.xcodeproj */,
-				C38B10D1135778E200F7A097 /* mstd.xcodeproj */,
+				C3E91C0615DCD999001F15B9 /* mlog.dylib */,
+				C3E91C0715DCD999001F15B9 /* mstd.dylib */,
 				C3389D49135388790010E3BF /* psql */,
 				C3389D48135388790010E3BF /* Products */,
 				C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */,
@@ -94,22 +63,6 @@
 				C35AA50B135391D500649921 /* psql.h */,
 			);
 			path = psql;
-			sourceTree = "<group>";
-		};
-		C38B10CF135778E200F7A097 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C38B10D6135778E200F7A097 /* mlog.dylib */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		C38B10D2135778E200F7A097 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C38B10D9135778E200F7A097 /* mstd.dylib */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +90,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				C38B10DC135778EB00F7A097 /* PBXTargetDependency */,
-				C38B10DE135778EB00F7A097 /* PBXTargetDependency */,
 			);
 			name = psql;
 			productName = psql;
@@ -164,39 +115,12 @@
 			mainGroup = C3389D3C135388790010E3BF;
 			productRefGroup = C3389D48135388790010E3BF /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = C38B10CF135778E200F7A097 /* Products */;
-					ProjectRef = C38B10CE135778E200F7A097 /* mlog.xcodeproj */;
-				},
-				{
-					ProductGroup = C38B10D2135778E200F7A097 /* Products */;
-					ProjectRef = C38B10D1135778E200F7A097 /* mstd.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				C3389D46135388790010E3BF /* psql */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		C38B10D6135778E200F7A097 /* mlog.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = mlog.dylib;
-			remoteRef = C38B10D5135778E200F7A097 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		C38B10D9135778E200F7A097 /* mstd.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = mstd.dylib;
-			remoteRef = C38B10D8135778E200F7A097 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C3389D43135388790010E3BF /* Sources */ = {
@@ -208,19 +132,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		C38B10DC135778EB00F7A097 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = mstd;
-			targetProxy = C38B10DB135778EB00F7A097 /* PBXContainerItemProxy */;
-		};
-		C38B10DE135778EB00F7A097 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = mlog;
-			targetProxy = C38B10DD135778EB00F7A097 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C3389D53135388790010E3BF /* Debug */ = {
@@ -241,10 +152,11 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lboost_system-mt-d";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Debug;
@@ -264,8 +176,9 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Release;

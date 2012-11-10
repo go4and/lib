@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#pragma warning(disable: 4996)
+
 #include "CurlUtils.h"
 #include "JSON.h"
 
@@ -51,6 +53,7 @@ public:
     {
         boost::lock_guard<boost::mutex> lock(mutex_);
         queue_.push_back(task);
+        condition_.notify_one();
     }
 
     void cancelAll()
@@ -61,6 +64,10 @@ public:
     ~AsyncHTTP()
     {
         thread_.interrupt();
+        {
+            boost::lock_guard<boost::mutex> lock(mutex_);
+            condition_.notify_one();
+        }
         thread_.join();
     }
 
@@ -74,96 +81,122 @@ private:
     {
         char * curlVersion = curl_version();
         MLOG_DEBUG("curl version: " << curlVersion);
+        conditionWait_ = true;
 
         try {
             std::vector<AsyncTaskPtr> tasks;
             CurlMultiHandle multi(curl_multi_init());
-            fd_set readfs, writefs, excfs;
-            int maxfd;
 
             while(!boost::this_thread::interruption_requested())
             {
                 size_t oldTasks = tasks.size();
                 {
-                    boost::lock_guard<boost::mutex> lock(mutex_);
+                    boost::unique_lock<boost::mutex> lock(mutex_);
+                    if(conditionWait_ && queue_.empty())
+                        condition_.timed_wait(lock, boost::posix_time::seconds(1));
                     tasks.insert(tasks.end(), queue_.begin(), queue_.end());
                     queue_.clear();
                 }
-                bool cancel = cancelAll_.cas(false, true);
-                if(!cancel)
-                {
-                    for(size_t i = oldTasks, size = tasks.size(); i != size; ++i)
-                        tasks[i]->start(*multi);
-                } else {
-                    for(std::vector<AsyncTaskPtr>::iterator i = tasks.begin(), end = tasks.end(); i != end; ++i)
-                        (*i)->done(600 + CURLE_ABORTED_BY_CALLBACK);
-                    tasks.clear();
-                }
-                int rh = 0;
-                // MLOG_DEBUG("performing curl");
-                for(;;)
-                {
-                    CURLMcode code = curl_multi_perform(*multi, &rh);
-                    // MLOG_DEBUG("perform code: " << code);
-                    if(code != CURLM_CALL_MULTI_PERFORM)
-                        break;
-                }
-                CURLMsg * msg;
-                // MLOG_DEBUG("reading messages");
-                while((msg = curl_multi_info_read(*multi, &rh)) != 0)
-                {
-                    // MLOG_DEBUG("message: " << msg->msg);
-                    if(msg->msg == CURLMSG_DONE)
-                    {
-                        AsyncTask * task;
-                        curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, &task);
-                        long code;
-                        curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &code);
-                        MLOG_MESSAGE_EX(code >= 300 ? mlog::llWarning : mlog::llInfo, "done with code: " << code << ", result: " << msg->data.result);
 
-                        bool failed = msg->data.result != CURLE_OK || code != 200;
-                        AsyncTaskPtr tp(task);
-                        for(std::vector<AsyncTaskPtr>::iterator i = tasks.begin(), end = tasks.end(); i != end; ++i)
-                            if(i->get() == task)
-                            {
-                                tasks.erase(i);
-                                break;
-                            }
-                        task->done(failed ? (code && code != 200 ? code : 600 + msg->data.result) : 0);
-                    }
-                }
-
-                FD_ZERO(&readfs);
-                FD_ZERO(&writefs);
-                FD_ZERO(&excfs);
-                maxfd = 0;
-                // MLOG_DEBUG("init fdset");
-                CURLMcode cr = curl_multi_fdset(*multi, &readfs, &writefs, &excfs, &maxfd);
-                if(cr != CURLM_OK)
-                    MLOG_ERROR("curl_multi_fdset failed: " << cr);
-                if(maxfd != -1)
-                {
-                    timeval timeout = { 0, 10000 };
-                    // MLOG_DEBUG("select");
-                    int res = select(maxfd + 1, &readfs, &writefs, &excfs, &timeout);
-                    if(res == -1)
-                    {
-                        int err = errno;
-                        MLOG_MESSAGE(Error, "select failed: " << err);
-                    }
-                } else {
-                    // MLOG_DEBUG("sleeping");
-                    boost::this_thread::sleep(boost::posix_time::milliseconds(10));
-                }
+                startNewTasks(multi, tasks, oldTasks);
+                processMessages(multi, tasks);
+                waitIO(multi, tasks);
             }
         } catch(boost::thread_interrupted&) {
         }
     }
 
+    void startNewTasks(CurlMultiHandle & multi, std::vector<AsyncTaskPtr> & tasks, size_t oldTasks)
+    {
+        bool cancel = cancelAll_.cas(false, true);
+        if(!cancel)
+        {
+            for(size_t i = oldTasks, size = tasks.size(); i != size; ++i)
+                tasks[i]->start(*multi);
+        } else {
+            for(std::vector<AsyncTaskPtr>::iterator i = tasks.begin(), end = tasks.end(); i != end; ++i)
+                (*i)->done(600 + CURLE_ABORTED_BY_CALLBACK);
+            tasks.clear();
+        }
+    }
+
+    void processMessages(CurlMultiHandle & multi, std::vector<AsyncTaskPtr> & tasks)
+    {
+        int rh = 0;
+        // MLOG_DEBUG("performing curl");
+        for(;;)
+        {
+            CURLMcode code = curl_multi_perform(*multi, &rh);
+            // MLOG_DEBUG("perform code: " << code);
+            if(code != CURLM_CALL_MULTI_PERFORM)
+                break;
+        }
+
+        CURLMsg * msg;
+        // MLOG_DEBUG("reading messages");
+        while((msg = curl_multi_info_read(*multi, &rh)) != 0)
+        {
+            // MLOG_DEBUG("message: " << msg->msg);
+            if(msg->msg == CURLMSG_DONE)
+            {
+                AsyncTask * task;
+                curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, &task);
+                long code;
+                curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &code);
+                MLOG_MESSAGE_EX(code >= 300 ? mlog::llWarning : mlog::llInfo, "done with code: " << code << ", result: " << msg->data.result);
+
+                bool failed = msg->data.result != CURLE_OK || code != 200;
+                AsyncTaskPtr tp(task);
+                for(std::vector<AsyncTaskPtr>::iterator i = tasks.begin(), end = tasks.end(); i != end; ++i)
+                    if(i->get() == task)
+                    {
+                        tasks.erase(i);
+                        break;
+                    }
+                task->done(failed ? (code && code != 200 ? code : 600 + msg->data.result) : 0);
+            }
+        }
+    }
+
+    void waitIO(CurlMultiHandle & multi, std::vector<AsyncTaskPtr> & tasks)
+    {
+        conditionWait_ = false;
+        
+        fd_set readfs, writefs, excfs;
+        int maxfd;
+
+        FD_ZERO(&readfs);
+        FD_ZERO(&writefs);
+        FD_ZERO(&excfs);
+        maxfd = 0;
+        // MLOG_DEBUG("init fdset");
+        CURLMcode cr = curl_multi_fdset(*multi, &readfs, &writefs, &excfs, &maxfd);
+        if(cr != CURLM_OK)
+            MLOG_ERROR("curl_multi_fdset failed: " << cr);
+        if(maxfd != -1)
+        {
+            timeval timeout = { 0, 10000 };
+            // MLOG_DEBUG("select");
+            int res = select(maxfd + 1, &readfs, &writefs, &excfs, &timeout);
+            if(res == -1)
+            {
+                int err = errno;
+                MLOG_MESSAGE(Error, "select failed: " << err);
+            }
+        } else {
+            if(!tasks.empty())
+                boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+            else
+                conditionWait_ = true;
+        }
+    }
+    
     boost::thread thread_;
     boost::mutex mutex_;
+    boost::condition_variable condition_;
     std::vector<AsyncTaskPtr> queue_;
     mstd::atomic<bool> cancelAll_;
+    bool conditionWait_;
 };
 
 class DownloadTask : public AsyncTask {

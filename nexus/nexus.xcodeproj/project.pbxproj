@@ -241,7 +241,7 @@
 		C3389D5A135388960010E3BF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = IP;
 			};
 			buildConfigurationList = C3389D5D135388960010E3BF /* Build configuration list for PBXProject "nexus" */;
@@ -307,13 +307,14 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lboost_system-mt-d",
 					"-lboost_thread-mt-d",
 				);
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Debug;
@@ -335,13 +336,14 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lboost_system-mt",
 					"-lboost_thread-mt",
 				);
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Release;

@@ -20,6 +20,11 @@
 
 #include <string.h>
 
+#ifdef ANDROID
+#include <asm/page.h>
+#include <android/log.h>
+#endif
+
 #include <exception>
 #include <iosfwd>
 #include <iomanip>
@@ -50,10 +55,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <boost/thread.hpp>
-
-#ifdef ANDROID
-#include <android/log.h>
-#endif
 
 #include "Config.h"
 

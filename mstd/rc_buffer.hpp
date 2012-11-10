@@ -67,7 +67,8 @@ public:
     {
         if(data_)
         {
-            if(detail::atomic_helper<sizeof(int)>::add(counterAddress(), -1) == 0)
+            typedef detail::atomic_helper<sizeof(int)> helper;
+            if(helper::add(counterAddress(), static_cast<helper::int_type>(-1)) == 0)
                 delete [] data_;
             data_ = 0;
         }

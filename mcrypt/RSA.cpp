@@ -2,9 +2,6 @@
 
 #include "RSA.h"
 
-using namespace std;
-using namespace boost;
-
 namespace mcrypt {
 
 //////////////////////////////////////////////////////////////////////////
@@ -76,8 +73,8 @@ RSAPtr RSA::generateKey(int num, unsigned long e, const mcrypt::RSA::GenerateLis
 
 RSAPtr RSA::createFromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen)
 {
-    BNHolder bn(BN_bin2bn(n, nlen, 0));
-    BNHolder be(BN_bin2bn(e, elen, 0));
+    BNHolder bn(BN_bin2bn(n, static_cast<int>(nlen), 0));
+    BNHolder be(BN_bin2bn(e, static_cast<int>(elen), 0));
 
     ::RSA * impl = RSA_new();
     if(!impl)
@@ -154,6 +151,7 @@ RSAPtr RSA::createFromPublicPem(const void * buf, size_t len)
     if(key)
     {
         ::RSA * rsa = extractRsa(key);
+
         if(key)
             EVP_PKEY_free(key);
         if(rsa)
@@ -395,14 +393,17 @@ const EVP_MD * getDigest(SignType type)
     case stMD5:
         return EVP_md5();
     }
+    BOOST_ASSERT(false);
     return 0;
 }
 
 bool RSA::verify(SignType type, const char * message, size_t messageLen, const char * sign, size_t signLen)
 {
     const EVP_MD * md = getDigest(type);
+    BOOST_ASSERT(md);
 
     EVP_MD_CTX ctx;
+    memset(&ctx, 0, sizeof(ctx));
     EVP_DigestInit(&ctx, md);
 	EVP_DigestUpdate(&ctx, message, messageLen);
     size_t outLen = EVP_MD_size(md);
@@ -410,8 +411,8 @@ bool RSA::verify(SignType type, const char * message, size_t messageLen, const c
 	EVP_DigestFinal(&ctx, out, 0);
 
     int result = RSA_verify(EVP_MD_type(md),
-                            out, outLen, 
-                            mstd::pointer_cast<const unsigned char*>(sign), signLen, impl_);
+                            out, static_cast<int>(outLen),
+                            mstd::pointer_cast<unsigned char*>(const_cast<char*>(sign)), static_cast<int>(signLen), impl_);
     return result != 0;
 }
 

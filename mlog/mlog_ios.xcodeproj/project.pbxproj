@@ -27,7 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C3D4504515845E46002107A6 /* libmlog_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmlog_d.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C37206EA15F2263D0080CC69 /* LoggerImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoggerImpl.h; sourceTree = SOURCE_ROOT; };
+		C3D4504515845E46002107A6 /* libmlog-iphoneos_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libmlog-iphoneos_d.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3D4504815845E46002107A6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C3D4505915845EA2002107A6 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = SOURCE_ROOT; };
 		C3D4505A15845EA2002107A6 /* Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = SOURCE_ROOT; };
@@ -71,7 +72,7 @@
 		C3D4504615845E46002107A6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C3D4504515845E46002107A6 /* libmlog_d.a */,
+				C3D4504515845E46002107A6 /* libmlog-iphoneos_d.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,6 +104,7 @@
 				C3D4506515845EA2002107A6 /* ThreadTrace.h */,
 				C3D4506615845EA2002107A6 /* Utils.cpp */,
 				C3D4506715845EA2002107A6 /* Utils.h */,
+				C37206EA15F2263D0080CC69 /* LoggerImpl.h */,
 			);
 			path = mlog_ios;
 			sourceTree = "<group>";
@@ -144,7 +146,7 @@
 			);
 			name = mlog_ios;
 			productName = mlog_ios;
-			productReference = C3D4504515845E46002107A6 /* libmlog_d.a */;
+			productReference = C3D4504515845E46002107A6 /* libmlog-iphoneos_d.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -195,6 +197,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COMMON_MACRO = "BOOST_AC_USE_PTHREADS BOOST_SP_USE_PTHREADS NS_BLOCK_ASSERTIONS=1";
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/libs/$(PLATFORM_NAME)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				COPY_PHASE_STRIP = NO;
@@ -205,6 +208,7 @@
 				GCC_PREFIX_HEADER = pch.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
+					"$(COMMON_MACRO)",
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -217,6 +221,7 @@
 					"$(PROJECT_DIR)/..",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SUFFIX = _d;
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				OTHER_CFLAGS = (
 					"-fvisibility=hidden",
@@ -239,12 +244,14 @@
 					armv6,
 					armv7,
 				);
+				COMMON_MACRO = "BOOST_AC_USE_PTHREADS BOOST_SP_USE_PTHREADS NS_BLOCK_ASSERTIONS=1";
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/libs/$(PLATFORM_NAME)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = pch.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(COMMON_MACRO)";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -254,6 +261,7 @@
 					"$(PROJECT_DIR)/..",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SUFFIX = "";
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				OTHER_CFLAGS = (
 					"-fvisibility=hidden",
@@ -274,7 +282,7 @@
 			buildSettings = {
 				DSTROOT = /tmp/mlog_ios.dst;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = mlog_d;
+				PRODUCT_NAME = "mlog$(EFFECTIVE_PLATFORM_NAME)$(LIBRARY_SUFFIX)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -284,7 +292,7 @@
 			buildSettings = {
 				DSTROOT = /tmp/mlog_ios.dst;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = mlog;
+				PRODUCT_NAME = "mlog$(EFFECTIVE_PLATFORM_NAME)$(LIBRARY_SUFFIX)";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;

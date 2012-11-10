@@ -239,6 +239,7 @@ public:
     void copyPutInt16(int16_t value);
     void copyPutInt32(int32_t value);
     void copyPutInt64(int64_t value);
+    void copyPutPTime(const boost::posix_time::ptime & value);
     void copyPut(const char * value, size_t len);
 
     Result copyEnd();
@@ -444,5 +445,7 @@ class ExpectedOidTag;
 typedef boost::error_info<ExpectedOidTag, Oid> ExpectedOidInfo;
 class ColumnTag;
 typedef boost::error_info<ColumnTag, size_t> ColumnInfo;
+
+size_t allocated();
 
 }
