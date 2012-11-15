@@ -259,5 +259,11 @@
     <ClInclude Include="process.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="rc_buffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rc_array.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

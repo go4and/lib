@@ -140,16 +140,16 @@ template<class PTree>
 class PTreeDump {
 public:
     explicit PTreeDump(const PTree & tree)
-        : tree_(tree)
+        : tree_(&tree)
     {
     }
 
     void dump(std::ostream & out) const
     {
-        dumpTree(out, tree_);
+        dumpTree(out, *tree_);
     }
 private:
-    const PTree & tree_;
+    const PTree * tree_;
 };
 
 template<class PTree>
