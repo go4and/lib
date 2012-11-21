@@ -491,7 +491,7 @@ typedef std::vector<LogDevicePtr> DeviceGroup;
 
 class Devices : public mstd::reference_counter<Devices> {
 public:
-    Devices(bool withConsole)
+    explicit Devices(bool withConsole)
     {
         if(withConsole)
         {
@@ -680,8 +680,10 @@ private:
         if(prop == "remove")
         {
             if(value == "*")
-                newDevices.reset(new Devices(false));
-            else {
+            {
+                Devices * devices = new Devices(false);
+                newDevices.reset(devices);
+            } else {
                 if(!newDevices->setup(value, EraseDevice(), lock))
                     BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown log device: " + value));
             }
