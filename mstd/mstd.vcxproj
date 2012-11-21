@@ -207,6 +207,8 @@
     <ClInclude Include="process.hpp" />
     <ClInclude Include="ptree.hpp" />
     <ClInclude Include="random.hpp" />
+    <ClInclude Include="rc_array.hpp" />
+    <ClInclude Include="rc_buffer.hpp" />
     <ClInclude Include="reference_counter.hpp" />
     <ClInclude Include="reverse_lock.hpp" />
     <ClInclude Include="shared_mutex.hpp" />

@@ -46,7 +46,7 @@ boost::filesystem::wpath executable_path()
     char buf[0x100 + 1];
     ssize_t size = readlink("/proc/self/exe", buf, sizeof(buf));
     buf[size] = 0;
-    return boost::filesystem::wpath(mstd::deutf8(buf));
+    return boost::filesystem::path(buf);
 #endif
 }
 
@@ -60,7 +60,7 @@ void execute_file(const boost::filesystem::wpath & path)
     si.cb = sizeof(si);
     boost::filesystem::wpath parent = path;
     parent.remove_filename();
-    CreateProcessW(NULL, const_cast<wchar_t*>(wfname(path).c_str()), NULL, NULL, true, 0, NULL, wfname(parent).c_str(), &si, &pi);
+    CreateProcessW(NULL, const_cast<wchar_t*>(wfname(path).c_str()), NULL, NULL, true, CREATE_NO_WINDOW, NULL, wfname(parent).c_str(), &si, &pi);
 #else
     std::string fname = apifname(path);
     if(!vfork())

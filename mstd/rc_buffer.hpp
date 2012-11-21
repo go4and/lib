@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string.h>
-
 #include "atomic.hpp"
 
 namespace mstd {
@@ -14,14 +12,14 @@ public:
     }
 
     explicit rc_buffer(size_t size)
-        : data_(new char[size + 8])
+        : data_(new char[size + sizeof(counter_t) + sizeof(size_t)])
     {
         *sizeAddress() = size;
         *counterAddress() = 1;
     }
 
     rc_buffer(const char * data, size_t size)
-        : data_(new char[size + 8])
+        : data_(new char[size + sizeof(counter_t) + sizeof(size_t)])
     {
         memcpy(this->data(), data, size);
         *sizeAddress() = size;
@@ -55,7 +53,7 @@ public:
 
     char * data() const
     {
-        return data_ + 8;
+        return data_ + sizeof(counter_t) + sizeof(size_t);
     }
 
     unsigned char * udata() const
@@ -87,12 +85,14 @@ public:
         return data_ == 0;
     }
 private:
+    typedef unsigned int counter_t;
+
     size_t * sizeAddress() const
     {
-        return static_cast<size_t*>(static_cast<void*>(data_ + 4));
+        return static_cast<size_t*>(static_cast<void*>(data_ + sizeof(counter_t)));
     }
 
-    volatile unsigned int * counterAddress() const
+    volatile counter_t * counterAddress() const
     {
         return static_cast<volatile unsigned int*>(static_cast<void*>(data_));
     }

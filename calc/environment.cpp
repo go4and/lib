@@ -58,10 +58,11 @@ public:
     variable run(void * context, variable * stack) const
     {
         size_t i = 0, size = args_.size();
-        variable * vars = static_cast<variable*>(alloca(sizeof(variable) * size));
+        variable * vars = static_cast<variable*>(alloca(sizeof(variable) * (size + 1))) + 1;
         deleter d(vars, i);
         for(; i != size; ++i)
             new (vars + i) variable(args_[i]->run(context, stack));
+        *mstd::pointer_cast<size_t*>(vars - 1) = size;
         return impl_(context, vars);
     }
 
