@@ -13,7 +13,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C3EFF50C156AD2660069B5BD /* libmsqlite_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmsqlite_d.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3EFF50C156AD2660069B5BD /* libsqlite_ios-iphoneos_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libsqlite_ios-iphoneos_d.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EFF50F156AD2660069B5BD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C3EFF520156AD2BE0069B5BD /* SQLite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SQLite.cpp; sourceTree = SOURCE_ROOT; };
 		C3EFF521156AD2BE0069B5BD /* SQLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLite.h; sourceTree = SOURCE_ROOT; };
@@ -43,7 +43,7 @@
 		C3EFF50D156AD2660069B5BD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C3EFF50C156AD2660069B5BD /* libmsqlite_d.a */,
+				C3EFF50C156AD2660069B5BD /* libsqlite_ios-iphoneos_d.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,7 +93,7 @@
 			);
 			name = sqlite_ios;
 			productName = sqlite;
-			productReference = C3EFF50C156AD2660069B5BD /* libmsqlite_d.a */;
+			productReference = C3EFF50C156AD2660069B5BD /* libsqlite_ios-iphoneos_d.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -161,14 +161,16 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/..",
-					/opt/local/include,
+					"$(PROJECT_DIR)/../../boost",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SUFFIX = _d;
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				OTHER_CFLAGS = (
 					"-fvisibility=hidden",
 					"-fvisibility-inlines-hidden",
 				);
+				PRODUCT_NAME = "msqlite$(EFFECTIVE_PLATFORM_NAME)$(LIBRARY_SUFFIX)";
 				SDKROOT = iphoneos;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
@@ -200,14 +202,16 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/..",
-					/opt/local/include,
+					"$(PROJECT_DIR)/../../boost",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SUFFIX = "";
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				OTHER_CFLAGS = (
 					"-fvisibility=hidden",
 					"-fvisibility-inlines-hidden",
 				);
+				PRODUCT_NAME = "msqlite$(EFFECTIVE_PLATFORM_NAME)$(LIBRARY_SUFFIX)";
 				SDKROOT = iphoneos;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 				VALIDATE_PRODUCT = YES;
@@ -219,7 +223,6 @@
 			buildSettings = {
 				DSTROOT = /tmp/sqlite.dst;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = msqlite_d;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -229,7 +232,6 @@
 			buildSettings = {
 				DSTROOT = /tmp/sqlite.dst;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = msqlite;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
