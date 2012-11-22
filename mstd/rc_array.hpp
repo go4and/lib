@@ -65,7 +65,7 @@ public:
         if(data_)
         {
             typedef detail::atomic_helper<sizeof(int)> helper;
-            if(helper::add(counterAddress(), static_cast<helper::int_type>(-1)) == 1)
+            if(helper::add(counterAddress(), static_cast<helper::int_type>(-1)) == 0)
             {
                 size_t size = this->size();
                 value_type * data = this->data();

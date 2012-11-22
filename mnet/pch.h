@@ -34,7 +34,7 @@
 #include <mstd/intrusive.hpp>
 #include <mstd/itoa.hpp>
 #include <mstd/pointer_cast.hpp>
-#include <mstd/reference_counter.hpp>
+#include <mstd/rc_buffer.hpp>
 #include <mstd/singleton.hpp>
 
 #include <mlog/Dumper.h>

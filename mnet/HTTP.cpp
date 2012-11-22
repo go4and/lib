@@ -289,8 +289,8 @@ public:
         if(postData_)
         {
             curl_easy_setopt(curl_, CURLOPT_POST, 1L);
-            curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, postData_->data());
-            curl_easy_setopt(curl_, CURLOPT_POSTFIELDSIZE, static_cast<long>(postData_->size()));
+            curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, postData_.data());
+            curl_easy_setopt(curl_, CURLOPT_POSTFIELDSIZE, static_cast<long>(postData_.size()));
         }
         MLOG_DEBUG("GetDataAsync::doStart, done");
     }
@@ -322,7 +322,7 @@ private:
     AsyncDataExHandler handlerEx_;
     std::string data_;
     std::string header_;
-    PostDataPtr postData_;
+    mstd::rc_buffer postData_;
     curl_slist * headers_;
 };
 

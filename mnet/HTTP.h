@@ -49,37 +49,6 @@ void getFileAsync(const std::string & url, const boost::filesystem::wpath & path
 boost::property_tree::ptree parseXml(const std::string& data);
 boost::property_tree::ptree parseJSON(const std::string& data);
 
-class PostData : public mstd::reference_counter<PostData> {
-public:
-    explicit PostData(size_t len)
-        : len_(len)
-    {
-    }
-
-    void * data() { return mstd::pointer_cast<char*>(this) + sizeof(*this); }
-    const void * data() const { return mstd::pointer_cast<const char*>(this) + sizeof(*this); }
-
-    size_t size() const { return len_; }
-private:
-    size_t len_;
-};
-
-inline PostData * makePostData(size_t len)
-{
-    char * placeholder = new char[sizeof(PostData) + len];
-    PostData * result = new (placeholder) PostData(len);
-    return result;
-}
-
-inline PostData * makePostData(const void * input, size_t len)
-{
-    PostData * result = makePostData(len);
-    memcpy(result->data(), input, len);
-    return result;
-}
-
-typedef boost::intrusive_ptr<PostData> PostDataPtr;
-
 class Request {
 public:
     Request() {}
@@ -91,8 +60,8 @@ public:
     Request & dataExHandler(const AsyncDataExHandler & value) { handlerEx_ = value; handler_.clear(); return *this; }
     Request & xmlHandler(const AsyncPTreeHandler & value);
     Request & jsonHandler(const AsyncPTreeHandler & value);
-    Request & postData(const void * data, size_t len) { return postData(makePostData(data, len)); }
-    Request & postData(const PostDataPtr & data) { postData_ = data; return *this; }
+    Request & postData(const void * data, size_t len) { postData_ = mstd::rc_buffer(static_cast<const char*>(data), len); return *this; }
+    Request & postData(const mstd::rc_buffer & data) { postData_ = data; return *this; }
     Request & header(const std::string & line) { headers_.push_back(line); return *this; }
 
     const std::string & url() const { return url_; }
@@ -100,7 +69,7 @@ public:
     const ProgressHandler & progressHandler() const { return progress_; }
     const AsyncDataHandler & dataHandler() const { return handler_; }
     const AsyncDataExHandler & dataExHandler() const { return handlerEx_; }
-    const PostDataPtr & postData() const { return postData_; }
+    const mstd::rc_buffer & postData() const { return postData_; }
     const std::vector<std::string> & headers() const { return headers_; }
 
     void run();
@@ -111,7 +80,7 @@ private:
     ProgressHandler progress_;
     AsyncDataHandler handler_;
     AsyncDataExHandler handlerEx_;
-    PostDataPtr postData_;
+    mstd::rc_buffer postData_;
 };
 
 std::ostream & operator<<(std::ostream & out, const Request & request);
