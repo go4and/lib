@@ -53,6 +53,11 @@ public:
         return *sizeAddress();
     }
 
+    void resize(size_t size)
+    {
+        *sizeAddress() = size;
+    }
+
     char * data() const
     {
         return data_ + sizeof(counter_t) + sizeof(size_t);
