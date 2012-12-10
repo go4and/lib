@@ -9,7 +9,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include <mstd/pointer_cast.hpp>
-#include <mstd/reference_counter.hpp>
+#include <mstd/rc_buffer.hpp>
 #endif
 
 #include "DownloadDefines.h"
