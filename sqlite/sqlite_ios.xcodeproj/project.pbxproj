@@ -13,7 +13,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C3EFF50C156AD2660069B5BD /* libsqlite_ios-iphoneos_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libsqlite_ios-iphoneos_d.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3EFF50C156AD2660069B5BD /* libsqlite_ios-iphoneos_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libsqlite_ios-iphoneos_d.a"; path = "libmsqlite-iphoneos_d.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EFF50F156AD2660069B5BD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C3EFF520156AD2BE0069B5BD /* SQLite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SQLite.cpp; sourceTree = SOURCE_ROOT; };
 		C3EFF521156AD2BE0069B5BD /* SQLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLite.h; sourceTree = SOURCE_ROOT; };
@@ -138,8 +138,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/libs/$(PLATFORM_NAME)";
+				ARCHS = armv7;
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -172,7 +172,7 @@
 				);
 				PRODUCT_NAME = "msqlite$(EFFECTIVE_PLATFORM_NAME)$(LIBRARY_SUFFIX)";
 				SDKROOT = iphoneos;
-				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
+				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Debug;
 		};
@@ -180,11 +180,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					armv6,
-					armv7,
-				);
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/libs/$(PLATFORM_NAME)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -213,7 +210,7 @@
 				);
 				PRODUCT_NAME = "msqlite$(EFFECTIVE_PLATFORM_NAME)$(LIBRARY_SUFFIX)";
 				SDKROOT = iphoneos;
-				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
+				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

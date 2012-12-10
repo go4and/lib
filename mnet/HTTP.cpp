@@ -191,9 +191,9 @@ private:
         }
     }
     
-    boost::thread thread_;
     boost::mutex mutex_;
     boost::condition_variable condition_;
+    boost::thread thread_;
     std::vector<AsyncTaskPtr> queue_;
     mstd::atomic<bool> cancelAll_;
     bool conditionWait_;
