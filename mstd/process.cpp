@@ -65,7 +65,7 @@ void execute_file(const boost::filesystem::wpath & path)
     std::string fname = apifname(path);
     if(!vfork())
     {
-        execl(fname.c_str(), NULL, NULL);
+        execl(fname.c_str(), fname.c_str(), NULL);
         _exit(0);
     }
 #endif

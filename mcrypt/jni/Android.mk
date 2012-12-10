@@ -10,6 +10,6 @@ LOCAL_CPP_FEATURES := exceptions rtti
 
 LOCAL_C_INCLUDES := $(BOOST_ROOT) $(OPENSSL_ROOT)/include ..
 
-LOCAL_SRC_FILES := ../base64.cpp
+LOCAL_SRC_FILES := ../base64.cpp ../RSA.cpp
 
 include $(BUILD_STATIC_LIBRARY)

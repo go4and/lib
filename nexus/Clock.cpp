@@ -40,8 +40,11 @@ class Ticker {
 public:
     ~Ticker()
     {
-        thread_.interrupt();
-        thread_.join();
+        if(thread_.joinable())
+        {
+            thread_.interrupt();
+            thread_.join();
+        }
     }
 
     bool dummy() const
