@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56799BCE1681CCD200B89933 /* command_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56799BCD1681CCD200B89933 /* command_queue.cpp */; };
 		C319523015A2A0CC002E5C47 /* ptree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C319522E15A2A0CC002E5C47 /* ptree.cpp */; };
 		C319523115A2A0CC002E5C47 /* ptree.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C319522F15A2A0CC002E5C47 /* ptree.hpp */; };
 		C33180F2156B95C60067468B /* math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C33180F1156B95C60067468B /* math.hpp */; };
@@ -39,6 +40,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		56799BCD1681CCD200B89933 /* command_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = command_queue.cpp; sourceTree = SOURCE_ROOT; };
 		C319522E15A2A0CC002E5C47 /* ptree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ptree.cpp; sourceTree = SOURCE_ROOT; };
 		C319522F15A2A0CC002E5C47 /* ptree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ptree.hpp; sourceTree = SOURCE_ROOT; };
 		C33180F1156B95C60067468B /* math.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = SOURCE_ROOT; };
@@ -127,6 +129,7 @@
 		C3EFF53F156AD4630069B5BD /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				56799BCD1681CCD200B89933 /* command_queue.cpp */,
 				C319522E15A2A0CC002E5C47 /* ptree.cpp */,
 				C319522F15A2A0CC002E5C47 /* ptree.hpp */,
 				C3D4507815846189002107A6 /* rc_buffer.hpp */,
@@ -243,6 +246,7 @@
 				C38F34F9156BBAD5005036B0 /* filesystem.cpp in Sources */,
 				C3D4507C15846189002107A6 /* singleton.cpp in Sources */,
 				C319523015A2A0CC002E5C47 /* ptree.cpp in Sources */,
+				56799BCE1681CCD200B89933 /* command_queue.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +327,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/mstd_ios.dst;
+				HEADER_SEARCH_PATHS = "$(BOOST_ROOT)";
 				OTHER_LDFLAGS = "-ObjC";
 				SKIP_INSTALL = YES;
 			};
@@ -332,6 +337,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/mstd_ios.dst;
+				HEADER_SEARCH_PATHS = "$(BOOST_ROOT)";
 				OTHER_LDFLAGS = "-ObjC";
 				SKIP_INSTALL = YES;
 			};
