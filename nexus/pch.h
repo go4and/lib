@@ -19,6 +19,7 @@
 #include <boost/noncopyable.hpp>
 
 #include <boost/asio/buffer.hpp>
+#include <boost/asio/ip/udp.hpp>
 #include <boost/asio/ip/tcp.hpp>
 
 #include <boost/mpl/bool.hpp>
@@ -64,6 +65,7 @@
 #include <mstd/enum_utils.hpp>
 #include <mstd/exception.hpp>
 #include <mstd/itoa.hpp>
+#include <mstd/hton.hpp>
 #include <mstd/pointer_cast.hpp>
 #include <mstd/reference_counter.hpp>
 #include <mstd/singleton.hpp>
