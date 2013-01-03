@@ -11,3 +11,6 @@
 *.user
 xcuserdata
 *.xcworkspace
+*.sdf
+*.suo
+*.sln
