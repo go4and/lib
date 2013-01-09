@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56799BCE1681CCD200B89933 /* command_queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56799BCD1681CCD200B89933 /* command_queue.cpp */; };
 		C319523015A2A0CC002E5C47 /* ptree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C319522E15A2A0CC002E5C47 /* ptree.cpp */; };
 		C319523115A2A0CC002E5C47 /* ptree.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C319522F15A2A0CC002E5C47 /* ptree.hpp */; };
 		C33180F2156B95C60067468B /* math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C33180F1156B95C60067468B /* math.hpp */; };
@@ -39,6 +40,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		56799BCD1681CCD200B89933 /* command_queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = command_queue.cpp; sourceTree = SOURCE_ROOT; };
 		C319522E15A2A0CC002E5C47 /* ptree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ptree.cpp; sourceTree = SOURCE_ROOT; };
 		C319522F15A2A0CC002E5C47 /* ptree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ptree.hpp; sourceTree = SOURCE_ROOT; };
 		C33180F1156B95C60067468B /* math.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = math.hpp; sourceTree = SOURCE_ROOT; };
@@ -59,7 +61,7 @@
 		C3D4507815846189002107A6 /* rc_buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rc_buffer.hpp; sourceTree = SOURCE_ROOT; };
 		C3D4507915846189002107A6 /* singleton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = singleton.cpp; sourceTree = SOURCE_ROOT; };
 		C3D4507A15846189002107A6 /* singleton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = singleton.hpp; sourceTree = SOURCE_ROOT; };
-		C3EFF53A156AD4630069B5BD /* libmstd-iphoneos_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libmstd-iphoneos_d.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3EFF53A156AD4630069B5BD /* lib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = lib.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EFF53D156AD4630069B5BD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C3EFF555156AD5120069B5BD /* strings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = strings.cpp; sourceTree = SOURCE_ROOT; };
 		C3EFF556156AD5120069B5BD /* strings.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = strings.hpp; sourceTree = SOURCE_ROOT; };
@@ -111,7 +113,7 @@
 		C3EFF53B156AD4630069B5BD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C3EFF53A156AD4630069B5BD /* libmstd-iphoneos_d.a */,
+				C3EFF53A156AD4630069B5BD /* lib.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,6 +129,7 @@
 		C3EFF53F156AD4630069B5BD /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				56799BCD1681CCD200B89933 /* command_queue.cpp */,
 				C319522E15A2A0CC002E5C47 /* ptree.cpp */,
 				C319522F15A2A0CC002E5C47 /* ptree.hpp */,
 				C3D4507815846189002107A6 /* rc_buffer.hpp */,
@@ -200,7 +203,7 @@
 			);
 			name = mstd_ios;
 			productName = mstd_ios;
-			productReference = C3EFF53A156AD4630069B5BD /* libmstd-iphoneos_d.a */;
+			productReference = C3EFF53A156AD4630069B5BD /* lib.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -243,6 +246,7 @@
 				C38F34F9156BBAD5005036B0 /* filesystem.cpp in Sources */,
 				C3D4507C15846189002107A6 /* singleton.cpp in Sources */,
 				C319523015A2A0CC002E5C47 /* ptree.cpp in Sources */,
+				56799BCE1681CCD200B89933 /* command_queue.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +276,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../../boost";
+				HEADER_SEARCH_PATHS = $BOOST_ROOT;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SUFFIX = _d;
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
@@ -305,7 +309,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../../boost";
+				HEADER_SEARCH_PATHS = $BOOST_ROOT;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				OTHER_CFLAGS = (

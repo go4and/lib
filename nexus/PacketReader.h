@@ -23,6 +23,7 @@
 #include <boost/utility/enable_if.hpp>
 
 #include <mstd/cstdint.hpp>
+#include <mstd/hton.hpp>
 #include <mstd/pointer_cast.hpp>
 
 #endif
@@ -282,5 +283,30 @@ inline std::string decompress(const std::vector<char> & input) { return input.em
 NEXUS_DECL std::string decompress(const Buffer & input);
 
 NEXUS_DECL void decompress(const void * input, size_t size, std::vector<char> & out);
+
+template<class SizeT, bool network, class Functor>
+void processPackets(std::vector<char> & buffer, size_t & position, const Functor & functor)
+{
+    PacketReader reader(&buffer[0], position);
+    while(reader.left() >= 1 + sizeof(SizeT))
+    {
+        uint8_t code = reader.read<uint8_t>();
+        SizeT len = network ? mstd::ntoh(reader.read<SizeT>()) : reader.read<SizeT>();
+        if(len > reader.left())
+        {
+            reader.revert(1 + sizeof(SizeT));
+            break;
+        }
+
+        functor(code, PacketReader(reader.raw(), len));
+        reader.skip(len);
+    }
+
+    if(reader.left() != position)
+    {
+        memcpy(&buffer[0], reader.raw(), reader.left());
+        position = reader.left();
+    }
+}
 
 }

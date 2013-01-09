@@ -1,3 +1,3 @@
-APP_ABI := armeabi armeabi-v7a mips
+APP_ABI := all
 APP_STL := gnustl_static
 APP_MODULES := mcrypt

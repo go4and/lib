@@ -448,8 +448,8 @@ private:
         C c_;
     };
 
-    NEXUS_DECLARE_HANDLER(Read, Connection, 1, receive, true);
-    NEXUS_DECLARE_HANDLER(Write, Connection, 1, send, true);
+    NEXUS_DECLARE_HANDLER(Read, Connection, true);
+    NEXUS_DECLARE_HANDLER(Write, Connection, true);
 
     Guard guard_;
     Lazy lazy_;

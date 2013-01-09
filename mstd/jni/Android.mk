@@ -10,6 +10,6 @@ LOCAL_CPP_FEATURES := exceptions rtti
 
 LOCAL_C_INCLUDES := $(BOOST_ROOT)
 
-LOCAL_SRC_FILES := ../filesystem.cpp ../itoa.cpp ../random.cpp ../strings.cpp ../threads.cpp ../singleton.cpp ../ptree.cpp ../command_queue.cpp ../process.cpp
+LOCAL_SRC_FILES := ../filesystem.cpp ../itoa.cpp ../random.cpp ../strings.cpp ../threads.cpp ../singleton.cpp ../ptree.cpp ../command_queue.cpp ../process.cpp ../exception.cpp
 
 include $(BUILD_STATIC_LIBRARY)
