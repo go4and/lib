@@ -64,7 +64,7 @@ bool extract(void * data, size_t size, const boost::filesystem::wpath & dest, in
 	archive_read_support_format_tar(a);
     archive_read_support_compression_gzip(a);
 
-	if (r = archive_read_open_memory(a, data, size))
+	if ((r = archive_read_open_memory(a, data, size)))
     {
 		MLOG_MESSAGE(Error, "archive_read_open_memory(): " << archive_error_string(a) << ", " << r);
         return false;
