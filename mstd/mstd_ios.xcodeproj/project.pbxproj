@@ -61,7 +61,7 @@
 		C3D4507815846189002107A6 /* rc_buffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rc_buffer.hpp; sourceTree = SOURCE_ROOT; };
 		C3D4507915846189002107A6 /* singleton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = singleton.cpp; sourceTree = SOURCE_ROOT; };
 		C3D4507A15846189002107A6 /* singleton.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = singleton.hpp; sourceTree = SOURCE_ROOT; };
-		C3EFF53A156AD4630069B5BD /* lib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = lib.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3EFF53A156AD4630069B5BD /* libmstd-iphoneos_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libmstd-iphoneos_d.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EFF53D156AD4630069B5BD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C3EFF555156AD5120069B5BD /* strings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = strings.cpp; sourceTree = SOURCE_ROOT; };
 		C3EFF556156AD5120069B5BD /* strings.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = strings.hpp; sourceTree = SOURCE_ROOT; };
@@ -113,7 +113,7 @@
 		C3EFF53B156AD4630069B5BD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C3EFF53A156AD4630069B5BD /* lib.a */,
+				C3EFF53A156AD4630069B5BD /* libmstd-iphoneos_d.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -203,7 +203,7 @@
 			);
 			name = mstd_ios;
 			productName = mstd_ios;
-			productReference = C3EFF53A156AD4630069B5BD /* lib.a */;
+			productReference = C3EFF53A156AD4630069B5BD /* libmstd-iphoneos_d.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -257,7 +257,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				COPY_PHASE_STRIP = NO;
