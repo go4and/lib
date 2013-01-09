@@ -222,6 +222,15 @@ public:
         pos_ = mstd::pointer_cast<const char*>(end + 1);
         return std::wstring(p, end);
     }
+
+    std::wstring readWCString(size_t limit)
+    {
+        BOOST_STATIC_ASSERT(sizeof(wchar_t) == 2);
+        const wchar_t * p = mstd::pointer_cast<const wchar_t*>(pos_);
+        const wchar_t * end = p + wcsnlen(p, limit);
+        pos_ = mstd::pointer_cast<const char*>(end + 1);
+        return std::wstring(p, end);
+    }
 #endif
 
     template<class Elem>
