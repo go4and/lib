@@ -4,6 +4,10 @@
 /mxsd
 /swutils
 /xmldom
+/generators
+/geometry
+/http
+/winutils
 .DS_Store
 .svn
 *.mode1v3

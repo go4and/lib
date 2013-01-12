@@ -15,7 +15,7 @@ public:
 
     inline void start() { startRead(); }
     inline void send(const char * str) { send(str, str + strlen(str)); }
-    inline boost::asio::io_service & ioService() { return (*socket_)->io_service(); }   
+    inline boost::asio::io_service & ioService() { return (*socket_)->get_io_service(); }   
 private:
     inline ConnectionPtr ptr()
     {
@@ -39,8 +39,8 @@ private:
     RequestId requestId_;
     bool keepAlive_;
 
-    NEXUS_DECLARE_HANDLER(Read, Connection, 1, receive, true);
-    NEXUS_DECLARE_HANDLER(Write, Connection, 1, send, true);
+    NEXUS_DECLARE_HANDLER(Read, Connection, true);
+    NEXUS_DECLARE_HANDLER(Write, Connection, true);
 };
 
 

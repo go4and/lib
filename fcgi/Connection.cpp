@@ -212,7 +212,7 @@ bool Connection::processRecord(const FCGIRecord & rec)
                 request->params.swap(params_);
                 request->body = stream_.empty() ? nexus::Buffer::blank() : nexus::Buffer(&stream_[0], stream_.size());
                 stream_.clear();
-                (*socket_)->io_service().post(boost::bind(requestHandler_, request, ptr()));
+                (*socket_)->get_io_service().post(boost::bind(requestHandler_, request, ptr()));
                 if(!keepAlive_)
                     return false;
             }

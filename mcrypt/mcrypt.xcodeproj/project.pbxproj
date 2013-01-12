@@ -290,7 +290,7 @@
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lboost_system-mt-d",
 					"-lboost_filesystem-mt-d",
@@ -320,7 +320,7 @@
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lboost_system-mt",
 					"-lboost_filesystem-mt",

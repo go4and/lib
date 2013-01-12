@@ -17,7 +17,7 @@ private:
     boost::asio::ip::tcp::acceptor acceptor_;
     RequestHandler handler_;
 
-    NEXUS_DECLARE_HANDLER(Accept, Server, 1, accept, true);
+    NEXUS_DECLARE_HANDLER(Accept, Server, true);
 };
 
 }

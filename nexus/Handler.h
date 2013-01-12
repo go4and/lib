@@ -37,6 +37,8 @@ public:
     ~HandlerStorage()
     {
         BOOST_ASSERT(!allocated_);
+        if(storage_)
+            ::free(storage_);
     }
 
     void * alloc(size_t size)
@@ -47,7 +49,7 @@ public:
                 return storage_;
             else {
                 if(storage_)
-                    free(storage_);
+                    ::free(storage_);
                 storage_ = malloc(size);
                 storageSize_ = size;
                 return storage_;
@@ -65,7 +67,7 @@ public:
             BOOST_ASSERT(allocated_);
             allocated_ = false;
         } else
-            free(data);
+            ::free(data);
     }
 private:
     mstd::atomic<bool> allocated_;
@@ -105,7 +107,7 @@ private:
     templ \
     class name { \
     public: \
-        explicit BOOST_PP_CAT(BOOST_PP_CAT(Handle, suffix), n)(cls * t BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(n, const T, & m)) \
+        explicit name(cls * t BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(n, const T, & m)) \
             : t_(t) BOOST_PP_ENUM_TRAILING(n, NEXUS_HANDLER_ASSIGN_ARGUMENT_DEF, ~) {} \
         \
         BOOST_PP_REPEAT_FROM_TO( \

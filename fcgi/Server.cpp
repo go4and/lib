@@ -28,7 +28,7 @@ void Server::startAccept()
 {
     MLOG_MESSAGE(Debug, "startAccept()");
 
-    nexus::isocket socket(new nexus::Socket(acceptor_.io_service()));
+    nexus::isocket socket(new nexus::Socket(acceptor_.get_io_service()));
     acceptor_.async_accept(**socket, bindAccept(socket));
 }
 

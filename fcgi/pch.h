@@ -3,8 +3,10 @@
 #endif
 
 #include <boost/asio.hpp>
+#include <boost/bind.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
+#include <boost/unordered_map.hpp>
 
 #include <boost/algorithm/string.hpp>
 

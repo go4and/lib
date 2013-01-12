@@ -190,7 +190,7 @@
 		C3F10D5B1352FCE300D8C945 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -208,7 +208,7 @@
 					"$(PROJECT_DIR)/..",
 				);
 				LD_DYLIB_INSTALL_NAME = "@executable_path/mlog.dylib";
-				LIBRARY_SEARCH_PATHS = $BOOST_ROOT/stage/lib;
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				OTHER_LDFLAGS = (
@@ -224,7 +224,7 @@
 		C3F10D5C1352FCE300D8C945 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -239,7 +239,7 @@
 					"$(PROJECT_DIR)/..",
 				);
 				LD_DYLIB_INSTALL_NAME = "@executable_path/mlog.dylib";
-				LIBRARY_SEARCH_PATHS = $BOOST_ROOT/stage/lib;
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				OTHER_LDFLAGS = (
