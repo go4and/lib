@@ -311,7 +311,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lboost_system-mt-d",
 					"-lboost_thread-mt-d",
