@@ -11,8 +11,7 @@ namespace mstd {
 #define MSTD_ENUM_ITEM(s, data, elem) BOOST_PP_CAT(data, elem),
 #define MSTD_ENUM_CASE_NAME(s, data, elem) case BOOST_PP_CAT(data, elem): return BOOST_PP_STRINGIZE(elem);
 #define MSTD_ENUM_CASE_WNAME(s, data, elem) case BOOST_PP_CAT(data, elem): return BOOST_PP_WSTRINGIZE(elem);
-#define MSTD_ENUM_PARSE_ITEM(s, data, elem) if(!strcmp(input, BOOST_PP_STRINGIZE(elem))) return BOOST_PP_CAT(data, elem);
-#define MSTD_ENUM_PARSE_WITEM(s, data, elem) if(!wcscmp(input, BOOST_PP_WSTRINGIZE(elem))) return BOOST_PP_CAT(data, elem);
+#define MSTD_ENUM_PARSE_ITEM(s, data, elem) if(!BOOST_PP_SEQ_ELEM(1, data)(input, BOOST_PP_SEQ_ELEM(2, data)(elem))) return BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(0, data), elem);
 #define MSTD_ENUM_TRANSLATOR(enumName, prefix) \
     struct BOOST_PP_CAT(BOOST_PP_CAT(prefix, translate), enumName) { \
         typedef std::BOOST_PP_CAT(prefix, string) internal_type; \
@@ -49,12 +48,22 @@ namespace mstd {
     } \
     \
     inline boost::optional<enumName> BOOST_PP_CAT(parse, enumName)(const char * input) { \
-        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, prefix, list); \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, (prefix)(strcmp)(BOOST_PP_STRINGIZE), list); \
         return boost::optional<enumName>(); \
     } \
     \
     inline boost::optional<enumName> BOOST_PP_CAT(parse, enumName)(const wchar_t * input) { \
-        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_WITEM, prefix, list); \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, (prefix)(wcscmp)(BOOST_PP_WSTRINGIZE), list); \
+        return boost::optional<enumName>(); \
+    } \
+    \
+    inline boost::optional<enumName> BOOST_PP_CAT(iparse, enumName)(const char * input) { \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, (prefix)(strcasecmp)(BOOST_PP_STRINGIZE), list); \
+        return boost::optional<enumName>(); \
+    } \
+    \
+    inline boost::optional<enumName> BOOST_PP_CAT(iparse, enumName)(const wchar_t * input) { \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, (prefix)(wcscasecmp)(BOOST_PP_WSTRINGIZE), list); \
         return boost::optional<enumName>(); \
     } \
     \
