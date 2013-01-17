@@ -250,25 +250,23 @@ public:
         result.assign(p, end);
     }
 
-#ifdef BOOST_WINDOWS
     std::wstring readWCString()
     {
-        BOOST_STATIC_ASSERT(sizeof(wchar_t) == 2);
-        const wchar_t * p = mstd::pointer_cast<const wchar_t*>(pos_);
-        const wchar_t * end = p + wcslen(p);
+        const uint16_t * p = mstd::pointer_cast<const uint16_t*>(pos_);
+        const uint16_t * end = p;
+        while(*end)
+            ++end;
         pos_ = mstd::pointer_cast<const char*>(end + 1);
         return std::wstring(p, end);
     }
 
     std::wstring readWCString(size_t limit)
     {
-        BOOST_STATIC_ASSERT(sizeof(wchar_t) == 2);
-        const wchar_t * p = mstd::pointer_cast<const wchar_t*>(pos_);
-        const wchar_t * end = p + wcsnlen(p, limit);
+        const uint16_t * p = mstd::pointer_cast<const uint16_t*>(pos_);
+        const uint16_t * end = std::find(p, p + limit, 0);
         pos_ = mstd::pointer_cast<const char*>(end + 1);
         return std::wstring(p, end);
     }
-#endif
 
     template<class Elem>
     typename boost::enable_if<boost::mpl::or_<boost::is_same<Elem, char>, boost::is_same<Elem, unsigned char> >, void>::type

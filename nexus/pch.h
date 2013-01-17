@@ -61,6 +61,7 @@
 
 #include <mstd/atomic.hpp>
 #include <mstd/buffers.hpp>
+#include <mstd/command_queue.hpp>
 #include <mstd/cstdint.hpp>
 #include <mstd/enum_utils.hpp>
 #include <mstd/exception.hpp>

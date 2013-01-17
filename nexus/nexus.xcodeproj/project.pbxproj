@@ -45,6 +45,8 @@
 		C366148213FA83C1001F51AA /* REST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C366148013FA83C1001F51AA /* REST.cpp */; };
 		C366148313FA83C1001F51AA /* REST.h in Headers */ = {isa = PBXBuildFile; fileRef = C366148113FA83C1001F51AA /* REST.h */; };
 		C36A4273148D184F00E9CF52 /* PacketWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C36A4272148D184F00E9CF52 /* PacketWriter.cpp */; };
+		C3E3CA5216A7F7810035EF18 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3E3CA5016A7F7810035EF18 /* Timer.cpp */; };
+		C3E3CA5316A7F7810035EF18 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C3E3CA5116A7F7810035EF18 /* Timer.h */; };
 		C3E76580148F3A450069EAFA /* mcrypt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E7657D148F3A450069EAFA /* mcrypt.dylib */; };
 		C3E76581148F3A450069EAFA /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E7657E148F3A450069EAFA /* mlog.dylib */; };
 		C3E76582148F3A450069EAFA /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E7657F148F3A450069EAFA /* mstd.dylib */; };
@@ -91,6 +93,8 @@
 		C366148113FA83C1001F51AA /* REST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REST.h; sourceTree = SOURCE_ROOT; };
 		C36A4272148D184F00E9CF52 /* PacketWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketWriter.cpp; sourceTree = SOURCE_ROOT; };
 		C3921B0F1691C48C005F4CC0 /* GenericBuffers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenericBuffers.h; sourceTree = SOURCE_ROOT; };
+		C3E3CA5016A7F7810035EF18 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = SOURCE_ROOT; };
+		C3E3CA5116A7F7810035EF18 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = SOURCE_ROOT; };
 		C3E7657D148F3A450069EAFA /* mcrypt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mcrypt.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3E7657E148F3A450069EAFA /* mlog.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3E7657F148F3A450069EAFA /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,6 +137,8 @@
 		C3389D65135388960010E3BF /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				C3E3CA5016A7F7810035EF18 /* Timer.cpp */,
+				C3E3CA5116A7F7810035EF18 /* Timer.h */,
 				C36A4272148D184F00E9CF52 /* PacketWriter.cpp */,
 				C35AA4A713538DD100649921 /* AsyncGuard.h */,
 				C35AA4A813538DD100649921 /* AsyncOperations.h */,
@@ -214,6 +220,7 @@
 				C35AA4E813538DD100649921 /* StackStream.h in Headers */,
 				C35AA4EA13538DD100649921 /* Utils.h in Headers */,
 				C366148313FA83C1001F51AA /* REST.h in Headers */,
+				C3E3CA5316A7F7810035EF18 /* Timer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +290,7 @@
 				C35AA4E913538DD100649921 /* Utils.cpp in Sources */,
 				C366148213FA83C1001F51AA /* REST.cpp in Sources */,
 				C36A4273148D184F00E9CF52 /* PacketWriter.cpp in Sources */,
+				C3E3CA5216A7F7810035EF18 /* Timer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,7 +317,7 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -338,7 +346,7 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
