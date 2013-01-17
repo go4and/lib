@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <deque>
 #include <exception>
+#include <queue>
 #include <string>
 #include <vector>
 
@@ -19,6 +20,7 @@
 #include <boost/noncopyable.hpp>
 
 #include <boost/asio/buffer.hpp>
+#include <boost/asio/deadline_timer.hpp>
 #include <boost/asio/ip/udp.hpp>
 #include <boost/asio/ip/tcp.hpp>
 

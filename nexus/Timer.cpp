@@ -16,11 +16,7 @@ public:
     
     ~Manager()
     {
-        {
-            boost::lock_guard<boost::mutex> lock(mutex_);
-            stopped_ = true;
-            timer_.expires_from_now(boost::posix_time::time_duration());
-        }
+        service_.stop();
         thread_.join();
     }
 private:
@@ -29,6 +25,8 @@ private:
     {
         thread_ = boost::thread(boost::bind(&boost::asio::io_service::run, &service_));
     }
+
+    typedef std::pair<mstd::command_queue::command_type, boost::posix_time::ptime> QueueItem;
 
     void doSchedule(const QueueItem & item)
     {
@@ -46,9 +44,8 @@ private:
         }
         if(!queue_.empty())
         {
-            boost::asio::deadline_timer * timer = new boost::asio::deadline_timer(service_, i.second);
             timer_.expires_at(queue_.top().second);
-            timer->async_wait(boost::bind(&Manager::handleTimer, this, _1));
+            timer_.async_wait(boost::bind(&Manager::handleTimer, this, _1));
         }
     }
     
@@ -58,7 +55,6 @@ private:
             processQueue();
     }
 
-    typedef std::pair<mstd::command_queue::command_type, boost::posix_time::ptime> QueueItem;
     
     struct QueueItemCompare {
         bool operator()(const QueueItem & lhs, const QueueItem & rhs) const
@@ -70,9 +66,9 @@ private:
     typedef std::priority_queue<QueueItem, std::vector<QueueItem>, QueueItemCompare> Queue;
 
     boost::thread        thread_;
-    boost::asio::io_service     service_;
-    boost::asio::work           work_;
-    boost::asio::deadline_timer timer_;
+    boost::asio::io_service       service_;
+    boost::asio::io_service::work work_;
+    boost::asio::deadline_timer   timer_;
     Queue queue_;
 };
 
