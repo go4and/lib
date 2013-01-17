@@ -287,7 +287,10 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(BOOST_ROOT)/stage/lib",
+					/opt/local/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
@@ -317,7 +320,10 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(BOOST_ROOT)/stage/lib",
+					/opt/local/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = NO;

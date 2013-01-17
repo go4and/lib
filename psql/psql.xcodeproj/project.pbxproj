@@ -152,7 +152,10 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(BOOST_ROOT)/stage/lib",
+					/opt/local/lib/postgresql90,
+				);
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lboost_system-mt-d";
@@ -176,7 +179,10 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(BOOST_ROOT)/stage/lib",
+					/opt/local/lib/postgresql90,
+				);
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				SDKROOT = macosx10.7;
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
@@ -190,10 +196,6 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib/postgresql90,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -205,10 +207,6 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib/postgresql90,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

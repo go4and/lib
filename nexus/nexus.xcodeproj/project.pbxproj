@@ -309,7 +309,7 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -338,7 +338,7 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (

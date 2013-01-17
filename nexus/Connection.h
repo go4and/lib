@@ -261,6 +261,11 @@ protected:
         return guard_;
     }
     
+    std::pair<const char *, const char *> readyData()
+    {
+        return std::make_pair(&rbuffer_[0], &rbuffer_[0] + rpos_);
+    }
+    
     typedef nexus::AsyncGuard<AsyncHelper> AsyncGuard;
 private:
     class AsyncHelper {
@@ -307,6 +312,7 @@ private:
                 while((bsize - rpos_) * threshold_ < bsize)
                     bsize *= 2;
                 rbuffer_.resize(bsize);
+                rbuffer_.resize(rbuffer_.capacity());
             }
 
             size_t size = bsize - rpos_;
