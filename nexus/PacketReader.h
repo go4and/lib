@@ -63,6 +63,16 @@ public:
     ~InvalidStringException() throw () {}
 };
 
+class NEXUS_DECL ReaderUnderflowException : public std::exception {
+public:
+    const char * what() const throw()
+    {
+        return "reader underflow exception";
+    }
+    
+    ~ReaderUnderflowException() throw () {}
+};
+
 class NEXUS_DECL PacketReader {
 public:
     explicit PacketReader()
@@ -84,17 +94,17 @@ public:
     {
         return end_ - pos_;
     }
-    
+
     void revert(size_t count)
     {
         pos_ -= count;
     }
-    
+
     void mark()
     {
         marked_ = pos_;
     }
-    
+
     void revert()
     {
         pos_ = marked_;
@@ -119,10 +129,11 @@ public:
     typename boost::enable_if<boost::is_pod<T>, T>::type
     read()
     {
-        const T * result = mstd::pointer_cast<const T*>(pos_);
+        T result;
+        memcpy(&result, pos_, sizeof(T));
         pos_ += sizeof(T);
         BOOST_ASSERT(pos_ <= end_);
-        return *result;
+        return result;
     }
     
     template<class T>
@@ -133,6 +144,18 @@ public:
         (void)stop;
         BOOST_ASSERT(stop <= end_);
         return *mstd::pointer_cast<const T*>(pos_);
+    }
+
+    template<class T>
+    typename boost::enable_if<boost::is_pod<T>, T>::type
+    checkedRead()
+    {
+        if(pos_ + sizeof(T) > end_)
+            throw ReaderUnderflowException();
+        T result;
+        memcpy(&result, pos_, sizeof(T));
+        pos_ += sizeof(T);
+        return result;
     }
 
     template<class T>
@@ -208,6 +231,19 @@ public:
     {
         const char * p = pos_;
         const char * end = std::find(p, p + max, 0);
+        if(*end)
+            throw InvalidStringException();
+        pos_ = end + 1;
+        result.assign(p, end);
+    }
+
+    void checkedReadCString(std::string & result, size_t max)
+    {
+        const char * p = pos_;
+        const char * q = std::min(end_, p + max);
+        const char * end = std::find(p, q, 0);
+        if(end == end_)
+            throw ReaderUnderflowException();
         if(*end)
             throw InvalidStringException();
         pos_ = end + 1;

@@ -191,6 +191,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -226,6 +227,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;

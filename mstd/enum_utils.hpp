@@ -6,26 +6,27 @@
 #include <boost/preprocessor/wstringize.hpp>
 #include <boost/preprocessor/seq/for_each.hpp>
 
+#include <boost/preprocessor/facilities/apply.hpp>
+
 namespace mstd {
 
 #define MSTD_ENUM_ITEM(s, data, elem) BOOST_PP_CAT(data, elem),
 #define MSTD_ENUM_CASE_NAME(s, data, elem) case BOOST_PP_CAT(data, elem): return BOOST_PP_STRINGIZE(elem);
 #define MSTD_ENUM_CASE_WNAME(s, data, elem) case BOOST_PP_CAT(data, elem): return BOOST_PP_WSTRINGIZE(elem);
-#define MSTD_ENUM_PARSE_ITEM(s, data, elem) if(!strcmp(input, BOOST_PP_STRINGIZE(elem))) return BOOST_PP_CAT(data, elem);
-#define MSTD_ENUM_PARSE_WITEM(s, data, elem) if(!wcscmp(input, BOOST_PP_WSTRINGIZE(elem))) return BOOST_PP_CAT(data, elem);
-#define MSTD_ENUM_TRANSLATOR(enumName, prefix) \
-    struct BOOST_PP_CAT(BOOST_PP_CAT(prefix, translate), enumName) { \
-        typedef std::BOOST_PP_CAT(prefix, string) internal_type; \
+#define MSTD_ENUM_PARSE_ITEM(s, data, elem) if(!BOOST_PP_SEQ_ELEM(1, data)(input, BOOST_PP_SEQ_ELEM(2, data)(elem))) return BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(0, data), elem);
+#define MSTD_ENUM_TRANSLATOR(enumName, prefix, case) \
+    struct BOOST_PP_CAT(BOOST_PP_CAT(BOOST_PP_CAT(BOOST_PP_APPLY(case), BOOST_PP_APPLY(prefix)), translate), enumName) { \
+        typedef std::BOOST_PP_CAT(BOOST_PP_APPLY(prefix), string) internal_type; \
         typedef enumName external_type; \
         \
         boost::optional<enumName> get_value(const internal_type & v) \
         { \
-            return BOOST_PP_CAT(parse, enumName)(v.c_str()); \
+            return BOOST_PP_CAT(BOOST_PP_CAT(BOOST_PP_APPLY(case), parse), enumName)(v.c_str()); \
         } \
         \
         boost::optional<internal_type> put_value(enumName inp) \
         { \
-            return internal_type(BOOST_PP_CAT(prefix, name)(inp)); \
+            return internal_type(BOOST_PP_CAT(BOOST_PP_APPLY(prefix), name)(inp)); \
         } \
     }; \
 
@@ -49,17 +50,29 @@ namespace mstd {
     } \
     \
     inline boost::optional<enumName> BOOST_PP_CAT(parse, enumName)(const char * input) { \
-        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, prefix, list); \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, (prefix)(strcmp)(BOOST_PP_STRINGIZE), list); \
         return boost::optional<enumName>(); \
     } \
     \
     inline boost::optional<enumName> BOOST_PP_CAT(parse, enumName)(const wchar_t * input) { \
-        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_WITEM, prefix, list); \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, (prefix)(wcscmp)(BOOST_PP_WSTRINGIZE), list); \
         return boost::optional<enumName>(); \
     } \
     \
-    MSTD_ENUM_TRANSLATOR(enumName, ); \
-    MSTD_ENUM_TRANSLATOR(enumName, w); \
+    inline boost::optional<enumName> BOOST_PP_CAT(iparse, enumName)(const char * input) { \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, (prefix)(strcasecmp)(BOOST_PP_STRINGIZE), list); \
+        return boost::optional<enumName>(); \
+    } \
+    \
+    inline boost::optional<enumName> BOOST_PP_CAT(iparse, enumName)(const wchar_t * input) { \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, (prefix)(wcscasecmp)(BOOST_PP_WSTRINGIZE), list); \
+        return boost::optional<enumName>(); \
+    } \
+    \
+    MSTD_ENUM_TRANSLATOR(enumName, BOOST_PP_NIL, BOOST_PP_NIL); \
+    MSTD_ENUM_TRANSLATOR(enumName, (w), BOOST_PP_NIL); \
+    MSTD_ENUM_TRANSLATOR(enumName, BOOST_PP_NIL, (i)); \
+    MSTD_ENUM_TRANSLATOR(enumName, (w), (i)); \
     const size_t BOOST_PP_CAT(elementsIn, enumName) = BOOST_PP_SEQ_SIZE(list);
     /**/
 
