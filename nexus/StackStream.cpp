@@ -31,6 +31,15 @@ void StackStream::writeCString(const std::string & str)
     pos_ += n;
 }
 
+void StackStream::writeUTF8CString(const std::wstring & str)
+{
+    ptrdiff_t n = mstd::utf8_length(str) + 1;
+    checkOverflow(n);
+    pos_ = mstd::utf8(str.c_str(), str.c_str() + str.length(), pos_);
+    *pos_ = 0;
+    ++pos_;
+}
+
 void StackStream::put(char ch)
 {
     checkOverflow(1);

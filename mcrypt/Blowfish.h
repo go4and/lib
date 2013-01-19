@@ -35,6 +35,9 @@ public:
     std::vector<char> encryptCFB(const std::vector<char> & src);
     std::vector<char> decryptCFB(const std::vector<char> & src);
 
+    void encryptCFB(const char * begin, const char * end, char * out);
+    void decryptCFB(const char * begin, const char * end, char * out);
+
     std::vector<unsigned char> encryptOFB(const std::vector<unsigned char> & src);
     std::vector<unsigned char> decryptOFB(const std::vector<unsigned char> & src);
 private:

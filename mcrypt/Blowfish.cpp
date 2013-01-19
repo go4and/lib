@@ -101,6 +101,22 @@ std::vector<char> Blowfish::decryptCFB(const std::vector<char> &src)
     return processCFB(src, &key_->value_, &num_, BF_DECRYPT);
 }
 
+void Blowfish::encryptCFB(const char * begin, const char * end, char * out)
+{
+    BF_cfb64_encrypt(mstd::pointer_cast<const unsigned char*>(begin),
+                     mstd::pointer_cast<unsigned char*>(out),
+                     static_cast<long>(end - begin),
+                     &key_->value_, ivec_, &num_, BF_ENCRYPT);
+}
+
+void Blowfish::decryptCFB(const char * begin, const char * end, char * out)
+{
+    BF_cfb64_encrypt(mstd::pointer_cast<const unsigned char*>(begin),
+                     mstd::pointer_cast<unsigned char*>(out),
+                     static_cast<long>(end - begin),
+                     &key_->value_, ivec_, &num_, BF_DECRYPT);
+}
+
 std::vector<unsigned char> Blowfish::decryptOFB(const std::vector<unsigned char> &src)
 {
     return encryptOFB(src);

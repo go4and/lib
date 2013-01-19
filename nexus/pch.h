@@ -73,6 +73,7 @@
 #include <mstd/reference_counter.hpp>
 #include <mstd/singleton.hpp>
 #include <mstd/threads.hpp>
+#include <mstd/utf8.hpp>
 
 #include <mlog/Logging.h>
 #include <mlog/ThreadTrace.h>

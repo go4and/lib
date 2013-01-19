@@ -46,6 +46,7 @@ public:
     static RSAPtr createFromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen);
     
     int size() const;
+    int availableSize(bool publicEncrypt = true, Padding padding = pdDefault) const;
 
     void extractN(std::vector<char> & out);
     
@@ -110,6 +111,7 @@ public:
     }
     
     size_t publicEncrypt(const char * src, size_t len, char * out, Padding padding = pdDefault) const;
+    size_t publicDecrypt(const char * src, size_t len, char * out, Padding padding = pdDefault) const;
     size_t privateDecrypt(const char * src, size_t len, char * out, Padding padding = pdDefault) const;
     size_t privateEncrypt(const char * src, size_t len, char * out, Padding padding = pdDefault) const;
 
@@ -164,7 +166,6 @@ public:
     std::vector<char> extractPublicKey() const;
 
     ~RSA();
-
 private:
     explicit RSA(rsa_st * rsa);
 

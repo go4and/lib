@@ -318,6 +318,11 @@ size_t RSA::publicEncrypt(const char * src, size_t len, char * out, Padding padd
     return process(&RSA_public_encrypt, src, len, out, impl_, getPadding(padding, true));
 }
 
+size_t RSA::publicDecrypt(const char * src, size_t len, char * out, Padding padding) const
+{
+    return process(&RSA_public_decrypt, src, len, out, impl_, getPadding(padding, false));
+}
+
 size_t getPaddingTail(int padding)
 {
     switch(padding) {
@@ -332,6 +337,12 @@ size_t getPaddingTail(int padding)
         return 0;
     };
 };
+
+int RSA::availableSize(bool publicEncrypt, Padding padding) const
+{
+    int realPadding = getPadding(padding, publicEncrypt);
+    return size() - getPaddingTail(realPadding);
+}
 
 template<class Func>
 static std::vector<char> processEx(Func func, const char * src, size_t len, ::RSA * rsa, bool encrypt, int padding)
