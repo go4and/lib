@@ -133,4 +133,20 @@ std::vector<unsigned char> Blowfish::encryptOFB(const std::vector<unsigned char>
     return result;
 }
 
+void Blowfish::encryptOFB(const char * begin, const char * end, char * out)
+{
+    BF_ofb64_encrypt(mstd::pointer_cast<const unsigned char*>(begin),
+                     mstd::pointer_cast<unsigned char*>(out),
+                     static_cast<long>(end - begin),
+                     &key_->value_, ivec_, &num_);
+}
+
+void Blowfish::decryptOFB(const char * begin, const char * end, char * out)
+{
+    BF_ofb64_encrypt(mstd::pointer_cast<const unsigned char*>(begin),
+                     mstd::pointer_cast<unsigned char*>(out),
+                     static_cast<long>(end - begin),
+                     &key_->value_, ivec_, &num_);
+}
+
 }

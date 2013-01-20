@@ -289,6 +289,17 @@ public:
         pos_ += len;
     }
 
+    template<class Container>
+    typename boost::enable_if<boost::is_pod<typename Container::value_type>, void>::type
+    checkedReadArray(Container & container)
+    {
+        size_t len = container.size() * sizeof(typename Container::value_type);
+        if(pos_ + len > end_)
+            throw ReaderUnderflowException();
+        memcpy(&container[0], pos_, len);
+        pos_ += len;
+    }
+
     const char * raw()
     {
         return pos_;
