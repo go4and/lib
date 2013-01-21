@@ -331,7 +331,7 @@ size_t getPaddingTail(int padding)
     case RSA_PKCS1_PADDING:
         return RSA_PKCS1_PADDING_SIZE;
     case RSA_PKCS1_OAEP_PADDING:
-        return 41;
+        return 42;
     default:
         BOOST_ASSERT(false);
         return 0;
