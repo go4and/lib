@@ -41,8 +41,11 @@ public:
     std::vector<unsigned char> encryptOFB(const std::vector<unsigned char> & src);
     std::vector<unsigned char> decryptOFB(const std::vector<unsigned char> & src);
 
-    void encryptOFB(const char * begin, const char * end, char * out);
-    void decryptOFB(const char * begin, const char * end, char * out);
+    inline void encryptOFB(const char * begin, const char * end, char * out) { encryptOFB(begin, end - begin, out); }
+    inline void decryptOFB(const char * begin, const char * end, char * out) { decryptOFB(begin, end - begin, out); }
+
+    void encryptOFB(const char * begin, size_t len, char * out);
+    void decryptOFB(const char * begin, size_t len, char * out);
 private:
     void init(const unsigned char * password, size_t len);
 
