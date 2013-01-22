@@ -312,7 +312,7 @@ private:
                 while((bsize - rpos_) * threshold_ < bsize)
                     bsize *= 2;
                 rbuffer_.resize(bsize);
-                rbuffer_.resize(rbuffer_.capacity());
+                rbuffer_.resize(bsize = rbuffer_.capacity());
             }
 
             size_t size = bsize - rpos_;
@@ -380,7 +380,7 @@ private:
 
             PacketReader reader(rbuffer_, rpos_);
             derived().processPackets(reader);
-            memcpy(&rbuffer_[0], reader.raw(), reader.left());
+            memmove(&rbuffer_[0], reader.raw(), reader.left());
             rpos_ = reader.left();
 
             asyncRead();
