@@ -4,7 +4,6 @@
 
 namespace wxutils {
 
-#if BOOST_WINDOWS
 void addSeparator(wxGridBagSizer * psizer, int y, wxWindow * parent, const std::wstring & title)
 {
     wxPanel * result = new wxPanel(parent);
@@ -15,6 +14,5 @@ void addSeparator(wxGridBagSizer * psizer, int y, wxWindow * parent, const std::
     result->SetSizerAndFit(sizer);
     psizer->Add(result, wxGBPosition(y, 0), wxGBSpan(1, 5), wxTOP | wxEXPAND, 4);
 }
-#endif
 
 }

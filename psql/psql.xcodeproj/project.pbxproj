@@ -37,14 +37,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C3389D3C135388790010E3BF = {
+		C315362916AA6D140029F34A /* deps */ = {
 			isa = PBXGroup;
 			children = (
 				C3E91C0615DCD999001F15B9 /* mlog.dylib */,
 				C3E91C0715DCD999001F15B9 /* mstd.dylib */,
+				C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */,
+			);
+			name = deps;
+			sourceTree = "<group>";
+		};
+		C3389D3C135388790010E3BF = {
+			isa = PBXGroup;
+			children = (
+				C315362916AA6D140029F34A /* deps */,
 				C3389D49135388790010E3BF /* psql */,
 				C3389D48135388790010E3BF /* Products */,
-				C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */,
 			);
 			sourceTree = "<group>";
 		};

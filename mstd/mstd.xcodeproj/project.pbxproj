@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C315362F16AAC0F10029F34A /* rc_array.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C315362E16AAC0F10029F34A /* rc_array.hpp */; };
 		C32456341352A9C800999158 /* access.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C32455DA1352A9C800999158 /* access.hpp */; };
 		C32456351352A9C800999158 /* any_iterator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C32455DB1352A9C800999158 /* any_iterator.hpp */; };
 		C32456361352A9C800999158 /* atomic_pod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C32455DC1352A9C800999158 /* atomic_pod.cpp */; };
@@ -99,6 +100,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C315362E16AAC0F10029F34A /* rc_array.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rc_array.hpp; sourceTree = SOURCE_ROOT; };
 		C32455981352A6B900999158 /* mstd.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C32455DA1352A9C800999158 /* access.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = access.hpp; sourceTree = SOURCE_ROOT; };
 		C32455DB1352A9C800999158 /* any_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = any_iterator.hpp; sourceTree = SOURCE_ROOT; };
@@ -223,7 +225,7 @@
 		C324559A1352A6B900999158 /* mstd */ = {
 			isa = PBXGroup;
 			children = (
-				C3E91BF415DCD697001F15B9 /* xml.cpp */,
+				C315362E16AAC0F10029F34A /* rc_array.hpp */,
 				C32455DA1352A9C800999158 /* access.hpp */,
 				C32455DB1352A9C800999158 /* any_iterator.hpp */,
 				C32455DE1352A9C800999158 /* atomic.cpp */,
@@ -307,6 +309,7 @@
 				C324562F1352A9C800999158 /* type_id.hpp */,
 				C32456301352A9C800999158 /* utf8.hpp */,
 				C32456311352A9C800999158 /* wide_stream.hpp */,
+				C3E91BF415DCD697001F15B9 /* xml.cpp */,
 				C32456331352A9C800999158 /* xml.hpp */,
 				C324561B1352A9C800999158 /* ptree.hpp */,
 			);
@@ -411,6 +414,7 @@
 				C346434113D3339000716430 /* process.hpp in Headers */,
 				C375FDA515490C250009748B /* disposers.hpp in Headers */,
 				C375FDA615490C250009748B /* indexed_map.hpp in Headers */,
+				C315362F16AAC0F10029F34A /* rc_array.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

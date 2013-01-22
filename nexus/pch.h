@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <deque>
 #include <exception>
+#include <queue>
 #include <string>
 #include <vector>
 
@@ -19,6 +20,7 @@
 #include <boost/noncopyable.hpp>
 
 #include <boost/asio/buffer.hpp>
+#include <boost/asio/deadline_timer.hpp>
 #include <boost/asio/ip/udp.hpp>
 #include <boost/asio/ip/tcp.hpp>
 
@@ -61,6 +63,7 @@
 
 #include <mstd/atomic.hpp>
 #include <mstd/buffers.hpp>
+#include <mstd/command_queue.hpp>
 #include <mstd/cstdint.hpp>
 #include <mstd/enum_utils.hpp>
 #include <mstd/exception.hpp>
@@ -70,6 +73,7 @@
 #include <mstd/reference_counter.hpp>
 #include <mstd/singleton.hpp>
 #include <mstd/threads.hpp>
+#include <mstd/utf8.hpp>
 
 #include <mlog/Logging.h>
 #include <mlog/ThreadTrace.h>

@@ -101,6 +101,22 @@ std::vector<char> Blowfish::decryptCFB(const std::vector<char> &src)
     return processCFB(src, &key_->value_, &num_, BF_DECRYPT);
 }
 
+void Blowfish::encryptCFB(const char * begin, const char * end, char * out)
+{
+    BF_cfb64_encrypt(mstd::pointer_cast<const unsigned char*>(begin),
+                     mstd::pointer_cast<unsigned char*>(out),
+                     static_cast<long>(end - begin),
+                     &key_->value_, ivec_, &num_, BF_ENCRYPT);
+}
+
+void Blowfish::decryptCFB(const char * begin, const char * end, char * out)
+{
+    BF_cfb64_encrypt(mstd::pointer_cast<const unsigned char*>(begin),
+                     mstd::pointer_cast<unsigned char*>(out),
+                     static_cast<long>(end - begin),
+                     &key_->value_, ivec_, &num_, BF_DECRYPT);
+}
+
 std::vector<unsigned char> Blowfish::decryptOFB(const std::vector<unsigned char> &src)
 {
     return encryptOFB(src);
@@ -115,6 +131,22 @@ std::vector<unsigned char> Blowfish::encryptOFB(const std::vector<unsigned char>
     std::vector<unsigned char> result(src.size());
     BF_ofb64_encrypt(&src[0], &result[0], static_cast<long>(src.size()), &key_->value_, ivec, &num_);
     return result;
+}
+
+void Blowfish::encryptOFB(const char * begin, size_t len, char * out)
+{
+    BF_ofb64_encrypt(mstd::pointer_cast<const unsigned char*>(begin),
+                     mstd::pointer_cast<unsigned char*>(out),
+                     static_cast<long>(len),
+                     &key_->value_, ivec_, &num_);
+}
+
+void Blowfish::decryptOFB(const char * begin, size_t len, char * out)
+{
+    BF_ofb64_encrypt(mstd::pointer_cast<const unsigned char*>(begin),
+                     mstd::pointer_cast<unsigned char*>(out),
+                     static_cast<long>(len),
+                     &key_->value_, ivec_, &num_);
 }
 
 }

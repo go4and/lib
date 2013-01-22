@@ -63,6 +63,7 @@ public:
     }
 
     void writeCString(const std::string & str);
+    void writeUTF8CString(const std::wstring & str);
     void write(const char * str, size_t len);
 
     void put(const char * str);
