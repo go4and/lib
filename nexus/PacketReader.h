@@ -349,7 +349,7 @@ void processPackets(std::vector<char> & buffer, size_t & position, const Functor
 
     if(reader.left() != position)
     {
-        memcpy(&buffer[0], reader.raw(), reader.left());
+        memmove(&buffer[0], reader.raw(), reader.left());
         position = reader.left();
     }
 }

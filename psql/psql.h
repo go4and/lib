@@ -323,6 +323,10 @@ public:
     void execVoid(const std::string & query, bool canHaveErrors = false);
     
     void addParam(const char * value, size_t length);
+    inline void addParam(const unsigned char * value, size_t length)
+    {
+        addParam(static_cast<const char*>(static_cast<const void*>(value)), length);
+    }
 
     void addParam(boost::int64_t value)
     {
