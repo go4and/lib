@@ -54,7 +54,8 @@ std::wstring wbase64(const void * src, size_t len, bool url)
     return mstd::widen(base64(src, len, url));
 }
 
-unsigned char debase64char(char ch, bool allowEq)
+template<class Ch>
+inline unsigned char debase64char(Ch ch, bool allowEq)
 {
     if(ch >= 'A' && ch <= 'Z')
         return ch - 'A';
@@ -72,7 +73,8 @@ unsigned char debase64char(char ch, bool allowEq)
     return 0;
 }
 
-inline void debase64block(const char *& input, unsigned char *& out, bool allowEq)
+template<class Ch>
+inline void debase64block(const Ch *& input, unsigned char *& out, bool allowEq)
 {
     uint32_t c1 = debase64char(*input++, allowEq);
     uint32_t c2 = debase64char(*input++, allowEq);
@@ -83,14 +85,15 @@ inline void debase64block(const char *& input, unsigned char *& out, bool allowE
     *out++ = ((c3 & 0x03) << 6) | (c4);
 }
 
-size_t debase64(const char * str, size_t len, void * rout)
+template<class Ch>
+size_t debase64_impl(const Ch * str, size_t len, void * rout)
 {
     BOOST_ASSERT((len & 3) == 0);
     unsigned char * out = static_cast<unsigned char*>(rout);
     size_t blocks = len / 4;
     if(!blocks)
         return 0;
-    const char * input = str;
+    const Ch * input = str;
     while(blocks-- > 1)
         debase64block(input, out, false);
 
@@ -113,9 +116,17 @@ size_t debase64(const char * str, size_t len, void * rout)
 
     size_t result = out - static_cast<unsigned char*>(rout);
 
-    BOOST_ASSERT(base64(rout, result, false) == std::string(str, len) || base64(rout, result, true) == std::string(str, len));
-
     return result;
+}
+
+size_t debase64(const char * str, size_t len, void * rout)
+{
+    return debase64_impl(str, len, rout);
+}
+
+size_t debase64(const wchar_t * str, size_t len, void * rout)
+{
+    return debase64_impl(str, len, rout);
 }
 
 }
