@@ -30,22 +30,27 @@ mstd::atomic<size_t> allocated_(0);
 
 boost::posix_time::ptime timeStart(boost::gregorian::date(2000, boost::date_time::Jan, 1));
 
-void write2(char *& pos, int16_t value)
+template<class T>
+inline void doWrite(char *& pos, T value)
 {
-    *mstd::pointer_cast<int16_t*>(pos) = mstd::hton(value);
-    pos += 2;
+    value = mstd::hton(value);
+    memcpy(pos, &value, sizeof(T));
+    pos += sizeof(T);
 }
 
-void write4(char *& pos, int32_t value)
+inline void write2(char *& pos, int16_t value)
 {
-    *mstd::pointer_cast<int32_t*>(pos) = mstd::hton(value);
-    pos += 4;
+    doWrite(pos, value);
 }
 
-void write8(char *& pos, int64_t value)
+inline void write4(char *& pos, int32_t value)
 {
-    *mstd::pointer_cast<int64_t*>(pos) = mstd::hton(value);
-    pos += 8;
+    doWrite(pos, value);
+}
+
+inline void write8(char *& pos, int64_t value)
+{
+    doWrite(pos, value);
 }
 
 char * newBuffer(size_t len)
@@ -474,124 +479,20 @@ char * ParametricExecution::allocBuffer(size_t size)
     return result + sizeof(void*);
 }
 
-void ParametricExecution::addArray(const std::pair<const char*, const char*> * value, size_t size, Oid oid)
+std::pair<char *, char*> ParametricExecution::prepareArray(size_t len, Oid oid, size_t dataSize)
 {
-    typedef const std::pair<const char*, const char*> * iterator;
+    size_t bufferSize = 20 + 4 * len + dataSize;
 
-    iterator end = value + size;
-    size_t bufferSize = 20 + 4 * size;
+    char * temp = allocBuffer(bufferSize);
+    char * out = temp;
 
-    for(iterator i = value; i != end; ++i)
-        bufferSize += i->second - i->first;
+    write4(out, 1);
+    write4(out, 1);
+    write4(out, oid);
+    write4(out, static_cast<int32_t>(len));
+    write4(out, 1);
     
-    char * temp = allocBuffer(bufferSize);
-    char * out = temp;
-
-    write4(out, 1);
-    write4(out, 1);
-    write4(out, oid);
-    write4(out, static_cast<int32_t>(size));
-    write4(out, 1);
-
-    for(; value != end; ++value)
-    {
-        size_t len = value->second - value->first;
-        write4(out, static_cast<int32_t>(len));
-        memcpy(out, value->first, len);
-        out += len;
-    }
-
-    addParam(temp, out - temp);
-}
-
-void ParametricExecution::addArray(const std::string * value, size_t size, Oid oid)
-{
-    typedef const std::string * iterator;
-
-    iterator end = value + size;
-    size_t bufferSize = 20 + 4 * size;
-
-    for(iterator i = value; i != end; ++i)
-        bufferSize += i->length();
-
-    char * temp = allocBuffer(bufferSize);
-    char * out = temp;
-
-    write4(out, 1);
-    write4(out, 1);
-    write4(out, oid);
-    write4(out, static_cast<int32_t>(size));
-    write4(out, 1);
-
-    for(; value != end; ++value)
-    {
-        size_t len = value->length();
-        write4(out, static_cast<int32_t>(len));
-        memcpy(out, value->c_str(), len);
-        out += len;
-    }
-
-    addParam(temp, out - temp);
-}
-
-void ParametricExecution::addArray(const boost::int64_t * value, size_t size)
-{
-    char * temp = allocBuffer(size * 12 + 20);
-    char * out = temp;
-
-    write4(out, 1);
-    write4(out, 1);
-    write4(out, psql::oidInt64);
-    write4(out, static_cast<int32_t>(size));
-    write4(out, 1);
-
-    for(const boost::int64_t * end = value + size; value != end; ++value)
-    {
-        write4(out, 8);
-        write8(out, *value);
-    }
-
-    addParam(temp, out - temp);
-}
-
-void ParametricExecution::addArray(const boost::int32_t * value, size_t size)
-{
-    char * temp = allocBuffer(size * 8 + 20);
-    char * out = temp;
-
-    write4(out, 1);
-    write4(out, 1);
-    write4(out, psql::oidInt32);
-    write4(out, static_cast<int32_t>(size));
-    write4(out, 1);
-
-    for(const boost::int32_t * end = value + size; value != end; ++value)
-    {
-        write4(out, 4);
-        write4(out, *value);
-    }
-
-    addParam(temp, out - temp);
-}
-
-void ParametricExecution::addArray(const boost::int16_t * value, size_t size)
-{
-    char * temp = allocBuffer(size * 6 + 20);
-    char * out = temp;
-
-    write4(out, 1);
-    write4(out, 1);
-    write4(out, psql::oidInt16);
-    write4(out, static_cast<int32_t>(size));
-    write4(out, 1);
-
-    for(const boost::int16_t * end = value + size; value != end; ++value)
-    {
-        write4(out, 2);
-        write2(out, *value);
-    }
-
-    addParam(temp, out - temp);
+    return std::make_pair(temp, out);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
