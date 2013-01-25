@@ -79,6 +79,20 @@ OutCollection<boost::iterator_range<Iterator> > ocollection(const std::pair<Iter
     return OutCollection<boost::iterator_range<Iterator> >(boost::iterator_range<Iterator>(p.first, p.second));
 }
 
+template<class Iterator>
+OutCollection<boost::iterator_range<Iterator> > ocollection(Iterator begin, Iterator end)
+{
+    return OutCollection<boost::iterator_range<Iterator> >(boost::iterator_range<Iterator>(begin, end));
+}
+
+template<class Iterator>
+OutCollection<boost::iterator_range<Iterator> > ocollection(Iterator begin, size_t len)
+{
+    Iterator end = begin;
+    std::advance(end, len);
+    return OutCollection<boost::iterator_range<Iterator> >(boost::iterator_range<Iterator>(begin, end));
+}
+
 template<class Collection>
 inline std::ostream & operator<<(std::ostream & out, const OutCollection<Collection> & value)
 {
