@@ -323,6 +323,15 @@ public:
     void execVoid(const std::string & query, bool canHaveErrors = false);
     
     void addParam(const char * value, size_t length);
+    inline void addParam(const unsigned char * value, size_t length)
+    {
+        addParam(static_cast<const char*>(static_cast<const void*>(value)), length);
+    }
+    
+    void addParam(const std::pair<const char *, const char *> & p)
+    {
+        addParam(p.first, p.second - p.first);
+    }
 
     void addParam(boost::int64_t value)
     {
@@ -365,11 +374,17 @@ public:
         addArray(value.empty() ? 0 : &value[0], value.size(), oid);
     }
 
-    void addArray(const std::pair<const char*, const char*> * value, size_t count, Oid oid = oidText);
-    void addArray(const std::string * value, size_t count, Oid oid = oidText);
-    void addArray(const boost::int64_t * value, size_t count);
-    void addArray(const boost::int32_t * value, size_t count);
-    void addArray(const boost::int16_t * value, size_t count);
+    template<size_t N>
+    inline void addArray(const boost::array<char, N> * value, size_t count, Oid oid = oidByteArray) { doAddArray(value, count, oid); }
+
+    template<size_t N>
+    inline void addArray(const boost::array<unsigned char, N> * value, size_t count, Oid oid = oidByteArray)  { doAddArray(value, count, oid); }
+
+    inline void addArray(const std::pair<const char*, const char*> * value, size_t count, Oid oid = oidText) { doAddArray(value, count, oid); }
+    inline void addArray(const std::string * value, size_t count, Oid oid = oidText)  { doAddArray(value, count, oid); }
+    inline void addArray(const boost::int64_t * value, size_t count) { doAddArray(value, count, oidInt64); }
+    inline void addArray(const boost::int32_t * value, size_t count) { doAddArray(value, count, oidInt32); }
+    inline void addArray(const boost::int16_t * value, size_t count) { doAddArray(value, count, oidInt16); }
     void clear();
 
     template<class T>
@@ -377,8 +392,22 @@ public:
     {
         addParam(t);
     }
+
+    template<class T>
+    void addArray(const T * value, size_t count, Oid oid)
+    {
+        doAddArray(value, count, oid);
+    }
 private:
-    void fill(std::vector<const char*> & values, std::vector<int> & lengths) const; 
+    std::pair<char *, char*> prepareArray(size_t len, Oid oid, size_t dataSize);
+    void fill(std::vector<const char*> & values, std::vector<int> & lengths) const;
+
+    template<class T>
+    void doAddArray(const T * value, size_t count, Oid oid);
+    template<class T>
+    void doAddArrayImpl(const T * value, size_t count, Oid oid, const boost::mpl::true_*);
+    template<class T>
+    void doAddArrayImpl(const T * value, size_t count, Oid oid, const boost::mpl::false_*);
 
     inline void ensure(size_t len)
     {
@@ -447,5 +476,133 @@ class ColumnTag;
 typedef boost::error_info<ColumnTag, size_t> ColumnInfo;
 
 size_t allocated();
+
+namespace detail {
+
+template<class T>
+class AddArrayHelper;
+
+template<size_t size>
+class StaticAddArrayHelper {
+public:
+    typedef boost::mpl::true_ isStaticSize;
+    static const size_t staticSize = size;
+};
+
+class DynamicAddArrayHelper {
+public:
+    typedef boost::mpl::false_ isStaticSize;
+};
+
+template<class T>
+class IntAddArrayHelper : public StaticAddArrayHelper<sizeof(T)> {
+public:
+    static void write(char * pos, T t)
+    {
+        t = mstd::hton(t);
+        memcpy(pos, &t, sizeof(T));
+    }
+};
+
+template<> class AddArrayHelper<int16_t> : public IntAddArrayHelper<int16_t> {};
+template<> class AddArrayHelper<int32_t> : public IntAddArrayHelper<int32_t> {};
+template<> class AddArrayHelper<int64_t> : public IntAddArrayHelper<int64_t> {};
+
+template<> class AddArrayHelper<std::pair<const char*, const char*> > : public DynamicAddArrayHelper {
+public:
+    static size_t getSize(const std::pair<const char*, const char*> & p)
+    {
+        return p.second - p.first;
+    }
+    
+    static void write(char * pos, const std::pair<const char*, const char*> & p)
+    {
+        memcpy(pos, p.first, p.second - p.first);
+    }
+};
+
+template<> class AddArrayHelper<std::string> : public DynamicAddArrayHelper {
+public:
+    static size_t getSize(const std::string & s)
+    {
+        return s.length();
+    }
+    
+    static void write(char * pos, const std::string & s)
+    {
+        memcpy(pos, s.c_str(), s.length());
+    }
+};
+
+template<size_t N> class AddArrayHelper<boost::array<char, N> > : public StaticAddArrayHelper<N> {
+public:
+    static void write(char * pos, const boost::array<char, N> & value)
+    {
+        memcpy(pos, &value[0], value.size());
+    }
+};
+
+template<size_t N> class AddArrayHelper<boost::array<unsigned char, N> > : public StaticAddArrayHelper<N> {
+public:
+    static void write(char * pos, const boost::array<unsigned char, N> & value)
+    {
+        memcpy(pos, &value[0], value.size());
+    }
+};
+
+}
+
+template<class T>
+void ParametricExecution::doAddArray(const T * value, size_t count, Oid oid)
+{
+    typedef detail::AddArrayHelper<T> Helper;
+
+    doAddArrayImpl(value, count, oid, static_cast<typename Helper::isStaticSize*>(0));
+}
+
+template<class T>
+void ParametricExecution::doAddArrayImpl(const T * value, size_t count, Oid oid, const boost::mpl::true_*)
+{
+    typedef detail::AddArrayHelper<T> Helper;
+ 
+    std::pair<char*, char*> p = prepareArray(count, oid, Helper::staticSize * count);
+
+    int32_t len = mstd::hton(static_cast<int32_t>(Helper::staticSize));
+    const T * end = value + count;
+    for(; value != end; ++value)
+    {
+        memcpy(p.second, &len, sizeof(len));
+        p.second += sizeof(len);
+        Helper::write(p.second, *value);
+        p.second += Helper::staticSize;
+    }
+
+    addParam(p);
+}
+
+template<class T>
+void ParametricExecution::doAddArrayImpl(const T * value, size_t count, Oid oid, const boost::mpl::false_*)
+{
+    typedef detail::AddArrayHelper<T> Helper;
+
+    const T * end = value + count;
+    size_t dataSize = 0;
+    for(const T * i = value; i != end; ++i)
+        dataSize += Helper::getSize(*i);
+ 
+    std::pair<char*, char*> p = prepareArray(count, oid, dataSize);
+
+    for(; value != end; ++value)
+    {
+        size_t itemSize = Helper::getSize(*value);
+        int32_t len = mstd::hton(static_cast<int32_t>(itemSize));
+        memcpy(p.second, &len, sizeof(len));
+        p.second += sizeof(len);
+        Helper::write(p.second, *value);
+        p.second += itemSize;
+    }
+
+    addParam(p);
+}
 
 }

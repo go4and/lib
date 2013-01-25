@@ -19,7 +19,7 @@ public:
     {
         *sizeAddress() = size;
         *counterAddress() = 1;
-        std::uninitialized_fill_n(data(), size, value_type());
+        std::uninitialized_fill(data(), data() + size, value_type());
     }
 
     explicit rc_array(const value_type * data, size_t size)
@@ -27,7 +27,7 @@ public:
     {
         *sizeAddress() = size;
         *counterAddress() = 1;
-        std::uninitialized_copy_n(data, size, this->data());
+        std::uninitialized_copy(data, data + size, this->data());
     }
 
     ~rc_array()
