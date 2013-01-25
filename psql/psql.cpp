@@ -190,7 +190,7 @@ Result Connection::exec(const char * query, bool canHaveErrors)
     checkResult(query, result, canHaveErrors, start);
 
     MLOG_MESSAGE(Debug, "exec succeeded");
-    return move(result);
+    return boost::move(result);
 }
 
 void Connection::execVoid(const char * query, bool canHaveErrors)
@@ -323,7 +323,7 @@ Result Connection::copyEnd()
     
     MLOG_DEBUG("copyEnd - ok");
     
-    return move(result);
+    return boost::move(result);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

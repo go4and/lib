@@ -7,14 +7,15 @@
 #include <vector>
 #include <iosfwd>
 
+#include <boost/array.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/logic/tribool.hpp>
+#include <boost/move/move.hpp>
 
 #include <mstd/cstdint.hpp>
 #include <mstd/exception.hpp>
 #include <mstd/hton.hpp>
-#include <mstd/move.hpp>
 
 typedef unsigned int Oid;
 typedef struct pg_conn PGconn;
@@ -119,28 +120,17 @@ public:
     size_t columns() const;
     Oid type(size_t index) const;
 
-    operator mstd::move_t<Result>()
-    {
-        return move();
-    }
-    
-    mstd::move_t<Result> move()
-    {
-        mstd::move_t<Result> x(*this);
-        return x;
-    }
-
     Result();
 
-    Result(mstd::move_t<Result> src)
-        : value_(src->value_), width_(src->width_)
+    Result(BOOST_RV_REF(Result) src)
+        : value_(src.value_), width_(src.width_)
     {
-        src->value_ = 0;
+        src.value_ = 0;
     }
 
-    void operator=(mstd::move_t<Result> src)
+    void operator=(BOOST_RV_REF(Result) src)
     {
-        Result temp(src);
+        Result temp(boost::move(src));
         swap(temp);
     }
 
@@ -157,8 +147,7 @@ public:
         return value_ ? &Result::width_ : 0;
     }
 private:
-    void operator=(Result&);
-    Result(Result&);
+    BOOST_MOVABLE_BUT_NOT_COPYABLE(Result);
 
     Result(PGresult * value);
 
@@ -448,11 +437,6 @@ inline std::ostream & operator<<(std::ostream & out, const ByteArray & value)
 {
     out << '[' << value.len << ']';
     return out;
-}
-
-inline Result move(mstd::move_t<Result> t)
-{
-    return Result(t);
 }
 
 class PSQLTag;
