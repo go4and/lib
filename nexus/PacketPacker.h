@@ -10,6 +10,7 @@
 #include <boost/mpl/find_if.hpp>
 #include <boost/mpl/vector.hpp>
 
+#include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 
 #include <boost/type_traits/is_pod.hpp>
@@ -450,13 +451,13 @@ struct TuplePacker {
     template <BOOST_PP_ENUM_PARAMS(n, typename T)> \
     size_t tupleSize(BOOST_PP_ENUM_BINARY_PARAMS(n, const T, & x)) \
     { \
-        return 0 BOOST_PP_REPEAT_FROM_TO_##z(0, n, NEXUS_PACKET_PACKER_ADD_SIZE, _); \
+        return 0 BOOST_PP_REPEAT(n, NEXUS_PACKET_PACKER_ADD_SIZE, ~); \
     } \
     /**/
 
 BOOST_PP_REPEAT_FROM_TO(
     1, BOOST_PP_INC(NEXUS_PACKET_PACKER_MAX_ARITY),
-    NEXUS_PACKET_PACKER_TUPLE_SIZE_DEF, _ )
+    NEXUS_PACKET_PACKER_TUPLE_SIZE_DEF, ~ )
 
 #define NEXUS_PACKET_PACKER_DO_PACK(z, n, data) \
     GetPacker<T##n>::type::pack(pos, x##n); \
