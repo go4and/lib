@@ -240,7 +240,7 @@ public:
     void checkedReadCString(std::string & result, size_t max)
     {
         const char * p = pos_;
-        const char * q = std::min(end_, p + max);
+        const char * q = (std::min)(end_, p + max);
         const char * end = std::find(p, q, 0);
         if(end == end_)
             throw ReaderUnderflowException();
