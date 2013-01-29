@@ -451,6 +451,8 @@ class InvalidTypeTag;
 typedef mstd::own_exception<InvalidTypeTag, Exception> InvalidTypeException;
 class CopyFailedTag;
 typedef mstd::own_exception<CopyFailedTag, Exception> CopyFailedException;
+class ConnectionLostTag;
+typedef mstd::own_exception<ConnectionLostTag, Exception> ConnectionLostException;
 
 class OidTag;
 typedef boost::error_info<OidTag, Oid> OidInfo;

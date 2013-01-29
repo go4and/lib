@@ -8,6 +8,10 @@
 
 #include <boost/preprocessor/facilities/apply.hpp>
 
+#if !BOOST_WINDOWS
+#include <strings.h>
+#endif
+
 namespace mstd {
 
 #define MSTD_ENUM_ITEM(s, data, elem) BOOST_PP_CAT(BOOST_PP_APPLY(data), elem),
@@ -33,6 +37,9 @@ namespace mstd {
 #if BOOST_WINDOWS
 #define MSTD_strcasecmp _stricmp
 #define MSTD_wcscasecmp _wcsicmp
+#elif defined(ANDROID)
+#define MSTD_strcasecmp strcasecmp
+#define MSTD_wcscasecmp wcscmp
 #else
 #define MSTD_strcasecmp strcasecmp
 #define MSTD_wcscasecmp wcscasecmp
