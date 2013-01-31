@@ -86,6 +86,12 @@ public:
         pos_ += sz;
     }
 
+    void move(ptrdiff_t offset)
+    {
+        checkOverflow(offset);
+        pos_ += offset;
+    }
+
     char * begin() const { return begin_; }
     char * pos() const { return pos_; }
     char * end() const { return end_; }
