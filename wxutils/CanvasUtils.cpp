@@ -4,32 +4,14 @@
 
 namespace wxutils {
 
-wxPoint getTextSize(wxDC & canvas, const wchar_t * str, size_t len)
-{
 #if BOOST_WINDOWS
+wxPoint getTextSize(HDC dc, const wchar_t * str, size_t len)
+{
 	RECT rect = {0, 0, 0, 0};
-	DrawText(static_cast<HDC>(canvas.GetHDC()), str, static_cast<int>(len), &rect, DT_CALCRECT);
+	DrawText(dc, str, static_cast<int>(len), &rect, DT_CALCRECT);
 	return wxPoint(rect.right, rect.bottom);
-#else
-    wxSize sz = canvas.GetTextExtent(wxString(str, len));
-    return wxPoint(sz.x, sz.y);
+}
 #endif
-}
-
-wxPoint getTextSize(wxDC & canvas, const std::wstring & str)
-{
-    return getTextSize(canvas, str.c_str(), str.length());
-}
-
-wxPoint getTextSize(wxDC & canvas, const wchar_t * str)
-{
-    return getTextSize(canvas, str, wcslen(str));
-}
-
-wxPoint getTextSize(wxDC & canvas, const wxString & str)
-{
-    return getTextSize(canvas, str.c_str(), str.length());
-}
 
 long getTextHeight(wxDC & canvas)
 {
@@ -57,25 +39,10 @@ void tile(wxDC & canvas, long x, long y, long xs, long ys, void * src, long ix, 
     }
 }
 
-void drawText(wxDC & canvas, const wchar_t * str, size_t len, const wxRect & r, unsigned int format)
+void drawText(HDC dc, const wchar_t * str, size_t len, const wxRect & r, unsigned int format)
 {
 	RECT rc = { r.x, r.y, r.x + r.width, r.y + r.height };
-	DrawText(static_cast<HDC>(canvas.GetHDC()), str, static_cast<int>(len), &rc, format );
-}
-
-void drawText(wxDC & canvas, const wchar_t * str, const wxRect & r, unsigned int format)
-{
-    drawText(canvas, str, wcslen(str), r, format);
-}
-
-void drawText(wxDC & canvas, const std::wstring & str, const wxRect & r, unsigned int format)
-{
-    drawText(canvas, str.c_str(), str.length(), r, format);
-}
-
-void drawText(wxDC & canvas, const wxString & str, const wxRect & r, unsigned int format)
-{
-    drawText(canvas, str.c_str(), str.length(), r, format);
+	DrawText(dc, str, static_cast<int>(len), &rc, format );
 }
 
 ClipRect::ClipRect(wxDC & canvas, const wxRect & rect)

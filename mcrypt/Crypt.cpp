@@ -20,7 +20,7 @@ void Crypt::decrypt(unsigned char * i, unsigned char * end)
     }
 
     // suggest little endian
-    size_t * val = reinterpret_cast<size_t*>(&key_[key_.size() - 8]);
+    uint64_t * val = reinterpret_cast<uint64_t*>(&key_[key_.size() - 8]);
     *val += size;
 }
 
@@ -34,7 +34,7 @@ void Crypt::encrypt(unsigned char * i, unsigned char * end)
         *i = temp = temp2 ^ key_[j & (key_.size() - 1)] ^ temp;
     }
 
-    size_t * val = reinterpret_cast<size_t*>(&key_[key_.size() - 8]);
+    uint64_t * val = reinterpret_cast<uint64_t*>(&key_[key_.size() - 8]);
     *val += size;
 }
 
