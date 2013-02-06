@@ -36,7 +36,7 @@ std::streamsize file_size(FILE * file)
         return -1;
 }
 
-rc_buffer load_file(const boost::filesystem::wpath & path)
+rc_buffer load_file(const boost::filesystem::wpath & path, bool addZero)
 {
     FILE * file = wfopen(path, "rb");
     if(file)
@@ -44,10 +44,14 @@ rc_buffer load_file(const boost::filesystem::wpath & path)
         off_t size = static_cast<off_t>(file_size(file));
         if(size >= 0)
         {
-            rc_buffer result(size);
+            rc_buffer result(size + (addZero ? 1 : 0));
             off_t read = fread(result.data(), 1, size, file);
             if(read == size)
+            {
+                if(addZero)
+                    result.data()[size] = 0;
                 return result;
+            }
         }
     }
 

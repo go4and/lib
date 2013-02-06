@@ -114,8 +114,18 @@ public:
     
     void doOutput(LogLevel level, const char * str, size_t len)
     {
-        size_t wr = fwrite(str, 1, len, handle_);
-        BOOST_VERIFY(wr == len);
+        while(len)
+        {
+            size_t wr = fwrite(str, 1, len, handle_);
+            if(!wr || wr == len)
+            {
+                BOOST_ASSERT(wr == len);
+                break;
+            }
+            str += wr;
+            len -= wr;
+        }
+        
         fflush(handle_);
     }
 

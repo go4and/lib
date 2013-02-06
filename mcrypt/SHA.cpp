@@ -131,6 +131,7 @@ SHADigest fromBase64(const std::string & string)
     temp[base64length - 1] = '=';
     SHADigest result;
     size_t len = debase64(temp, base64length, &result[0]);
+    (void)len;
     BOOST_ASSERT(len == result.size());
     return result;
 }

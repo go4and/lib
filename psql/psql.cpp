@@ -151,8 +151,12 @@ void Connection::checkResult(const char * query, Result & result, bool canHaveEr
         MLOG_MESSAGE(Error, "slow query: " << query << ", passed: " << passed);
     if(!result.success())
     {
-        MLOG_MESSAGE_EX(!canHaveErrors ? mlog::llError : mlog::llNotice, "exec failed: " << result.status() << ", msg: " << result.error() << ", query: " << query);
-        BOOST_THROW_EXCEPTION(ExecException() << mstd::error_message(result.error()));
+        ConnStatusType status = PQstatus(conn());
+        MLOG_MESSAGE_EX((!canHaveErrors || status != CONNECTION_OK) ? mlog::llError : mlog::llNotice, "exec failed: " << result.status() << ", msg: " << result.error() << ", query: " << query << ", status: " << status);
+        if(status != CONNECTION_OK)
+            BOOST_THROW_EXCEPTION(ConnectionLostException());
+        else
+            BOOST_THROW_EXCEPTION(ExecException() << mstd::error_message(result.error()));
     }
 }
 
@@ -190,7 +194,7 @@ Result Connection::exec(const char * query, bool canHaveErrors)
     checkResult(query, result, canHaveErrors, start);
 
     MLOG_MESSAGE(Debug, "exec succeeded");
-    return move(result);
+    return boost::move(result);
 }
 
 void Connection::execVoid(const char * query, bool canHaveErrors)
@@ -323,7 +327,7 @@ Result Connection::copyEnd()
     
     MLOG_DEBUG("copyEnd - ok");
     
-    return move(result);
+    return boost::move(result);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
