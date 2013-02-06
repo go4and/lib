@@ -18,6 +18,7 @@ namespace mstd {
 #define MSTD_ENUM_CASE_NAME(s, data, elem) case BOOST_PP_CAT(BOOST_PP_APPLY(data), elem): return BOOST_PP_STRINGIZE(elem);
 #define MSTD_ENUM_CASE_WNAME(s, data, elem) case BOOST_PP_CAT(BOOST_PP_APPLY(data), elem): return BOOST_PP_WSTRINGIZE(elem);
 #define MSTD_ENUM_PARSE_ITEM(s, data, elem) if(!BOOST_PP_SEQ_ELEM(1, data)(input, BOOST_PP_SEQ_ELEM(2, data)(elem))) return BOOST_PP_CAT(BOOST_PP_APPLY(BOOST_PP_SEQ_ELEM(0, data)), elem);
+#define MSTD_ENUM_PARSE_ITEM_RET(s, data, elem) if(!BOOST_PP_SEQ_ELEM(1, data)(input, BOOST_PP_SEQ_ELEM(2, data)(elem))) { outputValue_ = BOOST_PP_CAT(BOOST_PP_APPLY(BOOST_PP_SEQ_ELEM(0, data)), elem); return true; }
 #define MSTD_ENUM_TRANSLATOR(enumName, prefix, case, classPrefix) \
     struct BOOST_PP_CAT(BOOST_PP_CAT(BOOST_PP_APPLY(classPrefix), translate), enumName) { \
         typedef std::BOOST_PP_CAT(BOOST_PP_APPLY(prefix), string) internal_type; \
@@ -54,14 +55,14 @@ namespace mstd {
         switch(value) { \
         BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_CASE_NAME, prefix, list); \
         }; \
-        return "unknown "BOOST_PP_STRINGIZE(enumName); \
+        return "unknown " BOOST_PP_STRINGIZE(enumName); \
     } \
     \
     inline const wchar_t * wname(enumName value) { \
         switch(value) { \
         BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_CASE_WNAME, prefix, list); \
         }; \
-        return L"unknown "BOOST_PP_WSTRINGIZE(enumName); \
+        return L"unknown " BOOST_PP_WSTRINGIZE(enumName); \
     } \
     \
     inline boost::optional<enumName> BOOST_PP_CAT(parse, enumName)(const char * input) { \
@@ -82,6 +83,11 @@ namespace mstd {
     inline boost::optional<enumName> BOOST_PP_CAT(iparse, enumName)(const wchar_t * input) { \
         BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, (prefix)(MSTD_wcscasecmp)(BOOST_PP_WSTRINGIZE), list); \
         return boost::optional<enumName>(); \
+    } \
+    \
+    inline bool parseEnum(const char * input, enumName & outputValue_) { \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM_RET, (prefix)(strcmp)(BOOST_PP_STRINGIZE), list); \
+        return false; \
     } \
     \
     MSTD_ENUM_TRANSLATOR(enumName, BOOST_PP_NIL, BOOST_PP_NIL, BOOST_PP_NIL); \

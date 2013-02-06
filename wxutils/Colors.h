@@ -12,6 +12,7 @@
 
 namespace wxutils {
 
+wxColor string2color(const std::string & value);
 wxColor string2color(const std::wstring & value);
 std::wstring color2string(const wxColor & value);
 

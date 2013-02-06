@@ -9,10 +9,12 @@ namespace {
 typedef uint32_t ColorCode;
 
 struct MapItem {
-    std::wstring name;
+    std::wstring wname;
+    std::string name;
     ColorCode value;
 };
 
+class WNameTag;
 class NameTag;
 class ValueTag;
 
@@ -20,8 +22,12 @@ typedef boost::multi_index_container<
             MapItem,
             boost::multi_index::indexed_by<
                 boost::multi_index::hashed_unique<
+                    boost::multi_index::tag<WNameTag>,
+                    boost::multi_index::member<MapItem, std::wstring, &MapItem::wname>
+                >,
+                boost::multi_index::hashed_unique<
                     boost::multi_index::tag<NameTag>,
-                    boost::multi_index::member<MapItem, std::wstring, &MapItem::name>
+                    boost::multi_index::member<MapItem, std::string, &MapItem::name>
                 >,
                 boost::multi_index::hashed_unique<
                     boost::multi_index::tag<ValueTag>,
@@ -62,7 +68,8 @@ private:
     void add(const wchar_t * name, const wxColor & val)
     {
         MapItem item;
-        item.name = name;
+        item.wname = name;
+        item.name.assign(item.wname.begin(), item.wname.end());
         item.value = colorCode(val);
         value.insert(item);
     }
@@ -99,13 +106,43 @@ wxColor string2color(const std::wstring & value)
     }
 }
 
+wxColor string2color(const std::string & value)
+{
+    if(value.empty())
+        return 0xffffff;
+    if(value[0] == '#') {
+        uint32_t result = 0;
+        std::string::const_iterator i = value.begin();
+        ++i;
+        for(; i != value.end(); ++i)
+        {
+            result = (result << 4);
+            wchar_t c = *i;
+            if(c >= L'0' && c <= L'9')
+                result += c - '0';
+            else if(c >= L'a' && c <= L'f')
+                result += c - L'a' + 10;
+            else if(c >= L'A' && c <= L'F')
+                result += c - L'A' + 10;
+        }
+        return wxColor(((result & 0xff0000) >> 16) | ((result & 0xff) << 16) | (result & 0xff00));
+    } else {
+        const auto & colors = Data::instance().value.get<NameTag>();
+        auto i = colors.find(value);
+        if(i != colors.end())
+            return i->value;
+        else
+            return mstd::str2int10<unsigned long>(value);
+    }
+}
+
 std::wstring color2string(const wxColor & value)
 {
     typedef boost::multi_index::index<StdColors, ValueTag>::type Index;
     const Index & index = Data::instance().value.get<ValueTag>();
     Index::const_iterator i = index.find(colorCode(value));
     if(i != index.end())
-        return i->name;
+        return i->wname;
     else {
         const wchar_t * ht = L"0123456789abcdef";
         wchar_t buf[0x10];

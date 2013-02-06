@@ -88,6 +88,6 @@ FILE * wfopen(const boost::filesystem::wpath & path, const char * mode);
 std::streamsize file_size(FILE * file);
 
 class rc_buffer;
-rc_buffer load_file(const boost::filesystem::wpath & path);
+rc_buffer load_file(const boost::filesystem::wpath & path, bool addZero = false);
 
 }

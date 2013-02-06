@@ -46,6 +46,7 @@
 
 #include <mstd/cstdint.hpp>
 #include <mstd/enum_set.hpp>
+#include <mstd/itoa.hpp>
 #include <mstd/pointer_cast.hpp>
 #include <mstd/singleton.hpp>
 
