@@ -51,6 +51,7 @@ public:
     typedef Key key_type;
     typedef Value value_type;
     typedef interval_with_value<key_type, value_type> interval_type;
+    typedef std::vector<interval_type> holder_type;
 
     plain_interval_map()
     {
@@ -84,8 +85,19 @@ public:
         boost::optional<const value_type&> temp = get(k);
         return temp ? *temp : def;
     }
+
+    bool empty() const
+    {
+        return intervals_.empty();
+    }
+
+    void swap(std::vector<interval_type> & src)
+    {
+        intervals_.swap(src);
+        std::sort(intervals_.begin(), intervals_.end(), comparator_);
+    }
 private:
-    std::vector<interval_type> intervals_;
+    holder_type intervals_;
     interval_compare comparator_;
 };
 

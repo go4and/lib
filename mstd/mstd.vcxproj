@@ -202,6 +202,7 @@
     <ClInclude Include="performance_timer.hpp" />
     <ClInclude Include="phoenix.hpp" />
     <ClInclude Include="PImpl.h" />
+    <ClInclude Include="plain_interval_map.hpp" />
     <ClInclude Include="pointer_cast.hpp" />
     <ClInclude Include="pre_spirit.hpp" />
     <ClInclude Include="process.hpp" />

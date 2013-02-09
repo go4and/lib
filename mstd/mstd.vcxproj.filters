@@ -265,5 +265,8 @@
     <ClInclude Include="rc_array.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="plain_interval_map.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

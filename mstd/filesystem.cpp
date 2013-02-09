@@ -50,9 +50,11 @@ rc_buffer load_file(const boost::filesystem::wpath & path, bool addZero)
             {
                 if(addZero)
                     result.data()[size] = 0;
+                fclose(file);
                 return result;
             }
         }
+        fclose(file);
     }
 
     return rc_buffer();
