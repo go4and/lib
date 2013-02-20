@@ -613,11 +613,18 @@ const char * ResultRowRef::asCString(size_t index) const
 
 boost::posix_time::ptime ResultRowRef::asTime(size_t index) const
 {
-    const void * data = raw(index);
     checkOid(result_, index, oidTimestamp);
+    const void * data = raw(index);
     int64_t value = mstd::ntoh(*static_cast<const boost::int64_t*>(data));
     int64_t mul = (boost::posix_time::microseconds::traits_type::res_adjust() / 1000000);
     return timeStart + boost::posix_time::time_duration(0, 0, 0, value * mul);
+}
+
+bool ResultRowRef::asBool(size_t index) const
+{
+    checkOid(result_, index, oidBool);
+    const void * data = raw(index);
+    return static_cast<const uint8_t*>(data) != 0;
 }
 
 ByteArray ResultRowRef::asArray(size_t index) const

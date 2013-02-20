@@ -23,6 +23,7 @@ typedef struct pg_result PGresult;
 
 namespace psql {
 
+const Oid oidBool      =   16;
 const Oid oidByteArray =   17;
 const Oid oidInt64     =   20;
 const Oid oidInt16     =   21;
@@ -59,7 +60,8 @@ public:
     const char * asCString(size_t index) const;
     ByteArray asArray(size_t index) const;
     boost::posix_time::ptime asTime(size_t index) const;
-    
+    bool asBool(size_t index) const;
+
     template<class T>
     typename boost::enable_if<boost::is_same<T, boost::int16_t>, T>::type
     as(size_t index) const {
@@ -90,11 +92,16 @@ public:
         return asArray(index);
     }
 
-
     template<class T>
     typename boost::enable_if<boost::is_same<T, boost::posix_time::ptime>, T>::type
     as(size_t index) const {
         return asTime(index);
+    }
+
+    template<class T>
+    typename boost::enable_if<boost::is_same<T, bool>, T>::type
+    as(size_t index) const {
+        return asBool(index);
     }
 private:
     ResultRowRef(PGresult * result, size_t index, size_t size);

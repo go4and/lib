@@ -86,6 +86,13 @@ wxFont defaultGuiFont()
 
     return font;
 }
+#else
+
+wxFont defaultGuiFont()
+{
+    return wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+}
+
 #endif
 
 }

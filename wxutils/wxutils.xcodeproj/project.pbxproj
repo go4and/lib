@@ -10,6 +10,7 @@
 		C3A2980F13E0A3B100F7FC1B /* UIEnqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */; };
 		C3A2981013E0A3B100F7FC1B /* UIEnqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */; };
 		C3E07A1C1520EDC900E1F9FF /* Misc.mm in Sources */ = {isa = PBXBuildFile; fileRef = C3E07A1B1520EDC900E1F9FF /* Misc.mm */; };
+		C3E8123616C60B34002FB5B9 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E8123516C60B34002FB5B9 /* mlog.dylib */; };
 		C3EDA4E9138839D1002FAF3C /* Any.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4CB138839D1002FAF3C /* Any.h */; };
 		C3EDA4EA138839D1002FAF3C /* AttachData.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4CC138839D1002FAF3C /* AttachData.h */; };
 		C3EDA4EB138839D1002FAF3C /* CanvasUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EDA4CD138839D1002FAF3C /* CanvasUtils.cpp */; };
@@ -63,6 +64,7 @@
 		C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIEnqueue.cpp; sourceTree = "<group>"; };
 		C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIEnqueue.h; sourceTree = "<group>"; };
 		C3E07A1B1520EDC900E1F9FF /* Misc.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Misc.mm; sourceTree = "<group>"; };
+		C3E8123516C60B34002FB5B9 /* mlog.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EDA4C8138839A3002FAF3C /* wxutils.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = wxutils.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EDA4CB138839D1002FAF3C /* Any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Any.h; sourceTree = "<group>"; };
 		C3EDA4CC138839D1002FAF3C /* AttachData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachData.h; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3E8123616C60B34002FB5B9 /* mlog.dylib in Frameworks */,
 				C3EDA5AC13894DD1002FAF3C /* mstd.dylib in Frameworks */,
 				C3EDA59B13894D87002FAF3C /* OpenGL.framework in Frameworks */,
 			);
@@ -120,6 +123,7 @@
 		0867D691FE84028FC02AAC07 /* wxutils */ = {
 			isa = PBXGroup;
 			children = (
+				C34126B616D11A0C00BF26D2 /* Headers */,
 				C3EDA59F13894DB1002FAF3C /* Dependencies */,
 				5073E0CA09E734BC00EC74B6 /* Configuration Files */,
 				08FB77ACFE841707C02AAC07 /* Source */,
@@ -141,35 +145,18 @@
 			isa = PBXGroup;
 			children = (
 				C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */,
-				C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */,
-				C3EDA4CB138839D1002FAF3C /* Any.h */,
-				C3EDA4CC138839D1002FAF3C /* AttachData.h */,
 				C3EDA4CD138839D1002FAF3C /* CanvasUtils.cpp */,
-				C3EDA4CE138839D1002FAF3C /* CanvasUtils.h */,
 				C3EDA4CF138839D1002FAF3C /* Colors.cpp */,
-				C3EDA4D0138839D1002FAF3C /* Colors.h */,
-				C3EDA4D1138839D1002FAF3C /* Config.h */,
 				C3EDA4D2138839D1002FAF3C /* FilePicker.cpp */,
-				C3EDA4D3138839D1002FAF3C /* FilePicker.h */,
 				C3EDA4D4138839D1002FAF3C /* Icon.cpp */,
-				C3EDA4D5138839D1002FAF3C /* Icon.h */,
 				C3EDA4D6138839D1002FAF3C /* Image.cpp */,
-				C3EDA4D7138839D1002FAF3C /* Image.h */,
 				C3EDA4D8138839D1002FAF3C /* Instance.cpp */,
-				C3EDA4D9138839D1002FAF3C /* Instance.h */,
 				C3EDA4DA138839D1002FAF3C /* OpenGL.cpp */,
-				C3EDA4DB138839D1002FAF3C /* OpenGL.h */,
-				C3EDA4DC138839D1002FAF3C /* pch.h */,
 				C3EDA4DD138839D1002FAF3C /* RectUtils.cpp */,
-				C3EDA4DE138839D1002FAF3C /* RectUtils.h */,
 				C3EDA4DF138839D1002FAF3C /* ScopedDialog.cpp */,
-				C3EDA4E0138839D1002FAF3C /* ScopedDialog.h */,
 				C3EDA4E1138839D1002FAF3C /* Separator.cpp */,
-				C3EDA4E2138839D1002FAF3C /* Separator.h */,
 				C3EDA4E3138839D1002FAF3C /* Widget.cpp */,
-				C3EDA4E4138839D1002FAF3C /* Widget.h */,
 				C3EDA4E5138839D1002FAF3C /* WindowUtils.cpp */,
-				C3EDA4E6138839D1002FAF3C /* WindowUtils.h */,
 				C3E07A1B1520EDC900E1F9FF /* Misc.mm */,
 			);
 			name = Source;
@@ -182,9 +169,34 @@
 			name = "Configuration Files";
 			sourceTree = "<group>";
 		};
+		C34126B616D11A0C00BF26D2 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */,
+				C3EDA4CB138839D1002FAF3C /* Any.h */,
+				C3EDA4CC138839D1002FAF3C /* AttachData.h */,
+				C3EDA4CE138839D1002FAF3C /* CanvasUtils.h */,
+				C3EDA4D0138839D1002FAF3C /* Colors.h */,
+				C3EDA4D1138839D1002FAF3C /* Config.h */,
+				C3EDA4D3138839D1002FAF3C /* FilePicker.h */,
+				C3EDA4D5138839D1002FAF3C /* Icon.h */,
+				C3EDA4D7138839D1002FAF3C /* Image.h */,
+				C3EDA4D9138839D1002FAF3C /* Instance.h */,
+				C3EDA4DB138839D1002FAF3C /* OpenGL.h */,
+				C3EDA4DC138839D1002FAF3C /* pch.h */,
+				C3EDA4DE138839D1002FAF3C /* RectUtils.h */,
+				C3EDA4E0138839D1002FAF3C /* ScopedDialog.h */,
+				C3EDA4E2138839D1002FAF3C /* Separator.h */,
+				C3EDA4E4138839D1002FAF3C /* Widget.h */,
+				C3EDA4E6138839D1002FAF3C /* WindowUtils.h */,
+			);
+			name = Headers;
+			sourceTree = "<group>";
+		};
 		C3EDA59F13894DB1002FAF3C /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				C3E8123516C60B34002FB5B9 /* mlog.dylib */,
 				C3EDA5A413894DC0002FAF3C /* mstd.xcodeproj */,
 			);
 			name = Dependencies;

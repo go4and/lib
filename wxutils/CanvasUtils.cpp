@@ -11,12 +11,12 @@ wxPoint getTextSize(HDC dc, const wchar_t * str, size_t len)
 	DrawText(dc, str, static_cast<int>(len), &rect, DT_CALCRECT);
 	return wxPoint(rect.right, rect.bottom);
 }
-#endif
 
 long getTextHeight(wxDC & canvas)
 {
     return getTextSize(canvas, L" ").y - 2;
 }
+#endif
 
 #if BOOST_WINDOWS
 void tile(wxDC & canvas, long x, long y, long xs, long ys, void * src, long ix, long iy, long sx, long sy)
