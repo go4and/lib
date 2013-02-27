@@ -90,4 +90,7 @@ std::streamsize file_size(FILE * file);
 class rc_buffer;
 rc_buffer load_file(const boost::filesystem::wpath & path, bool addZero = false);
 
+boost::filesystem::path expand_env_vars(const std::wstring & input);
+boost::filesystem::path expand_env_vars(const std::string & input);
+
 }
