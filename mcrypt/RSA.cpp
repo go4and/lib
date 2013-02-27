@@ -341,7 +341,7 @@ size_t getPaddingTail(int padding)
 int RSA::availableSize(bool publicEncrypt, Padding padding) const
 {
     int realPadding = getPadding(padding, publicEncrypt);
-    return size() - getPaddingTail(realPadding);
+    return size() - static_cast<int>(getPaddingTail(realPadding));
 }
 
 template<class Func>

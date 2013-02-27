@@ -13,7 +13,7 @@ public:
 
     boost::asio::io_service & ioService();
 
-    void start(size_t count);
+    void start(size_t count, bool withCurrent = false);
     void stop();
 private:
     struct Impl;

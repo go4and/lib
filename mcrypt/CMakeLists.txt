@@ -1,2 +1,2 @@
 file(GLOB cppfiles "*.cpp")
-add_library(mcrypt ${cppfiles})
+add_library(mcrypt${BINARY_SUFFIX} ${cppfiles})

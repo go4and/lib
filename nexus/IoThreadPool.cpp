@@ -2,7 +2,7 @@
 
 #include "IoThreadPool.h"
 
-MLOG_DECLARE_LOGGER(iotp);
+MLOG_DECLARE_LOGGER(nexus_iotp);
 
 namespace nexus {
 
@@ -43,7 +43,7 @@ private:
 
 }
 
-void IoThreadPool::start(size_t count)
+void IoThreadPool::start(size_t count, bool withCurrent)
 {
     MLOG_MESSAGE(Notice, "start");
 
@@ -51,6 +51,9 @@ void IoThreadPool::start(size_t count)
 
     while(impl_->threads.size() != count)
         impl_->threads.push_back(new boost::thread(tracer(logger, Runner(impl_->ioService))));
+    
+    if(withCurrent)
+        tracer(logger, Runner(impl_->ioService))();
 }
 
 void IoThreadPool::stop()
@@ -60,7 +63,7 @@ void IoThreadPool::stop()
     for(boost::ptr_vector<boost::thread>::iterator i = impl_->threads.begin(), end = impl_->threads.end(); i != end; ++i)
         i->join();
     impl_->threads.clear();
-    
+
     MLOG_MESSAGE(Notice, "stop, finished");
 }
 

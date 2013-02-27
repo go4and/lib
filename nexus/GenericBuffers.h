@@ -1,44 +1,94 @@
 #pragma once
 
+#ifndef NEXUS_BUILDING
+#include <boost/circular_buffer.hpp>
+#endif
+
 namespace nexus {
 
 template<class Buffer>
 class GenericBuffers;
 
+template<class T>
+const void * get_buffer_data(const T & t)
+{
+    return t.data();
+}
+
+template<class T>
+size_t get_buffer_size(const T & t)
+{
+    return t.size();
+}
+
+class GenericBufferTraits {
+public:
+    template<class T>
+    static auto data(const T & t) -> decltype(get_buffer_data(t))
+    {
+        return get_buffer_data(t);
+    }
+
+    template<class T>
+    static size_t size(const T & t)
+    {
+        return get_buffer_size(t);
+    }
+
+    template<class T>
+    static auto data(T & t) -> decltype(get_buffer_data(t))
+    {
+        return get_buffer_data(t);
+    }
+
+    template<class T>
+    static size_t size(T & t)
+    {
+        return get_buffer_size(t);
+    }
+};
+
+template<class Impl, bool mutable_, class Traits = GenericBufferTraits>
+class GenericBuffersIterator {
+public:
+    typedef typename boost::mpl::if_c<!mutable_, boost::asio::const_buffer, boost::asio::mutable_buffer>::type value_type;
+    typedef typename boost::mpl::if_c<!mutable_, const char *, char *>::type data_type;
+
+    GenericBuffersIterator(const Impl & impl, size_t skip)
+        : impl_(impl), skip_(skip)
+    {
+    }
+    
+    void operator++()
+    {
+        ++impl_;
+        skip_ = 0;
+    }
+    
+    bool operator!=(const GenericBuffersIterator & rhs) const
+    {
+        return impl_ != rhs.impl_;
+    }
+
+    value_type operator*() const
+    {
+        data_type data = static_cast<data_type>(Traits::data(*impl_));
+        return value_type(data + skip_, Traits::size(*impl_) - skip_);
+    }
+private:
+    Impl impl_;
+    size_t skip_;
+};
+
 template<class Buffer>
 class GenericBuffersRef {
 public:
+    typedef GenericBuffersIterator<typename boost::circular_buffer<Buffer>::const_iterator, false> const_iterator;
+
     explicit GenericBuffersRef(const GenericBuffers<Buffer> & buffers)
         : buffers_(&buffers)
     {
     }
-
-    class const_iterator {
-    public:
-        const_iterator(const typename boost::circular_buffer<Buffer>::const_iterator & impl, size_t skip)
-            : impl_(impl), skip_(skip)
-        {
-        }
-        
-        void operator++()
-        {
-            ++impl_;
-            skip_ = 0;
-        }
-        
-        bool operator!=(const const_iterator & rhs) const
-        {
-            return impl_ != rhs.impl_;
-        }
-
-        boost::asio::const_buffer operator*() const
-        {
-            return boost::asio::const_buffer(impl_->data() + skip_, impl_->size() - skip_);
-        }
-    private:
-        typename boost::circular_buffer<Buffer>::const_iterator impl_;
-        size_t skip_;
-    };
 
     const_iterator begin() const
     {
@@ -52,6 +102,39 @@ public:
 private:
     const GenericBuffers<Buffer> * buffers_;
 };
+
+template<class Pending>
+void consume(size_t transferred, Pending & pending, size_t & skip)
+{
+    if(transferred && !pending.empty())
+    {
+        {
+            size_t size = get_buffer_size(pending.front());
+            size_t left = size - skip;
+            if(left <= transferred)
+            {
+                transferred -= left;
+                skip = 0;
+                pending.pop_front();
+            } else {
+                skip += transferred;
+                return;
+            }
+        }
+        while(transferred != 0)
+        {
+            size_t size = get_buffer_size(pending.front());
+            if(size <= transferred)
+            {
+                transferred -= size;
+                pending.pop_front();
+            } else {
+                skip = transferred;
+                break;
+            }
+        }
+    }
+}
 
 template<class Buffer>
 class GenericBuffers : public boost::noncopyable {
@@ -80,19 +163,7 @@ public:
     
     void consume(size_t transferred)
     {
-        while(transferred != 0)
-        {
-            Buffer & buf = pending_.front();
-            if(buf.size() - skip_ <= transferred)
-            {
-                transferred -= buf.size() - skip_;
-                skip_ = 0;
-                pending_.pop_front();
-            } else {
-                skip_ += transferred;
-                transferred = 0;
-            }
-        }
+        nexus::consume(transferred, pending_, skip_);
     }
 private:
     boost::circular_buffer<Buffer> pending_;

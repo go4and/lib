@@ -28,32 +28,20 @@ protected:
     void allocationFailed(size_t size, size_t bufferSize);
 };
 
-template<bool strict>
+template<bool strict, size_t count>
 class HandlerStorage : HandlerStorageBase {
 public:
     HandlerStorage()
-        : allocated_(false), storageSize_(0), storage_(0) {}
-
-    ~HandlerStorage()
     {
-        BOOST_ASSERT(!allocated_);
-        if(storage_)
-            ::free(storage_);
     }
 
     void * alloc(size_t size)
     {
-        if(!allocated_.cas(true, false))
+        for(size_t i = 0; i != count; ++i)
         {
-            if(size <= storageSize_)
-                return storage_;
-            else {
-                if(storage_)
-                    ::free(storage_);
-                storage_ = malloc(size);
-                storageSize_ = size;
-                return storage_;
-            }
+            void * result = items_[i].alloc(size);
+            if(result)
+                return result;
         }
 
         BOOST_ASSERT(!strict);
@@ -62,17 +50,59 @@ public:
 
     void free(void * data)
     {
-        if(data == storage_)
-        {
-            BOOST_ASSERT(allocated_);
-            allocated_ = false;
-        } else
-            ::free(data);
+        for(size_t i = 0; i != count; ++i)
+            if(items_[i].free(data))
+                return;
+        ::free(data);
     }
 private:
-    mstd::atomic<bool> allocated_;
-    size_t storageSize_;
-    void * storage_;
+    struct StorageItem {
+        mstd::atomic<bool> allocated;
+        size_t storageSize;
+        void * storage;
+        
+        StorageItem()
+            : allocated(false), storageSize(0), storage(0)
+        {
+        }
+
+        ~StorageItem()
+        {
+            BOOST_ASSERT(!allocated);
+            if(storage)
+                ::free(storage);
+        }
+
+        void * alloc(size_t size)
+        {
+            if(!allocated.cas(true, false))
+            {
+                if(size <= storageSize)
+                    return storage;
+                else {
+                    if(storage)
+                        ::free(storage);
+                    storage = malloc(size);
+                    storageSize = size;
+                    return storage;
+                }
+            }
+            return 0;
+        }
+
+        bool free(void * data)
+        {
+            if(data == storage)
+            {
+                BOOST_ASSERT(allocated);
+                allocated = false;
+                return true;
+            } else
+                return false;
+        }
+    };
+    
+    boost::array<StorageItem, count> items_;
 };
 
 #define NEXUS_GET_FIRST(a, b) a
@@ -158,7 +188,7 @@ private:
 #define NEXUS_HANDLER_BIND_DEF(z, n, data) \
     NEXUS_HANDLER_BIND_DEF_IMPL(BOOST_PP_TUPLE_ELEM(2, 0, data), BOOST_PP_TUPLE_ELEM(2, 1, data), n)
 
-#define NEXUS_DECLARE_HANDLER(suffix, cls, strict) \
+#define NEXUS_DECLARE_HANDLER_EX(suffix, cls, strict, count) \
     NEXUS_DECLARE_HANDLER_CLASS(suffix, cls, 0) \
     BOOST_PP_CAT(BOOST_PP_CAT(Handle, suffix), 0) BOOST_PP_CAT(bind, suffix)() \
     { \
@@ -176,9 +206,10 @@ private:
     } \
     \
     BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(6), NEXUS_HANDLER_BIND_DEF, (suffix, cls)) \
-    nexus::HandlerStorage<strict> storage##suffix##_; \
+    nexus::HandlerStorage<strict, count> storage##suffix##_; \
     /**/
 
+#define NEXUS_DECLARE_HANDLER(suffix, cls, strict) NEXUS_DECLARE_HANDLER_EX(suffix, cls, strict, 1)
 #define NEXUS_DECLARE_SIMPLE_HANDLER(a, b) NEXUS_DECLARE_HANDLER(a, b, true)
 
 }
