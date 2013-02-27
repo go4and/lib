@@ -19,8 +19,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 endif()
 
-set(CMAKE_CXX_FLAGS "-DBOOST_SYSTEM_NO_DEPRECATED")
-
 add_library(mlog${BINARY_SUFFIX} ${cppfiles})
 target_link_libraries(mlog${BINARY_SUFFIX} mstd${BINARY_SUFFIX})
 
