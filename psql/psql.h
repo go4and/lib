@@ -7,6 +7,7 @@
 #include <vector>
 #include <iosfwd>
 
+#include <boost/array.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/logic/tribool.hpp>

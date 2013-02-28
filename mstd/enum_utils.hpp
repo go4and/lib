@@ -47,14 +47,14 @@ namespace mstd {
         switch(value) { \
         BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_CASE_NAME, prefix, list); \
         }; \
-        return "unknown "BOOST_PP_STRINGIZE(enumName); \
+        return "unknown " BOOST_PP_STRINGIZE(enumName); \
     } \
     \
     inline const wchar_t * wname(enumName value) { \
         switch(value) { \
         BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_CASE_WNAME, prefix, list); \
         }; \
-        return L"unknown "BOOST_PP_WSTRINGIZE(enumName); \
+        return L"unknown " BOOST_PP_WSTRINGIZE(enumName); \
     } \
     \
     inline boost::optional<enumName> BOOST_PP_CAT(parse, enumName)(const char * input) { \
