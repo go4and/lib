@@ -15,6 +15,10 @@
 
 #include "Defines.h"
 
+namespace boost { namespace filesystem {
+class path;
+} }
+
 namespace mlog {
 
 #if !MLOG_NO_LOGGING
@@ -44,6 +48,8 @@ private:
     friend class Logger;
 };
 
+class tag_filename;
+typedef boost::error_info<tag_filename, boost::filesystem::path> error_filename;
 typedef mstd::own_exception<Manager> ManagerException;
 #endif
 

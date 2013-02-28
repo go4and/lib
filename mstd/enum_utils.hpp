@@ -8,12 +8,17 @@
 
 #include <boost/preprocessor/facilities/apply.hpp>
 
+#if !BOOST_WINDOWS
+#include <strings.h>
+#endif
+
 namespace mstd {
 
 #define MSTD_ENUM_ITEM(s, data, elem) BOOST_PP_CAT(BOOST_PP_APPLY(data), elem),
 #define MSTD_ENUM_CASE_NAME(s, data, elem) case BOOST_PP_CAT(BOOST_PP_APPLY(data), elem): return BOOST_PP_STRINGIZE(elem);
 #define MSTD_ENUM_CASE_WNAME(s, data, elem) case BOOST_PP_CAT(BOOST_PP_APPLY(data), elem): return BOOST_PP_WSTRINGIZE(elem);
 #define MSTD_ENUM_PARSE_ITEM(s, data, elem) if(!BOOST_PP_SEQ_ELEM(1, data)(input, BOOST_PP_SEQ_ELEM(2, data)(elem))) return BOOST_PP_CAT(BOOST_PP_APPLY(BOOST_PP_SEQ_ELEM(0, data)), elem);
+#define MSTD_ENUM_PARSE_ITEM_RET(s, data, elem) if(!BOOST_PP_SEQ_ELEM(1, data)(input, BOOST_PP_SEQ_ELEM(2, data)(elem))) { outputValue_ = BOOST_PP_CAT(BOOST_PP_APPLY(BOOST_PP_SEQ_ELEM(0, data)), elem); return true; }
 #define MSTD_ENUM_TRANSLATOR(enumName, prefix, case, classPrefix) \
     struct BOOST_PP_CAT(BOOST_PP_CAT(BOOST_PP_APPLY(classPrefix), translate), enumName) { \
         typedef std::BOOST_PP_CAT(BOOST_PP_APPLY(prefix), string) internal_type; \
@@ -33,6 +38,9 @@ namespace mstd {
 #if BOOST_WINDOWS
 #define MSTD_strcasecmp _stricmp
 #define MSTD_wcscasecmp _wcsicmp
+#elif defined(ANDROID)
+#define MSTD_strcasecmp strcasecmp
+#define MSTD_wcscasecmp wcscmp
 #else
 #define MSTD_strcasecmp strcasecmp
 #define MSTD_wcscasecmp wcscasecmp
@@ -75,6 +83,11 @@ namespace mstd {
     inline boost::optional<enumName> BOOST_PP_CAT(iparse, enumName)(const wchar_t * input) { \
         BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM, (prefix)(MSTD_wcscasecmp)(BOOST_PP_WSTRINGIZE), list); \
         return boost::optional<enumName>(); \
+    } \
+    \
+    inline bool parseEnum(const char * input, enumName & outputValue_) { \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM_RET, (prefix)(strcmp)(BOOST_PP_STRINGIZE), list); \
+        return false; \
     } \
     \
     MSTD_ENUM_TRANSLATOR(enumName, BOOST_PP_NIL, BOOST_PP_NIL, BOOST_PP_NIL); \

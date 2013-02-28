@@ -27,7 +27,8 @@ void listen(boost::asio::ip::tcp::acceptor & acceptor, const boost::asio::ip::tc
     MLOG_MESSAGE(Debug, "listen(" << endpoint << ')');
 
     try {
-        acceptor.open(endpoint.protocol());
+        boost::asio::ip::tcp::endpoint::protocol_type type = endpoint.protocol();
+        acceptor.open(type);
         acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
         acceptor.bind(endpoint);
         acceptor.listen();

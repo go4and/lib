@@ -24,6 +24,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
+#include <boost/move/move.hpp>
+
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/multi_index/hashed_index.hpp>
@@ -41,12 +43,16 @@
 #include <wx/icon.h>
 #include <wx/image.h>
 #include <wx/msgdlg.h>
+#include <wx/settings.h>
 #include <wx/stattext.h>
 #include <wx/timer.h>
 
 #include <mstd/cstdint.hpp>
 #include <mstd/enum_set.hpp>
+#include <mstd/itoa.hpp>
 #include <mstd/pointer_cast.hpp>
 #include <mstd/singleton.hpp>
+
+#include <mlog/Logging.h>
 
 #define BUILDING_WXUTILS

@@ -2,9 +2,12 @@
 
 #include "OpenGL.h"
 
+MLOG_DECLARE_LOGGER(wxutils_opengl);
+
 namespace wxutils {
 
-class CheckHasNP2 : public mstd::singleton<CheckHasNP2> {
+class CheckHasNP2 {
+    MSTD_SINGLETON_INLINE_DEFINITION(CheckHasNP2);
 public:
     bool value() const
     {
@@ -18,8 +21,6 @@ private:
     }
 
     bool value_;
-
-    MSTD_SINGLETON_DECLARATION(CheckHasNP2);
 };
 
 GLBitmap::GLBitmap()
@@ -101,9 +102,21 @@ void fillImageData(wxImage & img, unsigned char * output, size_t owidth, size_t 
     }
 }
 
+void GLTexture::reset()
+{
+    if(id_)
+    {
+        MLOG_DEBUG("Release texture: " << id_);
+        glDeleteTextures(1, &id_);
+        id_ = 0;
+    }
+}
+
 GLTexture loadTexture(const wxImage & simg, ImageFlags flags)
 {
-    GLint texSize; glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
+    MLOG_DEBUG("loadTexture(" << simg.GetWidth() << ", " << simg.GetHeight() << ")");
+
+    GLint texSize = 0; glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
 
     wxImage img;
     if(simg.GetWidth() > texSize || simg.GetHeight() > texSize)

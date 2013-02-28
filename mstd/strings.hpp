@@ -117,4 +117,53 @@ bool iequals(const std::string & lhs, const std::string & rhs);
 int istrcmp(const std::wstring & lhs, const std::wstring & rhs);
 int istrcmp(const std::string & lhs, const std::string & rhs);
 
+template<class Output, class It>
+void split_args(Output & output, It input, It end)
+{
+    while(input != end && *input == ' ')
+        ++input;
+    if(input == end)
+        return;
+    It begin = input;
+    It out = begin;
+    while(input != end)
+    {
+        auto ch = *input++;
+        if(ch == '\\')
+        {
+            if(input == end)
+                break;
+            *out++ = *input;
+            ++input;
+        } else if(ch == '"' || ch == '\'')
+        {
+            while(input != end)
+            {
+                auto cc = *input;
+                ++input;
+                if(cc == '\\')
+                {
+                    if(input == end)
+                        break;
+                    *out++ = *input;
+                    ++input;
+                } else if(cc == ch)
+                    break;
+                else
+                    *out++ = cc;
+            }
+        } else if(ch == ' ')
+        {
+            output.push_back(typename Output::value_type(begin, out));
+            out = begin;
+            while(input != end && *input == ' ')
+                ++input;
+            if(input == end)
+                return;
+        } else
+            *out++ = ch;
+    }
+    output.push_back(typename Output::value_type(begin, out));
+}
+
 }

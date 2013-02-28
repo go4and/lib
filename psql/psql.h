@@ -11,11 +11,11 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/logic/tribool.hpp>
+#include <boost/move/move.hpp>
 
 #include <mstd/cstdint.hpp>
 #include <mstd/exception.hpp>
 #include <mstd/hton.hpp>
-#include <mstd/move.hpp>
 
 typedef unsigned int Oid;
 typedef struct pg_conn PGconn;
@@ -23,6 +23,7 @@ typedef struct pg_result PGresult;
 
 namespace psql {
 
+const Oid oidBool      =   16;
 const Oid oidByteArray =   17;
 const Oid oidInt64     =   20;
 const Oid oidInt16     =   21;
@@ -59,7 +60,8 @@ public:
     const char * asCString(size_t index) const;
     ByteArray asArray(size_t index) const;
     boost::posix_time::ptime asTime(size_t index) const;
-    
+    bool asBool(size_t index) const;
+
     template<class T>
     typename boost::enable_if<boost::is_same<T, boost::int16_t>, T>::type
     as(size_t index) const {
@@ -90,11 +92,16 @@ public:
         return asArray(index);
     }
 
-
     template<class T>
     typename boost::enable_if<boost::is_same<T, boost::posix_time::ptime>, T>::type
     as(size_t index) const {
         return asTime(index);
+    }
+
+    template<class T>
+    typename boost::enable_if<boost::is_same<T, bool>, T>::type
+    as(size_t index) const {
+        return asBool(index);
     }
 private:
     ResultRowRef(PGresult * result, size_t index, size_t size);
@@ -120,28 +127,17 @@ public:
     size_t columns() const;
     Oid type(size_t index) const;
 
-    operator mstd::move_t<Result>()
-    {
-        return move();
-    }
-    
-    mstd::move_t<Result> move()
-    {
-        mstd::move_t<Result> x(*this);
-        return x;
-    }
-
     Result();
 
-    Result(mstd::move_t<Result> src)
-        : value_(src->value_), width_(src->width_)
+    Result(BOOST_RV_REF(Result) src)
+        : value_(src.value_), width_(src.width_)
     {
-        src->value_ = 0;
+        src.value_ = 0;
     }
 
-    void operator=(mstd::move_t<Result> src)
+    void operator=(BOOST_RV_REF(Result) src)
     {
-        Result temp(src);
+        Result temp(boost::move(src));
         swap(temp);
     }
 
@@ -158,8 +154,7 @@ public:
         return value_ ? &Result::width_ : 0;
     }
 private:
-    void operator=(Result&);
-    Result(Result&);
+    BOOST_MOVABLE_BUT_NOT_COPYABLE(Result);
 
     Result(PGresult * value);
 
@@ -451,11 +446,6 @@ inline std::ostream & operator<<(std::ostream & out, const ByteArray & value)
     return out;
 }
 
-inline Result move(mstd::move_t<Result> t)
-{
-    return Result(t);
-}
-
 class PSQLTag;
 typedef mstd::own_exception<PSQLTag> Exception;
 class ConnectionTag;
@@ -468,6 +458,8 @@ class InvalidTypeTag;
 typedef mstd::own_exception<InvalidTypeTag, Exception> InvalidTypeException;
 class CopyFailedTag;
 typedef mstd::own_exception<CopyFailedTag, Exception> CopyFailedException;
+class ConnectionLostTag;
+typedef mstd::own_exception<ConnectionLostTag, Exception> ConnectionLostException;
 
 class OidTag;
 typedef boost::error_info<OidTag, Oid> OidInfo;

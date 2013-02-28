@@ -114,8 +114,18 @@ public:
     
     void doOutput(LogLevel level, const char * str, size_t len)
     {
-        size_t wr = fwrite(str, 1, len, handle_);
-        BOOST_VERIFY(wr == len);
+        while(len)
+        {
+            size_t wr = fwrite(str, 1, len, handle_);
+            if(!wr || wr == len)
+            {
+                BOOST_ASSERT(wr == len);
+                break;
+            }
+            str += wr;
+            len -= wr;
+        }
+        
         fflush(handle_);
     }
 
@@ -206,17 +216,16 @@ public:
 
 class FileHolder : public boost::noncopyable {
 public:
-    explicit FileHolder(const std::string & fname)
+    explicit FileHolder(const boost::filesystem::path & fname)
         : fname_(fname)
     {
-        boost::filesystem::wpath path(mstd::deutf8(fname));
-        boost::filesystem::wpath dir = path;
+        boost::filesystem::wpath dir = fname;
         dir.remove_filename();
         boost::system::error_code ec;
         create_directories(dir, ec);
-        handle_ = mstd::wfopen(path, "ab");
+        handle_ = mstd::wfopen(fname, "ab");
         if(!handle_)
-            BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Failed to open for writing: " + fname));
+            BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Failed to open for writing") << error_filename(fname));
     }
     
     FILE * handle()
@@ -224,7 +233,7 @@ public:
         return handle_;
     }
     
-    const std::string & fname() const
+    const boost::filesystem::path & fname() const
     {
         return fname_;
     }
@@ -239,7 +248,7 @@ public:
     {
         handle_ = fopen(fname_.c_str(), "wb");
         if(!handle_)
-            BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Failed to open for writing: " + fname_));
+            BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Failed to open for writing") << error_filename(fname_));
     }
 
     ~FileHolder()
@@ -248,7 +257,7 @@ public:
             fclose(handle_);
     }
 private:
-    std::string fname_;
+    boost::filesystem::path fname_;
     FILE * handle_;
 };
 
@@ -319,8 +328,8 @@ std::string parse(const std::string & fname)
 
 class FileLogDevice : private FileHolder, public CFileLogDevice {
 public:
-    explicit FileLogDevice(const std::string & fname, size_t threshold, size_t count)
-        : FileHolder(parse(fname)), CFileLogDevice(handle()), threshold_(threshold), count_(count)
+    explicit FileLogDevice(const boost::filesystem::path & fname, size_t threshold, size_t count)
+        : FileHolder(fname), CFileLogDevice(handle()), threshold_(threshold), count_(count)
     {
         current_ = ftell(handle());
         checkLimit();
@@ -380,8 +389,8 @@ private:
 
     boost::filesystem::path history(size_t idx) const
     {
-        char buf[0x20];
-        return fname() + "." + mstd::itoa(idx, buf);
+        boost::filesystem::path::value_type buf[0x20];
+        return fname().native() + static_cast<boost::filesystem::path::value_type>('.') + mstd::itoa(idx, buf);
     }
 
     boost::mutex mutex_;
@@ -409,14 +418,14 @@ LogDevice * createDevice(const std::string & name, const std::string & value)
             BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("File device syntax: file(filename)"));
         std::string args = value.substr(5, value.length() - 6);
         std::string::size_type p = args.find(',');
-        size_t threshold = 1 << 20;
+        size_t threshold = std::numeric_limits<size_t>::max();
         if(p != std::string::npos)
         {
             threshold = mstd::str2int10<size_t>(args.substr(p + 1));
             args.erase(p);
             boost::trim(args);
         }
-        device = new FileLogDevice(args, threshold, 5);
+        device = new FileLogDevice(mstd::expand_env_vars(parse(args)), threshold, 5);
     }
 #if defined(__APPLE__)
     else if(value == "nslog()")

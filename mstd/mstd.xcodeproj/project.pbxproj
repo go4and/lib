@@ -192,6 +192,7 @@
 		C375FDA215490C250009748B /* ptree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ptree.cpp; sourceTree = SOURCE_ROOT; };
 		C375FDA315490C250009748B /* ptree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ptree.hpp; sourceTree = SOURCE_ROOT; };
 		C39101E4157D264900F119C0 /* rc_buffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = rc_buffer.hpp; sourceTree = SOURCE_ROOT; };
+		C3E8123416C3E03E002FB5B9 /* plain_interval_map.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = plain_interval_map.hpp; sourceTree = SOURCE_ROOT; };
 		C3E91BF415DCD697001F15B9 /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -209,6 +210,7 @@
 		C324558D1352A6B900999158 = {
 			isa = PBXGroup;
 			children = (
+				C366958016DDF04100F96BED /* Sources */,
 				C324559A1352A6B900999158 /* mstd */,
 				C32455991352A6B900999158 /* Products */,
 			);
@@ -225,36 +227,27 @@
 		C324559A1352A6B900999158 /* mstd */ = {
 			isa = PBXGroup;
 			children = (
-				C315362E16AAC0F10029F34A /* rc_array.hpp */,
 				C32455DA1352A9C800999158 /* access.hpp */,
 				C32455DB1352A9C800999158 /* any_iterator.hpp */,
-				C32455DE1352A9C800999158 /* atomic.cpp */,
 				C32455DF1352A9C800999158 /* atomic.hpp */,
-				C32455DC1352A9C800999158 /* atomic_pod.cpp */,
 				C32455DD1352A9C800999158 /* atomic_pod.hpp */,
 				C32455E01352A9C800999158 /* auto_bind.hpp */,
-				C32455E21352A9C800999158 /* buffers.cpp */,
 				C32455E31352A9C800999158 /* buffers.hpp */,
 				C32455E11352A9C800999158 /* buffers_fwd.hpp */,
 				C32455E41352A9C800999158 /* call_traits.hpp */,
 				C32455E51352A9C800999158 /* changed_set.hpp */,
 				C32455E61352A9C800999158 /* clone_ptr.hpp */,
 				C32455E71352A9C800999158 /* collections.hpp */,
-				C32455E81352A9C800999158 /* command_queue.cpp */,
 				C32455E91352A9C800999158 /* command_queue.hpp */,
 				C32455EA1352A9C800999158 /* comparators.hpp */,
 				C32455EB1352A9C800999158 /* config.hpp */,
 				C32455EC1352A9C800999158 /* cstdint.hpp */,
 				C32455ED1352A9C800999158 /* debug_mutex.hpp */,
-				C32455EE1352A9C800999158 /* detail */,
 				C375FDA015490C250009748B /* disposers.hpp */,
-				C32455F71352A9C800999158 /* email.cpp */,
 				C32455F81352A9C800999158 /* email.hpp */,
 				C32455F91352A9C800999158 /* enum_set.hpp */,
 				C32455FA1352A9C800999158 /* enum_utils.hpp */,
-				C32455FB1352A9C800999158 /* exception.cpp */,
 				C32455FC1352A9C800999158 /* exception.hpp */,
-				C346433C13D3339000716430 /* filesystem.cpp */,
 				C32455FD1352A9C800999158 /* filesystem.hpp */,
 				C32455FE1352A9C800999158 /* handle_base.hpp */,
 				C32455FF1352A9C800999158 /* has.hpp */,
@@ -263,53 +256,42 @@
 				C32456021352A9C800999158 /* hton.hpp */,
 				C375FDA115490C250009748B /* indexed_map.hpp */,
 				C32456031352A9C800999158 /* intrusive.hpp */,
-				C32456041352A9C800999158 /* itoa.cpp */,
 				C32456051352A9C800999158 /* itoa.hpp */,
 				C32456071352A9C800999158 /* kmp.hpp */,
 				C32456081352A9C800999158 /* lexical_cast.hpp */,
 				C32456091352A9C800999158 /* linked_allocator.hpp */,
-				C324560A1352A9C800999158 /* Logging.cpp */,
 				C324560B1352A9C800999158 /* Logging.h */,
 				C324560C1352A9C800999158 /* long_map.hpp */,
-				C324560D1352A9C800999158 /* machine */,
 				C324560F1352A9C800999158 /* map_gen.hpp */,
 				C32456101352A9C800999158 /* move.hpp */,
 				C32456131352A9C800999158 /* mutex.hpp */,
 				C32456141352A9C800999158 /* null.hpp */,
-				C32456151352A9C800999158 /* performance_timer.cpp */,
 				C32456161352A9C800999158 /* performance_timer.hpp */,
 				C32456171352A9C800999158 /* phoenix.hpp */,
 				C32456181352A9C800999158 /* PImpl.h */,
+				C3E8123416C3E03E002FB5B9 /* plain_interval_map.hpp */,
 				C32456191352A9C800999158 /* pointer_cast.hpp */,
 				C324561A1352A9C800999158 /* pre_spirit.hpp */,
-				C346433D13D3339000716430 /* process.cpp */,
 				C346433E13D3339000716430 /* process.hpp */,
-				C375FDA215490C250009748B /* ptree.cpp */,
 				C375FDA315490C250009748B /* ptree.hpp */,
-				C324561C1352A9C800999158 /* random.cpp */,
 				C324561D1352A9C800999158 /* random.hpp */,
+				C315362E16AAC0F10029F34A /* rc_array.hpp */,
 				C39101E4157D264900F119C0 /* rc_buffer.hpp */,
 				C324561E1352A9C800999158 /* reference_counter.hpp */,
 				C324561F1352A9C800999158 /* reverse_lock.hpp */,
 				C32456201352A9C800999158 /* shared_mutex.hpp */,
-				C32456211352A9C800999158 /* singleton.cpp */,
 				C32456221352A9C800999158 /* singleton.hpp */,
 				C32456231352A9C800999158 /* sqr.hpp */,
-				C32456241352A9C800999158 /* strings.cpp */,
 				C32456251352A9C800999158 /* strings.hpp */,
 				C32456261352A9C800999158 /* tagged_lock.hpp */,
-				C32456271352A9C800999158 /* thread_pool.cpp */,
 				C32456281352A9C800999158 /* thread_pool.hpp */,
-				C32456291352A9C800999158 /* threads.cpp */,
 				C324562A1352A9C800999158 /* threads.hpp */,
 				C324562B1352A9C800999158 /* tid_map.hpp */,
-				C324562C1352A9C800999158 /* token_generator.cpp */,
 				C324562D1352A9C800999158 /* token_generator.hpp */,
 				C324562E1352A9C800999158 /* tss.hpp */,
 				C324562F1352A9C800999158 /* type_id.hpp */,
 				C32456301352A9C800999158 /* utf8.hpp */,
 				C32456311352A9C800999158 /* wide_stream.hpp */,
-				C3E91BF415DCD697001F15B9 /* xml.cpp */,
 				C32456331352A9C800999158 /* xml.hpp */,
 				C324561B1352A9C800999158 /* ptree.hpp */,
 			);
@@ -336,6 +318,34 @@
 			);
 			path = machine;
 			sourceTree = SOURCE_ROOT;
+		};
+		C366958016DDF04100F96BED /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				C32455DE1352A9C800999158 /* atomic.cpp */,
+				C32455DC1352A9C800999158 /* atomic_pod.cpp */,
+				C32455E21352A9C800999158 /* buffers.cpp */,
+				C32455E81352A9C800999158 /* command_queue.cpp */,
+				C32455EE1352A9C800999158 /* detail */,
+				C32455F71352A9C800999158 /* email.cpp */,
+				C32455FB1352A9C800999158 /* exception.cpp */,
+				C346433C13D3339000716430 /* filesystem.cpp */,
+				C32456041352A9C800999158 /* itoa.cpp */,
+				C324560A1352A9C800999158 /* Logging.cpp */,
+				C324560D1352A9C800999158 /* machine */,
+				C32456151352A9C800999158 /* performance_timer.cpp */,
+				C346433D13D3339000716430 /* process.cpp */,
+				C375FDA215490C250009748B /* ptree.cpp */,
+				C324561C1352A9C800999158 /* random.cpp */,
+				C32456211352A9C800999158 /* singleton.cpp */,
+				C32456241352A9C800999158 /* strings.cpp */,
+				C32456271352A9C800999158 /* thread_pool.cpp */,
+				C32456291352A9C800999158 /* threads.cpp */,
+				C324562C1352A9C800999158 /* token_generator.cpp */,
+				C3E91BF415DCD697001F15B9 /* xml.cpp */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -444,7 +454,7 @@
 		C324558F1352A6B900999158 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = IP;
 			};
 			buildConfigurationList = C32455921352A6B900999158 /* Build configuration list for PBXProject "mstd" */;
@@ -498,6 +508,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				COPY_PHASE_STRIP = NO;
@@ -508,6 +522,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
@@ -532,6 +547,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -539,6 +558,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",

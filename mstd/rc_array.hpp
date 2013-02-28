@@ -30,6 +30,16 @@ public:
         std::uninitialized_copy(data, data + size, this->data());
     }
 
+    template<class It>
+    explicit rc_array(const It & begin, const It & end)
+    {
+        size_t size = std::distance(begin, end);
+        data_ = new char[size * sizeof(value_type) + header_size];
+        *sizeAddress() = size;
+        *counterAddress() = 1;
+        std::uninitialized_copy(begin, end, this->data());
+    }
+
     ~rc_array()
     {
         reset();
@@ -50,14 +60,29 @@ public:
             detail::atomic_helper<sizeof(int)>::add(counterAddress(), 1);
     }
 
-    size_t size() const
+    inline size_t size() const
     {
         return *sizeAddress();
     }
 
-    value_type * data() const
+    inline value_type * data() const
     {
         return static_cast<value_type*>(static_cast<void*>(data_ + header_size));
+    }
+
+    inline value_type * begin() const
+    {
+        return data();
+    }
+
+    inline value_type * end() const
+    {
+        return begin() + size();
+    }
+
+    inline value_type & operator[](size_t index) const
+    {
+        return data()[index];
     }
 
     void reset()

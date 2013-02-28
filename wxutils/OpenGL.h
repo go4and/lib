@@ -2,6 +2,7 @@
 
 #if !defined(BUILDING_WXUTILS)
 #include <boost/mpl/int.hpp>
+#include <boost/move/move.hpp>
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -57,12 +58,35 @@ private:
 };
 
 class WXUTILS_DECL GLTexture {
+    BOOST_MOVABLE_BUT_NOT_COPYABLE(GLTexture);
 public:
     GLTexture()
         : x_(0), y_(0), id_(0) {}
 
     GLTexture(double x, double y, GLuint id)
         : x_(x), y_(y), id_(id) {}
+
+    ~GLTexture()
+    {
+        reset();
+    }
+
+    GLTexture(BOOST_RV_REF(GLTexture) texture)
+        : x_(texture.x_), y_(texture.y_), id_(texture.id_)
+    {
+        texture.id_ = 0;
+    }
+
+    void operator=(BOOST_RV_REF(GLTexture) texture)
+    {
+        reset();
+        x_ = texture.x_;
+        y_ = texture.y_;
+        id_ = texture.id_;
+        texture.id_ = 0;
+    }
+
+    void reset();
 
     inline double x() const
     {
@@ -77,6 +101,11 @@ public:
     inline GLuint id() const
     {
         return id_;
+    }
+
+    inline bool operator!() const
+    {
+        return !id_;
     }
 private:
     double x_;

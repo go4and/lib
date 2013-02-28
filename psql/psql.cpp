@@ -151,8 +151,12 @@ void Connection::checkResult(const char * query, Result & result, bool canHaveEr
         MLOG_MESSAGE(Error, "slow query: " << query << ", passed: " << passed);
     if(!result.success())
     {
-        MLOG_MESSAGE_EX(!canHaveErrors ? mlog::llError : mlog::llNotice, "exec failed: " << result.status() << ", msg: " << result.error() << ", query: " << query);
-        BOOST_THROW_EXCEPTION(ExecException() << mstd::error_message(result.error()));
+        ConnStatusType status = PQstatus(conn());
+        MLOG_MESSAGE_EX((!canHaveErrors || status != CONNECTION_OK) ? mlog::llError : mlog::llNotice, "exec failed: " << result.status() << ", msg: " << result.error() << ", query: " << query << ", status: " << status);
+        if(status != CONNECTION_OK)
+            BOOST_THROW_EXCEPTION(ConnectionLostException());
+        else
+            BOOST_THROW_EXCEPTION(ExecException() << mstd::error_message(result.error()));
     }
 }
 
@@ -190,7 +194,7 @@ Result Connection::exec(const char * query, bool canHaveErrors)
     checkResult(query, result, canHaveErrors, start);
 
     MLOG_MESSAGE(Debug, "exec succeeded");
-    return move(result);
+    return boost::move(result);
 }
 
 void Connection::execVoid(const char * query, bool canHaveErrors)
@@ -323,7 +327,7 @@ Result Connection::copyEnd()
     
     MLOG_DEBUG("copyEnd - ok");
     
-    return move(result);
+    return boost::move(result);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -609,11 +613,18 @@ const char * ResultRowRef::asCString(size_t index) const
 
 boost::posix_time::ptime ResultRowRef::asTime(size_t index) const
 {
-    const void * data = raw(index);
     checkOid(result_, index, oidTimestamp);
+    const void * data = raw(index);
     int64_t value = mstd::ntoh(*static_cast<const boost::int64_t*>(data));
     int64_t mul = (boost::posix_time::microseconds::traits_type::res_adjust() / 1000000);
     return timeStart + boost::posix_time::time_duration(0, 0, 0, value * mul);
+}
+
+bool ResultRowRef::asBool(size_t index) const
+{
+    checkOid(result_, index, oidBool);
+    const void * data = raw(index);
+    return static_cast<const uint8_t*>(data) != 0;
 }
 
 ByteArray ResultRowRef::asArray(size_t index) const
