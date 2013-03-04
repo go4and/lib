@@ -25,6 +25,12 @@ inline auto sdist(const O1 & o1, const O2 & o2) -> decltype((o1.x - o2.x) * (o1.
     return sqr(o1.x - o2.x) + sqr(o1.y - o2.y);
 }
 
+template<class Result, class O1, class O2>
+inline Result sdistEx(const O1 & o1, const O2 & o2)
+{
+    return sqr<Result>(o1.x - o2.x) + sqr<Result>(o1.y - o2.y);
+}
+
 template<class O1, class O2>
 inline auto dist(const O1 & o1, const O2 & o2) -> decltype(std::sqrt(sdist(o1, o2)))
 {
@@ -386,6 +392,7 @@ T randomInt(double a, double b, Gen & gen)
 
 using math::sqr;
 using math::sdist;
+using math::sdistEx;
 using math::diff;
 using math::dotProduct;
 using math::crossProduct;

@@ -227,10 +227,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SUFFIX = _d;
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
-				OTHER_CFLAGS = (
-					"-fvisibility=hidden",
-					"-fvisibility-inlines-hidden",
-				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DMLOG_USE_BUFFERS=0",
@@ -268,10 +264,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SUFFIX = "";
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
-				OTHER_CFLAGS = (
-					"-fvisibility=hidden",
-					"-fvisibility-inlines-hidden",
-				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DMLOG_USE_BUFFERS=0",
