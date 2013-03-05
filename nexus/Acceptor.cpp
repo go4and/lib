@@ -9,7 +9,7 @@ MLOG_DECLARE_LOGGER(nexus_acceptor);
 namespace nexus {
 
 Acceptor::Acceptor(boost::asio::io_service & ios, const AcceptorListener & listener)
-    : acceptor_(ios), socket_(ios), listener_(listener)
+    : listener_(listener), acceptor_(ios), socket_(ios)
 {
 }
 

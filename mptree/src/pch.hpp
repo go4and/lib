@@ -7,8 +7,9 @@
 #include <boost/array.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
+#include <boost/unordered_set.hpp>
 
-#include <boost/mpl/has_xxx.hpp>
+#include <boost/container/stable_vector.hpp>
 
 #include <boost/type_traits/is_base_of.hpp>
 #include <boost/type_traits/is_enum.hpp>

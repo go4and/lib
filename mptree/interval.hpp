@@ -5,7 +5,6 @@
 #endif
 
 #include "src/writers.hpp"
-#include "xml.hpp"
 
 namespace mptree {
 
@@ -45,9 +44,6 @@ bool parse_value(interval<T> & out, const char * val)
     }
 }
 
-template<class T>
-void write_value(std::ostream & out, const char * name, const interval<T> & value, size_t ident);
-
 template<class T, class Collection = std::vector<interval<T> > >
 struct intervals {
     typedef interval<T> value_type;
@@ -82,11 +78,11 @@ char * render_interval(const interval<T> & interval, char * buffer)
 }
 
 template<class T>
-void write_value(std::streambuf * buf, const interval<T> & interval)
+void write_value(node_writer & writer, const interval<T> & interval)
 {
     char buffer[0x20];
     char * stop = render_interval(interval, buffer);
-    buf->sputn(buffer, stop - buffer);
+    writer.write_raw(buffer, stop - buffer);
 }
 
 template<class T>
@@ -131,7 +127,7 @@ bool parse_value(intervals<T> & out, const char * val)
 }
 
 template<class T>
-void write_value(std::streambuf * buf, const intervals<T> & intervals)
+void write_value(node_writer & writer, const intervals<T> & intervals)
 {
     char buffer[0x21];
     for(auto i = intervals.begin(), end = intervals.end(); i != end;)
@@ -139,7 +135,7 @@ void write_value(std::streambuf * buf, const intervals<T> & intervals)
         char * stop = render_interval(*i, buffer);
         if(++i != end)
             *stop++ = ',';
-        buf->sputn(buffer, stop - buffer);
+        writer.write_raw(buffer, stop - buffer);
     }
 }
 

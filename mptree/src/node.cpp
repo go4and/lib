@@ -4,142 +4,105 @@
 
 namespace mptree {
 
-namespace {
-
-void append(char *& out, const char * value, size_t len)
-{
-    memcpy(out, value, len);
-    out += len;
-}
-
-template<class Ch>
-bool check_escape(char *& out, Ch ch)
-{
-    if(ch == '&')
-        append(out, "&amp;", 5);
-    else if(ch == '"')
-        append(out, "&quot;", 6);
-    else if(ch == '\'')
-        append(out, "&apos;", 6);
-    else if(ch == '<')
-        append(out, "&lt;", 4);
-    else if(ch == '>')
-        append(out, "&gt;", 4);
-    else
-        return false;
-    return true;
-}
-
-template<class Out>
-size_t fill_unparsed(Out & out, const rapidxml::xml_node<char> & node)
-{
-    size_t idx = out.size();
-    out.push_back(unparsed_child(node));
-    size_t tail = 0;
-    for(auto i = xml::node_begin(node), end = xml::node_end(node); i != end; ++i)
-    {
-        size_t child = fill_unparsed(out, *i);
-        if(tail)
-            out[tail].next(child);
-        else
-            out[idx].child(child);
-        tail = child;
-    }
-    return idx;
-}
-
-}
-
-unparsed_child::unparsed_child(const rapidxml::xml_node<char> & node)
-    : name_(xml::node_name(node)), value_(xml::node_value(node)), next_(0), child_(0)
-{
-}
 
 template<class Col>
-void write_unparsed(const Col & col, size_t idx, std::streambuf * out, size_t ident)
+void write_unparsed(node_writer & writer, const Col & col, size_t idx)
 {
-    const unparsed_child & child = col[idx];
-    xml::write_ident(out, ident);
+    const auto & child = col[idx];
     if(child.child())
     {
-        xml::write_open_tag(out, child.name().c_str(), child.name().length(), true);
-        write_unparsed(col, child.child(), out, ident + 1);
-        xml::write_ident(out, ident);
-        xml::write_close_tag(out, child.name().c_str(), child.name().length());
-    } else if(!child.value().empty()) {
-        xml::write_open_tag(out, child.name().c_str(), child.name().length(), false);
-        char buffer[0x40];
-        char * o = buffer;
-        char * limit = buffer + sizeof(buffer) - 6;
-        for(std::string::const_iterator p = child.value().begin(), end = child.value().end(); p != end; ++p)
-        {
-            char ch = *p;
-            if(!check_escape(o, ch))
-                *o++ = ch;
-            if(o >= limit)
-            {
-                out->sputn(buffer, o - buffer);
-                o = buffer;
-            }
-        }
-        if(o != buffer)
-            out->sputn(buffer, o - buffer);
-        xml::write_close_tag(out, child.name().c_str(), child.name().length());
+        writer.begin_struct(child.name().c_str(), false);
+        write_unparsed(writer, col, child.child());
+        writer.end_struct(child.name().c_str(), false);
+    } else if(!child.value().empty())
+    {
+        writer.begin_value(child.name().c_str(), false);
+        writer.write_escaped(child.value().c_str(), child.value().length());
+        writer.end_value(child.name().c_str(), false);
     } else {
-        out->sputc('<');
-        out->sputn(child.name().c_str(), child.name().length());
-        out->sputn("/>\n", 3);
+        writer.empty_node(child.name().c_str());
     }
     if(child.next())
-        write_unparsed(col, child.next(), out, ident);
+        write_unparsed(writer, col, child.next());
 }
 
-void unparsed::add(const rapidxml::xml_node<char> & node)
-{
-    size_t idx = fill_unparsed(children_, node);
-    if(tail_ != idx)
-        children_[tail_].next(idx);
-    tail_ = idx;
-}
-
-void unparsed::write(std::ostream & out, size_t ident) const
-{
-    std::streambuf * buf = out.rdbuf();
-    write_unparsed(children_, 0, buf, ident);
-}
-
-bool node::parse(const rapidxml::xml_node<char> & node)
-{
-    if(parsed_)
+class unparsed_child {
+public:
+    explicit unparsed_child(unparsed & holder, const std::string & name)
+        : holder_(holder), name_(name), next_(0), child_(0), tail_(0)
     {
-        return false;
-    } else {
-        for(auto i = xml::node_begin(node), end = xml::node_end(node); i != end; ++i)
-        {
-            if(!parse_child(*i))
-            {
-                if(!unparsed_)
-                    unparsed_.reset(new unparsed);
-                unparsed_->add(*i);
-            }
-        }
-        complete();
-        parsed_ = true;
+    }
+
+    unparsed & holder() const { return holder_; }
+
+    inline const std::string & name() const { return name_; }
+    inline const std::string & value() const { return value_; }
+    inline size_t next() const { return next_; }
+    inline size_t child() const { return child_; }
+
+    inline void next(size_t value) { next_ = value; }
+    inline void child(size_t value) { child_ = value; }
+private:
+    unparsed & holder_;
+    std::string name_;
+    std::string value_;
+    size_t next_;
+    size_t child_;
+    size_t tail_;
+    
+    static parser_state unparsed_child_parser(const char * name, void * data);
+
+    static bool unparsed_parse_value(const char * value, void * data)
+    {
+        unparsed_child * self = static_cast<unparsed_child*>(data);
+        self->value_ = value;
         return true;
     }
-}
 
-void node::write(std::ostream & out, const char * name, size_t ident) const
+    friend class unparsed;
+};
+
+class unparsed : public mstd::reference_counter<unparsed> {
+public:
+    unparsed()
+        : tail_(0) {}
+
+    parser_state add(const char * name)
+    {
+        size_t idx = children_.size();
+        children_.push_back(unparsed_child(*this, name));
+        if(tail_ != idx)
+            children_[tail_].next(idx);
+        tail_ = idx;
+        return parser_state(&unparsed_child::unparsed_child_parser, &unparsed_child::unparsed_parse_value, &children_[idx]);
+    }
+
+    void write(node_writer & writer) const
+    {
+        write_unparsed(writer, children_, 0);
+    }
+private:
+    size_t tail_;
+    boost::container::stable_vector<unparsed_child> children_;
+    
+    friend class unparsed_child;
+};
+
+parser_state unparsed_child::unparsed_child_parser(const char * name, void * data)
 {
-    std::streambuf * buf = out.rdbuf();
-    xml::write_ident(buf, ident);
-    size_t len = strlen(name);
-    xml::write_open_tag(buf, name, len, true);
-    write_children(out, ident + 1);
-    if(unparsed_)
-        unparsed_->write(out, ident + 1);
-    xml::write_ident(buf, ident);
-    xml::write_close_tag(buf, name, len);
+    if(!name)
+        return parser_state(0, 0, 0);
+    unparsed_child * self = static_cast<unparsed_child*>(data);
+    auto & children = self->holder_.children_;
+    size_t idx = children.size();
+    children.push_back(unparsed_child(self->holder_, name));
+    if(self->tail_)
+        children[self->tail_].next_ = idx;
+    else
+        self->child_ = idx;
+    self->tail_ = idx;
+    return parser_state(&unparsed_child_parser, &unparsed_parse_value, &children[idx]);
+    
 }
 
 void node::complete()
@@ -148,49 +111,32 @@ void node::complete()
         do_complete();
 }
 
-void write_value(std::streambuf * buf, const std::wstring & value)
+void node::write(node_writer & writer, const char * name, bool in_array) const
 {
-    char buffer[0x40];
-    char * out = buffer;
-    char * limit = buffer + sizeof(buffer) - 6;
-    const wchar_t ones = static_cast<wchar_t>(-1);
-    for(std::wstring::const_iterator p = value.begin(), end = value.end(); p != end; ++p)
-    {
-        wchar_t ch = *p;
-        if(!check_escape(out, ch))
-        {
-            if (!(ch & (ones ^ 0x7f))) {
-                *out = static_cast<char>(ch);
-                ++out;
-            } else if (ch & (ones ^ 0x07ff)) {
-                *out = static_cast<char>(0xe0 | ((ch >> 12) & 0x0f));
-                *++out = static_cast<char>(0x80 | ((ch >> 6) & 0x3f));
-                *++out = static_cast<char>(0x80 | (ch & 0x3f));
-                ++out;
-            } else {
-                *out = static_cast<char>(0xc0 | ((ch >> 6) & 0x1f));
-                *++out = static_cast<char>(0x80 | (ch & 0x3f));
-                ++out;
-            }
-        }
-        if(out >= limit)
-        {
-            buf->sputn(buffer, out - buffer);
-            out = buffer;
-        }
-    }
-    if(out != buffer)
-        buf->sputn(buffer, out - buffer);
+    writer.begin_struct(name, in_array);
+    write_children(writer);
+    if(unparsed_)
+        unparsed_->write(writer);
+    writer.end_struct(name, in_array);
 }
 
-void write_value(std::ostream & out, const char * name, double value, size_t ident)
+parser_state make_unparsed_parser(const char * name, unparsed_ptr & out)
 {
-    std::streambuf * buf = out.rdbuf();
-    xml::write_ident(buf, ident);
-    size_t len = strlen(name);
-    xml::write_open_tag(buf, name, len, false);
-    out << value;
-    xml::write_close_tag(buf, name, len);
+    if(!out)
+        out.reset(new unparsed());
+    return out->add(name);
+}
+
+void intrusive_ptr_add_ref(unparsed * obj)
+{
+    mstd::reference_counter<unparsed> * counter = obj;
+    intrusive_ptr_add_ref(counter);
+}
+
+void intrusive_ptr_release(unparsed * obj)
+{
+    mstd::reference_counter<unparsed> * counter = obj;
+    intrusive_ptr_release(counter);
 }
 
 }
