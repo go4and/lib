@@ -41,9 +41,8 @@ void Acceptor::start(const boost::asio::ip::tcp::endpoint & ep, boost::system::e
             MLOG_WARNING("failed to get local endpoint: " << ec << ", " << ec.message());
         else
             MLOG_NOTICE("started[" << endpoint_ << "]");
+        startAccept();
     }
-
-    startAccept();
 }
 
 void Acceptor::handleAccept(const boost::system::error_code & ec)

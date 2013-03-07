@@ -8,10 +8,22 @@
 
 namespace mptree {
 
+bool parse_value(std::string & out, const char * value, size_t len);
 bool parse_value(std::wstring & out, const char * value, size_t len);
 bool parse_value(bool & out, const char * value, size_t len);
-bool parse_value(int & out, const char * value, size_t len);
 bool parse_value(double & out, const char * value, size_t len);
+
+template<class T>
+typename boost::enable_if<boost::is_integral<T>, T>::type
+parse_value(T & out, const char * value, size_t len)
+{
+    try {
+        out = mstd::str2int10_checked<T>(value, len);
+        return true;
+    } catch(mstd::bad_str2int_cast & exc) {
+        return false;
+    }
+}
 
 template<class T>
 typename boost::enable_if<boost::is_enum<T>, bool>::type

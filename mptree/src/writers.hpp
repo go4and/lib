@@ -27,7 +27,7 @@ inline void write_value(node_writer & writer, const std::string & value) { write
 
 char render_short_value(...);
 
-inline int render_short_value(char * out, bool value)
+inline size_t render_short_value(char * out, bool value)
 {
     if(value)
     {
@@ -39,17 +39,17 @@ inline int render_short_value(char * out, bool value)
     }
 }
 
-int render_short_value(char * out, double value);
+size_t render_short_value(char * out, double value);
 
 template<class T>
-typename boost::enable_if<boost::is_integral<T>, int>::type render_short_value(char * out, const T & value)
+typename boost::enable_if<boost::is_integral<T>, size_t>::type render_short_value(char * out, const T & value)
 {
     mstd::itoa(value, out);
     return strlen(out);
 }
 
 template<class T>
-typename boost::enable_if<boost::is_enum<T>, int>::type render_short_value(char * out, const T & value)
+typename boost::enable_if<boost::is_enum<T>, size_t>::type render_short_value(char * out, const T & value)
 {
     const char * temp = name(value);
     size_t result = strlen(temp);

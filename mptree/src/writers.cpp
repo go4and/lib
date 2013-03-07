@@ -4,7 +4,7 @@
 
 namespace mptree {
 
-int render_short_value(char * out, double value)
+size_t render_short_value(char * out, double value)
 {
     return snprintf(out, 0x40 - 1, "%g", value);
 }

@@ -4,6 +4,12 @@
 
 namespace mptree {
 
+bool parse_value(std::string & out, const char * value, size_t len)
+{
+    out.assign(value, len);
+    return true;
+}
+
 bool parse_value(std::wstring & out, const char * value, size_t len)
 {
     out = mstd::deutf8(value, len);
@@ -28,16 +34,6 @@ bool parse_value(bool & out, const char * value, size_t len)
     else
         return false;
     return true;
-}
-
-bool parse_value(int & out, const char * value, size_t len)
-{
-    try {
-        out = mstd::str2int10_checked<int>(value, len);
-        return true;
-    } catch(mstd::bad_str2int_cast & exc) {
-        return false;
-    }
 }
 
 bool parse_value(double & out, const char * val, size_t len)
