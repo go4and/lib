@@ -2,9 +2,9 @@
 
 namespace mptree {
 
-bool parse_value(boost::asio::ip::address & out, const char * val)
-{
-    out = boost::asio::ip::address::from_string(val);
-}
+struct subnet {
+    boost::asio::ip::address_v4 address;
+    uint32_t mask;
+};
 
 }

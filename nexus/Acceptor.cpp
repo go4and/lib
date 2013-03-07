@@ -15,13 +15,33 @@ Acceptor::Acceptor(boost::asio::io_service & ios, const AcceptorListener & liste
 
 void Acceptor::start(const boost::asio::ip::tcp::endpoint & ep)
 {
-    listen(acceptor_, ep);
+    boost::asio::ip::tcp::acceptor temp(acceptor_.get_io_service());
+    listen(temp, ep);
+    acceptor_ = boost::move(temp);
     boost::system::error_code ec;
     endpoint_ = acceptor_.local_endpoint(ec);
     if(ec)
         MLOG_WARNING("failed to get local endpoint: " << ec << ", " << ec.message());
     else
         MLOG_NOTICE("started[" << endpoint_ << "]");
+
+    startAccept();
+}
+
+void Acceptor::start(const boost::asio::ip::tcp::endpoint & ep, boost::system::error_code & ec)
+{
+    boost::asio::ip::tcp::acceptor temp(acceptor_.get_io_service());
+    listen(temp, ep, ec);
+    if(!ec)
+    {
+        acceptor_ = boost::move(temp);
+        boost::system::error_code ec;
+        endpoint_ = acceptor_.local_endpoint(ec);
+        if(ec)
+            MLOG_WARNING("failed to get local endpoint: " << ec << ", " << ec.message());
+        else
+            MLOG_NOTICE("started[" << endpoint_ << "]");
+    }
 
     startAccept();
 }
