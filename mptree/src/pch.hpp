@@ -17,7 +17,11 @@
 
 #include <boost/utility/enable_if.hpp>
 
+#include <yajl/yajl_parse.h>
+
+#include <mstd/handle_base.hpp>
 #include <mstd/itoa.hpp>
+#include <mstd/pointer_cast.hpp>
 #include <mstd/reference_counter.hpp>
 #include <mstd/strings.hpp>
 

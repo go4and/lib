@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C313587016E66487008881D3 /* writers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C313586F16E66487008881D3 /* writers.cpp */; };
+		C313587516E7BD2B008881D3 /* json.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C313587416E7BD2B008881D3 /* json.cpp */; };
+		C313587816E7C02D008881D3 /* write_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C313587716E7C02D008881D3 /* write_helper.cpp */; };
 		C371D7F416E518AD002E73C9 /* parsers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C371D7F316E518AC002E73C9 /* parsers.cpp */; };
 		C3DBFF9E16E4762B0017B443 /* node.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3DBFF9D16E4762B0017B443 /* node.hpp */; };
 		C3DBFFA616E477EA0017B443 /* interval.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3DBFFA416E477EA0017B443 /* interval.hpp */; };
@@ -23,6 +25,10 @@
 
 /* Begin PBXFileReference section */
 		C313586F16E66487008881D3 /* writers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = writers.cpp; path = src/writers.cpp; sourceTree = "<group>"; };
+		C313587316E7BD04008881D3 /* json.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
+		C313587416E7BD2B008881D3 /* json.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json.cpp; path = src/json.cpp; sourceTree = "<group>"; };
+		C313587616E7BFF2008881D3 /* write_helper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = write_helper.hpp; path = src/write_helper.hpp; sourceTree = "<group>"; };
+		C313587716E7C02D008881D3 /* write_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = write_helper.cpp; path = src/write_helper.cpp; sourceTree = "<group>"; };
 		C32455981352A6B900999158 /* mptree.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mptree.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C371D7F216E517A6002E73C9 /* parsers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = parsers.hpp; path = src/parsers.hpp; sourceTree = "<group>"; };
 		C371D7F316E518AC002E73C9 /* parsers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = parsers.cpp; path = src/parsers.cpp; sourceTree = "<group>"; };
@@ -75,9 +81,12 @@
 		C324559A1352A6B900999158 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				C3DBFFB416E47C770017B443 /* xml.hpp */,
 				C3DBFFA416E477EA0017B443 /* interval.hpp */,
 				C3DBFF9D16E4762B0017B443 /* node.hpp */,
 				C371D88016E5D856002E73C9 /* asio.hpp */,
+				C313587316E7BD04008881D3 /* json.hpp */,
+				C313587616E7BFF2008881D3 /* write_helper.hpp */,
 			);
 			name = Headers;
 			sourceTree = SOURCE_ROOT;
@@ -85,12 +94,13 @@
 		C366958016DDF04100F96BED /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C313587716E7C02D008881D3 /* write_helper.cpp */,
+				C313587416E7BD2B008881D3 /* json.cpp */,
 				C313586F16E66487008881D3 /* writers.cpp */,
 				C371D7F316E518AC002E73C9 /* parsers.cpp */,
 				C3DBFFB316E479F60017B443 /* pch.hpp */,
 				C3DBFFAB16E479CC0017B443 /* writers.hpp */,
 				C3DBFFAE16E479CC0017B443 /* node.cpp */,
-				C3DBFFB416E47C770017B443 /* xml.hpp */,
 				C3DBFFBE16E481700017B443 /* xml.cpp */,
 				C371D7F216E517A6002E73C9 /* parsers.hpp */,
 			);
@@ -180,6 +190,8 @@
 				C3DBFFC016E481700017B443 /* xml.cpp in Sources */,
 				C371D7F416E518AD002E73C9 /* parsers.cpp in Sources */,
 				C313587016E66487008881D3 /* writers.cpp in Sources */,
+				C313587516E7BD2B008881D3 /* json.cpp in Sources */,
+				C313587816E7C02D008881D3 /* write_helper.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,17 +223,16 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					$BOOST_ROOT,
+					$INCLUDE,
 					..,
 				);
-				LD_DYLIB_INSTALL_NAME = "";
-				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"$(BOOST_ROOT)/stage/lib",
+					/opt/local/lib,
+				);
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-lboost_filesystem-mt-d",
-					"-lboost_system-mt-d",
-					"-lboost_thread-mt-d",
-				);
+				OTHER_LDFLAGS = "-lyajl";
 				SDKROOT = macosx10.7;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
@@ -250,18 +261,17 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					$BOOST_ROOT,
+					$INCLUDE,
 					..,
 				);
-				LD_DYLIB_INSTALL_NAME = "";
-				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"$(BOOST_ROOT)/stage/lib",
+					/opt/local/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"-lboost_filesystem-mt",
-					"-lboost_system-mt",
-					"-lboost_thread-mt",
-				);
+				OTHER_LDFLAGS = "-lyajl";
 				SDKROOT = macosx10.7;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";

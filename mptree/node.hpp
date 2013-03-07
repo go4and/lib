@@ -24,15 +24,15 @@ public:
         parsed_ = true;
     }
 
-    static parser_state static_child_parser(const char * name, void * data)
+    static parser_state static_child_parser(const char * name, size_t len, void * data)
     {
-        return static_cast<node*>(data)->child_parser(name, true);
+        return static_cast<node*>(data)->child_parser(name, len ,true);
     }
 
     virtual void complete();
     virtual void write(node_writer & writer, const char * name, bool in_array) const;
 private:
-    virtual parser_state child_parser(const char * name, bool final) = 0;
+    virtual parser_state child_parser(const char * name, size_t len, bool final) = 0;
     virtual void do_complete() = 0;
     virtual void write_children(node_writer & writer) const = 0;
 
@@ -50,7 +50,7 @@ inline typename boost::disable_if<boost::is_base_of<node, T>, void>::type comple
 inline parser_state make_parser(node & out) { out.mark_parsed(); return parser_state(&node::static_child_parser, 0, &out); }
 inline void write_node(node_writer & writer, const node & out, const char * name, bool in_array) { out.write(writer, name, in_array); }
 
-parser_state make_unparsed_parser(const char * name, unparsed_ptr & unparsed);
+parser_state make_unparsed_parser(const char * name, size_t len, unparsed_ptr & unparsed);
 
 #define MPTREE_NODE_ITEM_STRING_2(elem) BOOST_PP_STRINGIZE(BOOST_PP_SEQ_ELEM(1, elem))
 #define MPTREE_NODE_ITEM_STRING_3(elem) BOOST_PP_SEQ_ELEM(2, elem)
@@ -62,25 +62,22 @@ parser_state make_unparsed_parser(const char * name, unparsed_ptr & unparsed);
     BOOST_PP_CAT(MPTREE_NODE_ITEM_STRING_, BOOST_PP_SEQ_SIZE(elem))(elem)
 
 #define MPTREE_NODE_PARSE_CHILD_ITEM(r, data, elem) \
-        if(!strcmp(name, MPTREE_NODE_ITEM_STRING(elem))) \
+        if(len == strlen(MPTREE_NODE_ITEM_STRING(elem)) && !strncmp(name, MPTREE_NODE_ITEM_STRING(elem), len)) \
             return make_parser(this->BOOST_PP_SEQ_ELEM(1, elem)); \
         /**/
 
 #define MPTREE_NODE_PARSE(parentInvoker, parent, seq) \
-    mptree::parser_state child_parser(const char * name, bool final) \
+    mptree::parser_state child_parser(const char * name, size_t len, bool final) \
     { \
         using mptree::make_parser; \
         using mptree::make_unparsed_parser; \
         if(!name) { complete(); return mptree::parser_state(0, 0, 0); } \
-        parentInvoker((mptree::parser_state temp = parent::child_parser(name, false); if(temp.data) return temp;)); \
+        parentInvoker((mptree::parser_state temp = parent::child_parser(name, len, false); if(temp.data) return temp;)); \
         BOOST_PP_SEQ_FOR_EACH(MPTREE_NODE_PARSE_CHILD_ITEM, ~, seq); \
         if(!final) \
             return mptree::parser_state(0, 0, 0); \
         else \
-            return make_unparsed_parser(name, unparsed_); \
-    } \
-    void parse_value(const char * value, void * data) \
-    { \
+            return make_unparsed_parser(name, len, unparsed_); \
     } \
     /**/
 

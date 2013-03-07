@@ -24,9 +24,9 @@ struct interval {
 };
 
 template<class T>
-bool parse_value(interval<T> & out, const char * val)
+bool parse_value(interval<T> & out, const char * val, size_t len)
 {
-    const char * end = val + strlen(val);
+    const char * end = val + len;
     const char * p = std::find(val, end, '-');
     try {
         if(p != end)
@@ -86,9 +86,9 @@ void write_value(node_writer & writer, const interval<T> & interval)
 }
 
 template<class T>
-bool parse_value(intervals<T> & out, const char * val)
+bool parse_value(intervals<T> & out, const char * val, size_t len)
 {
-    const char * end = val + strlen(val);
+    const char * end = val + len;
     boost::array<interval<T>, 0x10> buffer;
     std::vector<interval<T> > temp;
     size_t n = 0;

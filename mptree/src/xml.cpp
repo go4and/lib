@@ -3,6 +3,7 @@
 #include "../rapidxml/rapidxml.hpp"
 
 #include "node.hpp"
+#include "write_helper.hpp"
 
 #include "xml.hpp"
 
@@ -15,16 +16,16 @@ void parse(const parser_state & state, rapidxml::xml_node<> & input)
     for(auto i = input.first_node(); i; i = i->next_sibling())
         if(i->type() == rapidxml::node_element)
         {
-            parser_state ps = state.child_parser(i->name(), state.data);
+            parser_state ps = state.child_parser(i->name(), i->name_size(), state.data);
             if(ps.data)
             {
                 if(ps.parse_value)
-                    ps.parse_value(i->value(), ps.data);
+                    ps.parse_value(i->value(), i->value_size(), ps.data);
                 if(ps.child_parser)
                     parse(ps, *i);
             }
         }
-    state.child_parser(0, state.data);
+    state.child_parser(0, 0, state.data);
 }
 
 void parse(node & output, rapidxml::xml_node<> & input)
@@ -50,35 +51,26 @@ void write_close_tag(std::streambuf * buf, const char * name, size_t len)
     buf->sputn(">\n", 2);
 }
 
-void write_ident(std::streambuf * buf, size_t ident)
-{
-    for(size_t i = 0; i != ident; ++i)
-        buf->sputn("  ", 2);
-}
-
-void append(char *& out, const char * value, size_t len)
-{
-    memcpy(out, value, len);
-    out += len;
-}
-
-template<class Ch>
-bool check_escape(char *& out, Ch ch)
-{
-    if(ch == '&')
-        append(out, "&amp;", 5);
-    else if(ch == '"')
-        append(out, "&quot;", 6);
-    else if(ch == '\'')
-        append(out, "&apos;", 6);
-    else if(ch == '<')
-        append(out, "&lt;", 4);
-    else if(ch == '>')
-        append(out, "&gt;", 4);
-    else
-        return false;
-    return true;
-}
+class xml_escape {
+public:
+    template<class Ch>
+    bool operator()(char *& out, Ch ch) const
+    {
+        if(ch == '&')
+            append(out, "&amp;", 5);
+        else if(ch == '"')
+            append(out, "&quot;", 6);
+        else if(ch == '\'')
+            append(out, "&apos;", 6);
+        else if(ch == '<')
+            append(out, "&lt;", 4);
+        else if(ch == '>')
+            append(out, "&gt;", 4);
+        else
+            return false;
+        return true;
+    }
+};
 
 class xml_writer : public node_writer {
 public:
@@ -135,57 +127,12 @@ public:
     
     void write_escaped(const char * p, size_t len)
     {
-        char buffer[0x40];
-        char * o = buffer;
-        char * limit = buffer + sizeof(buffer) - 6;
-        for(const char * end = p + len; p != end; ++p)
-        {
-            char ch = *p;
-            if(!check_escape(o, ch))
-                *o++ = ch;
-            if(o >= limit)
-            {
-                buf_->sputn(buffer, o - buffer);
-                o = buffer;
-            }
-        }
-        if(o != buffer)
-            buf_->sputn(buffer, o - buffer);
+        mptree::write_escaped(buf_, p, len, xml_escape());
     }
 
     void write_escaped(const wchar_t * p, size_t len)
     {
-        char buffer[0x40];
-        char * out = buffer;
-        char * limit = buffer + sizeof(buffer) - 6;
-        const wchar_t ones = static_cast<wchar_t>(-1);
-        for(const wchar_t * end = p + len; p != end; ++p)
-        {
-            wchar_t ch = *p;
-            if(!check_escape(out, ch))
-            {
-                if (!(ch & (ones ^ 0x7f))) {
-                    *out = static_cast<char>(ch);
-                    ++out;
-                } else if (ch & (ones ^ 0x07ff)) {
-                    *out = static_cast<char>(0xe0 | ((ch >> 12) & 0x0f));
-                    *++out = static_cast<char>(0x80 | ((ch >> 6) & 0x3f));
-                    *++out = static_cast<char>(0x80 | (ch & 0x3f));
-                    ++out;
-                } else {
-                    *out = static_cast<char>(0xc0 | ((ch >> 6) & 0x1f));
-                    *++out = static_cast<char>(0x80 | (ch & 0x3f));
-                    ++out;
-                }
-            }
-            if(out >= limit)
-            {
-                buf_->sputn(buffer, out - buffer);
-                out = buffer;
-            }
-        }
-        if(out != buffer)
-            buf_->sputn(buffer, out - buffer);
+        mptree::write_escaped(buf_, p, len, xml_escape());
     }
 private:
     std::streambuf * buf_;
