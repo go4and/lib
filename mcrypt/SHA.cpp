@@ -10,37 +10,36 @@ BOOST_STATIC_ASSERT(SHA_DIGEST_LENGTH == SHA1Digest::static_size);
 
 SHA1::SHA1()
 {
-    SHA1_Init(&context_);
+    BOOST_STATIC_ASSERT(sizeof(SHA_CTX) == Context::size);
+    SHA1_Init(static_cast<SHA_CTX*>(context_.address()));
 }
-
-SHA1::~SHA1()
-{}
 
 void SHA1::feed(const void * src, size_t len)
 {
-    SHA1_Update(&context_, src, len);
-}
-
-void SHA1::feed(const std::vector<unsigned char> & src)
-{
-    SHA1_Update(&context_, &src[0], src.size());
-}
-
-void SHA1::feed(const std::vector<char> & src)
-{
-    feed(&src[0], src.size());
-}
-
-SHA1Digest SHA1::digest()
-{
-    SHA1Digest result;
-    SHA1_Final(result.c_array(), &context_);
-    return result;
+    SHA1_Update(static_cast<SHA_CTX*>(context_.address()), src, len);
 }
 
 void SHA1::digest(SHA1Digest & out)
 {
-    SHA1_Final(out.c_array(), &context_);
+    SHA1_Final(out.c_array(), static_cast<SHA_CTX*>(context_.address()));
+}
+
+BOOST_STATIC_ASSERT(SHA256_DIGEST_LENGTH == SHA256Digest::static_size);
+
+SHA256::SHA256()
+{
+    BOOST_STATIC_ASSERT(sizeof(SHA256_CTX) == Context::size);
+    SHA256_Init(static_cast<SHA256_CTX*>(context_.address()));
+}
+
+void SHA256::feed(const void * src, size_t len)
+{
+    SHA256_Update(static_cast<SHA256_CTX*>(context_.address()), src, len);
+}
+
+void SHA256::digest(SHA256Digest & out)
+{
+    SHA256_Final(out.c_array(), static_cast<SHA256_CTX*>(context_.address()));
 }
 
 //////////////////////////////////////////////////////////////////////////

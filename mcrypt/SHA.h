@@ -1,14 +1,9 @@
 #pragma once
 
 #ifndef MCRYPT_BUILDING
-#include <openssl/sha.h>
-
 #include <vector>
 
-#include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
-
-#include <boost/filesystem/path.hpp>
+#include <boost/aligned_storage.hpp>
 #endif
 
 #include "Config.h"
@@ -18,34 +13,45 @@
 
 namespace mcrypt {
     
-class MCRYPT_DECL SHA1 {
+class MCRYPT_DECL SHA1 : public HashEngine<SHA1, SHA1Digest> {
 public:
-    typedef SHA1Digest result_type;
-
     SHA1();
-    ~SHA1();
 
+    using HashEngine::feed;
     void feed(const void * src, size_t len);
-    void feed(const std::vector<char> & src);
-    void feed(const std::vector<unsigned char> & src);
 
-    SHA1Digest digest();
-    void digest(SHA1Digest & out);
+    using HashEngine::digest;
+    void digest(result_type & out);
 private:
-    SHA_CTX context_;
+    typedef boost::aligned_storage<96> Context;
+    Context context_;
 };
 
-SHA1Digest sha1String(const std::string & input)
+inline SHA1Digest sha1String(const std::string & input)
 {
     return hashString<SHA1>(input);
 }
 
-SHA1Digest sha1Buffer(const void * data, size_t len)
+inline SHA1Digest sha1Buffer(const void * data, size_t len)
 {
     return hashBuffer<SHA1>(data, len);
 }
 
 std::string toBase64(const SHA1Digest & digest, bool url = false);
 SHA1Digest fromBase64(const std::string & string);
+
+class MCRYPT_DECL SHA256 : public HashEngine<SHA256, SHA256Digest> {
+public:
+    SHA256();
+
+    using HashEngine::feed;
+    void feed(const void * src, size_t len);
+
+    using HashEngine::digest;
+    void digest(SHA256Digest & out);
+private:
+    typedef boost::aligned_storage<112> Context;
+    Context context_;
+};
 
 }
