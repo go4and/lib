@@ -2,6 +2,7 @@
 
 #ifndef NEXUS_BUILDING
 
+#include <boost/array.hpp>
 #include <boost/assert.hpp>
 #include <boost/noncopyable.hpp>
 

@@ -23,6 +23,7 @@ namespace std { class runtime_error : public exception { public: runtime_error(c
 #include <string>
 #include <vector>
 
+#include <boost/aligned_storage.hpp>
 #include <boost/assert.hpp>
 #include <boost/array.hpp>
 #include <boost/crc.hpp>

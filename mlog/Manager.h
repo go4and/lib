@@ -9,15 +9,13 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
+#include <boost/filesystem/path.hpp>
+
 #include <mstd/exception.hpp>
 #include <mstd/reference_counter.hpp>
 #endif
 
 #include "Defines.h"
-
-namespace boost { namespace filesystem {
-class path;
-} }
 
 namespace mlog {
 
@@ -41,7 +39,7 @@ private:
     Manager();
 
     detail::LoggerImpl & registerLogger(const std::string & name);
-    
+
     class Impl;
     boost::scoped_ptr<Impl> impl_;
 
