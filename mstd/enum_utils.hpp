@@ -19,6 +19,7 @@ namespace mstd {
 #define MSTD_ENUM_CASE_WNAME(s, data, elem) case BOOST_PP_CAT(BOOST_PP_APPLY(data), elem): return BOOST_PP_WSTRINGIZE(elem);
 #define MSTD_ENUM_PARSE_ITEM(s, data, elem) if(!BOOST_PP_SEQ_ELEM(1, data)(input, BOOST_PP_SEQ_ELEM(2, data)(elem))) return BOOST_PP_CAT(BOOST_PP_APPLY(BOOST_PP_SEQ_ELEM(0, data)), elem);
 #define MSTD_ENUM_PARSE_ITEM_RET(s, data, elem) if(!BOOST_PP_SEQ_ELEM(1, data)(input, BOOST_PP_SEQ_ELEM(2, data)(elem))) { outputValue_ = BOOST_PP_CAT(BOOST_PP_APPLY(BOOST_PP_SEQ_ELEM(0, data)), elem); return true; }
+#define MSTD_ENUM_PARSE_LEN_ITEM_RET(s, data, elem) if(len == strlen(BOOST_PP_SEQ_ELEM(2, data)(elem)) && !BOOST_PP_SEQ_ELEM(1, data)(input, BOOST_PP_SEQ_ELEM(2, data)(elem), len)) { outputValue_ = BOOST_PP_CAT(BOOST_PP_APPLY(BOOST_PP_SEQ_ELEM(0, data)), elem); return true; }
 #define MSTD_ENUM_TRANSLATOR(enumName, prefix, case, classPrefix) \
     struct BOOST_PP_CAT(BOOST_PP_CAT(BOOST_PP_APPLY(classPrefix), translate), enumName) { \
         typedef std::BOOST_PP_CAT(BOOST_PP_APPLY(prefix), string) internal_type; \
@@ -87,6 +88,11 @@ namespace mstd {
     \
     inline bool parseEnum(const char * input, enumName & outputValue_) { \
         BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_ITEM_RET, (prefix)(strcmp)(BOOST_PP_STRINGIZE), list); \
+        return false; \
+    } \
+    \
+    inline bool parseEnum(const char * input, size_t len, enumName & outputValue_) { \
+        BOOST_PP_SEQ_FOR_EACH(MSTD_ENUM_PARSE_LEN_ITEM_RET, (prefix)(strncmp)(BOOST_PP_STRINGIZE), list); \
         return false; \
     } \
     \

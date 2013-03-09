@@ -227,15 +227,12 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SUFFIX = _d;
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
-				OTHER_CFLAGS = (
-					"-fvisibility=hidden",
-					"-fvisibility-inlines-hidden",
-				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DMLOG_USE_BUFFERS=0",
 				);
 				SDKROOT = iphoneos;
+				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Debug;
@@ -268,15 +265,12 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				LIBRARY_SUFFIX = "";
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
-				OTHER_CFLAGS = (
-					"-fvisibility=hidden",
-					"-fvisibility-inlines-hidden",
-				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DMLOG_USE_BUFFERS=0",
 				);
 				SDKROOT = iphoneos;
+				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				VALIDATE_PRODUCT = YES;
 			};

@@ -9,13 +9,15 @@ MLOG_DECLARE_LOGGER(nexus_acceptor);
 namespace nexus {
 
 Acceptor::Acceptor(boost::asio::io_service & ios, const AcceptorListener & listener)
-    : acceptor_(ios), socket_(ios), listener_(listener)
+    : listener_(listener), acceptor_(ios), socket_(ios)
 {
 }
 
 void Acceptor::start(const boost::asio::ip::tcp::endpoint & ep)
 {
-    listen(acceptor_, ep);
+    boost::asio::ip::tcp::acceptor temp(acceptor_.get_io_service());
+    listen(temp, ep);
+    acceptor_ = boost::move(temp);
     boost::system::error_code ec;
     endpoint_ = acceptor_.local_endpoint(ec);
     if(ec)
@@ -24,6 +26,23 @@ void Acceptor::start(const boost::asio::ip::tcp::endpoint & ep)
         MLOG_NOTICE("started[" << endpoint_ << "]");
 
     startAccept();
+}
+
+void Acceptor::start(const boost::asio::ip::tcp::endpoint & ep, boost::system::error_code & ec)
+{
+    boost::asio::ip::tcp::acceptor temp(acceptor_.get_io_service());
+    listen(temp, ep, ec);
+    if(!ec)
+    {
+        acceptor_ = boost::move(temp);
+        boost::system::error_code ec;
+        endpoint_ = acceptor_.local_endpoint(ec);
+        if(ec)
+            MLOG_WARNING("failed to get local endpoint: " << ec << ", " << ec.message());
+        else
+            MLOG_NOTICE("started[" << endpoint_ << "]");
+        startAccept();
+    }
 }
 
 void Acceptor::handleAccept(const boost::system::error_code & ec)
