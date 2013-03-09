@@ -3,6 +3,7 @@
 #ifndef MCRYPT_BUILDING
 #include <boost/optional.hpp>
 
+#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
 #endif
 
@@ -48,8 +49,8 @@ class HashEngine {
 public:
     typedef Result result_type;
 
-    void feed(const std::vector<char> & src) { self()->feed(&src[0], src.size); }
-    void feed(const std::vector<unsigned char> & src) { self()->feed(&src[0], src.size); }
+    void feed(const std::vector<char> & src) { self()->feed(&src[0], src.size()); }
+    void feed(const std::vector<unsigned char> & src) { self()->feed(&src[0], src.size()); }
 
     Result digest()
     {
