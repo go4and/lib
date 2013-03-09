@@ -54,4 +54,19 @@ private:
     Context context_;
 };
 
+inline SHA256Digest sha256String(const std::string & input)
+{
+    return hashString<SHA256>(input);
+}
+
+inline SHA256Digest sha256Buffer(const void * data, size_t len)
+{
+    return hashBuffer<SHA256>(data, len);
+}
+
+inline SHA256Digest sha256Buffer(const char * begin, const char * end)
+{
+    return hashBuffer<SHA256>(begin, end - begin);
+}
+
 }
