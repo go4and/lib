@@ -6,116 +6,54 @@
 
 namespace mcrypt {
 
-BOOST_STATIC_ASSERT(SHA_DIGEST_LENGTH == SHADigest::static_size);
+BOOST_STATIC_ASSERT(SHA_DIGEST_LENGTH == SHA1Digest::static_size);
 
-class SHA::Context {
-public:
-    SHA_CTX value_;
-};
-
-SHA::SHA()
-    : context_(new Context())
+SHA1::SHA1()
 {
-    SHA1_Init(&context_->value_);
+    SHA1_Init(&context_);
 }
 
-SHA::~SHA()
+SHA1::~SHA1()
 {}
 
-void SHA::feed(const void * src, size_t len)
+void SHA1::feed(const void * src, size_t len)
 {
-    SHA1_Update(&context_->value_, src, len);
+    SHA1_Update(&context_, src, len);
 }
 
-void SHA::feed(const std::vector<unsigned char> & src)
+void SHA1::feed(const std::vector<unsigned char> & src)
 {
-    SHA1_Update(&context_->value_, &src[0], src.size());
+    SHA1_Update(&context_, &src[0], src.size());
 }
 
-void SHA::feed(const std::vector<char> & src)
+void SHA1::feed(const std::vector<char> & src)
 {
     feed(&src[0], src.size());
 }
 
-SHADigest SHA::digest()
+SHA1Digest SHA1::digest()
 {
-    SHADigest result;
-    SHA1_Final(result.c_array(), &context_->value_);
+    SHA1Digest result;
+    SHA1_Final(result.c_array(), &context_);
     return result;
 }
 
-void SHA::digest(SHADigest & out)
+void SHA1::digest(SHA1Digest & out)
 {
-    SHA1_Final(out.c_array(), &context_->value_);
+    SHA1_Final(out.c_array(), &context_);
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Utility functions
 //////////////////////////////////////////////////////////////////////////
 
-#if !_STLP_NO_IOSTREAMS
-template<class Path>
-boost::optional<SHADigest> shaFileImpl(const Path & path)
-{
-    SHA sha;
-    boost::filesystem::ifstream inf(path, std::ios::binary);
-
-    if(!inf)
-        return boost::optional<SHADigest>();
-
-    char buffer[0x1000];
-    while(inf)
-    {
-        inf.read(buffer, sizeof(buffer));
-        sha.feed(buffer, static_cast<size_t>(inf.gcount()));
-    }
-
-    return sha.digest();
-}
-
-boost::optional<SHADigest> shaFile(const std::wstring & filename)
-{
-    return shaFile(boost::filesystem::wpath(filename));
-}
-
-#if BOOST_VERSION < 104600
-boost::optional<SHADigest> shaFile(const boost::filesystem::wpath & path)
-{
-    return shaFileImpl(path);
-}
-#endif
-
-boost::optional<SHADigest> shaFile(const boost::filesystem::path & path)
-{
-    return shaFileImpl(path);
-}
-#endif
-
-SHADigest shaString(const std::string & str)
-{
-    mcrypt::SHA sha;
-    sha.feed(str.c_str(), str.length());
-    SHADigest digest;
-    sha.digest(digest);
-    return digest;
-}
-
-SHADigest shaBuffer(const void * data, size_t len)
-{
-    mcrypt::SHA sha;
-    sha.feed(data, len);
-    SHADigest digest;
-    sha.digest(digest);
-    return digest;
-}
-
 namespace {
 
-const size_t base64length = (SHADigest::static_size + 2) / 3 * 4;
+const size_t base64length = (SHA1Digest::static_size + 2) / 3 * 4;
 
 }
 
-std::string toBase64(const SHADigest & digest, bool url)
+std::string toBase64(const SHA1Digest & digest, bool url)
 {
     std::string result = base64(&digest[0], digest.size(), url);
     BOOST_ASSERT(result[result.length() - 1] == '=');
@@ -123,13 +61,13 @@ std::string toBase64(const SHADigest & digest, bool url)
     return result;
 }
 
-SHADigest fromBase64(const std::string & string)
+SHA1Digest fromBase64(const std::string & string)
 {
     BOOST_ASSERT(string.length() == base64length - 1);
     char temp[base64length];
     memcpy(temp, string.c_str(), base64length - 1);
     temp[base64length - 1] = '=';
-    SHADigest result;
+    SHA1Digest result;
     size_t len = debase64(temp, base64length, &result[0]);
     (void)len;
     BOOST_ASSERT(len == result.size());

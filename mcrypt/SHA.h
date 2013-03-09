@@ -1,6 +1,8 @@
 #pragma once
 
 #ifndef MCRYPT_BUILDING
+#include <openssl/sha.h>
+
 #include <vector>
 
 #include <boost/optional.hpp>
@@ -12,36 +14,38 @@
 #include "Config.h"
 
 #include "Defines.h"
+#include "Hash.h"
 
 namespace mcrypt {
     
-class MCRYPT_DECL SHA {
+class MCRYPT_DECL SHA1 {
 public:
-    SHA();
-    ~SHA();
-    
+    typedef SHA1Digest result_type;
+
+    SHA1();
+    ~SHA1();
+
     void feed(const void * src, size_t len);
     void feed(const std::vector<char> & src);
     void feed(const std::vector<unsigned char> & src);
 
-    SHADigest digest();
-    void digest(SHADigest & out);
+    SHA1Digest digest();
+    void digest(SHA1Digest & out);
 private:
-    class Context;
-    
-    boost::scoped_ptr<Context> context_;
+    SHA_CTX context_;
 };
 
-#if !_STLP_NO_IOSTREAMS
-MCRYPT_DECL boost::optional<SHADigest> shaFile(const std::wstring & filename);
-MCRYPT_DECL boost::optional<SHADigest> shaFile(const boost::filesystem::wpath & path);
-MCRYPT_DECL boost::optional<SHADigest> shaFile(const boost::filesystem::path & path);
-#endif
+SHA1Digest sha1String(const std::string & input)
+{
+    return hashString<SHA1>(input);
+}
 
-MCRYPT_DECL SHADigest shaString(const std::string & input);
-MCRYPT_DECL SHADigest shaBuffer(const void * data, size_t len);
+SHA1Digest sha1Buffer(const void * data, size_t len)
+{
+    return hashBuffer<SHA1>(data, len);
+}
 
-std::string toBase64(const SHADigest & digest, bool url = false);
-SHADigest fromBase64(const std::string & string);
+std::string toBase64(const SHA1Digest & digest, bool url = false);
+SHA1Digest fromBase64(const std::string & string);
 
 }
