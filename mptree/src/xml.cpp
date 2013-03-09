@@ -2,10 +2,10 @@
 
 #include "../rapidxml/rapidxml.hpp"
 
-#include "node.hpp"
+#include "../node.hpp"
 #include "write_helper.hpp"
 
-#include "xml.hpp"
+#include "../xml.hpp"
 
 namespace mptree {
 

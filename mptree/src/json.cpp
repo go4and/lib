@@ -1,9 +1,9 @@
 #include "pch.hpp"
 
-#include "node.hpp"
+#include "../node.hpp"
 #include "write_helper.hpp"
 
-#include "json.hpp"
+#include "../json.hpp"
 
 namespace mptree {
 

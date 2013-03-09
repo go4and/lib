@@ -1,6 +1,6 @@
 #include "pch.hpp"
 
-#include "node.hpp"
+#include "../node.hpp"
 
 namespace mptree {
 
