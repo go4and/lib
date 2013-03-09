@@ -103,6 +103,8 @@ public:
     as(size_t index) const {
         return asBool(index);
     }
+
+    void out(std::ostream & out, size_t index) const;
 private:
     ResultRowRef(PGresult * result, size_t index, size_t size);
 
@@ -113,10 +115,48 @@ private:
     friend class Result;
 };
 
+std::ostream & operator<<(std::ostream & out, const ResultRowRef & row);
+
 class Result {
 public:
     typedef ResultRowRef value_type;
     typedef ResultRowRef reference;
+
+    class const_iterator {
+    public:
+        typedef ResultRowRef reference;
+
+        explicit const_iterator(const Result & result, size_t index)
+            : result_(&result), index_(index)
+        {
+        }
+        
+        const_iterator & operator++()
+        {
+            ++index_;
+            return *this;
+        }
+
+        reference operator*() const
+        {
+            return (*result_)[index_];
+        }
+    private:
+        const Result * result_;
+        size_t index_;
+
+        friend bool operator!=(const const_iterator & lhs, const const_iterator & rhs)
+        {
+            return lhs.index_ != rhs.index_;
+        }
+
+        friend bool operator==(const const_iterator & lhs, const const_iterator & rhs)
+        {
+            return lhs.index_ == rhs.index_;
+        }
+    };
+    
+    typedef const_iterator iterator;
 
     ~Result();
 
@@ -153,6 +193,9 @@ public:
     {
         return value_ ? &Result::width_ : 0;
     }
+
+    const_iterator begin() const { return const_iterator(*this, 0); }
+    const_iterator end() const { return const_iterator(*this, size()); }
 private:
     BOOST_MOVABLE_BUT_NOT_COPYABLE(Result);
 

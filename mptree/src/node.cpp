@@ -70,7 +70,7 @@ private:
     friend class unparsed;
 };
 
-class unparsed : public mstd::reference_counter<unparsed> {
+class unparsed : boost::noncopyable, public mstd::reference_counter<unparsed> {
 public:
     unparsed()
         : tail_(0) {}

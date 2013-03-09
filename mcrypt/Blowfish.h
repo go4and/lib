@@ -16,11 +16,11 @@ namespace mcrypt {
 
 class MCRYPT_DECL Blowfish : private boost::noncopyable {
 public:
-    explicit Blowfish(const std::string & password);
-    Blowfish(const char * password, size_t len);
-    Blowfish(unsigned char * password, size_t len);
-    explicit Blowfish(const std::vector<unsigned char> & password);
-    explicit Blowfish(const std::vector<char> & password);
+    explicit Blowfish(const std::string & password, const char * ivec = 0);
+    Blowfish(const char * password, size_t len, const char * ivec = 0);
+    Blowfish(const unsigned char * password, size_t len, const unsigned char * ivec = 0);
+    explicit Blowfish(const std::vector<unsigned char> & password, const unsigned char * ivec = 0);
+    explicit Blowfish(const std::vector<char> & password, const char * ivec = 0);
 
     ~Blowfish();
     
@@ -47,7 +47,7 @@ public:
     void encryptOFB(const char * begin, size_t len, char * out);
     void decryptOFB(const char * begin, size_t len, char * out);
 private:
-    void init(const unsigned char * password, size_t len);
+    void init(const unsigned char * password, size_t len, const unsigned char * ivec);
 
     class Key;
     

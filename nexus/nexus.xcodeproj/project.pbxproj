@@ -336,6 +336,10 @@
 				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fmacro-backtrace-limit=0",
+				);
 				OTHER_LDFLAGS = (
 					"-lboost_system-mt-d",
 					"-lboost_thread-mt-d",
@@ -376,6 +380,10 @@
 				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-fmacro-backtrace-limit=0",
+				);
 				OTHER_LDFLAGS = (
 					"-lboost_system-mt",
 					"-lboost_thread-mt",

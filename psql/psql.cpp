@@ -649,6 +649,55 @@ size_t ResultRowRef::size() const
     return size_;
 }
 
+void ResultRowRef::out(std::ostream & out, size_t index) const
+{
+    if(null(index))
+        out << "<NULL>";
+    else {
+        Oid oid = PQftype(result_, static_cast<int>(index));
+        switch(oid) {
+        case oidInt16:
+            out << asInt16(index);
+            break;
+        case oidInt32:
+            out << asInt32(index);
+            break;
+        case oidInt64:
+            out << asInt64(index);
+            break;
+        case oidText:
+        case oidVarChar:
+            out << asCString(index);
+            break;
+        case oidTimestamp:
+            out << asTime(index);
+            break;
+        case oidBool:
+            out << (asBool(index) ? "true" : "false");
+            break;
+        case oidByteArray:
+            {
+                ByteArray temp = asArray(index);
+                out << mlog::dump(temp.data, temp.len);
+            } break;
+        default:
+            out << "Unknown oid: " << oid;
+        }
+    }
+}
+
+std::ostream & operator<<(std::ostream & out, const ResultRowRef & row)
+{
+    out << "[";
+    for(size_t i = 0, size = row.size(); i != size; ++i)
+    {
+        if(i)
+             out << ", ";
+        row.out(out, i);
+    }
+    return out << "]";
+}
+
 size_t allocated()
 {
     return allocated_;
