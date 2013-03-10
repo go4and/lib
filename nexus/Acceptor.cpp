@@ -57,6 +57,7 @@ void Acceptor::handleAccept(const boost::system::error_code & ec)
     } else if(ec == boost::asio::error::operation_aborted)
     {
         MLOG_NOTICE("accept aborted[" << endpoint_ << "]");
+        acceptor_.close();
         return;
     }
 

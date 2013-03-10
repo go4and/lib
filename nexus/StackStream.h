@@ -104,4 +104,6 @@ private:
     char * end_;
 };
 
+#define NEXUS_STACK_STREAM(name, size) nexus::StackStream name(static_cast<char*>(alloca(size)), (size));
+
 }
