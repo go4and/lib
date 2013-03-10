@@ -18,7 +18,7 @@ bool parse_value(mptree::subnet & out, const char * value, size_t len)
             value = p + 1;
         }
         temp.masklen = mstd::str2int10_checked<uint32_t>(value, end);
-        if(temp.masklen > 32 || (temp.address & ((1 << (32 - temp.masklen)) - 1)) != 0)
+        if(temp.masklen > 32 || (temp.address & temp.mask()) != 0)
             return false;
         out = temp;
         return true;
