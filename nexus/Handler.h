@@ -232,6 +232,8 @@ private:
 #define NEXUS_DECLARE_HANDLER(suffix, cls, strict) NEXUS_DECLARE_HANDLER_EX(suffix, cls, strict, 1)
 #define NEXUS_DECLARE_SIMPLE_HANDLER(a, b) NEXUS_DECLARE_HANDLER(a, b, true)
 
+#define NEXUS_HANDLER(suffix, cls, count) NEXUS_DECLARE_HANDLER_EX(suffix, cls, (count > 0), (count > 0 ? count : -count))
+
 #define NEXUS_HANDLER_ZERO(suffix, cls, count) \
     BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(6), NEXUS_HANDLER_BIND_DEF, (suffix, cls, NEXUS_HANDLER_ZERO_CLASS)) \
     nexus::HandlerStorage<(count > 0), (count > 0 ? count : -count)> storage##suffix##_; \
