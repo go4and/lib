@@ -20,7 +20,7 @@ public:
     using HashEngine<SHA1, SHA1Digest>::feed;
     void feed(const void * src, size_t len);
 
-    using HashEngine<SHA256, SHA256Digest>::digest;
+    using HashEngine<SHA1, SHA1Digest>::digest;
     void digest(result_type & out);
 private:
     typedef boost::aligned_storage<96> Context;

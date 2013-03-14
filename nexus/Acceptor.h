@@ -109,7 +109,7 @@ private:
 class TcpAcceptor : public GenericAcceptor<boost::asio::ip::tcp> {
 public:
     explicit TcpAcceptor(boost::asio::io_service & ios, const Listener & listener)
-        : GenericAcceptor(ios, listener)
+        : GenericAcceptor<boost::asio::ip::tcp>(ios, listener)
     {
     }
 
@@ -134,7 +134,7 @@ public:
 class LocalAcceptor : public GenericAcceptor<boost::asio::local::stream_protocol> {
 public:
     explicit LocalAcceptor(boost::asio::io_service & ios, const Listener & listener)
-        : GenericAcceptor(ios, listener)
+        : GenericAcceptor<boost::asio::local::stream_protocol>(ios, listener)
     {
     }
 };
