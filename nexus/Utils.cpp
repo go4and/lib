@@ -72,6 +72,50 @@ void listen(boost::asio::ip::tcp::acceptor & acceptor, unsigned short port, boos
     listen(acceptor, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port), ec);
 }
 
+void listen(boost::asio::local::stream_protocol::acceptor & acceptor, const boost::asio::local::stream_protocol::endpoint & endpoint)
+{
+    MLOG_MESSAGE(Debug, "listen(" << endpoint << ')');
+
+    try {
+        acceptor.open(endpoint.protocol());
+        acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
+        acceptor.bind(endpoint);
+        acceptor.listen();
+    } catch (boost::exception & e) {
+        MLOG_MESSAGE(Error, "Listen " << endpoint << " failed: " << mstd::out_exception(e));
+        throw;
+    } catch (std::exception & e) {
+        MLOG_MESSAGE(Error, "Listen " << endpoint << " failed: " << mstd::out_exception(e));
+        throw;
+    }
+}
+
+void listen(boost::asio::local::stream_protocol::acceptor & acceptor, const boost::asio::local::stream_protocol::endpoint & endpoint, boost::system::error_code & ec)
+{
+    MLOG_MESSAGE(Debug, "listen(" << endpoint << "), acceptor size: " << sizeof(acceptor) << ", impl size: " << sizeof(boost::asio::ip::tcp::acceptor::implementation_type));
+
+    acceptor.open(endpoint.protocol(), ec);
+    if(!ec)
+    {
+        acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true), ec);
+        if(!ec)
+        {
+            acceptor.bind(endpoint, ec);
+            if(!ec)
+            {
+                acceptor.listen(boost::asio::ip::tcp::socket::max_connections, ec);
+                if(!ec)
+                    return;
+                else
+                    MLOG_ERROR("Listen " << endpoint << ", listen failed: " << ec << ", message: " << ec);
+            } else
+                MLOG_ERROR("Listen " << endpoint << ", bind failed: " << ec << ", message: " << ec);
+        } else
+            MLOG_ERROR("Listen " << endpoint << ", set option failed: " << ec << ", message: " << ec);
+    } else
+        MLOG_ERROR("Listen " << endpoint << ", open failed: " << ec << ", message: " << ec << ", handle: " << acceptor.native_handle());
+}
+
 void bindBroadcast(boost::asio::ip::udp::socket & socket, unsigned short port, boost::system::error_code & ec)
 {
     socket.open(boost::asio::ip::udp::v4(), ec);
