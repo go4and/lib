@@ -68,6 +68,11 @@ public:
     {
         acceptor_.cancel();
     }
+
+    void cancel(boost::system::error_code & ec)
+    {
+        acceptor_.cancel();
+    }
 private:
     void handleAccept(const boost::system::error_code & ec)
     {
