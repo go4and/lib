@@ -17,10 +17,10 @@ class MCRYPT_DECL SHA1 : public HashEngine<SHA1, SHA1Digest> {
 public:
     SHA1();
 
-    using HashEngine::feed;
+    using HashEngine<SHA1, SHA1Digest>::feed;
     void feed(const void * src, size_t len);
 
-    using HashEngine::digest;
+    using HashEngine<SHA256, SHA256Digest>::digest;
     void digest(result_type & out);
 private:
     typedef boost::aligned_storage<96> Context;
@@ -44,10 +44,10 @@ class MCRYPT_DECL SHA256 : public HashEngine<SHA256, SHA256Digest> {
 public:
     SHA256();
 
-    using HashEngine::feed;
+    using HashEngine<SHA256, SHA256Digest>::feed;
     void feed(const void * src, size_t len);
 
-    using HashEngine::digest;
+    using HashEngine<SHA256, SHA256Digest>::digest;
     void digest(SHA256Digest & out);
 private:
     typedef boost::aligned_storage<112> Context;
