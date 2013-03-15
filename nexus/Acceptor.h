@@ -16,18 +16,25 @@ protected:
     mlog::Logger & getLogger();
 };
 
-template<class Protocol>
+template<class Derived, class Protocol>
 class GenericAcceptor : public BaseAcceptor {
 public:
-    typedef typename Protocol::acceptor acceptor_type;
-    typedef typename Protocol::endpoint endpoint_type;
-    typedef typename Protocol::socket socket_type;
+    typedef Protocol protocol_type;
+    typedef typename protocol_type::acceptor acceptor_type;
+    typedef typename protocol_type::endpoint endpoint_type;
+    typedef typename protocol_type::socket socket_type;
 
     typedef boost::function<void(socket_type &)> Listener;
+    typedef boost::function<void(Derived &)> AbortListener;
 
     explicit GenericAcceptor(boost::asio::io_service & ios, const Listener & listener)
         : listener_(listener), acceptor_(ios), socket_(ios)
     {
+    }
+
+    void listenAbort(const AbortListener & listener)
+    {
+        abortListener_ = listener;
     }
 
     void start(const boost::asio::ip::tcp::endpoint & ep)
@@ -87,6 +94,8 @@ private:
         {
             MLOG_FMESSAGE(Notice, "accept aborted[" << endpoint_ << "]");
             acceptor_.close();
+            if(!abortListener_.empty())
+                acceptor_.get_io_service().post(boost::bind(abortListener_, boost::ref(*static_cast<Derived*>(this))));
             return;
         }
 
@@ -99,6 +108,7 @@ private:
     }
 
     Listener listener_;
+    AbortListener abortListener_;
     acceptor_type acceptor_;
     socket_type socket_;
     endpoint_type endpoint_;
@@ -106,10 +116,10 @@ private:
     NEXUS_DECLARE_HANDLER(Accept, GenericAcceptor, true);
 };
 
-class TcpAcceptor : public GenericAcceptor<boost::asio::ip::tcp> {
+class TcpAcceptor : public GenericAcceptor<TcpAcceptor, boost::asio::ip::tcp> {
 public:
     explicit TcpAcceptor(boost::asio::io_service & ios, const Listener & listener)
-        : GenericAcceptor<boost::asio::ip::tcp>(ios, listener)
+        : GenericAcceptor<TcpAcceptor, boost::asio::ip::tcp>(ios, listener)
     {
     }
 
@@ -128,13 +138,13 @@ public:
     void startLoopbackV6(unsigned short port, boost::system::error_code & ec) { start(boost::asio::ip::address_v6::loopback(), port, ec); }
 
     inline void start(const boost::asio::ip::address & address, unsigned short port, boost::system::error_code & ec) { start(boost::asio::ip::tcp::endpoint(address, port), ec); }
-    using GenericAcceptor<boost::asio::ip::tcp>::start;
+    using GenericAcceptor<TcpAcceptor, boost::asio::ip::tcp>::start;
 };
 
-class LocalAcceptor : public GenericAcceptor<boost::asio::local::stream_protocol> {
+class LocalAcceptor : public GenericAcceptor<LocalAcceptor, boost::asio::local::stream_protocol> {
 public:
     explicit LocalAcceptor(boost::asio::io_service & ios, const Listener & listener)
-        : GenericAcceptor<boost::asio::local::stream_protocol>(ios, listener)
+        : GenericAcceptor<LocalAcceptor, boost::asio::local::stream_protocol>(ios, listener)
     {
     }
 };

@@ -118,7 +118,7 @@ int istrcmp(const std::wstring & lhs, const std::wstring & rhs);
 int istrcmp(const std::string & lhs, const std::string & rhs);
 
 template<class Output, class It, class Value>
-void split_args(Output & output, It input, It end, const Value &)
+void split_args_impl(Output & output, It input, It end, const Value &)
 {
     while(input != end && *input == ' ')
         ++input;

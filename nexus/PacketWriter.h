@@ -30,11 +30,23 @@ inline void writeWCString(char *& out, const std::wstring & str)
     out += len;
 }
 
+inline void writeCString(char *& out, const char * str, size_t len)
+{
+    BOOST_ASSERT(!str[len]);
+
+    ++len;
+    memcpy(out, str, len);
+    out += len;
+}
+
+inline void writeCString(char *& out, const char * str)
+{
+    writeCString(out, str, strlen(str));
+}
+
 inline void writeCString(char *& out, const std::string & str)
 {
-    size_t len = str.length() + 1;
-    memcpy(out, str.c_str(), len);
-    out += len;
+    writeCString(out, str.c_str(), str.length());
 }
 
 inline void writeLenString(char *& out, const char * str, size_t len)
