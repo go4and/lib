@@ -2,59 +2,15 @@
 
 #include "src/parsers.hpp"
 #include "src/writers.hpp"
-#include "xml.hpp"
 
 namespace mptree {
 
 class node;
 
-template<class T>
-inline typename boost::disable_if<boost::is_base_of<node, T>, void>::type
-write_node(std::ostream & out, const char * name, const T & value, size_t ident)
-{
-    xml::do_write_node(out, name, value, ident);
-}
-
-template<class T>
-inline void write_node(std::ostream & out, const char * name, const std::vector<T> & value, size_t ident)
-{
-    for(auto i = value.begin(), end = value.end(); i != end; ++i)
-        write_node(out, name, *i, ident);
-}
-
 class unparsed;
 typedef boost::intrusive_ptr<unparsed> unparsed_ptr;
-
-class unparsed_child {
-public:
-    explicit unparsed_child(const rapidxml::xml_node<char> & node);
-
-    inline const std::string & name() const { return name_; }
-    inline const std::string & value() const { return value_; }
-    inline size_t next() const { return next_; }
-    inline size_t child() const { return child_; }
-
-    inline void next(size_t value) { next_ = value; }
-    inline void child(size_t value) { child_ = value; }
-private:
-    std::string name_;
-    std::string value_;
-    size_t next_;
-    size_t child_;
-};
-
-class unparsed : public mstd::reference_counter<unparsed> {
-public:
-    unparsed()
-        : tail_(0) {}
-
-    void add(const rapidxml::xml_node<char> & node);
-    void write(std::ostream & out, size_t ident) const;
-private:
-    size_t tail_;
-    std::vector<unparsed_child> children_;
-};
-
+void intrusive_ptr_add_ref(unparsed * obj);
+void intrusive_ptr_release(unparsed * obj);
 
 class node {
 public:
@@ -63,15 +19,25 @@ public:
     {
     }
 
-    void write(std::ostream & out, const char * name, size_t ident = 0) const;
-    bool parse(const rapidxml::xml_node<char> & node);
+    void mark_parsed()
+    {
+        parsed_ = true;
+    }
+
+    static parser_state static_child_parser(const char * name, size_t len, void * data)
+    {
+        return static_cast<node*>(data)->child_parser(name, len ,true);
+    }
+
     virtual void complete();
+    virtual void write(node_writer & writer, const char * name, bool in_array) const;
 private:
-    virtual bool parse_child(const rapidxml::xml_node<char> & node) = 0;
+    virtual parser_state child_parser(const char * name, size_t len, bool final) = 0;
     virtual void do_complete() = 0;
-    virtual void write_children(std::ostream & out, size_t ident) const = 0;
+    virtual void write_children(node_writer & writer) const = 0;
 
     bool parsed_;
+protected:
     unparsed_ptr unparsed_;
 };
 
@@ -81,8 +47,10 @@ inline typename boost::enable_if<boost::is_base_of<node, T>, void>::type complet
 template<class T>
 inline typename boost::disable_if<boost::is_base_of<node, T>, void>::type complete_value(T & out) {}
 
-inline bool parse_node(node & out, const rapidxml::xml_node<char> & node) { return out.parse(node); }
-inline void write_node(std::ostream & out, const char * name, const node & node, size_t ident) { node.write(out, name, ident); }
+inline parser_state make_parser(node & out) { out.mark_parsed(); return parser_state(&node::static_child_parser, 0, &out); }
+inline void write_node(node_writer & writer, const node & out, const char * name, bool in_array) { out.write(writer, name, in_array); }
+
+parser_state make_unparsed_parser(const char * name, size_t len, unparsed_ptr & unparsed);
 
 #define MPTREE_NODE_ITEM_STRING_2(elem) BOOST_PP_STRINGIZE(BOOST_PP_SEQ_ELEM(1, elem))
 #define MPTREE_NODE_ITEM_STRING_3(elem) BOOST_PP_SEQ_ELEM(2, elem)
@@ -94,19 +62,22 @@ inline void write_node(std::ostream & out, const char * name, const node & node,
     BOOST_PP_CAT(MPTREE_NODE_ITEM_STRING_, BOOST_PP_SEQ_SIZE(elem))(elem)
 
 #define MPTREE_NODE_PARSE_CHILD_ITEM(r, data, elem) \
-        if(!strcmp(name, MPTREE_NODE_ITEM_STRING(elem))) \
-            return parse_node(this->BOOST_PP_SEQ_ELEM(1, elem), node); \
+        if(len == strlen(MPTREE_NODE_ITEM_STRING(elem)) && !strncmp(name, MPTREE_NODE_ITEM_STRING(elem), len)) \
+            return make_parser(this->BOOST_PP_SEQ_ELEM(1, elem)); \
         /**/
 
-#define MPTREE_NODE_PARSE_CHILD(parentInvoker, parent, seq) \
-    bool parse_child(const rapidxml::xml_node<char> & node) \
+#define MPTREE_NODE_PARSE(parentInvoker, parent, seq) \
+    mptree::parser_state child_parser(const char * name, size_t len, bool final) \
     { \
-        using mptree::node_name; \
-        using mptree::parse_node; \
-        parentInvoker((if(parent::parse_child(node)) return true;)); \
-        const char * name = node_name(node); \
+        using mptree::make_parser; \
+        using mptree::make_unparsed_parser; \
+        if(!name) { complete(); return mptree::parser_state(0, 0, 0); } \
+        parentInvoker((mptree::parser_state temp = parent::child_parser(name, len, false); if(temp.data) return temp;)); \
         BOOST_PP_SEQ_FOR_EACH(MPTREE_NODE_PARSE_CHILD_ITEM, ~, seq); \
-        return false; \
+        if(!final) \
+            return mptree::parser_state(0, 0, 0); \
+        else \
+            return make_unparsed_parser(name, len, unparsed_); \
     } \
     /**/
 
@@ -121,12 +92,12 @@ inline void write_node(std::ostream & out, const char * name, const node & node,
     /**/
 
 #define MPTREE_NODE_WRITE_CHILD(r, data, elem) \
-    write_node(out, MPTREE_NODE_ITEM_STRING(elem), BOOST_PP_SEQ_ELEM(1, elem), ident);
+    write_node(writer, BOOST_PP_SEQ_ELEM(1, elem), MPTREE_NODE_ITEM_STRING(elem), false);
 #define MPTREE_NODE_WRITE_CHILDREN(parentInvoker, parent, seq) \
-    void write_children(std::ostream & out, size_t ident) const \
+    void write_children(mptree::node_writer & writer) const \
     { \
         using mptree::write_node; \
-        parentInvoker((parent::write_children(out, ident))); \
+        parentInvoker((parent::write_children(writer))); \
         BOOST_PP_SEQ_FOR_EACH(MPTREE_NODE_WRITE_CHILD, ~, seq); \
     } \
     /**/
@@ -138,7 +109,7 @@ inline void write_node(std::ostream & out, const char * name, const node & node,
     public: \
         MPTREE_NODE_MEMBERS(seq) \
     protected: \
-        MPTREE_NODE_PARSE_CHILD(parentInvoker, parent, seq) \
+        MPTREE_NODE_PARSE(parentInvoker, parent, seq) \
         MPTREE_NODE_WRITE_CHILDREN(parentInvoker, parent, seq) \
         MPTREE_NODE_DO_COMPLETE(parentInvoker, parent, seq) \
         /**/

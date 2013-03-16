@@ -23,6 +23,7 @@
 #include <boost/asio/deadline_timer.hpp>
 #include <boost/asio/ip/udp.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/local/stream_protocol.hpp>
 
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/find_if.hpp>

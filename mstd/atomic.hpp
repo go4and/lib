@@ -130,7 +130,7 @@ public:
     value_type cas(value_type value, value_type cmp)
     {
         BOOST_STATIC_ASSERT(sizeof(int_type) == sizeof(this->value_));
-        return value_type(helper::cas(static_cast<volatile int_type*>(static_cast<volatile void*>(&this->value_)), word_type(value), word_type(cmp)));
+        return value_type(helper::cas(static_cast<volatile int_type*>(static_cast<volatile void*>(&this->value_)), int_type(value), int_type(cmp)));
     }
 
     operator value_type() const volatile

@@ -117,8 +117,8 @@ bool iequals(const std::string & lhs, const std::string & rhs);
 int istrcmp(const std::wstring & lhs, const std::wstring & rhs);
 int istrcmp(const std::string & lhs, const std::string & rhs);
 
-template<class Output, class It>
-void split_args(Output & output, It input, It end)
+template<class Output, class It, class Value>
+void split_args_impl(Output & output, It input, It end, const Value &)
 {
     while(input != end && *input == ' ')
         ++input;
@@ -128,7 +128,7 @@ void split_args(Output & output, It input, It end)
     It out = begin;
     while(input != end)
     {
-        auto ch = *input++;
+        Value ch = *input++;
         if(ch == '\\')
         {
             if(input == end)
@@ -139,7 +139,7 @@ void split_args(Output & output, It input, It end)
         {
             while(input != end)
             {
-                auto cc = *input;
+                Value cc = *input;
                 ++input;
                 if(cc == '\\')
                 {
@@ -164,6 +164,13 @@ void split_args(Output & output, It input, It end)
             *out++ = ch;
     }
     output.push_back(typename Output::value_type(begin, out));
+}
+
+template<class Output, class It>
+void split_args(Output & output, It input, It end)
+{
+    if(input != end)
+        split_args_impl(output, input, end, *input);
 }
 
 }

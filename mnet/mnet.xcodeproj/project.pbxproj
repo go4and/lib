@@ -246,6 +246,7 @@
 				);
 				PRODUCT_NAME = mnet;
 				SDKROOT = macosx10.7;
+				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Debug;
@@ -286,6 +287,7 @@
 				);
 				PRODUCT_NAME = mnet;
 				SDKROOT = macosx10.7;
+				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
 			name = Release;

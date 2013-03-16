@@ -45,8 +45,10 @@ private:
 
 void IoThreadPool::start(size_t count, bool withCurrent)
 {
-    MLOG_MESSAGE(Notice, "start");
+    MLOG_MESSAGE(Notice, "start(" << count << ", " << withCurrent << ")");
 
+    if(withCurrent)
+        --count;
     impl_->threads.reserve(count);
 
     while(impl_->threads.size() != count)

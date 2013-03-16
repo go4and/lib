@@ -75,7 +75,7 @@ private:
     std::string name_;
 };
 
-class MLOG_DECL LogDevice : public LogParticipant, public mstd::reference_counter<LogDevice> {
+class MLOG_DECL LogDevice : boost::noncopyable, public LogParticipant, public mstd::reference_counter<LogDevice> {
 public:
     explicit LogDevice()
         : LogParticipant(llDebug) {}
@@ -498,7 +498,7 @@ private:
 
 typedef std::vector<LogDevicePtr> DeviceGroup;
 
-class Devices : public mstd::reference_counter<Devices> {
+class Devices : boost::noncopyable, public mstd::reference_counter<Devices> {
 public:
     explicit Devices(bool withConsole)
     {
@@ -555,7 +555,17 @@ public:
             }
         }
     }
+    
+    Devices * clone()
+    {
+        return new Devices(groups_);
+    }
 private:
+    explicit Devices(const std::vector<DeviceGroup> & groups)
+    {
+        groups_ = groups;
+    }
+
     std::vector<DeviceGroup> groups_;
 };
 
@@ -685,7 +695,7 @@ private:
 
     void setupDevice(const std::string & prop, const std::string & value, boost::mutex::scoped_lock & lock)
     {
-        DevicesPtr newDevices(new Devices(*devices_));
+        DevicesPtr newDevices(devices_->clone());
         if(prop == "remove")
         {
             if(value == "*")
@@ -764,7 +774,7 @@ private:
             BOOST_FOREACH(const Loggers::value_type & i, loggers_)
                 f(const_cast<detail::LoggerImpl&>(i.second));
         } else {
-            DevicesPtr newDevices(new Devices(*devices_));
+            DevicesPtr newDevices(devices_->clone());
             if(newDevices->setup(name, f, lock))
                 devices_ = newDevices;
             else

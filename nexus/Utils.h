@@ -4,6 +4,7 @@
 
 #include <boost/asio/ip/udp.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/local/stream_protocol.hpp>
 
 #endif
 
@@ -15,6 +16,9 @@ NEXUS_DECL void listen(boost::asio::ip::tcp::acceptor & acceptor, const boost::a
 NEXUS_DECL void listen(boost::asio::ip::tcp::acceptor & acceptor, unsigned short port);
 NEXUS_DECL void listen(boost::asio::ip::tcp::acceptor & acceptor, const boost::asio::ip::tcp::endpoint & ep, boost::system::error_code & ec);
 NEXUS_DECL void listen(boost::asio::ip::tcp::acceptor & acceptor, unsigned short port, boost::system::error_code & ec);
+
+NEXUS_DECL void listen(boost::asio::local::stream_protocol::acceptor & acceptor, const boost::asio::local::stream_protocol::endpoint & ep);
+NEXUS_DECL void listen(boost::asio::local::stream_protocol::acceptor & acceptor, const boost::asio::local::stream_protocol::endpoint & ep, boost::system::error_code & ec);
 
 NEXUS_DECL void bindBroadcast(boost::asio::ip::udp::socket & socket, unsigned short port, boost::system::error_code & ec);
 
