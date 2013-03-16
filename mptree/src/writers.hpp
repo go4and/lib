@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef MPTREE_BUILDING
+#include <mstd/itoa.hpp>
+#endif
+
 namespace mptree {
 
 void write_value(std::streambuf * buf, const std::wstring & value);
@@ -11,6 +15,8 @@ inline void write_value(std::streambuf * buf, bool value)
     else
         buf->sputn("false", 5);
 }
+
+void write_value(std::streambuf * buf, double value);
 
 template<class T>
 typename boost::enable_if<boost::is_integral<T>, void>::type write_value(std::streambuf * buf, const T & value)

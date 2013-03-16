@@ -1,4 +1,4 @@
-#include "pch.hpp"
+#include "src/pch.hpp"
 
 #include "parsers.hpp"
 
@@ -26,7 +26,7 @@ bool parse_value(int & out, const char * value)
     try {
         out = mstd::str2int10_checked<int>(value);
         return true;
-    } catch(mstd::bad_str2int_cast & exc) {
+    } catch(mstd::bad_str2int_cast &) {
         return false;
     }
 }

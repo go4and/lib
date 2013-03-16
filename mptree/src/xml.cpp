@@ -1,4 +1,4 @@
-#include "pch.hpp"
+#include "src/pch.hpp"
 
 #include "../rapidxml/rapidxml.hpp"
 
@@ -60,7 +60,7 @@ iterator node_begin(const rapidxml::xml_node<char> & node)
     return iterator(filter(node.first_node()));
 }
 
-iterator node_end(const rapidxml::xml_node<char> & node)
+iterator node_end(const rapidxml::xml_node<char> &)
 {
     return iterator(0);
 }
