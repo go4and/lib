@@ -246,7 +246,7 @@ public:
 
     void reopen()
     {
-        handle_ = fopen(fname_.c_str(), "wb");
+        handle_ = mstd::wfopen(fname_, "wb");
         if(!handle_)
             BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Failed to open for writing") << error_filename(fname_));
     }

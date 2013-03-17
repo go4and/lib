@@ -21,7 +21,7 @@ class Buffer;
 
 class NEXUS_DECL PipeNode : public boost::noncopyable, public Connection<PipeNode> {
 public:
-    typedef boost::function<void(PacketCode, const PacketReader&)> Listener;
+    typedef boost::function<void(PacketCode, PacketReader)> Listener;
 
     PipeNode();
     ~PipeNode();

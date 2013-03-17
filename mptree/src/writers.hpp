@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef MPTREE_BUILDING
+#include <mstd/itoa.hpp>
+#endif
+
 namespace mptree {
 
 class node_writer {
@@ -56,6 +60,8 @@ typename boost::enable_if<boost::is_enum<T>, size_t>::type render_short_value(ch
     memcpy(out, temp, result);
     return result;
 }
+
+void write_value(std::streambuf * buf, double value);
 
 template<class T>
 inline typename boost::disable_if_c<sizeof(render_short_value(0, T())) == 1, void>::type
