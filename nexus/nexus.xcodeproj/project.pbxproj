@@ -11,6 +11,8 @@
 		C3161E67135776A20001E128 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E66135776A20001E128 /* libz.dylib */; };
 		C3161E69135776AA0001E128 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E68135776AA0001E128 /* libcrypto.dylib */; };
 		C3161E6B135776B10001E128 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3161E6A135776B10001E128 /* libssl.dylib */; };
+		C343E1C416F47D86000E2CDC /* ShellConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C343E1C216F47D86000E2CDC /* ShellConnection.cpp */; };
+		C343E1C516F47D86000E2CDC /* ShellConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C343E1C316F47D86000E2CDC /* ShellConnection.h */; };
 		C35AA4C913538DD100649921 /* AsyncGuard.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4A713538DD100649921 /* AsyncGuard.h */; };
 		C35AA4CA13538DD100649921 /* AsyncOperations.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA4A813538DD100649921 /* AsyncOperations.h */; };
 		C35AA4CB13538DD100649921 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA4A913538DD100649921 /* Buffer.cpp */; };
@@ -60,6 +62,8 @@
 		C3161E68135776AA0001E128 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		C3161E6A135776B10001E128 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
 		C3389D63135388960010E3BF /* nexus.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = nexus.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C343E1C216F47D86000E2CDC /* ShellConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShellConnection.cpp; sourceTree = SOURCE_ROOT; };
+		C343E1C316F47D86000E2CDC /* ShellConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShellConnection.h; sourceTree = SOURCE_ROOT; };
 		C35AA4A713538DD100649921 /* AsyncGuard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncGuard.h; sourceTree = SOURCE_ROOT; };
 		C35AA4A813538DD100649921 /* AsyncOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncOperations.h; sourceTree = SOURCE_ROOT; };
 		C35AA4A913538DD100649921 /* Buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = SOURCE_ROOT; };
@@ -140,9 +144,8 @@
 		C3389D65135388960010E3BF /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				C3E3CA5016A7F7810035EF18 /* Timer.cpp */,
-				C3E3CA5116A7F7810035EF18 /* Timer.h */,
-				C36A4272148D184F00E9CF52 /* PacketWriter.cpp */,
+				C3084DDA16DC95330019D2A4 /* Acceptor.cpp */,
+				C3084DD916DC94280019D2A4 /* Acceptor.h */,
 				C35AA4A713538DD100649921 /* AsyncGuard.h */,
 				C35AA4A813538DD100649921 /* AsyncOperations.h */,
 				C35AA4A913538DD100649921 /* Buffer.cpp */,
@@ -154,6 +157,7 @@
 				C35AA4AF13538DD100649921 /* Config.h */,
 				C35AA4B013538DD100649921 /* Connection.cpp */,
 				C35AA4B113538DD100649921 /* Connection.h */,
+				C3921B0F1691C48C005F4CC0 /* GenericBuffers.h */,
 				C35AA4B213538DD100649921 /* Handler.cpp */,
 				C35AA4B313538DD100649921 /* Handler.h */,
 				C35AA4B413538DD100649921 /* IoThreadPool.cpp */,
@@ -163,6 +167,7 @@
 				C35AA4B813538DD100649921 /* PacketPacker.h */,
 				C35AA4B913538DD100649921 /* PacketReader.cpp */,
 				C35AA4BA13538DD100649921 /* PacketReader.h */,
+				C36A4272148D184F00E9CF52 /* PacketWriter.cpp */,
 				C35AA4BB13538DD100649921 /* PacketWriter.h */,
 				C35AA4BC13538DD100649921 /* pch.h */,
 				C35AA4BD13538DD100649921 /* PipeNode.cpp */,
@@ -175,11 +180,12 @@
 				C35AA4C413538DD100649921 /* Socket.h */,
 				C35AA4C513538DD100649921 /* StackStream.cpp */,
 				C35AA4C613538DD100649921 /* StackStream.h */,
+				C3E3CA5016A7F7810035EF18 /* Timer.cpp */,
+				C3E3CA5116A7F7810035EF18 /* Timer.h */,
 				C35AA4C713538DD100649921 /* Utils.cpp */,
 				C35AA4C813538DD100649921 /* Utils.h */,
-				C3921B0F1691C48C005F4CC0 /* GenericBuffers.h */,
-				C3084DD916DC94280019D2A4 /* Acceptor.h */,
-				C3084DDA16DC95330019D2A4 /* Acceptor.cpp */,
+				C343E1C216F47D86000E2CDC /* ShellConnection.cpp */,
+				C343E1C316F47D86000E2CDC /* ShellConnection.h */,
 			);
 			name = Source;
 			path = nexus;
@@ -226,6 +232,7 @@
 				C35AA4EA13538DD100649921 /* Utils.h in Headers */,
 				C366148313FA83C1001F51AA /* REST.h in Headers */,
 				C3E3CA5316A7F7810035EF18 /* Timer.h in Headers */,
+				C343E1C516F47D86000E2CDC /* ShellConnection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +304,7 @@
 				C36A4273148D184F00E9CF52 /* PacketWriter.cpp in Sources */,
 				C3E3CA5216A7F7810035EF18 /* Timer.cpp in Sources */,
 				C3084DDB16DC95330019D2A4 /* Acceptor.cpp in Sources */,
+				C343E1C416F47D86000E2CDC /* ShellConnection.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
