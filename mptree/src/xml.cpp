@@ -1,4 +1,6 @@
+#ifdef _MSC_VER
 #include "src/pch.hpp"
+#endif
 
 #include "../rapidxml/rapidxml.hpp"
 
