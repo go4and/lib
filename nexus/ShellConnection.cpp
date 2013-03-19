@@ -27,7 +27,7 @@ class ShellConnectionImpl : public ShellConnection {
 public:
     explicit ShellConnectionImpl(Socket & socket, const std::string & welcome, const ShellConnectionListener & listener)
         : socket_(boost::move(socket)), strand_(socket_.get_io_service()), welcome_(welcome), listener_(listener),
-          readBuffer_(0x1000), writeBuffer_(0x1000)
+          readBuffer_(0x100)
     {
     }
 
