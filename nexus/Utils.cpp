@@ -72,6 +72,7 @@ void listen(boost::asio::ip::tcp::acceptor & acceptor, unsigned short port, boos
     listen(acceptor, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port), ec);
 }
 
+#if !BOOST_WINDOWS
 void listen(boost::asio::local::stream_protocol::acceptor & acceptor, const boost::asio::local::stream_protocol::endpoint & endpoint)
 {
     MLOG_MESSAGE(Debug, "listen(" << endpoint << ')');
@@ -115,6 +116,7 @@ void listen(boost::asio::local::stream_protocol::acceptor & acceptor, const boos
     } else
         MLOG_ERROR("Listen " << endpoint << ", open failed: " << ec << ", message: " << ec << ", handle: " << acceptor.native_handle());
 }
+#endif
 
 void bindBroadcast(boost::asio::ip::udp::socket & socket, unsigned short port, boost::system::error_code & ec)
 {

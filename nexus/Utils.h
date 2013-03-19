@@ -17,8 +17,10 @@ NEXUS_DECL void listen(boost::asio::ip::tcp::acceptor & acceptor, unsigned short
 NEXUS_DECL void listen(boost::asio::ip::tcp::acceptor & acceptor, const boost::asio::ip::tcp::endpoint & ep, boost::system::error_code & ec);
 NEXUS_DECL void listen(boost::asio::ip::tcp::acceptor & acceptor, unsigned short port, boost::system::error_code & ec);
 
+#if !BOOST_WINDOWS
 NEXUS_DECL void listen(boost::asio::local::stream_protocol::acceptor & acceptor, const boost::asio::local::stream_protocol::endpoint & ep);
 NEXUS_DECL void listen(boost::asio::local::stream_protocol::acceptor & acceptor, const boost::asio::local::stream_protocol::endpoint & ep, boost::system::error_code & ec);
+#endif
 
 NEXUS_DECL void bindBroadcast(boost::asio::ip::udp::socket & socket, unsigned short port, boost::system::error_code & ec);
 
