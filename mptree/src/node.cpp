@@ -1,8 +1,4 @@
-#ifdef _MSC_VER
 #include "src/pch.hpp"
-#else
-#include "pch.hpp"
-#endif
 
 #include "../node.hpp"
 
