@@ -103,6 +103,6 @@ IDDIGIT
        '\u1040'..'\u1049'
    ;
 
-T_NEWLINE: '\r'? '\n' ;
-T_WHITESPACE: (' '|'\t'|T_NEWLINE)+ { $channel = HIDDEN; } ;
+//T_NEWLINE: '\r'? '\n' ;
+T_WHITESPACE: (' '|'\t'|'\r'|'\n')+ { $channel = HIDDEN; } ;
 
