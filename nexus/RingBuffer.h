@@ -49,6 +49,9 @@ public:
         return idx >= bufferSize_ ? idx - bufferSize_ : idx;
     }
 
+    inline size_t writePosition() const { return writePos_; }
+    inline size_t readPosition() const { return readPos_; }
+
     inline bool full() const
     {
         return trim(writePos_ + 1) == readPos_;

@@ -16,7 +16,7 @@ private:
 public:
     explicit Strand(boost::asio::io_service & ios)
         : boost::asio::detail::operation(&Strand::doComplete),
-          ios_(boost::asio::use_service<boost::asio::detail::io_service_impl>(ios))
+          ios_(boost::asio::use_service<boost::asio::detail::io_service_impl>(ios)), locked_(false)
     {
     }
 
