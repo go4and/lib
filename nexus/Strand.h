@@ -16,7 +16,7 @@ private:
 public:
     explicit Strand(boost::asio::io_service & ios)
         : boost::asio::detail::operation(&Strand::doComplete),
-          ios_(boost::asio::use_service<boost::asio::io_service::impl_type>(ios))
+          ios_(boost::asio::use_service<boost::asio::detail::io_service_impl>(ios))
     {
     }
 
@@ -78,7 +78,7 @@ private:
         return false;
     }
 
-    static void doComplete(boost::asio::io_service::impl_type * owner, boost::asio::detail::operation* base, const boost::system::error_code & ec, std::size_t bytes_transferred)
+    static void doComplete(boost::asio::detail::io_service_impl * owner, boost::asio::detail::operation* base, const boost::system::error_code & ec, std::size_t bytes_transferred)
     {
         if (owner)
         {
@@ -154,7 +154,7 @@ private:
         Strand & strand_;
     };
 
-    boost::asio::io_service::impl_type & ios_;
+    boost::asio::detail::io_service_impl & ios_;
     Mutex mutex_;
     bool locked_;
     boost::asio::detail::op_queue<boost::asio::detail::operation> waiting_queue_;
