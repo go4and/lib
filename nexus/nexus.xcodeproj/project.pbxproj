@@ -100,6 +100,8 @@
 		C366148113FA83C1001F51AA /* REST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REST.h; sourceTree = SOURCE_ROOT; };
 		C36A4272148D184F00E9CF52 /* PacketWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketWriter.cpp; sourceTree = SOURCE_ROOT; };
 		C3921B0F1691C48C005F4CC0 /* GenericBuffers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenericBuffers.h; sourceTree = SOURCE_ROOT; };
+		C3A7992B16FC58F000839EA1 /* RingBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
+		C3A7993C16FC77CA00839EA1 /* Strand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Strand.h; sourceTree = "<group>"; };
 		C3E3CA5016A7F7810035EF18 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = SOURCE_ROOT; };
 		C3E3CA5116A7F7810035EF18 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = SOURCE_ROOT; };
 		C3E7657D148F3A450069EAFA /* mcrypt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mcrypt.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -127,6 +129,7 @@
 		C3389D58135388960010E3BF = {
 			isa = PBXGroup;
 			children = (
+				C3A7992A16FC586D00839EA1 /* Headers */,
 				C3B8C2AC1546BA6B00E14219 /* Dependencies */,
 				C3389D65135388960010E3BF /* Source */,
 				C3389D64135388960010E3BF /* Products */,
@@ -145,50 +148,59 @@
 			isa = PBXGroup;
 			children = (
 				C3084DDA16DC95330019D2A4 /* Acceptor.cpp */,
-				C3084DD916DC94280019D2A4 /* Acceptor.h */,
-				C35AA4A713538DD100649921 /* AsyncGuard.h */,
-				C35AA4A813538DD100649921 /* AsyncOperations.h */,
 				C35AA4A913538DD100649921 /* Buffer.cpp */,
-				C35AA4AA13538DD100649921 /* Buffer.h */,
 				C35AA4AB13538DD100649921 /* Buffers.cpp */,
-				C35AA4AC13538DD100649921 /* Buffers.h */,
 				C35AA4AD13538DD100649921 /* Clock.cpp */,
-				C35AA4AE13538DD100649921 /* Clock.h */,
-				C35AA4AF13538DD100649921 /* Config.h */,
 				C35AA4B013538DD100649921 /* Connection.cpp */,
-				C35AA4B113538DD100649921 /* Connection.h */,
-				C3921B0F1691C48C005F4CC0 /* GenericBuffers.h */,
 				C35AA4B213538DD100649921 /* Handler.cpp */,
-				C35AA4B313538DD100649921 /* Handler.h */,
 				C35AA4B413538DD100649921 /* IoThreadPool.cpp */,
-				C35AA4B513538DD100649921 /* IoThreadPool.h */,
-				C35AA4B613538DD100649921 /* Packet.h */,
 				C35AA4B713538DD100649921 /* PacketPacker.cpp */,
-				C35AA4B813538DD100649921 /* PacketPacker.h */,
 				C35AA4B913538DD100649921 /* PacketReader.cpp */,
-				C35AA4BA13538DD100649921 /* PacketReader.h */,
 				C36A4272148D184F00E9CF52 /* PacketWriter.cpp */,
-				C35AA4BB13538DD100649921 /* PacketWriter.h */,
-				C35AA4BC13538DD100649921 /* pch.h */,
 				C35AA4BD13538DD100649921 /* PipeNode.cpp */,
-				C35AA4BE13538DD100649921 /* PipeNode.h */,
 				C366148013FA83C1001F51AA /* REST.cpp */,
-				C366148113FA83C1001F51AA /* REST.h */,
 				C35AA4BF13538DD100649921 /* Signals.cpp */,
-				C35AA4C013538DD100649921 /* Signals.h */,
 				C35AA4C313538DD100649921 /* Socket.cpp */,
-				C35AA4C413538DD100649921 /* Socket.h */,
 				C35AA4C513538DD100649921 /* StackStream.cpp */,
-				C35AA4C613538DD100649921 /* StackStream.h */,
 				C3E3CA5016A7F7810035EF18 /* Timer.cpp */,
-				C3E3CA5116A7F7810035EF18 /* Timer.h */,
 				C35AA4C713538DD100649921 /* Utils.cpp */,
-				C35AA4C813538DD100649921 /* Utils.h */,
 				C343E1C216F47D86000E2CDC /* ShellConnection.cpp */,
-				C343E1C316F47D86000E2CDC /* ShellConnection.h */,
 			);
 			name = Source;
 			path = nexus;
+			sourceTree = "<group>";
+		};
+		C3A7992A16FC586D00839EA1 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				C3084DD916DC94280019D2A4 /* Acceptor.h */,
+				C35AA4A713538DD100649921 /* AsyncGuard.h */,
+				C35AA4A813538DD100649921 /* AsyncOperations.h */,
+				C35AA4AA13538DD100649921 /* Buffer.h */,
+				C35AA4AC13538DD100649921 /* Buffers.h */,
+				C35AA4AE13538DD100649921 /* Clock.h */,
+				C35AA4AF13538DD100649921 /* Config.h */,
+				C35AA4B113538DD100649921 /* Connection.h */,
+				C3921B0F1691C48C005F4CC0 /* GenericBuffers.h */,
+				C35AA4B313538DD100649921 /* Handler.h */,
+				C35AA4B513538DD100649921 /* IoThreadPool.h */,
+				C35AA4B613538DD100649921 /* Packet.h */,
+				C35AA4B813538DD100649921 /* PacketPacker.h */,
+				C35AA4BA13538DD100649921 /* PacketReader.h */,
+				C35AA4BB13538DD100649921 /* PacketWriter.h */,
+				C35AA4BC13538DD100649921 /* pch.h */,
+				C35AA4BE13538DD100649921 /* PipeNode.h */,
+				C366148113FA83C1001F51AA /* REST.h */,
+				C35AA4C013538DD100649921 /* Signals.h */,
+				C35AA4C413538DD100649921 /* Socket.h */,
+				C35AA4C613538DD100649921 /* StackStream.h */,
+				C3E3CA5116A7F7810035EF18 /* Timer.h */,
+				C35AA4C813538DD100649921 /* Utils.h */,
+				C343E1C316F47D86000E2CDC /* ShellConnection.h */,
+				C3A7992B16FC58F000839EA1 /* RingBuffer.h */,
+				C3A7993C16FC77CA00839EA1 /* Strand.h */,
+			);
+			name = Headers;
 			sourceTree = "<group>";
 		};
 		C3B8C2AC1546BA6B00E14219 /* Dependencies */ = {
