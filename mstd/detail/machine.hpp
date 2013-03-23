@@ -13,7 +13,7 @@
 #if defined(_M_IX86)
 #include "windows32.hpp"
 #else
-#error Unsupported windows platform
+#include "windows64.hpp"
 #endif
 
 #elif __linux__ || __FreeBSD__ || __APPLE__

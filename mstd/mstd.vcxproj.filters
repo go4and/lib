@@ -268,5 +268,8 @@
     <ClInclude Include="plain_interval_map.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="windows64.hpp">
+      <Filter>Details</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

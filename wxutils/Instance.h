@@ -10,5 +10,7 @@ extern "C" {
 namespace wxutils {
 
 WXUTILS_DECL HINSTANCE instance();
+bool checkSingleInstance(bool show, const std::wstring & title = std::wstring());
+void releaseSingleInstance();
 
 }
