@@ -70,17 +70,4 @@ inline void atomic_write(volatile void * ptr, typename size_to_int<size>::type v
     *static_cast<volatile typename size_to_int<size>::type*>(ptr) = value;
 }
 
-void yield();
-
-inline void pause(boost::uint32_t delay)
-{
-    __asm {
-        mov eax, delay
-mloop: 
-        pause
-        add eax, -1
-        jne mloop  
-    }
-}
-
 } }

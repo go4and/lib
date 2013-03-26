@@ -30,7 +30,7 @@ struct atomic_helper<4> {
 
     static int_type read_write(volatile int_type * ptr, int_type value)
     {
-        return InterlockedExchangeAdd(ptr, value);
+        return InterlockedExchange(ptr, value);
     }
 };
 
@@ -126,19 +126,6 @@ inline void atomic_write(volatile void * ptr, typename size_to_int<size>::type v
 {
     memory_fence();
     *static_cast<volatile typename size_to_int<size>::type*>(ptr) = value;
-}
-
-void yield();
-
-inline void pause(boost::uint32_t delay)
-{
-    __asm {
-        mov eax, delay
-      mloop: 
-        pause
-        add eax, -1
-        jne mloop  
-    }
 }
 
 } }

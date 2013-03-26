@@ -95,11 +95,12 @@ std::wstring MSTD_STDCALL widen(const std::string & value)
 
 std::string MSTD_STDCALL narrow(const std::wstring & value)
 {
-    int len = WideCharToMultiByte(CP_ACP, 0, value.c_str(), value.length(), 0, 0, 0, 0);
+    int valueLen = static_cast<int>(value.length());
+    int len = WideCharToMultiByte(CP_ACP, 0, value.c_str(), valueLen, 0, 0, 0, 0);
     if(len > 0)
     {
         std::string res(len, 0);
-        WideCharToMultiByte(CP_ACP, 0, value.c_str(), value.length(), &res[0], res.length(), 0, 0);
+        WideCharToMultiByte(CP_ACP, 0, value.c_str(), valueLen, &res[0], res.length(), 0, 0);
         return res;
     } else
         return std::string();
