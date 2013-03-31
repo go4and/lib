@@ -34,81 +34,23 @@ struct atomic_helper<4> {
     }
 };
 
-inline __declspec(naked) boost::uint64_t atomic_add8(volatile boost::uint64_t *, boost::uint64_t)
-{
-    __asm {
-        ALIGN 4
-        push ebx
-        push edi
-        mov edi, 12[esp]
-        mov eax, [edi]
-        mov edx, 4[edi]
-mloop:
-        mov ebx, 16[esp]
-        mov ecx, 20[esp]
-        add ebx, eax
-        adc ecx, edx
-        lock cmpxchg8b qword ptr [edi]
-        jnz mloop
-        pop edi
-        pop ebx
-        ret
-    }
-}
-
-inline __declspec(naked) boost::uint64_t atomic_cas8(volatile void *, boost::uint64_t, boost::uint64_t)
-{
-    __asm {
-        push ebx
-        push edi
-        mov edi, 12[esp]
-        mov ebx, 16[esp]
-        mov ecx, 20[esp]
-        mov eax, 24[esp]
-        mov edx, 28[esp]
-        lock cmpxchg8b qword ptr [edi]
-        pop edi
-        pop ebx
-        ret
-    }
-}
-
-inline __declspec(naked) boost::uint64_t atomic_read_write8(volatile boost::uint64_t *, boost::uint64_t)
-{
-    __asm {
-        push ebx
-        push edi
-        mov edi, 12[esp]
-        mov ebx, 16[esp]
-        mov ecx, 20[esp]
-        mov eax, [edi]
-        mov edx, 4[edi]
-mloop:
-        lock cmpxchg8b qword ptr [edi]
-        jnz mloop
-        pop edi
-        pop ebx
-        ret
-    }
-}
-
 template<>
 struct atomic_helper<8> {
     typedef size_to_int<8>::type int_type;
 
     static inline int_type add(volatile int_type * ptr, int_type value)
     {
-        return atomic_add8(ptr, value);
+        return InterlockedExchangeAdd(ptr, value);
     }
 
-    static inline int_type cas(volatile void * ptr, int_type newval, int_type oldval)
+    static inline int_type cas(volatile int_type * ptr, int_type newval, int_type oldval)
     {
-        return atomic_cas8(ptr, newval, oldval);
+        return InterlockedCompareExchange(ptr, newval, oldval);
     }
 
     static inline int_type read_write(volatile int_type * ptr, int_type value)
     {
-        return atomic_read_write8(ptr, value);
+        return InterlockedExchange(ptr, value);
     }
 };
 

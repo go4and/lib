@@ -5,6 +5,7 @@
 #define MSTD_MACHINE_COMMON_PROCESSING
 
 #include "waiter.hpp"
+#include "yield_k.hpp"
 
 #include "machine_fwd.hpp"
 
@@ -12,8 +13,10 @@
 
 #if defined(_M_IX86)
 #include "windows32.hpp"
+#elif defined(_M_X64)
+#include "windows64.hpp"
 #else
-#error Unsupported windows platform
+#error Unsupported Windows platform
 #endif
 
 #elif __linux__ || __FreeBSD__ || __APPLE__
@@ -30,12 +33,8 @@ namespace mstd { namespace detail {
 
 inline void waiter::wait()
 {
-    if(state_ <= limit_)
-    {
-        detail::pause(state_);
-        state_ += state_;
-    } else
-        detail::yield();
+    yield(state_);
+    ++state_;
 }
 
 template<size_t S, class F>

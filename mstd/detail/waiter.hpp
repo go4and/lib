@@ -14,7 +14,6 @@ public:
         state_ = 1;
     }
 private:
-    static const boost::uint32_t limit_ = 16;
     boost::uint32_t state_;
 };
 

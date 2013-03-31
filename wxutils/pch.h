@@ -26,6 +26,9 @@
 
 #include <boost/move/move.hpp>
 
+#include <boost/interprocess/mapped_region.hpp>
+#include <boost/interprocess/shared_memory_object.hpp>
+
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/multi_index/hashed_index.hpp>
@@ -49,10 +52,13 @@
 
 #include <mstd/cstdint.hpp>
 #include <mstd/enum_set.hpp>
+#include <mstd/filesystem.hpp>
 #include <mstd/itoa.hpp>
 #include <mstd/pointer_cast.hpp>
+#include <mstd/process.hpp>
 #include <mstd/singleton.hpp>
 
+#include <mlog/Dumper.h>
 #include <mlog/Logging.h>
 
 #define BUILDING_WXUTILS

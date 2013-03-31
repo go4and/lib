@@ -268,5 +268,14 @@
     <ClInclude Include="plain_interval_map.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="windows64.hpp">
+      <Filter>Details</Filter>
+    </ClInclude>
+    <ClInclude Include="spinlock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="yield_k.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

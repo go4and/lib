@@ -64,9 +64,6 @@ inline utf8_functor utf8()
     return utf8_functor();
 }
 
-void to_lower(std::string & inp);
-void to_lower(char * inp);
-void to_lower(char * inp, size_t len);
 void to_lower(std::wstring & inp);
 void to_lower(wchar_t * inp);
 void to_lower(wchar_t * inp, size_t len);
