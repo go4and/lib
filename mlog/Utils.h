@@ -136,6 +136,36 @@ inline std::ostream & operator<<(std::ostream & out, const OutMap<Collection> & 
     return out;
 }
 
+template<class T>
+class OutPointer {
+public:
+    explicit OutPointer(const T & value)
+        : value_(value) {}
+
+    void operator()(std::ostream & out) const
+    {
+        if(value_)
+            out << *value_;
+        else
+            out << "<null>";
+    }
+private:
+    const T & value_;
+};
+
+template<class T>
+OutPointer<T> opointer(const T & t)
+{
+    return OutPointer<T>(t);
+}
+
+template<class T>
+inline std::ostream & operator<<(std::ostream & out, const OutPointer<T> & value)
+{
+    value(out);
+    return out;
+}
+
 }
 
 #endif

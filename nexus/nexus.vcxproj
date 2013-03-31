@@ -269,6 +269,7 @@
     <ClInclude Include="PacketWriter.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PipeNode.h" />
+    <ClInclude Include="RingBuffer.h" />
     <ClInclude Include="Signals.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="StackStream.h" />

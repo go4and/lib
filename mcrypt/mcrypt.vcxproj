@@ -116,7 +116,7 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BUILD_OUTPUT)/$(Configuration)</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">$(BUILD_OUTPUT)/$(Configuration)</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MD|x64'">$(BUILD_OUTPUT)/$(Configuration)</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(BUILD_OUTPUT)\$(Configuration)_$(Platform).$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(BUILD_OUTPUT)/$(Configuration)_$(Platform).$(ProjectName)</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BUILD_OUTPUT)\$(Configuration)_$(Platform).$(ProjectName)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">$(BUILD_OUTPUT)\$(Configuration)_$(Platform).$(ProjectName)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MD|x64'">$(BUILD_OUTPUT)\$(Configuration)_$(Platform).$(ProjectName)\</IntDir>
