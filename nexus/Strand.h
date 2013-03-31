@@ -46,7 +46,18 @@ public:
             boost::asio::detail::completion_handler<Handler>::do_complete(&ios_, o, boost::system::error_code(), 0);
         }
     }
-    
+
+    template <typename Handler>
+    void post(Handler handler)
+    {
+        typedef boost::asio::detail::completion_handler<Handler> op;
+        typename op::ptr p = { boost::addressof(handler), boost_asio_handler_alloc_helpers::allocate(sizeof(op), handler), 0 };
+        p.p = new (p.v) op(handler);
+
+        doPost(p.p);
+        p.v = p.p = 0;
+    }
+
     template <typename Handler>
     boost::asio::detail::wrapped_handler<StrandRef, Handler> wrap(Handler handler)
     {
@@ -76,6 +87,21 @@ private:
         }
 
         return false;
+    }
+
+    void doPost(boost::asio::detail::operation* op)
+    {
+        mutex_.lock();
+        if(locked_)
+        {
+            waiting_queue_.push(op);
+            mutex_.unlock();
+        } else {
+            locked_ = true;
+            mutex_.unlock();
+            ready_queue_.push(op);
+            ios_.post_immediate_completion(this);
+        }
     }
 
     static void doComplete(boost::asio::detail::io_service_impl * owner, boost::asio::detail::operation* base, const boost::system::error_code & ec, std::size_t bytes_transferred)

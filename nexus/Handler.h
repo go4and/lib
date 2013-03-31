@@ -239,4 +239,10 @@ private:
     nexus::HandlerStorage<(count > 0), (count > 0 ? count : -count)> storage##suffix##_; \
     /**/
 
+#define NEXUS_HANDLER_BLANK(suffix, cls, count) \
+    NEXUS_HANDLER_ZERO_CLASS(suffix, cls, 0) \
+    NEXUS_HANDLER_BIND_ZERO(suffix) \
+    nexus::HandlerStorage<(count > 0), (count > 0 ? count : -count)> storage##suffix##_; \
+    /**/
+
 }
