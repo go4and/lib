@@ -27,6 +27,11 @@ public:
             self().process(out, &src[0], src.size());
     }
 
+    void process(char * out, const std::string & src)
+    {
+        self().process(out, src.c_str(), src.size());
+    }
+
     inline void process(unsigned char * out, const unsigned char * begin, const unsigned char * end)
     {
         self().process(mstd::pointer_cast<char*>(out), mstd::pointer_cast<const char*>(begin), end - begin);
