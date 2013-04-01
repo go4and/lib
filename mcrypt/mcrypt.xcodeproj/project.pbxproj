@@ -74,6 +74,7 @@
 		C3389D191353839C0010E3BF /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = SOURCE_ROOT; };
 		C3389D1A1353839C0010E3BF /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = SOURCE_ROOT; };
 		C35D3F6916EBD9DB00497C4A /* Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hash.h; sourceTree = SOURCE_ROOT; };
+		C3B1CC141709AB6300156E12 /* Cipher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cipher.h; sourceTree = SOURCE_ROOT; };
 		C3B64CC5157C659500F20E55 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = "<group>"; };
 		C3B8C2B31546BCE100E14219 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = mstd.dylib; path = ../../_build/Debug/mstd.dylib; sourceTree = "<group>"; };
 		C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.1.0.0.dylib; path = /opt/local/lib/libcrypto.1.0.0.dylib; sourceTree = "<absolute>"; };
@@ -134,6 +135,7 @@
 				C3389D181353839C0010E3BF /* TEA.h */,
 				C3389D191353839C0010E3BF /* Utils.cpp */,
 				C3389D1A1353839C0010E3BF /* Utils.h */,
+				C3B1CC141709AB6300156E12 /* Cipher.h */,
 			);
 			name = Sources;
 			path = mcrypt;

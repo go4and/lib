@@ -5,7 +5,7 @@
 #define MSTD_MACHINE_COMMON_PROCESSING
 
 #include "waiter.hpp"
-#include "yield_k.hpp"
+#include "../yield_k.hpp"
 
 #include "machine_fwd.hpp"
 

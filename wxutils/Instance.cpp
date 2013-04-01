@@ -57,9 +57,9 @@ std::string getSharedName()
     }
     return result;
 }
-#endif
 
 }
+#endif
 
 bool checkSingleInstance(bool show, const std::wstring & title)
 {
@@ -118,11 +118,13 @@ bool checkSingleInstance(bool show, const std::wstring & title)
 
 void releaseSingleInstance()
 {
+#if BOOST_WINDOWS
     try {
         boost::interprocess::shared_memory_object::remove(getSharedName().c_str());
     } catch(boost::interprocess::interprocess_exception & exc) {
         MLOG_ERROR("releaseSingleInstance failure: " << mstd::out_exception(exc));
     }
+#endif
 }
 
 }

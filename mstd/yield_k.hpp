@@ -7,6 +7,9 @@
 
 extern "C" void _mm_pause();
 #pragma intrinsic( _mm_pause )
+#else
+#include <sched.h>
+#include <time.h>
 #endif
 
 namespace mstd {

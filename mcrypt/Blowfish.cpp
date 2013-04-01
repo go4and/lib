@@ -2,10 +2,68 @@
 
 #include "Blowfish.h"
 
-using namespace std;
-
 namespace mcrypt {
 
+void BlowfishBase::init(const char * password, size_t len, const char * ivec)
+{
+    BOOST_STATIC_ASSERT(sizeof(BF_KEY) == Key::size);
+    num_ = 0;
+    BF_set_key(static_cast<BF_KEY*>(key_.address()), static_cast<int>(len), mstd::pointer_cast<const unsigned char*>(password));
+    if(!ivec)
+        memset(ivec_, 0, sizeof(ivec_));
+    else
+        memcpy(ivec_, ivec, sizeof(ivec_));
+}
+
+void BlowfishCbcEncrypt::process(char * out, const char * begin, size_t len)
+{
+    BF_cbc_encrypt(mstd::pointer_cast<const unsigned char *>(begin),
+                   mstd::pointer_cast<unsigned char *>(out),
+                   static_cast<int>(len),
+                   static_cast<BF_KEY*>(key_.address()), ivec_, BF_ENCRYPT);
+}
+
+void BlowfishCbcDecrypt::process(char * out, const char * begin, size_t len)
+{
+    BF_cbc_encrypt(mstd::pointer_cast<const unsigned char *>(begin),
+                   mstd::pointer_cast<unsigned char *>(out),
+                   static_cast<int>(len),
+                   static_cast<BF_KEY*>(key_.address()), ivec_, BF_DECRYPT);
+}
+
+void BlowfishOfbEncrypt::process(char * out, const char * begin, size_t len)
+{
+    BF_ofb64_encrypt(mstd::pointer_cast<const unsigned char *>(begin),
+                     mstd::pointer_cast<unsigned char *>(out),
+                     static_cast<int>(len),
+                     static_cast<BF_KEY*>(key_.address()), ivec_, &num_);
+}
+
+void BlowfishOfbDecrypt::process(char * out, const char * begin, size_t len)
+{
+    BF_ofb64_encrypt(mstd::pointer_cast<const unsigned char *>(begin),
+                     mstd::pointer_cast<unsigned char *>(out),
+                     static_cast<int>(len),
+                     static_cast<BF_KEY*>(key_.address()), ivec_, &num_);
+}
+
+void BlowfishCfbEncrypt::process(char * out, const char * begin, size_t len)
+{
+    BF_cfb64_encrypt(mstd::pointer_cast<const unsigned char *>(begin),
+                     mstd::pointer_cast<unsigned char *>(out),
+                     static_cast<int>(len),
+                     static_cast<BF_KEY*>(key_.address()), ivec_, &num_, BF_ENCRYPT);
+}
+
+void BlowfishCfbDecrypt::process(char * out, const char * begin, size_t len)
+{
+    BF_cfb64_encrypt(mstd::pointer_cast<const unsigned char *>(begin),
+                     mstd::pointer_cast<unsigned char *>(out),
+                     static_cast<int>(len),
+                     static_cast<BF_KEY*>(key_.address()), ivec_, &num_, BF_DECRYPT);
+}
+
+#if 0
 class Blowfish::Key {
 public:
     BF_KEY value_;
@@ -151,5 +209,6 @@ void Blowfish::decryptOFB(const char * begin, size_t len, char * out)
                      static_cast<long>(len),
                      &key_->value_, ivec_, &num_);
 }
+#endif
 
 }

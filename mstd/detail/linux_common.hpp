@@ -28,17 +28,6 @@ struct atomic_helper {
 
 inline void memory_fence() { __sync_synchronize(); }
 
-inline void yield()
-{
-    sched_yield();
-}
-
-inline void pause(boost::uint32_t delay)
-{
-    while(delay--)
-       __sync_synchronize();
-}
-
 template<size_t size>
 inline typename size_to_int<size>::type atomic_read(const volatile void * ptr)
 {
