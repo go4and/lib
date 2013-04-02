@@ -1,6 +1,8 @@
 #pragma once
 
 #ifndef MCRYPT_BUILDING
+#include <string.h>
+
 #include <string>
 #include <vector>
 
