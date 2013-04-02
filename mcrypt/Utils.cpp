@@ -12,7 +12,7 @@ void bfcrypt(const std::string & password, const char * begin, const char * end,
     char * p = &output[0];
     *mstd::pointer_cast<uint32_t*>(p) = static_cast<uint32_t>(end - begin);
 
-    BlowfishCbcEncrypt bf(password);
+    BlowfishCbc bf(_encrypt=true, _key=password, _padding=false);
     bf.process(p + 4, begin, end);
 }
 
@@ -22,7 +22,7 @@ void bfdecrypt(const std::string & password, const char * begin, const char * en
     output.resize((len + 7) / 8 * 8);
     if(len)
     {
-        BlowfishCbcDecrypt bf(password);
+        BlowfishCbc bf(_decrypt=true, _key=password, _padding=false);
         bf.process(&output[0], begin + 4, end);
     }
     output.resize(len);

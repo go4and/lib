@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C32639B41709C750002C2A4A /* AES.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C32639B21709C750002C2A4A /* AES.cpp */; };
+		C32639B51709C750002C2A4A /* AES.h in Headers */ = {isa = PBXBuildFile; fileRef = C32639B31709C750002C2A4A /* AES.h */; };
+		C32639B71709D523002C2A4A /* Cipher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C32639B61709D523002C2A4A /* Cipher.cpp */; };
 		C3389D1B1353839C0010E3BF /* Base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D061353839C0010E3BF /* Base64.cpp */; };
 		C3389D1C1353839C0010E3BF /* Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D071353839C0010E3BF /* Base64.h */; };
 		C3389D1D1353839C0010E3BF /* Blowfish.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D081353839C0010E3BF /* Blowfish.cpp */; };
@@ -51,6 +54,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C32639B21709C750002C2A4A /* AES.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AES.cpp; sourceTree = SOURCE_ROOT; };
+		C32639B31709C750002C2A4A /* AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES.h; sourceTree = SOURCE_ROOT; };
+		C32639B61709D523002C2A4A /* Cipher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cipher.cpp; sourceTree = SOURCE_ROOT; };
 		C3389CEB135383290010E3BF /* mcrypt.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mcrypt.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3389D061353839C0010E3BF /* Base64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Base64.cpp; sourceTree = SOURCE_ROOT; };
 		C3389D071353839C0010E3BF /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = SOURCE_ROOT; };
@@ -113,6 +119,8 @@
 		C3389CED135383290010E3BF /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C32639B21709C750002C2A4A /* AES.cpp */,
+				C32639B31709C750002C2A4A /* AES.h */,
 				C35D3F6916EBD9DB00497C4A /* Hash.h */,
 				C3389D061353839C0010E3BF /* Base64.cpp */,
 				C3389D071353839C0010E3BF /* Base64.h */,
@@ -136,6 +144,7 @@
 				C3389D191353839C0010E3BF /* Utils.cpp */,
 				C3389D1A1353839C0010E3BF /* Utils.h */,
 				C3B1CC141709AB6300156E12 /* Cipher.h */,
+				C32639B61709D523002C2A4A /* Cipher.cpp */,
 			);
 			name = Sources;
 			path = mcrypt;
@@ -179,6 +188,7 @@
 				C3389D2D1353839C0010E3BF /* TEA.h in Headers */,
 				C3389D2F1353839C0010E3BF /* Utils.h in Headers */,
 				C35D3F6A16EBD9DB00497C4A /* Hash.h in Headers */,
+				C32639B51709C750002C2A4A /* AES.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +269,8 @@
 				C3389D2A1353839C0010E3BF /* SHA.cpp in Sources */,
 				C3389D2C1353839C0010E3BF /* TEA.cpp in Sources */,
 				C3389D2E1353839C0010E3BF /* Utils.cpp in Sources */,
+				C32639B41709C750002C2A4A /* AES.cpp in Sources */,
+				C32639B71709D523002C2A4A /* Cipher.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,7 +306,6 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
@@ -334,7 +345,6 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",

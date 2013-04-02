@@ -1,75 +1,215 @@
 #pragma once
 
 #ifndef MCRYPT_BUILDING
+#include <string>
+#include <vector>
+
 #include <boost/aligned_storage.hpp>
+
+#include <boost/parameter/name.hpp>
+#include <boost/parameter/preprocessor.hpp>
 
 #include <mstd/pointer_cast.hpp>
 #endif
 
 namespace mcrypt {
 
-template<class Derived>
-class CipherEngine {
+enum CipherMode {
+    modeEncrypt,
+    modeDecrypt,
+};
+
+class CipherDescriptor {
 public:
+    explicit CipherDescriptor(const void * evp)
+        : evp_(evp)
+    {
+    }
+
+    const void * handle() const { return evp_; }
+
+    size_t ivSize() const;
+    size_t blockSize() const;
+private:
+    const void * evp_;
+};
+
+namespace keywords {
+    BOOST_PARAMETER_NAME(encrypt)
+    BOOST_PARAMETER_NAME(decrypt)
+    BOOST_PARAMETER_NAME(key)
+    BOOST_PARAMETER_NAME(keysize)
+    BOOST_PARAMETER_NAME(iv)
+    BOOST_PARAMETER_NAME(padding)
+}
+
+using namespace keywords;
+
+inline const char * getBytes(const char * raw) { return raw; }
+inline const char * getBytes(const std::string & raw) { return raw.c_str(); }
+
+inline size_t bytesSize(const std::string & raw) { return raw.length(); }
+inline size_t bytesSize(const char * raw) { return strlen(raw); }
+
+template<class Key>
+class BytesSize {
+public:
+    typedef size_t result_type;
+
+    explicit BytesSize(const Key & key)
+        : key_(key)
+    {
+    }
+    
+    size_t operator()() const
+    {
+        return bytesSize(key_);
+    }
+private:
+    const Key & key_;
+};
+
+template<class ArgumentPack>
+class GetDecrypt {
+public:
+    typedef bool result_type;
+
+    explicit GetDecrypt(const ArgumentPack & args)
+        : args_(args)
+    {
+    }
+    
+    bool operator()() const
+    {
+        return !args_[_decrypt];
+    }
+private:
+    const ArgumentPack & args_;
+};
+
+class GenericCipher {
+public:
+    template<class ArgumentPack>
+    GenericCipher(const CipherDescriptor & descriptor, const ArgumentPack & args)
+    {
+        typedef typename boost::parameter::binding<ArgumentPack, tag::encrypt, boost::mpl::void_>::type EncryptType;
+        typedef typename boost::parameter::binding<ArgumentPack, tag::decrypt, boost::mpl::void_>::type DecryptType;
+        BOOST_STATIC_ASSERT((boost::mpl::or_<boost::is_same<EncryptType, boost::mpl::void_>,
+                                             boost::is_same<DecryptType, boost::mpl::void_> >::value));
+        CipherMode mode = args[_encrypt || GetDecrypt<ArgumentPack>(args)] ? modeEncrypt : modeDecrypt;
+        const char * key = getBytes(args[_key]);
+        size_t keySize = args[_keysize || BytesSize<typename boost::parameter::binding<ArgumentPack, tag::key>::type>(args[_key])];
+        const char * iv = getBytes(args[_iv | static_cast<const char*>(0)]);
+        init(descriptor, mode, key, keySize, iv, args[_padding|true]);
+    }
+    
+    ~GenericCipher();
+
     void process(std::vector<char> & out, const std::vector<char> & src)
     {
         if(src.empty())
             out.clear();
+        else
+            process(out, &src[0], src.size());
+    }
+
+    void process(std::vector<char> & out, const char * begin, const char * end)
+    {
+        process(out, begin, end - begin);
+    }
+
+    void process(std::vector<char> & out, const char * begin, size_t len)
+    {
+        if(!len)
+            out.clear();
         else {
-            out.resize(src.size());
-            self().process(&out[0], &src[0], src.size());
+            out.resize(len + descriptor().blockSize());
+            size_t outlen = process(&out[0], begin, len);
+            BOOST_ASSERT(out.size() >= outlen);
+            out.resize(outlen);
         }
     }
 
-    void process(char * out, const std::vector<char> & src)
+    size_t process(char * out, const std::vector<char> & src)
     {
         if(!src.empty())
-            self().process(out, &src[0], src.size());
+            return process(out, &src[0], src.size());
+        else
+            return 0;
     }
 
-    void process(char * out, const std::string & src)
+    size_t process(char * out, const std::string & src)
     {
-        self().process(out, src.c_str(), src.size());
+        return process(out, src.c_str(), src.size());
     }
 
-    inline void process(unsigned char * out, const unsigned char * begin, const unsigned char * end)
+    inline size_t process(unsigned char * out, const unsigned char * begin, const unsigned char * end)
     {
-        self().process(mstd::pointer_cast<char*>(out), mstd::pointer_cast<const char*>(begin), end - begin);
+        return process(mstd::pointer_cast<char*>(out), mstd::pointer_cast<const char*>(begin), end - begin);
     }
 
-    inline void process(unsigned char * out, const unsigned char * begin, size_t len)
+    inline size_t process(unsigned char * out, const unsigned char * begin, size_t len)
     {
-        self().process(mstd::pointer_cast<char*>(out), mstd::pointer_cast<const char*>(begin), len);
+        return process(mstd::pointer_cast<char*>(out), mstd::pointer_cast<const char*>(begin), len);
     }
 
-    inline void process(char * out, const char * begin, const char * end)
+    inline size_t process(char * out, const char * begin, const char * end)
     {
-        self().process(out, begin, end - begin);
+        return process(out, begin, end - begin);
     }
+    
+    size_t process(char * out, const char * input, size_t len)
+    {
+        size_t outlen = update(out, input, len);
+        out += outlen;
+        outlen += final(out);
+        return outlen;
+    }
+    
+    size_t update(char * out, const char * input, size_t len);
+    size_t final(char * out);
 private:
-    Derived & self() { return *static_cast<Derived*>(this); }
+    CipherDescriptor descriptor();
+
+    void init(const CipherDescriptor & descriptor, CipherMode mode, const char * key, size_t len, const char * ivec, bool padding);
+
+    typedef boost::aligned_storage<sizeof(void*) == 8 ? 168 : 140> Context;
+    Context context_;
 };
 
-#define MCRYPT_CIPHER_CONSTRUCTORS(engine) \
-    explicit engine(const std::string & password, const char * ivec = 0) { init(password.c_str(), password.size(), ivec); } \
-    explicit engine(const char * password, size_t len, const char * ivec = 0) { init(password, len, ivec); } \
-    explicit engine(const unsigned char * password, size_t len, const unsigned char * ivec = 0) { init(mstd::pointer_cast<const char*>(password), len, mstd::pointer_cast<const char*>(ivec)); } \
-    explicit engine(const std::vector<char> & password, const char * ivec = 0) { init(&password[0], password.size(), ivec); } \
-    explicit engine(const std::vector<unsigned char> & password, const unsigned char * ivec = 0) { init(mstd::pointer_cast<const char*>(&password[0]), password.size(), mstd::pointer_cast<const char*>(ivec)); } \
-    /**/
+template<class Tag>
+class CipherBase : public GenericCipher {
+public:
+    static CipherDescriptor descriptor() { return CipherDescriptor(Tag::evp()); }
 
-#define MCRYPT_CIPHER_IMPL(engine, base) \
-    class MCRYPT_DECL engine : public CipherEngine<engine>, private base { \
-    public: \
-        MCRYPT_CIPHER_CONSTRUCTORS(engine); \
-        using CipherEngine<engine>::process; \
-        void process(char * out, const char * begin, size_t len); \
-    }; \
-    /**/
+    template<class ArgumentPack>
+    explicit CipherBase(const ArgumentPack & pack)
+        : GenericCipher(descriptor(), pack)
+    {
+    }
+};
 
-#define MCRYPT_CIPHER(engine, base) \
-    MCRYPT_CIPHER_IMPL(BOOST_PP_CAT(engine, Encrypt), base); \
-    MCRYPT_CIPHER_IMPL(BOOST_PP_CAT(engine, Decrypt), base); \
+template<class Tag>
+class Cipher : public CipherBase<Tag> {
+public:
+    BOOST_PARAMETER_CONSTRUCTOR(
+        Cipher, (CipherBase<Tag>), tag,
+            (required
+                (key, *)
+            )
+            (optional
+                (encrypt, (bool))
+                (decrypt, (bool))
+                (keysize, (size_t))
+                (iv, *)
+                (padding, (bool))
+            )
+        )
+};
+
+#define MCRYPT_CIPHER(name) \
+    struct BOOST_PP_CAT(name, Tag) { static const void * evp(); }; \
+    typedef Cipher<BOOST_PP_CAT(name, Tag)> name; \
     /**/
 
 }

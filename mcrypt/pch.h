@@ -42,6 +42,10 @@ namespace std { class runtime_error : public exception { public: runtime_error(c
 
 #include <boost/mpl/or.hpp>
 
+#include <boost/parameter/name.hpp>
+#include <boost/parameter/preprocessor.hpp>
+
+#include <openssl/aes.h>
 #include <openssl/bio.h>
 #include <openssl/blowfish.h>
 #include <openssl/bn.h>
