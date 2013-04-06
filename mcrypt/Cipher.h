@@ -89,7 +89,7 @@ private:
     const ArgumentPack & args_;
 };
 
-class GenericCipher {
+class GenericCipher : boost::noncopyable {
 public:
     template<class ArgumentPack>
     GenericCipher(const CipherDescriptor & descriptor, const ArgumentPack & args)
