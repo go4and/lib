@@ -7,6 +7,7 @@
 #include <vector>
 
 #include <boost/aligned_storage.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <boost/parameter/name.hpp>
 #include <boost/parameter/preprocessor.hpp>
