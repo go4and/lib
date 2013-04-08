@@ -133,6 +133,23 @@ public:
         }
     }
 
+    void process(std::vector<unsigned char> & out, const unsigned char * begin, const unsigned char * end)
+    {
+        process(out, begin, end - begin);
+    }
+
+    void process(std::vector<unsigned char> & out, const unsigned char * begin, size_t len)
+    {
+        if(!len)
+            out.clear();
+        else {
+            out.resize(len + descriptor().blockSize());
+            size_t outlen = process(&out[0], begin, len);
+            BOOST_ASSERT(out.size() >= outlen);
+            out.resize(outlen);
+        }
+    }
+
     size_t process(char * out, const std::vector<char> & src)
     {
         if(!src.empty())

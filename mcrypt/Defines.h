@@ -15,6 +15,4 @@ typedef boost::array<unsigned char, 32> SHA256Digest;
 
 class RSA;
 
-typedef boost::intrusive_ptr<RSA> RSAPtr;
-
 }
