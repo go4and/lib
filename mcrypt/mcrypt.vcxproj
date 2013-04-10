@@ -306,6 +306,7 @@
     <ClCompile Include="Crypt.cpp" />
     <ClCompile Include="EC.cpp" />
     <ClCompile Include="Error.cpp" />
+    <ClCompile Include="Hasher.cpp" />
     <ClCompile Include="MD5.cpp" />
     <ClCompile Include="pch\pch.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -325,6 +326,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MD|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PKey.cpp" />
     <ClCompile Include="RSA.cpp" />
     <ClCompile Include="SHA.cpp" />
     <ClCompile Include="TEA.cpp" />
@@ -341,8 +343,10 @@
     <ClInclude Include="Defines.h" />
     <ClInclude Include="EC.h" />
     <ClInclude Include="Error.h" />
+    <ClInclude Include="Hasher.h" />
     <ClInclude Include="MD5.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PKey.h" />
     <ClInclude Include="RSA.h" />
     <ClInclude Include="SHA.h" />
     <ClInclude Include="TEA.h" />

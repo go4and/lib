@@ -16,6 +16,12 @@ size_t CipherDescriptor::blockSize() const
     return cipher->block_size;
 }
 
+size_t CipherDescriptor::keySize() const
+{
+    const EVP_CIPHER * cipher = static_cast<const EVP_CIPHER*>(evp_);
+    return cipher->key_len;
+}
+
 void GenericCipher::init(const CipherDescriptor & descriptor, CipherMode mode, const char * key, size_t len, const char * ivec, bool padding)
 {
     BOOST_STATIC_ASSERT(Context::size == sizeof(EVP_CIPHER_CTX));

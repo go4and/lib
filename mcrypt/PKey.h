@@ -17,6 +17,7 @@ class GenericPKey {
 public:
     static GenericPKey fromPrivatePem(const char * buffer, size_t len, Error & error);
     static GenericPKey fromPrivatePem(const mstd::rc_buffer & data, Error & error);
+    static GenericPKey fromPrivateDer(const char * buffer, size_t len, Error & error);
 
     static GenericPKey fromPublicPem(const char * buffer, size_t len, Error & error);
     static GenericPKey fromPublicDer(const char * buffer, size_t len, Error & error);
@@ -120,6 +121,7 @@ public:
     explicit PKeyDerive(const GenericPKey & key, const GenericPKey & peer, Error & error);
 
     size_t operator()(char * out, size_t outlen, Error & error);
+    inline size_t operator()(unsigned char * out, size_t outlen, Error & error) { return (*this)(mstd::pointer_cast<char*>(out), outlen, error); }
 };
 
 }

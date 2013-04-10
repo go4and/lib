@@ -33,6 +33,7 @@ public:
 
     size_t ivSize() const;
     size_t blockSize() const;
+    size_t keySize() const;
 private:
     const void * evp_;
 };
@@ -51,8 +52,12 @@ using namespace keywords;
 inline const char * getBytes(const char * raw) { return raw; }
 inline const char * getBytes(const unsigned char * raw) { return mstd::pointer_cast<const char*>(raw); }
 inline const char * getBytes(const std::string & raw) { return raw.c_str(); }
+inline const char * getBytes(const std::vector<char> & raw) { return &raw[0]; }
+inline const char * getBytes(const std::vector<unsigned char> & raw) { return mstd::pointer_cast<const char*>(&raw[0]); }
 
 inline size_t bytesSize(const std::string & raw) { return raw.length(); }
+inline size_t bytesSize(const std::vector<char> & raw) { return raw.size(); }
+inline size_t bytesSize(const std::vector<unsigned char> & raw) { return raw.size(); }
 inline size_t bytesSize(const char * raw) { return strlen(raw); }
 
 template<class Key>

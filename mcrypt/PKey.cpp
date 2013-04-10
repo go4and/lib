@@ -45,7 +45,7 @@ GenericPKey GenericPKey::fromPublicPem(const char * buffer, size_t len, Error & 
 GenericPKey GenericPKey::fromPublicDer(const char * buffer, size_t len, Error & error)
 {
     BIO * bmem = BIO_new_mem_buf(const_cast<char*>(buffer), static_cast<int>(len));
-    EVP_PKEY * key = d2i_PUBKEY_bio(bmem, 0, 0, 0);
+    EVP_PKEY * key = d2i_PUBKEY_bio(bmem, 0);
     BIO_free_all(bmem);
 
     if(!key && error.checkResult(0))
@@ -63,6 +63,18 @@ GenericPKey GenericPKey::fromPrivatePem(const char * buffer, size_t len, Error &
 {
     BIO * bmem = BIO_new_mem_buf(const_cast<char*>(buffer), static_cast<int>(len));
     EVP_PKEY * key = PEM_read_bio_PrivateKey(bmem, 0, 0, 0);
+    BIO_free_all(bmem);
+
+    if(!key && error.checkResult(0))
+        return GenericPKey(0);
+
+    return GenericPKey(key);
+}
+
+GenericPKey GenericPKey::fromPrivateDer(const char * buffer, size_t len, Error & error)
+{
+    BIO * bmem = BIO_new_mem_buf(const_cast<char*>(buffer), static_cast<int>(len));
+    EVP_PKEY * key = d2i_PrivateKey_bio(bmem, 0);
     BIO_free_all(bmem);
 
     if(!key && error.checkResult(0))
