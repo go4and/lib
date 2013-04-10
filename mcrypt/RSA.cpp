@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#include "Error.h"
+
 #include "RSA.h"
 
 namespace mcrypt {
@@ -22,36 +24,188 @@ typedef mstd::handle_base<BIGNUM*, mstd::comparable_traits<BNTraits> > BNHolder;
 
 namespace {
 
-void handleError()
+template<class Func>
+inline std::vector<char> process(Func func, const char * src, size_t len, ::RSA * rsa, int padding, Error & error)
 {
-    error_t err = ERR_get_error();
-    if(err)
-        throw RSAException(err);
+    std::vector<char> result(RSA_size(rsa));
+    int sz = func(static_cast<int>(len), mstd::pointer_cast<const unsigned char*>(src), mstd::pointer_cast<unsigned char*>(&result[0]), rsa, padding);
+    if(error.checkError(sz))
+        return std::vector<char>();
+    result.resize(sz);
+    return result;
 }
 
-void checkError(int result)
+template<class Func>
+inline size_t process(Func func, const char * src, size_t len, char * out, ::RSA * rsa, int padding, Error & error)
 {
-    if(result == -1)
-        handleError();
+    int sz = func(static_cast<int>(len), mstd::pointer_cast<const unsigned char*>(src), mstd::pointer_cast<unsigned char*>(out), rsa, padding);
+    if(error.checkError(sz))
+        return 0;
+    return sz;
 }
+
+int getPadding(Padding padding, bool publicEncrypt)
+{
+    switch(padding) {
+    case pdNone:
+        return RSA_NO_PADDING;
+    case pdDefault:
+        return publicEncrypt ? RSA_PKCS1_OAEP_PADDING : RSA_PKCS1_PADDING;
+    case pdPKCS1:
+        return RSA_PKCS1_PADDING;
+    case pdPKCS1_OAEP:
+        return RSA_PKCS1_OAEP_PADDING;
+    }
+    BOOST_ASSERT(false);
+    return RSA_NO_PADDING;
+}
+
+BIGNUM * extractBignum(const char *& i, const char * end, Error & error)
+{
+    if(end - i < 4 && error.checkResult(0))
+        return 0;
+    int32_t len;
+    memcpy(&len, i, sizeof(len));
+    len = mstd::ntoh(len);
+    i += 4;
+    if(end - i < len && error.checkResult(0))
+        return 0;
+    BIGNUM * result = BN_bin2bn(mstd::pointer_cast<const unsigned char*>(i), len, NULL);
+    i += len;
+    return result;
+}
+
+size_t getPaddingTail(int padding)
+{
+    switch(padding) {
+    case RSA_NO_PADDING:
+        return 0;
+    case RSA_PKCS1_PADDING:
+        return RSA_PKCS1_PADDING_SIZE;
+    case RSA_PKCS1_OAEP_PADDING:
+        return 42;
+    default:
+        BOOST_ASSERT(false);
+        return 0;
+    };
+};
+
+}
+
+size_t RSA::publicDecrypt(char * out, const char * src, size_t len, Error & error, Padding padding) const
+{
+    auto * impl = static_cast<EVP_PKEY*>(handle())->pkey.rsa;
+    return process(&RSA_public_decrypt, src, len, out, impl, getPadding(padding, false), error);
+}
+
+size_t RSA::privateEncrypt(char * out, const char * src, size_t len, Error & error, Padding padding) const
+{
+    auto * impl = static_cast<EVP_PKEY*>(handle())->pkey.rsa;
+    return process(&RSA_private_encrypt, src, len, out, impl, getPadding(padding, false), error);
+}
+
+RSA RSA::fromPrivateKey(const char * src, size_t len, Error & error)
+{
+    const char * i = src, * end = src + len;
+    BNHolder n(extractBignum(i, end, error));
+    if(!n)
+        return RSA(0);
+    BNHolder e(extractBignum(i, end, error));
+    if(!e)
+        return RSA(0);
+    BNHolder d(extractBignum(i, end, error));
+    if(!d)
+        return RSA(0);
+    BNHolder p(extractBignum(i, end, error));
+    if(!p)
+        return RSA(0);
+    BNHolder q(extractBignum(i, end, error));
+    if(!q)
+        return RSA(0);
+    BNHolder dmp1(extractBignum(i, end, error));
+    if(!dmp1)
+        return RSA(0);
+    BNHolder dmq1(extractBignum(i, end, error));
+    if(!dmq1)
+        return RSA(0);
+    BNHolder iqmp(extractBignum(i, end, error));
+    if(!iqmp)
+        return RSA(0);
+
+    ::RSA * impl = RSA_new();
+    if(!impl && error.checkResult(0))
+        return RSA(0);
+
+    BOOST_SCOPE_EXIT((&impl)) {
+        if(impl)
+            RSA_free(impl);
+    } BOOST_SCOPE_EXIT_END;
+
+    impl->n = n.release();
+    impl->e = e.release();
+    impl->d = d.release();
+    impl->p = p.release();
+    impl->q = q.release();
+    impl->dmp1 = dmp1.release();
+    impl->dmq1 = dmq1.release();
+    impl->iqmp = iqmp.release();
+        
+    int code = RSA_check_key(impl);
+    
+    if(error.checkResult(code))
+        return RSA(0);
+    
+    EVP_PKEY * key = EVP_PKEY_new();
+    EVP_PKEY_assign_RSA(key, impl);
+    impl = 0;
+    return RSA(key);
+}
+
+RSA RSA::fromPrivateKey(const mstd::rc_buffer & src, Error & error)
+{
+    return fromPrivateKey(src.data(), src.size(), error);
+}
+
+RSA RSA::fromPublicKey(const char * src, size_t len, Error & error)
+{
+    const char * i = src, * end = src + len;
+    BNHolder n(extractBignum(i, end, error));
+    if(!n)
+        return RSA(0);
+    BNHolder e(extractBignum(i, end, error));
+    if(!e)
+        return RSA(0);
+    
+    ::RSA * impl = RSA_new();
+    if(!impl && error.checkResult(0))
+        return RSA(0);
+    BOOST_SCOPE_EXIT((&impl)) {
+        if(impl)
+            RSA_free(impl);
+    } BOOST_SCOPE_EXIT_END;
+
+    impl->n = n.release();
+    impl->e = e.release();
+
+    EVP_PKEY * key = EVP_PKEY_new();
+    EVP_PKEY_assign_RSA(key, impl);
+    impl = 0;
+    return RSA(key);
+}
+
+size_t RSA::availableSize(bool publicEncrypt, Padding padding) const
+{
+    int realPadding = getPadding(padding, publicEncrypt);
+    return size() - getPaddingTail(realPadding);
+}
+
+#if 0
+namespace {
 
 void invokeListener(int a, int b, void * raw)
 {
     RSA::GenerateListener * listener = static_cast<RSA::GenerateListener*>(raw);
     (*listener)(a, b);
-}
-
-BIGNUM * extractBignum(std::vector<char>::const_iterator & i, std::vector<char>::const_iterator end)
-{
-    if(end - i < 4)
-        throw RSAException(0);
-    int len = ntohl(*mstd::pointer_cast<const int*>(&*i));
-    i += 4;
-    if(end - i < len)
-        throw RSAException(0);
-    BIGNUM * result = BN_bin2bn(mstd::pointer_cast<const unsigned char*>(&*i), len, NULL);
-    i += len;
-    return result;
 }
 
 ::RSA * extractRsa(EVP_PKEY *& key)
@@ -83,63 +237,6 @@ RSAPtr RSA::createFromNE(const unsigned char * n, size_t nlen, const unsigned ch
     impl->e = be.release();
 
     return RSAPtr(new RSA(impl));
-}
-
-RSAPtr RSA::createFromPublicKey(const std::vector<char> & src)
-{
-    std::vector<char>::const_iterator i = src.begin();
-    BNHolder n(extractBignum(i, src.end()));
-    BNHolder e(extractBignum(i, src.end()));
-    
-    ::RSA * impl = RSA_new();
-    if(!impl)
-        handleError();
-    impl->n = n.release();
-    impl->e = e.release();
-    
-    return RSAPtr(new RSA(impl));
-}
-
-RSAPtr RSA::createFromPrivateKey(const std::vector<char> & src)
-{
-    std::vector<char>::const_iterator i = src.begin();
-    BNHolder n(extractBignum(i, src.end()));
-    BNHolder e(extractBignum(i, src.end()));
-    BNHolder d(extractBignum(i, src.end()));
-    BNHolder p(extractBignum(i, src.end()));
-    BNHolder q(extractBignum(i, src.end()));
-    BNHolder dmp1(extractBignum(i, src.end()));
-    BNHolder dmq1(extractBignum(i, src.end()));
-    BNHolder iqmp(extractBignum(i, src.end()));
-
-    ::RSA * impl = RSA_new();
-    if(!impl)
-        handleError();
-
-    BOOST_SCOPE_EXIT((&impl)) {
-        if(impl)
-            RSA_free(impl);
-    } BOOST_SCOPE_EXIT_END;
-
-    impl->n = n.release();
-    impl->e = e.release();
-    impl->d = d.release();
-    impl->p = p.release();
-    impl->q = q.release();
-    impl->dmp1 = dmp1.release();
-    impl->dmq1 = dmq1.release();
-    impl->iqmp = iqmp.release();
-        
-    int code = RSA_check_key(impl);
-    
-    checkError(code);
-    
-    if(code == 0)
-        throw RSAException(0);
-    
-    RSAPtr result(new RSA(impl));
-    impl = 0;
-    return result;
 }
 
 RSAPtr RSA::createFromPublicPem(const void * buf, size_t len)
@@ -209,17 +306,6 @@ RSA::RSA(::RSA * impl)
         handleError();
 }
 
-RSA::~RSA()
-{
-    if(impl_)
-        RSA_free(impl_);
-}
-
-int RSA::size() const
-{
-    return RSA_size(impl_);
-}
-
 void RSA::extractN(std::vector<char> & out)
 {
     out.resize(BN_num_bytes(impl_->n));
@@ -249,22 +335,6 @@ std::vector<char> packBigNums(const BigNums & nums)
     return result;
 }
 
-int getPadding(Padding padding, bool publicEncrypt)
-{
-    switch(padding) {
-    case pdNone:
-        return RSA_NO_PADDING;
-    case pdDefault:
-        return publicEncrypt ? RSA_PKCS1_OAEP_PADDING : RSA_PKCS1_PADDING;
-    case pdPKCS1:
-        return RSA_PKCS1_PADDING;
-    case pdPKCS1_OAEP:
-        return RSA_PKCS1_OAEP_PADDING;
-    }
-    BOOST_ASSERT(false);
-    return RSA_NO_PADDING;
-}
-
 template<class Func>
 static std::vector<char> process(Func func, const char * src, size_t len, ::RSA * rsa, int padding)
 {
@@ -286,11 +356,6 @@ static size_t process(Func func, const char * src, size_t len, char * out, ::RSA
 std::vector<char> RSA::publicEncrypt(const char * src, size_t len, Padding padding) const
 {
     return process(&RSA_public_encrypt, src, len, impl_, getPadding(padding, true));
-}
-
-std::vector<char> RSA::publicDecrypt(const char * src, size_t len,  Padding padding) const
-{
-    return process(&RSA_public_decrypt, src, len, impl_, getPadding(padding, false));
 }
 
 std::vector<char> RSA::privateEncrypt(const char * src, size_t len, Padding padding) const
@@ -316,32 +381,6 @@ size_t RSA::privateEncrypt(const char * src, size_t len, char * out, Padding pad
 size_t RSA::publicEncrypt(const char * src, size_t len, char * out, Padding padding) const
 {
     return process(&RSA_public_encrypt, src, len, out, impl_, getPadding(padding, true));
-}
-
-size_t RSA::publicDecrypt(const char * src, size_t len, char * out, Padding padding) const
-{
-    return process(&RSA_public_decrypt, src, len, out, impl_, getPadding(padding, false));
-}
-
-size_t getPaddingTail(int padding)
-{
-    switch(padding) {
-    case RSA_NO_PADDING:
-        return 0;
-    case RSA_PKCS1_PADDING:
-        return RSA_PKCS1_PADDING_SIZE;
-    case RSA_PKCS1_OAEP_PADDING:
-        return 42;
-    default:
-        BOOST_ASSERT(false);
-        return 0;
-    };
-};
-
-int RSA::availableSize(bool publicEncrypt, Padding padding) const
-{
-    int realPadding = getPadding(padding, publicEncrypt);
-    return size() - static_cast<int>(getPaddingTail(realPadding));
 }
 
 template<class Func>
@@ -454,31 +493,6 @@ std::vector<char> RSA::extractPrivateKey() const
     
     return packBigNums(nums);
 }
-
-//////////////////////////////////////////////////////////////////////////
-// class RSAException
-//////////////////////////////////////////////////////////////////////////
-
-std::string getErrorMessage(error_t error)
-{
-    char buffer[0x1000];
-    ERR_load_crypto_strings();
-    
-    ERR_error_string_n(error, buffer, sizeof(buffer));
-    return buffer;
-}
-
-RSAException::RSAException(error_t error)
-    : what_(getErrorMessage(error)), error_(error) {}
-    
-const char * RSAException::what() const throw ()
-{
-    return what_.c_str();
-}
-
-error_t RSAException::error() const
-{
-    return error_;
-}
+#endif
 
 }

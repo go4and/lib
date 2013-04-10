@@ -40,6 +40,8 @@ namespace std { class runtime_error : public exception { public: runtime_error(c
 #include <boost/filesystem/fstream.hpp>
 #endif
 
+#include <boost/move/move.hpp>
+
 #include <boost/mpl/or.hpp>
 
 #include <boost/parameter/name.hpp>
@@ -58,8 +60,10 @@ namespace std { class runtime_error : public exception { public: runtime_error(c
 
 #include <mstd/cstdint.hpp>
 #include <mstd/handle_base.hpp>
+#include <mstd/hton.hpp>
 #include <mstd/itoa.hpp>
 #include <mstd/pointer_cast.hpp>
+#include <mstd/rc_buffer.hpp>
 #include <mstd/reference_counter.hpp>
 #include <mstd/strings.hpp>
 

@@ -8,39 +8,11 @@ namespace mcrypt {
 
 BOOST_STATIC_ASSERT(SHA_DIGEST_LENGTH == SHA1Digest::static_size);
 
-SHA1::SHA1()
-{
-    BOOST_STATIC_ASSERT(sizeof(SHA_CTX) == Context::size);
-    SHA1_Init(static_cast<SHA_CTX*>(context_.address()));
-}
-
-void SHA1::feed(const void * src, size_t len)
-{
-    SHA1_Update(static_cast<SHA_CTX*>(context_.address()), src, len);
-}
-
-void SHA1::digest(SHA1Digest & out)
-{
-    SHA1_Final(out.c_array(), static_cast<SHA_CTX*>(context_.address()));
-}
+const void * SHA1Tag::evp() { return EVP_sha1(); }
 
 BOOST_STATIC_ASSERT(SHA256_DIGEST_LENGTH == SHA256Digest::static_size);
 
-SHA256::SHA256()
-{
-    BOOST_STATIC_ASSERT(sizeof(SHA256_CTX) == Context::size);
-    SHA256_Init(static_cast<SHA256_CTX*>(context_.address()));
-}
-
-void SHA256::feed(const void * src, size_t len)
-{
-    SHA256_Update(static_cast<SHA256_CTX*>(context_.address()), src, len);
-}
-
-void SHA256::digest(SHA256Digest & out)
-{
-    SHA256_Final(out.c_array(), static_cast<SHA256_CTX*>(context_.address()));
-}
+const void * SHA256Tag::evp() { return EVP_sha256(); }
 
 //////////////////////////////////////////////////////////////////////////
 // Utility functions

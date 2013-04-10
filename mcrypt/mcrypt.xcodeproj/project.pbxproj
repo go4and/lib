@@ -31,7 +31,13 @@
 		C3389D2D1353839C0010E3BF /* TEA.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D181353839C0010E3BF /* TEA.h */; };
 		C3389D2E1353839C0010E3BF /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3389D191353839C0010E3BF /* Utils.cpp */; };
 		C3389D2F1353839C0010E3BF /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C3389D1A1353839C0010E3BF /* Utils.h */; };
-		C35D3F6A16EBD9DB00497C4A /* Hash.h in Headers */ = {isa = PBXBuildFile; fileRef = C35D3F6916EBD9DB00497C4A /* Hash.h */; };
+		C35D3F6A16EBD9DB00497C4A /* Hasher.h in Headers */ = {isa = PBXBuildFile; fileRef = C35D3F6916EBD9DB00497C4A /* Hasher.h */; };
+		C396A782170FD8DB0005A852 /* Hasher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C396A781170FD8DB0005A852 /* Hasher.cpp */; };
+		C396A7B9171159640005A852 /* PKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C396A7B7171159640005A852 /* PKey.cpp */; };
+		C396A7BA171159640005A852 /* PKey.h in Headers */ = {isa = PBXBuildFile; fileRef = C396A7B8171159640005A852 /* PKey.h */; };
+		C396A7BD1711A7D30005A852 /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C396A7BC1711A7D30005A852 /* Error.cpp */; };
+		C396A7C11711C95F0005A852 /* EC.h in Headers */ = {isa = PBXBuildFile; fileRef = C396A7C01711C95F0005A852 /* EC.h */; };
+		C396A7C31711C9680005A852 /* EC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C396A7C21711C9680005A852 /* EC.cpp */; };
 		C3B64CCD157C65DA00F20E55 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B64CCA157C659500F20E55 /* mstd.dylib */; };
 		C3DB2FA61394BA9B00A8CB1B /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3DB2FA51394BA9B00A8CB1B /* libcrypto.1.0.0.dylib */; };
 /* End PBXBuildFile section */
@@ -79,7 +85,14 @@
 		C3389D181353839C0010E3BF /* TEA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEA.h; sourceTree = SOURCE_ROOT; };
 		C3389D191353839C0010E3BF /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = SOURCE_ROOT; };
 		C3389D1A1353839C0010E3BF /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = SOURCE_ROOT; };
-		C35D3F6916EBD9DB00497C4A /* Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hash.h; sourceTree = SOURCE_ROOT; };
+		C35D3F6916EBD9DB00497C4A /* Hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hasher.h; sourceTree = SOURCE_ROOT; };
+		C396A781170FD8DB0005A852 /* Hasher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hasher.cpp; sourceTree = SOURCE_ROOT; };
+		C396A7B7171159640005A852 /* PKey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PKey.cpp; sourceTree = SOURCE_ROOT; };
+		C396A7B8171159640005A852 /* PKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKey.h; sourceTree = SOURCE_ROOT; };
+		C396A7BB1711A7350005A852 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = SOURCE_ROOT; };
+		C396A7BC1711A7D30005A852 /* Error.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Error.cpp; sourceTree = SOURCE_ROOT; };
+		C396A7C01711C95F0005A852 /* EC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EC.h; sourceTree = "<group>"; };
+		C396A7C21711C9680005A852 /* EC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EC.cpp; sourceTree = SOURCE_ROOT; };
 		C3B1CC141709AB6300156E12 /* Cipher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cipher.h; sourceTree = SOURCE_ROOT; };
 		C3B64CC5157C659500F20E55 /* mstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = mstd.xcodeproj; path = ../mstd/mstd.xcodeproj; sourceTree = "<group>"; };
 		C3B8C2B31546BCE100E14219 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = mstd.dylib; path = ../../_build/Debug/mstd.dylib; sourceTree = "<group>"; };
@@ -102,6 +115,7 @@
 		C3389CE0135383290010E3BF = {
 			isa = PBXGroup;
 			children = (
+				C396A783170FD9060005A852 /* Interface */,
 				C3B8C2B21546BCD100E14219 /* Dependencies */,
 				C3389CED135383290010E3BF /* Sources */,
 				C3389CEC135383290010E3BF /* Products */,
@@ -120,34 +134,48 @@
 			isa = PBXGroup;
 			children = (
 				C32639B21709C750002C2A4A /* AES.cpp */,
-				C32639B31709C750002C2A4A /* AES.h */,
-				C35D3F6916EBD9DB00497C4A /* Hash.h */,
 				C3389D061353839C0010E3BF /* Base64.cpp */,
-				C3389D071353839C0010E3BF /* Base64.h */,
 				C3389D081353839C0010E3BF /* Blowfish.cpp */,
-				C3389D091353839C0010E3BF /* Blowfish.h */,
+				C32639B61709D523002C2A4A /* Cipher.cpp */,
 				C3389D0A1353839C0010E3BF /* Config.h */,
 				C3389D0B1353839C0010E3BF /* crc32.cpp */,
-				C3389D0C1353839C0010E3BF /* crc32.h */,
 				C3389D0D1353839C0010E3BF /* Crypt.cpp */,
-				C3389D0E1353839C0010E3BF /* Crypt.h */,
 				C3389D0F1353839C0010E3BF /* Defines.h */,
+				C396A7C21711C9680005A852 /* EC.cpp */,
+				C396A7BC1711A7D30005A852 /* Error.cpp */,
+				C396A781170FD8DB0005A852 /* Hasher.cpp */,
 				C3389D101353839C0010E3BF /* MD5.cpp */,
-				C3389D111353839C0010E3BF /* MD5.h */,
 				C3389D121353839C0010E3BF /* pch.h */,
+				C396A7B7171159640005A852 /* PKey.cpp */,
 				C3389D131353839C0010E3BF /* RSA.cpp */,
-				C3389D141353839C0010E3BF /* RSA.h */,
 				C3389D151353839C0010E3BF /* SHA.cpp */,
-				C3389D161353839C0010E3BF /* SHA.h */,
 				C3389D171353839C0010E3BF /* TEA.cpp */,
-				C3389D181353839C0010E3BF /* TEA.h */,
 				C3389D191353839C0010E3BF /* Utils.cpp */,
-				C3389D1A1353839C0010E3BF /* Utils.h */,
-				C3B1CC141709AB6300156E12 /* Cipher.h */,
-				C32639B61709D523002C2A4A /* Cipher.cpp */,
 			);
 			name = Sources;
 			path = mcrypt;
+			sourceTree = "<group>";
+		};
+		C396A783170FD9060005A852 /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				C32639B31709C750002C2A4A /* AES.h */,
+				C3389D071353839C0010E3BF /* Base64.h */,
+				C3389D091353839C0010E3BF /* Blowfish.h */,
+				C3B1CC141709AB6300156E12 /* Cipher.h */,
+				C3389D0C1353839C0010E3BF /* crc32.h */,
+				C3389D0E1353839C0010E3BF /* Crypt.h */,
+				C396A7C01711C95F0005A852 /* EC.h */,
+				C396A7BB1711A7350005A852 /* Error.h */,
+				C35D3F6916EBD9DB00497C4A /* Hasher.h */,
+				C3389D111353839C0010E3BF /* MD5.h */,
+				C396A7B8171159640005A852 /* PKey.h */,
+				C3389D141353839C0010E3BF /* RSA.h */,
+				C3389D161353839C0010E3BF /* SHA.h */,
+				C3389D181353839C0010E3BF /* TEA.h */,
+				C3389D1A1353839C0010E3BF /* Utils.h */,
+			);
+			name = Interface;
 			sourceTree = "<group>";
 		};
 		C3B64CC6157C659500F20E55 /* Products */ = {
@@ -187,8 +215,10 @@
 				C3389D2B1353839C0010E3BF /* SHA.h in Headers */,
 				C3389D2D1353839C0010E3BF /* TEA.h in Headers */,
 				C3389D2F1353839C0010E3BF /* Utils.h in Headers */,
-				C35D3F6A16EBD9DB00497C4A /* Hash.h in Headers */,
+				C35D3F6A16EBD9DB00497C4A /* Hasher.h in Headers */,
 				C32639B51709C750002C2A4A /* AES.h in Headers */,
+				C396A7BA171159640005A852 /* PKey.h in Headers */,
+				C396A7C11711C95F0005A852 /* EC.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +301,10 @@
 				C3389D2E1353839C0010E3BF /* Utils.cpp in Sources */,
 				C32639B41709C750002C2A4A /* AES.cpp in Sources */,
 				C32639B71709D523002C2A4A /* Cipher.cpp in Sources */,
+				C396A782170FD8DB0005A852 /* Hasher.cpp in Sources */,
+				C396A7B9171159640005A852 /* PKey.cpp in Sources */,
+				C396A7BD1711A7D30005A852 /* Error.cpp in Sources */,
+				C396A7C31711C9680005A852 /* EC.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

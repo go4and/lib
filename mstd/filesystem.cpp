@@ -60,6 +60,22 @@ rc_buffer load_file(const boost::filesystem::wpath & path, bool addZero)
     return rc_buffer();
 }
 
+bool save_file(const boost::filesystem::wpath & path, const rc_buffer & data, bool trimZero)
+{
+    bool result = false;
+    FILE * file = wfopen(path, "wb");
+    if(file)
+    {
+        const char * buf = data.data();
+        off_t size = data.size();
+        if(trimZero)
+            size = std::find(buf, buf + size, 0) - buf;
+        result = fwrite(buf, 1, size, file) == size;
+        fclose(file);
+    }
+    return result;
+}
+
 namespace {
 
 typedef boost::filesystem::path::string_type string_type;

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include <boost/aligned_storage.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <boost/parameter/name.hpp>
 #include <boost/parameter/preprocessor.hpp>
@@ -90,7 +91,7 @@ private:
     const ArgumentPack & args_;
 };
 
-class GenericCipher {
+class GenericCipher : boost::noncopyable {
 public:
     template<class ArgumentPack>
     GenericCipher(const CipherDescriptor & descriptor, const ArgumentPack & args)
@@ -125,6 +126,23 @@ public:
 
     template<class C1, class C2>
     void process(std::vector<C1> & out, const C2 * begin, size_t len)
+    {
+        if(!len)
+            out.clear();
+        else {
+            out.resize(len + descriptor().blockSize());
+            size_t outlen = process(&out[0], begin, len);
+            BOOST_ASSERT(out.size() >= outlen);
+            out.resize(outlen);
+        }
+    }
+
+    void process(std::vector<unsigned char> & out, const unsigned char * begin, const unsigned char * end)
+    {
+        process(out, begin, end - begin);
+    }
+
+    void process(std::vector<unsigned char> & out, const unsigned char * begin, size_t len)
     {
         if(!len)
             out.clear();
