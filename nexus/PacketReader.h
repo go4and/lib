@@ -84,6 +84,12 @@ public:
     explicit PacketReader(const std::vector<char> & inp, size_t size)
         : pos_(inp.empty() ? 0 : &inp[0]), end_(pos_ + size) {}
 
+    explicit PacketReader(const std::vector<unsigned char> & inp)
+        : pos_(inp.empty() ? 0 : mstd::pointer_cast<const char*>(&inp[0])), end_(pos_ + inp.size()) {}
+
+    explicit PacketReader(const std::vector<unsigned char> & inp, size_t size)
+        : pos_(inp.empty() ? 0 : mstd::pointer_cast<const char*>(&inp[0])), end_(pos_ + size) {}
+
     explicit PacketReader(const char * begin, const char * end)
         : pos_(begin), end_(end) {}
     

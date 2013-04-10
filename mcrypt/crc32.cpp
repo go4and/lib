@@ -4,14 +4,6 @@
 
 namespace mcrypt {
 
-crc32_t crc32(const std::vector<char> & src)
-{
-    if(src.empty())
-        return 0;
-    else
-        return boost::crc<32, 0x04C11DB7, 0, 0, false, false>(&src[0], src.size());
-}
-
 std::vector<char> crc32check(const std::vector<char> & src)
 {
     BOOST_STATIC_ASSERT(sizeof(crc32_t) == 4);
@@ -32,7 +24,28 @@ void crc32append(std::vector<char> & data)
     data.insert(data.end(), start, start + sizeof(crc));
 }
 
+crc32_t crc32(const std::vector<char> & src)
+{
+    if(src.empty())
+        return 0;
+    else
+        return boost::crc<32, 0x04C11DB7, 0, 0, false, false>(&src[0], src.size());
+}
+
 crc32_t crc32(const char * begin, const char * end)
+{
+    return boost::crc<32, 0x04C11DB7, 0, 0, false, false>(begin, end - begin);
+}
+
+crc32_t crc32(const std::vector<unsigned char> & src)
+{
+    if(src.empty())
+        return 0;
+    else
+        return boost::crc<32, 0x04C11DB7, 0, 0, false, false>(&src[0], src.size());
+}
+
+crc32_t crc32(const unsigned char * begin, const unsigned char * end)
 {
     return boost::crc<32, 0x04C11DB7, 0, 0, false, false>(begin, end - begin);
 }
