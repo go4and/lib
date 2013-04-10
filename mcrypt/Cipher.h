@@ -48,6 +48,7 @@ namespace keywords {
 using namespace keywords;
 
 inline const char * getBytes(const char * raw) { return raw; }
+inline const char * getBytes(const unsigned char * raw) { return mstd::pointer_cast<const char*>(raw); }
 inline const char * getBytes(const std::string & raw) { return raw.c_str(); }
 
 inline size_t bytesSize(const std::string & raw) { return raw.length(); }
@@ -107,7 +108,8 @@ public:
     
     ~GenericCipher();
 
-    void process(std::vector<char> & out, const std::vector<char> & src)
+    template<class C1, class C2>
+    void process(std::vector<C1> & out, const std::vector<C2> & src)
     {
         if(src.empty())
             out.clear();
@@ -115,12 +117,14 @@ public:
             process(out, &src[0], src.size());
     }
 
-    void process(std::vector<char> & out, const char * begin, const char * end)
+    template<class C1, class C2>
+    void process(std::vector<C1> & out, const C2 * begin, const C2 * end)
     {
         process(out, begin, end - begin);
     }
 
-    void process(std::vector<char> & out, const char * begin, size_t len)
+    template<class C1, class C2>
+    void process(std::vector<C1> & out, const C2 * begin, size_t len)
     {
         if(!len)
             out.clear();
