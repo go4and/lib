@@ -304,6 +304,8 @@
     <ClCompile Include="Cipher.cpp" />
     <ClCompile Include="crc32.cpp" />
     <ClCompile Include="Crypt.cpp" />
+    <ClCompile Include="EC.cpp" />
+    <ClCompile Include="Error.cpp" />
     <ClCompile Include="MD5.cpp" />
     <ClCompile Include="pch\pch.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -337,6 +339,8 @@
     <ClInclude Include="crc32.h" />
     <ClInclude Include="Crypt.h" />
     <ClInclude Include="Defines.h" />
+    <ClInclude Include="EC.h" />
+    <ClInclude Include="Error.h" />
     <ClInclude Include="MD5.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RSA.h" />

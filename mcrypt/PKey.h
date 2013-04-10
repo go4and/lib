@@ -19,6 +19,8 @@ public:
     static GenericPKey fromPrivatePem(const mstd::rc_buffer & data, Error & error);
 
     static GenericPKey fromPublicPem(const char * buffer, size_t len, Error & error);
+    static GenericPKey fromPublicDer(const char * buffer, size_t len, Error & error);
+    static inline GenericPKey fromPublicDer(const unsigned char * buffer, size_t len, Error & error) { return fromPublicDer(mstd::pointer_cast<const char*>(buffer), len, error); }
 
     explicit GenericPKey(void * evp = 0)
         : key_(evp)
@@ -46,6 +48,7 @@ public:
     void reset();
 
     int size() const;
+    bool operator!() const { return !key_; }
     
     void * handle() const { return key_; }
 
