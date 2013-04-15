@@ -148,13 +148,6 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release MD|x64'" />
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_$(Platform)$(TargetExt)</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release Dll|Win32'">_$(Platform)$(TargetExt)</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">_$(Platform)$(TargetExt)</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_$(Platform)$(TargetExt)</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release Dll|x64'">_$(Platform)$(TargetExt)</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release MD|x64'">_$(Platform)$(TargetExt)</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_$(Platform)$(TargetExt)</TargetExt>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectName)_$(Platform)</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)_$(Platform)</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release Dll|Win32'">$(ProjectName)_$(Platform)</TargetName>

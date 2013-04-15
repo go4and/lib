@@ -202,7 +202,11 @@ private:
 
     void init(const CipherDescriptor & descriptor, CipherMode mode, const char * key, size_t len, const char * ivec, bool padding);
 
+#ifndef BOOST_WINDOWS
     typedef boost::aligned_storage<sizeof(void*) == 8 ? 168 : 140> Context;
+#else
+    typedef boost::aligned_storage<sizeof(void*) == 8 ? 160 : 140> Context;
+#endif
     Context context_;
 };
 

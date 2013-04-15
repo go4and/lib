@@ -61,6 +61,7 @@ public:
     Request & xmlHandler(const AsyncPTreeHandler & value);
     Request & jsonHandler(const AsyncPTreeHandler & value);
     Request & postData(const void * data, size_t len) { postData_ = mstd::rc_buffer(static_cast<const char*>(data), len); return *this; }
+    Request & postData(const std::string & data) { return postData(data.c_str(), data.size()); }
     Request & postData(const mstd::rc_buffer & data) { postData_ = data; return *this; }
     Request & header(const std::string & line) { headers_.push_back(line); return *this; }
 

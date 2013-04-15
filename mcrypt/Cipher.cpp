@@ -22,9 +22,14 @@ size_t CipherDescriptor::keySize() const
     return cipher->key_len;
 }
 
+template<size_t ourSize, size_t realSize>
+struct EqSize {
+    BOOST_STATIC_ASSERT(ourSize == realSize);
+};
+
 void GenericCipher::init(const CipherDescriptor & descriptor, CipherMode mode, const char * key, size_t len, const char * ivec, bool padding)
 {
-    BOOST_STATIC_ASSERT(Context::size == sizeof(EVP_CIPHER_CTX));
+    BOOST_STATIC_ASSERT((sizeof(EqSize<Context::size, sizeof(EVP_CIPHER_CTX)>)));
     const EVP_CIPHER * cipher = static_cast<const EVP_CIPHER*>(descriptor.handle());
     EVP_CIPHER_CTX * ctx = static_cast<EVP_CIPHER_CTX*>(context_.address());
     char iv[EVP_MAX_IV_LENGTH];
