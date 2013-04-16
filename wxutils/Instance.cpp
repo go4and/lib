@@ -77,7 +77,6 @@ bool checkSingleInstance(bool show, const std::wstring & title)
             memcpy(&pid, mr.get_address(), sizeof(pid));
             {
                 HWND hwnd = ::GetTopWindow(0);
-                WINDOWINFO wi;
                 while(hwnd)
                 {
                     DWORD cpid = 0;

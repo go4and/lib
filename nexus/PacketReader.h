@@ -189,6 +189,13 @@ public:
         out.assign(oldPos, pos_);
     }
 
+    template<class T, size_t n>
+    void read(boost::array<T, n> & out)
+    {
+        for(size_t i = 0; i != n; ++i)
+            out[i] = read<T>();
+    }
+
     template<class T>
     void read(std::vector<T> & result)
     {

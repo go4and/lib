@@ -120,6 +120,12 @@ void addTimer(int interval, const F & f)
 }
 
 template<class F>
+void addTimer(const boost::posix_time::time_duration & interval, const F & f)
+{
+    addTimer(interval.total_milliseconds(), f);
+}
+
+template<class F>
 class UIInvoker {
 public:
     UIInvoker(const F & f)

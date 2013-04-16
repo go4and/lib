@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#include "Base64.h"
+
 #include "Hasher.h"
 
 namespace mcrypt {
@@ -31,6 +33,16 @@ size_t GenericHasher::final(unsigned char * out)
     unsigned int outlen;
     EVP_DigestFinal_ex(context, out, &outlen);
     return outlen;
+}
+
+std::string hashBase64(const unsigned char * data, size_t len, bool url)
+{
+    std::string result = base64(data, len, url);
+    len = result.length();
+    while(result[len - 1] == '=')
+        --len;
+    result.resize(len);
+    return result;
 }
 
 }

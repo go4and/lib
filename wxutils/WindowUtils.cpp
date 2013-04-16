@@ -86,6 +86,42 @@ wxFont defaultGuiFont()
 
     return font;
 }
+
+StoredPosition storePosition(wxWindow * window)
+{
+    WINDOWPLACEMENT wp;
+    wp.length = sizeof(wp);
+    GetWindowPlacement(window->GetHWND(), &wp);
+    StoredPosition result;
+    result.maximized = wp.showCmd == SW_MAXIMIZE;
+    result.left = wp.rcNormalPosition.left;
+    result.top = wp.rcNormalPosition.top;
+    result.width = wp.rcNormalPosition.right - wp.rcNormalPosition.left;
+    result.height = wp.rcNormalPosition.bottom - wp.rcNormalPosition.top;
+    if(!window->HasFlag(wxFRAME_TOOL_WINDOW))
+    {
+        int n = wxDisplay::GetFromWindow(window);
+        wxDisplay dpy(n == wxNOT_FOUND ? 0 : n);
+        const wxPoint offset = dpy.GetClientArea().GetPosition() - dpy.GetGeometry().GetPosition();
+        result.left += offset.x;
+        result.top += offset.y;
+    }
+    return result;
+}
+
+void restorePosition(wxWindow * window, const StoredPosition & position)
+{
+    if(position.left != std::numeric_limits<int>::max())
+        window->SetSize(position.left, position.top, position.width, position.height, 0);
+    else
+        window->SetSize(position.width, position.height);
+    if(position.maximized)
+    {
+        wxTopLevelWindow * tlw = dynamic_cast<wxTopLevelWindow*>(window);
+        if(tlw)
+            tlw->Maximize();
+    }
+}
 #else
 
 wxFont defaultGuiFont()

@@ -7,6 +7,8 @@
 #include <boost/filesystem/path.hpp>
 #endif
 
+#include "Base64.h"
+
 namespace mcrypt {
 
 #if !_STLP_NO_IOSTREAMS
@@ -31,7 +33,8 @@ boost::optional<typename Engine::result_type> hashFile(const boost::filesystem::
 #endif
 
 template<class Engine, class Data>
-typename Engine::result_type hashBuffer(const Data * data, size_t len)
+typename boost::enable_if<boost::mpl::or_<boost::is_same<Data, char>, boost::is_same<Data, unsigned char> >, typename Engine::result_type>::type
+hashBuffer(const Data * data, size_t len)
 {
     Engine engine;
     engine.update(data, len);
@@ -42,6 +45,24 @@ template<class Engine>
 typename Engine::result_type hashString(const std::string & input)
 {
     return hashBuffer<Engine>(input.c_str(), input.length());
+}
+
+std::string hashBase64(const unsigned char * data, size_t len, bool url = false);
+
+template<class Result>
+Result fromBase64(const std::string & string)
+{
+    const size_t base64length = (Result::static_size + 2) / 3 * 4;
+    char temp[base64length];
+    BOOST_ASSERT(string.length() <= base64length);
+    size_t len = std::min(string.length(), base64length);
+    memcpy(temp, string.c_str(), len);
+    memset(temp + len, '=', base64length - len);
+    Result result;
+    len = debase64(temp, base64length, &result[0]);
+    (void)len;
+    BOOST_ASSERT(len == result.size());
+    return result;
 }
 
 class HasherDescriptor {
@@ -101,7 +122,7 @@ public:
     struct BOOST_PP_CAT(name, Tag) { static const void * evp(); }; \
     typedef Hasher<BOOST_PP_CAT(name, Tag), digestlen> name; \
     typedef name::result_type BOOST_PP_CAT(name, digest); \
-    inline name::result_type BOOST_PP_CAT(lname, String(const std::string & input)) \
+    inline name::result_type BOOST_PP_CAT(lname, String)(const std::string & input) \
     { \
         return hashString<name>(input); \
     } \
@@ -114,6 +135,10 @@ public:
     inline name::result_type BOOST_PP_CAT(lname, Buffer)(const Data * begin, const Data * end) \
     { \
         return hashBuffer<name>(begin, end - begin); \
+    } \
+    inline std::string toBase64(const BOOST_PP_CAT(name, Digest) & digest, bool url = false) \
+    { \
+        return hashBase64(&digest[0], digest.size(), url); \
     } \
     /**/
 

@@ -61,10 +61,10 @@ class WXUTILS_DECL GLTexture {
     BOOST_MOVABLE_BUT_NOT_COPYABLE(GLTexture);
 public:
     GLTexture()
-        : x_(0), y_(0), id_(0) {}
+        : width_(0), height_(0), x_(0), y_(0), id_(0) {}
 
-    GLTexture(double x, double y, GLuint id)
-        : x_(x), y_(y), id_(id) {}
+    GLTexture(int width, int height, double x, double y, GLuint id)
+        : width_(width), height_(height), x_(x), y_(y), id_(id) {}
 
     ~GLTexture()
     {
@@ -72,7 +72,7 @@ public:
     }
 
     GLTexture(BOOST_RV_REF(GLTexture) texture)
-        : x_(texture.x_), y_(texture.y_), id_(texture.id_)
+        : width_(texture.width_), height_(texture.height_), x_(texture.x_), y_(texture.y_), id_(texture.id_)
     {
         texture.id_ = 0;
     }
@@ -80,6 +80,8 @@ public:
     void operator=(BOOST_RV_REF(GLTexture) texture)
     {
         reset();
+        width_ = texture.width_;
+        height_ = texture.height_;
         x_ = texture.x_;
         y_ = texture.y_;
         id_ = texture.id_;
@@ -88,26 +90,15 @@ public:
 
     void reset();
 
-    inline double x() const
-    {
-        return x_;
-    }
-
-    inline double y() const
-    {
-        return y_;
-    }
-
-    inline GLuint id() const
-    {
-        return id_;
-    }
-
-    inline bool operator!() const
-    {
-        return !id_;
-    }
+    inline int width() const { return width_; }
+    inline int height() const { return height_; }
+    inline double x() const { return x_; }
+    inline double y() const { return y_; }
+    inline GLuint id() const { return id_; }
+    inline bool operator!() const { return !id_; }
 private:
+    int width_;
+    int height_;
     double x_;
     double y_;
     GLuint id_;

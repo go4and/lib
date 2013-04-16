@@ -21,8 +21,11 @@
 #include <boost/cast.hpp>
 #include <boost/format.hpp>
 #include <boost/function.hpp>
+#include <boost/scope_exit.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
+
+#include <boost/date_time/posix_time/posix_time_io.hpp>
 
 #include <boost/move/move.hpp>
 
@@ -40,14 +43,19 @@
 #endif
 
 #include <wx/dc.h>
+#include <wx/dcclient.h>
+#include <wx/display.h>
 #include <wx/filepicker.h>
 #include <wx/fontutil.h>
+#include <wx/frame.h>
 #include <wx/gbsizer.h>
+#include <wx/grid.h>
 #include <wx/icon.h>
 #include <wx/image.h>
 #include <wx/msgdlg.h>
 #include <wx/settings.h>
 #include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/timer.h>
 
 #include <mstd/cstdint.hpp>
@@ -56,6 +64,7 @@
 #include <mstd/itoa.hpp>
 #include <mstd/pointer_cast.hpp>
 #include <mstd/process.hpp>
+#include <mstd/rc_buffer.hpp>
 #include <mstd/singleton.hpp>
 
 #include <mlog/Dumper.h>

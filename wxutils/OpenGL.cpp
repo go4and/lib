@@ -154,7 +154,7 @@ GLTexture loadTexture(const wxImage & simg, ImageFlags flags)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    return GLTexture(static_cast<double>(width) / twidth, static_cast<double>(height) / theight, texture);
+    return GLTexture(width, height, static_cast<double>(width) / twidth, static_cast<double>(height) / theight, texture);
 }
 
 GLBitmap loadBitmap(wxImage & img, ImageFlags flags)
