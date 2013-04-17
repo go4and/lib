@@ -24,13 +24,6 @@ namespace mcrypt {
 
 typedef unsigned long error_t;
 
-enum Padding {
-    pdDefault,
-    pdNone,
-    pdPKCS1,
-    pdPKCS1_OAEP,
-};
-
 enum SignType {
     stSHA1,
     stMD5,
@@ -67,6 +60,9 @@ public:
     {
         return fromPublicKey(&src[0], src.size(), error);
     }
+
+    static RSA generateKey(int num, unsigned long e, Error & error);
+    static RSA fromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen, Error & error);
 
     explicit RSA(void * evp = 0)
         : GenericPKey(evp)
@@ -110,6 +106,8 @@ public:
     }
 
     size_t privateEncrypt(char * out, const char * src, size_t len, Error & error, Padding padding = pdDefault) const;
+
+    void extractN(std::vector<char> & out);
 };
 
 #if 0
@@ -117,13 +115,8 @@ class MCRYPT_DECL RSA : private boost::noncopyable, public mstd::reference_count
 public:
     typedef boost::function<void(int, int)> GenerateListener;
 
-    static RSAPtr generateKey(int num, unsigned long e, const GenerateListener & listener);
-
     static RSAPtr createFromPUBKEY(const void * buf, size_t len);
-    static RSAPtr createFromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen);
     
-    void extractN(std::vector<char> & out);
-
     bool verify(SignType type, const char * message, size_t messageLen, const char * sign, size_t signLen);
 
     std::vector<char> extractPrivateKey() const;

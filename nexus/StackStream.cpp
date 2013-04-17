@@ -23,6 +23,15 @@ void StackStream::put(const std::string & str)
     pos_ += n;
 }
 
+void StackStream::writeShortString(const std::string & str)
+{
+    ptrdiff_t n = std::min<size_t>(str.length(), 0xff);
+    checkOverflow(n + 1);
+    *pos_++ = n;
+    memcpy(pos_, str.c_str(), n);
+    pos_ += n;
+}
+
 void StackStream::writeCString(const std::string & str)
 {
     ptrdiff_t n = str.length() + 1;

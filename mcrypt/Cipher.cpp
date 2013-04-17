@@ -22,10 +22,14 @@ size_t CipherDescriptor::keySize() const
     return cipher->key_len;
 }
 
+namespace {
+
 template<size_t ourSize, size_t realSize>
 struct EqSize {
     BOOST_STATIC_ASSERT(ourSize == realSize);
 };
+
+}
 
 void GenericCipher::init(const CipherDescriptor & descriptor, CipherMode mode, const char * key, size_t len, const char * ivec, bool padding)
 {

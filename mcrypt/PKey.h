@@ -61,6 +61,13 @@ private:
     void * key_;
 };
 
+enum Padding {
+    pdDefault,
+    pdNone,
+    pdPKCS1,
+    pdPKCS1_OAEP,
+};
+
 class PKeyContext {
     BOOST_MOVABLE_BUT_NOT_COPYABLE(PKeyContext);
 public:
@@ -79,40 +86,57 @@ private:
     void * context_;
 };
 
-/*class PKeyVerify : public PKeyContext {
+class PKeyCrypt : public PKeyContext {
 public:
-    explicit PKeyVerify(const GenericPKey & key);
-    
-    std::vector<char> operator()(const std::vector<char> & input) const;
-private:
-};*/
+    PKeyCrypt(const GenericPKey & key, bool encrypt, Padding value, Error & error);
+};
 
 template<class Derived>
-class PKeyContextBase : public PKeyContext {
+class PKeyCryptBase : public PKeyCrypt {
 public:
     inline size_t operator()(char * out, const char * begin, const char * end, Error & error) { return self()(out, begin, end - begin, error); }
 protected:
-    explicit PKeyContextBase(const GenericPKey & key)
-        : PKeyContext(key)
+    explicit PKeyCryptBase(const GenericPKey & key, bool encrypt, Padding padding, Error & error)
+        : PKeyCrypt(key, encrypt, padding, error)
     {
     }
 private:
     Derived & self() { return *static_cast<Derived*>(this); }
 };
 
-class PKeyEncrypt : public PKeyContextBase<PKeyEncrypt> {
+class PKeyEncrypt : public PKeyCryptBase<PKeyEncrypt> {
 public:
-    explicit PKeyEncrypt(const GenericPKey & key, Error & error);
+    typedef PKeyCryptBase<PKeyEncrypt> Base;
 
-    using PKeyContextBase<PKeyEncrypt>::operator();
+    explicit PKeyEncrypt(const GenericPKey & key, Error & error)
+        : Base(key, true, pdDefault, error)
+    {
+    }
+
+    explicit PKeyEncrypt(const GenericPKey & key, Padding padding, Error & error)
+        : Base(key, true, padding, error)
+    {
+    }
+
+    using Base::operator();
     size_t operator()(char * out, const char * begin, size_t len, Error & error);
 };
 
-class PKeyDecrypt : public PKeyContextBase<PKeyDecrypt> {
+class PKeyDecrypt : public PKeyCryptBase<PKeyDecrypt> {
 public:
-    explicit PKeyDecrypt(const GenericPKey & key, Error & error);
+    typedef PKeyCryptBase<PKeyDecrypt> Base;
 
-    using PKeyContextBase<PKeyDecrypt>::operator();
+    explicit PKeyDecrypt(const GenericPKey & key, Error & error)
+        : Base(key, false, pdDefault, error)
+    {
+    }
+    
+    explicit PKeyDecrypt(const GenericPKey & key, Padding padding, Error & error)
+        : Base(key, false, padding, error)
+    {
+    }
+
+    using Base::operator();
     size_t operator()(char * out, const char * begin, size_t len, Error & error);
 };
 

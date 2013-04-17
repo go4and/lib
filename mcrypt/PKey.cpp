@@ -6,6 +6,8 @@
 
 namespace mcrypt {
 
+int getRsaPadding(Padding padding, bool publicEncrypt);
+
 namespace {
 
 mstd::rc_buffer bio2rc(BIO * bmem)
@@ -122,16 +124,16 @@ PKeyContext::~PKeyContext()
         EVP_PKEY_CTX_free(static_cast<EVP_PKEY_CTX*>(context_));
 }
 
-PKeyEncrypt::PKeyEncrypt(const GenericPKey & key, Error & error)
-    : PKeyContextBase(key)
+PKeyCrypt::PKeyCrypt(const GenericPKey & key, bool encrypt, Padding padding, Error & error)
+    : PKeyContext(key)
 {
     EVP_PKEY_CTX * context = static_cast<EVP_PKEY_CTX*>(handle());
-    int res = EVP_PKEY_encrypt_init(context);
+    int res = encrypt ? EVP_PKEY_encrypt_init(context) : EVP_PKEY_decrypt_init(context);
     if(error.checkResult(res))
         return;
     int type = EVP_PKEY_type(static_cast<EVP_PKEY*>(key.handle())->type);
     if(type == EVP_PKEY_RSA)
-        EVP_PKEY_CTX_set_rsa_padding(context, RSA_PKCS1_OAEP_PADDING);
+        EVP_PKEY_CTX_set_rsa_padding(context, getRsaPadding(padding, true));
 }
 
 size_t PKeyEncrypt::operator()(char * out, const char * begin, size_t len, Error & error)
@@ -143,18 +145,6 @@ size_t PKeyEncrypt::operator()(char * out, const char * begin, size_t len, Error
     if(error.checkResult(res))
         return 0;
     return outlen;
-}
-
-PKeyDecrypt::PKeyDecrypt(const GenericPKey & key, Error & error)
-    : PKeyContextBase(key)
-{
-    EVP_PKEY_CTX * context = static_cast<EVP_PKEY_CTX*>(handle());
-    int res = EVP_PKEY_decrypt_init(context);
-    if(error.checkResult(res))
-        return;
-    int type = EVP_PKEY_type(static_cast<EVP_PKEY*>(key.handle())->type);
-    if(type == EVP_PKEY_RSA)
-        EVP_PKEY_CTX_set_rsa_padding(context, RSA_PKCS1_OAEP_PADDING);
 }
 
 size_t PKeyDecrypt::operator()(char * out, const char * begin, size_t len, Error & error)

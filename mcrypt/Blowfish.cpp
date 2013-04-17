@@ -19,16 +19,32 @@ const void * BlowfishCfbTag::evp()
     return EVP_bf_cfb64();
 }
 
-#if 0
-void Blowfish::decryptChunk(boost::uint32_t * data) const
-{
-    BF_decrypt(reinterpret_cast<BF_LONG*>(data), &key_->value_);
+namespace {
+
+template<size_t ourSize, size_t realSize>
+struct EqSize {
+    BOOST_STATIC_ASSERT(ourSize == realSize);
+};
+
 }
 
-void Blowfish::encryptChunk(boost::uint32_t * data) const
+BlowfishChunk::BlowfishChunk(const char * key, size_t keySize)
 {
-    BF_encrypt(reinterpret_cast<BF_LONG*>(data), &key_->value_);
+    BOOST_STATIC_ASSERT((sizeof(EqSize<Context::size, sizeof(BF_KEY)>)));
+    BF_KEY * bfkey = static_cast<BF_KEY*>(context_.address());
+    BF_set_key(bfkey, keySize, mstd::pointer_cast<const unsigned char*>(key));
 }
-#endif
+
+void BlowfishChunk::decryptChunk(boost::uint32_t * data) const
+{
+    const BF_KEY * bfkey = static_cast<const BF_KEY*>(context_.address());
+    BF_decrypt(reinterpret_cast<BF_LONG*>(data), bfkey);
+}
+
+void BlowfishChunk::encryptChunk(boost::uint32_t * data) const
+{
+    const BF_KEY * bfkey = static_cast<const BF_KEY*>(context_.address());
+    BF_encrypt(reinterpret_cast<BF_LONG*>(data), bfkey);
+}
 
 }

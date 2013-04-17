@@ -62,6 +62,7 @@ public:
         write(mstd::pointer_cast<const char*>(&buf[0]), buf.size());
     }
 
+    void writeShortString(const std::string & str);
     void writeCString(const std::string & str);
     void writeUTF8CString(const std::wstring & str);
     void write(const char * str, size_t len);

@@ -5,6 +5,8 @@
 
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/path.hpp>
+
+#include <mstd/pointer_cast.hpp>
 #endif
 
 #include "Base64.h"
@@ -25,7 +27,7 @@ boost::optional<typename Engine::result_type> hashFile(const boost::filesystem::
     while(inf)
     {
         inf.read(buffer, sizeof(buffer));
-        engine.feed(buffer, static_cast<size_t>(inf.gcount()));
+        engine.update(buffer, static_cast<size_t>(inf.gcount()));
     }
 
     return engine.final();
