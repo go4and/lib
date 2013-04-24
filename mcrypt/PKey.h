@@ -148,4 +148,14 @@ public:
     inline size_t operator()(unsigned char * out, size_t outlen, Error & error) { return (*this)(mstd::pointer_cast<char*>(out), outlen, error); }
 };
 
+class HasherDescriptor;
+
+class PKeyVerify : public PKeyContext {
+public:
+    explicit PKeyVerify(const GenericPKey & key, const HasherDescriptor & hasher, Error & error);
+
+    bool operator()(const char * input, size_t inlen, const char * sign, size_t signlen, Error & error);
+    inline bool operator()(const unsigned char * input, size_t inlen, const unsigned char * sign, size_t signlen, Error & error) { return (*this)(mstd::pointer_cast<const char*>(input), inlen, mstd::pointer_cast<const char*>(sign), signlen, error); }
+};
+
 }

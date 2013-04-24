@@ -12,6 +12,6 @@ LOCAL_CPP_FEATURES := exceptions rtti
 
 LOCAL_C_INCLUDES := $(BOOST_ROOT) ..
 
-LOCAL_SRC_FILES := ../Utils.cpp
+LOCAL_SRC_FILES := ../Utils.cpp ../Acceptor.cpp ../ShellConnection.cpp
 
 include $(BUILD_STATIC_LIBRARY)

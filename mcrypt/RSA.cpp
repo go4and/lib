@@ -94,13 +94,13 @@ size_t getPaddingTail(int padding)
 
 size_t RSA::publicDecrypt(char * out, const char * src, size_t len, Error & error, Padding padding) const
 {
-    auto * impl = static_cast<EVP_PKEY*>(handle())->pkey.rsa;
+    ::RSA * impl = static_cast<EVP_PKEY*>(handle())->pkey.rsa;
     return process(&RSA_public_decrypt, src, len, out, impl, getRsaPadding(padding, false), error);
 }
 
 size_t RSA::privateEncrypt(char * out, const char * src, size_t len, Error & error, Padding padding) const
 {
-    auto * impl = static_cast<EVP_PKEY*>(handle())->pkey.rsa;
+    ::RSA * impl = static_cast<EVP_PKEY*>(handle())->pkey.rsa;
     return process(&RSA_private_encrypt, src, len, out, impl, getRsaPadding(padding, false), error);
 }
 
@@ -207,6 +207,17 @@ RSA RSA::fromPublicKey(const char * src, size_t len, Error & error)
     return makeRSA(n, e, error);
 }
 
+RSA RSA::fromPUBKEY(const char * buf, size_t len, Error & error)
+{
+    BIO * bmem = BIO_new_mem_buf(const_cast<void*>(static_cast<const void*>(buf)), static_cast<int>(len));
+    ::RSA * rsa = d2i_RSA_PUBKEY_bio(bmem, 0);
+    BIO_free_all(bmem);
+
+    if(!rsa && error.checkResult(0))
+        return RSA(0);
+    return RSA(rsa);
+}
+
 RSA RSA::fromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen, Error & error)
 {
     BNHolder bn(BN_bin2bn(n, static_cast<int>(nlen), 0));
@@ -236,32 +247,12 @@ RSA RSA::generateKey(int num, unsigned long e, Error & error)
 
 void RSA::extractN(std::vector<char> & out)
 {
-    auto * impl = static_cast<EVP_PKEY*>(handle())->pkey.rsa;
+    ::RSA * impl = static_cast<EVP_PKEY*>(handle())->pkey.rsa;
     out.resize(BN_num_bytes(impl->n));
     BN_bn2bin(impl->n, mstd::pointer_cast<unsigned char*>(&out[0]));
 }
 
 #if 0
-namespace {
-
-void invokeListener(int a, int b, void * raw)
-{
-    RSA::GenerateListener * listener = static_cast<RSA::GenerateListener*>(raw);
-    (*listener)(a, b);
-}
-
-::RSA * extractRsa(EVP_PKEY *& key)
-{
-	if(!key)
-        return 0;
-	::RSA * rtmp = EVP_PKEY_get1_RSA(key);
-	EVP_PKEY_free(key);
-    key = 0;
-	return rtmp;
-}
-
-}
-
 RSAPtr RSA::createFromPublicPem(const void * buf, size_t len)
 {
     BIO * bmem = BIO_new_mem_buf(const_cast<void*>(buf), static_cast<int>(len));
@@ -307,99 +298,6 @@ RSAPtr RSA::createFromPrivatePem(const void * buf, size_t len)
     throw RSAException(0);
 }
 
-RSAPtr RSA::createFromPUBKEY(const void * buf, size_t len)
-{
-    BIO * bmem = BIO_new_mem_buf(const_cast<void*>(buf), static_cast<int>(len));
-    ::RSA * rsa = d2i_RSA_PUBKEY_bio(bmem, 0);
-    BIO_free_all(bmem);
-
-    if(rsa)
-    {
-        RSAPtr result(new RSA(rsa));
-        return result;
-    } else
-        handleError();
-    throw RSAException(0);
-}
-
-RSA::RSA(::RSA * impl)
-    : impl_(impl)
-{
-    if(!impl_)
-        handleError();
-}
-
-typedef std::vector<BIGNUM*> BigNums;
-
-std::vector<char> packBigNums(const BigNums & nums)
-{
-    size_t size = 0;
-    for(BigNums::const_iterator i = nums.begin(); i != nums.end(); ++i)
-        size += 4 + BN_num_bytes(*i);
-    
-    std::vector<char> result(size);
-    std::vector<char>::iterator p = result.begin();
-    for(BigNums::const_iterator i = nums.begin(); i != nums.end(); ++i)
-    {
-        BIGNUM * num = *i;
-        size_t len = BN_num_bytes(num);
-        *mstd::pointer_cast<boost::uint32_t*>(&*p) = htonl(static_cast<boost::uint32_t>(len));
-        p += 4;
-        BN_bn2bin(num, mstd::pointer_cast<unsigned char*>(&*p));
-        p += len;
-    }
-
-    return result;
-}
-
-template<class Func>
-static std::vector<char> process(Func func, const char * src, size_t len, ::RSA * rsa, int padding)
-{
-    std::vector<char> result(RSA_size(rsa));
-    int sz = func(static_cast<int>(len), mstd::pointer_cast<const unsigned char*>(src), mstd::pointer_cast<unsigned char*>(&result[0]), rsa, padding);
-    checkError(sz);
-    result.resize(sz);
-    return result;
-}
-
-template<class Func>
-static size_t process(Func func, const char * src, size_t len, char * out, ::RSA * rsa, int padding)
-{
-    int sz = func(static_cast<int>(len), mstd::pointer_cast<const unsigned char*>(src), mstd::pointer_cast<unsigned char*>(out), rsa, padding);
-    checkError(sz);
-    return sz;
-}
-
-std::vector<char> RSA::publicEncrypt(const char * src, size_t len, Padding padding) const
-{
-    return process(&RSA_public_encrypt, src, len, impl_, getRsaPadding(padding, true));
-}
-
-std::vector<char> RSA::privateEncrypt(const char * src, size_t len, Padding padding) const
-{
-    return process(&RSA_private_encrypt, src, len, impl_, getRsaPadding(padding, false));
-}
-
-std::vector<char> RSA::privateDecrypt(const char * src, size_t len, Padding padding) const
-{
-    return process(&RSA_private_decrypt, src, len, impl_, getRsaPadding(padding, true));
-}
-
-size_t RSA::privateDecrypt(const char * src, size_t len, char * out, Padding padding) const
-{
-    return process(&RSA_private_decrypt, src, len, out, impl_, getRsaPadding(padding, true));
-}
-
-size_t RSA::privateEncrypt(const char * src, size_t len, char * out, Padding padding) const
-{
-    return process(&RSA_private_encrypt, src, len, out, impl_, getPadding(padding, false));
-}
-
-size_t RSA::publicEncrypt(const char * src, size_t len, char * out, Padding padding) const
-{
-    return process(&RSA_public_encrypt, src, len, out, impl_, getPadding(padding, true));
-}
-
 template<class Func>
 static std::vector<char> processEx(Func func, const char * src, size_t len, ::RSA * rsa, bool encrypt, int padding)
 {
@@ -430,85 +328,6 @@ static std::vector<char> processEx(Func func, const char * src, size_t len, ::RS
     }
     result.resize(out - &result[0]);
     return result;
-}
-
-std::vector<char> RSA::publicEncryptEx(const char * src, size_t len, Padding padding) const
-{
-    return processEx(&RSA_public_encrypt, src, len, impl_, true, getPadding(padding, true));
-}
-
-std::vector<char> RSA::publicDecryptEx(const char * src, size_t len,  Padding padding) const
-{
-    return processEx(&RSA_public_decrypt, src, len, impl_, false, getPadding(padding, false));
-}
-
-std::vector<char> RSA::privateEncryptEx(const char * src, size_t len, Padding padding) const
-{
-    return processEx(&RSA_private_encrypt, src, len, impl_, true, getPadding(padding, false));
-}
-
-std::vector<char> RSA::privateDecryptEx(const char * src, size_t len, Padding padding) const
-{
-    return processEx(&RSA_private_decrypt, src, len, impl_, false, getPadding(padding, true));
-}
-
-const EVP_MD * getDigest(SignType type)
-{
-    switch(type) {
-    case stSHA1:
-        return EVP_sha1();
-    case stMD5:
-        return EVP_md5();
-    }
-    BOOST_ASSERT(false);
-    return 0;
-}
-
-bool RSA::verify(SignType type, const char * message, size_t messageLen, const char * sign, size_t signLen)
-{
-    const EVP_MD * md = getDigest(type);
-    BOOST_ASSERT(md);
-
-    EVP_MD_CTX ctx;
-    memset(&ctx, 0, sizeof(ctx));
-    EVP_DigestInit(&ctx, md);
-	EVP_DigestUpdate(&ctx, message, messageLen);
-    size_t outLen = EVP_MD_size(md);
-    unsigned char * out = static_cast<unsigned char*>(alloca(outLen));
-	EVP_DigestFinal(&ctx, out, 0);
-
-    int result = RSA_verify(EVP_MD_type(md),
-                            out, static_cast<int>(outLen),
-                            mstd::pointer_cast<unsigned char*>(const_cast<char*>(sign)), static_cast<int>(signLen), impl_);
-    return result != 0;
-}
-
-std::vector<char> RSA::extractPublicKey() const
-{
-    ::RSA * src = impl_;
-    
-    BigNums nums;
-    nums.push_back(src->n);
-    nums.push_back(src->e);
-    
-    return packBigNums(nums);
-}
-
-std::vector<char> RSA::extractPrivateKey() const
-{
-    ::RSA * src = impl_;
-    
-    BigNums nums;
-    nums.push_back(src->n);
-    nums.push_back(src->e);
-    nums.push_back(src->d);
-    nums.push_back(src->p);
-    nums.push_back(src->q);
-    nums.push_back(src->dmp1);
-    nums.push_back(src->dmq1);
-    nums.push_back(src->iqmp);
-    
-    return packBigNums(nums);
 }
 #endif
 

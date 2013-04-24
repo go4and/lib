@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "Error.h"
+#include "Hasher.h"
 
 #include "PKey.h"
 
@@ -176,6 +177,29 @@ size_t PKeyDerive::operator()(char * out, size_t outlen, Error & error)
     if(error.checkResult(res))
         return 0;
     return outlen;
+}
+
+PKeyVerify::PKeyVerify(const GenericPKey & key, const HasherDescriptor & hasher, Error & error)
+    : PKeyContext(key)
+{
+    EVP_PKEY_CTX * context = static_cast<EVP_PKEY_CTX*>(handle());
+    int res = EVP_PKEY_verify_init(context);
+    if(error.checkResult(res))
+        return;
+    res = EVP_PKEY_CTX_set_signature_md(context, static_cast<const EVP_MD*>(hasher.handle()));
+    if(error.checkResult(res))
+        return;
+}
+
+bool PKeyVerify::operator()(const char * input, size_t inlen, const char * sign, size_t signlen, Error & error)
+{
+    EVP_PKEY_CTX * context = static_cast<EVP_PKEY_CTX*>(handle());
+    int res = EVP_PKEY_verify(context,
+                              mstd::pointer_cast<const unsigned char*>(sign), static_cast<int>(signlen),
+                              mstd::pointer_cast<const unsigned char*>(input), static_cast<int>(inlen));
+    if(error.checkError(res))
+        return false;
+    return res != 0;
 }
 
 }

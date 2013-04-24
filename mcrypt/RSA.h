@@ -24,11 +24,6 @@ namespace mcrypt {
 
 typedef unsigned long error_t;
 
-enum SignType {
-    stSHA1,
-    stMD5,
-};
-
 class MCRYPT_DECL RSA : public GenericPKey {
     BOOST_MOVABLE_BUT_NOT_COPYABLE(RSA);
 public:
@@ -60,6 +55,7 @@ public:
     {
         return fromPublicKey(&src[0], src.size(), error);
     }
+    static RSA fromPUBKEY(const char * buf, size_t len, Error & error);
 
     static RSA generateKey(int num, unsigned long e, Error & error);
     static RSA fromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen, Error & error);
@@ -109,25 +105,5 @@ public:
 
     void extractN(std::vector<char> & out);
 };
-
-#if 0
-class MCRYPT_DECL RSA : private boost::noncopyable, public mstd::reference_counter<RSA> {
-public:
-    typedef boost::function<void(int, int)> GenerateListener;
-
-    static RSAPtr createFromPUBKEY(const void * buf, size_t len);
-    
-    bool verify(SignType type, const char * message, size_t messageLen, const char * sign, size_t signLen);
-
-    std::vector<char> extractPrivateKey() const;
-    std::vector<char> extractPublicKey() const;
-
-    ~RSA();
-private:
-    explicit RSA(rsa_st * rsa);
-
-    rsa_st * impl_;
-};
-#endif
 
 }
