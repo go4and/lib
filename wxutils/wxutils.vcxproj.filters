@@ -62,6 +62,9 @@
     <ClCompile Include="StructTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GLFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Any.h">
@@ -122,6 +125,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StructTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLFont.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

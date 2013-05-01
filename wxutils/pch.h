@@ -44,6 +44,7 @@
 
 #include <wx/dc.h>
 #include <wx/dcclient.h>
+#include <wx/dcmemory.h>
 #include <wx/display.h>
 #include <wx/filepicker.h>
 #include <wx/fontutil.h>

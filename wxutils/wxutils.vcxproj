@@ -291,6 +291,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BlankHint.cpp" />
+    <ClCompile Include="GLFont.cpp" />
     <ClCompile Include="Preferences.cpp" />
     <ClCompile Include="StructTable.cpp" />
     <ClCompile Include="UIEnqueue.cpp" />
@@ -319,6 +320,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlankHint.h" />
+    <ClInclude Include="GLFont.h" />
     <ClInclude Include="Preferences.h" />
     <ClInclude Include="StructTable.h" />
     <ClInclude Include="UIEnqueue.h" />
