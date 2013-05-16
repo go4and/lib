@@ -142,6 +142,20 @@ public:
         }
     }
 
+    template<class C2>
+    void process(mstd::rc_buffer & out, const C2 * begin, size_t len)
+    {
+        BOOST_STATIC_ASSERT(sizeof(C2) == 1);
+        if(!len)
+            out.reset();
+        else {
+            out = mstd::rc_buffer(len + descriptor().blockSize());
+            size_t outlen = process(out.data(), mstd::pointer_cast<const char*>(begin), len);
+            BOOST_ASSERT(out.size() >= outlen);
+            out.resize(outlen);
+        }
+    }
+
     void process(std::vector<unsigned char> & out, const unsigned char * begin, const unsigned char * end)
     {
         process(out, begin, end - begin);

@@ -153,6 +153,12 @@ public:
     {
         uiEnqueue(boost::bind(f_, a, b, c));
     }
+
+    template<class A, class B, class C, class D>
+    void operator()(const A & a, const B & b, const C & c, const D & d) const
+    {
+        uiEnqueue(boost::bind(f_, a, b, c, d));
+    }
 private:
     F f_;
 };

@@ -135,9 +135,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(OutDir)$(TargetName)_$(Platform)$(TargetExt)</OutputFile>
-    </Lib>
+    <Lib />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -152,9 +150,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(OutDir)$(TargetName)_$(Platform)$(TargetExt)</OutputFile>
-    </Lib>
+    <Lib />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -170,9 +166,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(OutDir)$(TargetName)_$(Platform)$(TargetExt)</OutputFile>
-    </Lib>
+    <Lib />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -188,9 +182,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(OutDir)$(TargetName)_$(Platform)$(TargetExt)</OutputFile>
-    </Lib>
+    <Lib />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Dll|Win32'">
     <ClCompile>
@@ -206,9 +198,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(OutDir)$(TargetName)_$(Platform)$(TargetExt)</OutputFile>
-    </Lib>
+    <Lib />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Dll|x64'">
     <ClCompile>
@@ -224,13 +214,12 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(OutDir)$(TargetName)_$(Platform)$(TargetExt)</OutputFile>
-    </Lib>
+    <Lib />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="Buffers.cpp" />
+    <ClCompile Include="ByteBuffer.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="Handler.cpp" />
@@ -253,6 +242,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PipeNode.cpp" />
+    <ClCompile Include="PipeService.cpp" />
     <ClCompile Include="Signals.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="StackStream.cpp" />
@@ -264,6 +254,8 @@
     <ClInclude Include="AsyncOperations.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Buffers.h" />
+    <ClInclude Include="ByteBuffer.h" />
+    <ClInclude Include="ChunkedBuffer.h" />
     <ClInclude Include="Clock.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Connection.h" />
@@ -275,6 +267,7 @@
     <ClInclude Include="PacketWriter.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PipeNode.h" />
+    <ClInclude Include="PipeService.h" />
     <ClInclude Include="RingBuffer.h" />
     <ClInclude Include="Signals.h" />
     <ClInclude Include="Socket.h" />

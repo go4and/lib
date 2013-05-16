@@ -18,6 +18,8 @@ public:
     void draw(const wchar_t * str);
     inline void draw(const std::wstring & str) { draw(str.c_str(), str.length()); }
     inline void draw(const wxString & str) { draw(str.c_str().AsWChar(), str.length()); }
+
+    wxSize textSize(const wxString & str) { return mdc_.GetTextExtent(str); }
 private:
     GLuint makeGlyph(wchar_t ch);
 
