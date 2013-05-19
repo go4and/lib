@@ -48,6 +48,11 @@
 		C366148213FA83C1001F51AA /* REST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C366148013FA83C1001F51AA /* REST.cpp */; };
 		C366148313FA83C1001F51AA /* REST.h in Headers */ = {isa = PBXBuildFile; fileRef = C366148113FA83C1001F51AA /* REST.h */; };
 		C36A4273148D184F00E9CF52 /* PacketWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C36A4272148D184F00E9CF52 /* PacketWriter.cpp */; };
+		C3AFD7921748E5700079FE35 /* ByteBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD78D1748E5700079FE35 /* ByteBuffer.cpp */; };
+		C3AFD7931748E5700079FE35 /* ByteBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C3AFD78E1748E5700079FE35 /* ByteBuffer.h */; };
+		C3AFD7941748E5700079FE35 /* ChunkedBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C3AFD78F1748E5700079FE35 /* ChunkedBuffer.h */; };
+		C3AFD7951748E5700079FE35 /* PipeService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD7901748E5700079FE35 /* PipeService.cpp */; };
+		C3AFD7961748E5700079FE35 /* PipeService.h in Headers */ = {isa = PBXBuildFile; fileRef = C3AFD7911748E5700079FE35 /* PipeService.h */; };
 		C3E3CA5216A7F7810035EF18 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3E3CA5016A7F7810035EF18 /* Timer.cpp */; };
 		C3E3CA5316A7F7810035EF18 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C3E3CA5116A7F7810035EF18 /* Timer.h */; };
 		C3E76580148F3A450069EAFA /* mcrypt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E7657D148F3A450069EAFA /* mcrypt.dylib */; };
@@ -100,8 +105,13 @@
 		C366148113FA83C1001F51AA /* REST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REST.h; sourceTree = SOURCE_ROOT; };
 		C36A4272148D184F00E9CF52 /* PacketWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketWriter.cpp; sourceTree = SOURCE_ROOT; };
 		C3921B0F1691C48C005F4CC0 /* GenericBuffers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenericBuffers.h; sourceTree = SOURCE_ROOT; };
-		C3A7992B16FC58F000839EA1 /* RingBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
-		C3A7993C16FC77CA00839EA1 /* Strand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Strand.h; sourceTree = "<group>"; };
+		C3A7992B16FC58F000839EA1 /* RingBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = SOURCE_ROOT; };
+		C3A7993C16FC77CA00839EA1 /* Strand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Strand.h; sourceTree = SOURCE_ROOT; };
+		C3AFD78D1748E5700079FE35 /* ByteBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteBuffer.cpp; sourceTree = SOURCE_ROOT; };
+		C3AFD78E1748E5700079FE35 /* ByteBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteBuffer.h; sourceTree = SOURCE_ROOT; };
+		C3AFD78F1748E5700079FE35 /* ChunkedBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChunkedBuffer.h; sourceTree = SOURCE_ROOT; };
+		C3AFD7901748E5700079FE35 /* PipeService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PipeService.cpp; path = PipeService.cpp; sourceTree = SOURCE_ROOT; };
+		C3AFD7911748E5700079FE35 /* PipeService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PipeService.h; sourceTree = SOURCE_ROOT; };
 		C3E3CA5016A7F7810035EF18 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = SOURCE_ROOT; };
 		C3E3CA5116A7F7810035EF18 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = SOURCE_ROOT; };
 		C3E7657D148F3A450069EAFA /* mcrypt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mcrypt.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,6 +157,8 @@
 		C3389D65135388960010E3BF /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				C3AFD78D1748E5700079FE35 /* ByteBuffer.cpp */,
+				C3AFD7901748E5700079FE35 /* PipeService.cpp */,
 				C3084DDA16DC95330019D2A4 /* Acceptor.cpp */,
 				C35AA4A913538DD100649921 /* Buffer.cpp */,
 				C35AA4AB13538DD100649921 /* Buffers.cpp */,
@@ -173,6 +185,9 @@
 		C3A7992A16FC586D00839EA1 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				C3AFD78E1748E5700079FE35 /* ByteBuffer.h */,
+				C3AFD78F1748E5700079FE35 /* ChunkedBuffer.h */,
+				C3AFD7911748E5700079FE35 /* PipeService.h */,
 				C3084DD916DC94280019D2A4 /* Acceptor.h */,
 				C35AA4A713538DD100649921 /* AsyncGuard.h */,
 				C35AA4A813538DD100649921 /* AsyncOperations.h */,
@@ -245,6 +260,9 @@
 				C366148313FA83C1001F51AA /* REST.h in Headers */,
 				C3E3CA5316A7F7810035EF18 /* Timer.h in Headers */,
 				C343E1C516F47D86000E2CDC /* ShellConnection.h in Headers */,
+				C3AFD7931748E5700079FE35 /* ByteBuffer.h in Headers */,
+				C3AFD7941748E5700079FE35 /* ChunkedBuffer.h in Headers */,
+				C3AFD7961748E5700079FE35 /* PipeService.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +335,8 @@
 				C3E3CA5216A7F7810035EF18 /* Timer.cpp in Sources */,
 				C3084DDB16DC95330019D2A4 /* Acceptor.cpp in Sources */,
 				C343E1C416F47D86000E2CDC /* ShellConnection.cpp in Sources */,
+				C3AFD7921748E5700079FE35 /* ByteBuffer.cpp in Sources */,
+				C3AFD7951748E5700079FE35 /* PipeService.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

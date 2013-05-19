@@ -13,6 +13,7 @@
 #include <boost/parameter/preprocessor.hpp>
 
 #include <mstd/pointer_cast.hpp>
+#include <mstd/rc_buffer.hpp>
 #endif
 
 namespace mcrypt {

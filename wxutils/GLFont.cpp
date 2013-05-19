@@ -15,6 +15,8 @@ GLFont::~GLFont()
         glDeleteLists(i->second, 1);
 }
 
+#if BOOST_WINDOWS
+
 void GLFont::draw(const wchar_t * str)
 {
     draw(str, wcslen(str));
@@ -40,5 +42,7 @@ void GLFont::draw(const wchar_t * str, size_t len)
     }
     glCallLists(len, GL_UNSIGNED_INT, &buffer_[0]);
 }
+
+#endif
 
 }
