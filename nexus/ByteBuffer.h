@@ -10,6 +10,28 @@ inline BufferDescriptor makeBufferDescriptor(void * data, size_t len)
     return result;
 }
 #else
+typedef iovec BufferDescriptor;
+inline BufferDescriptor makeBufferDescriptor(void * data, size_t len)
+{
+    BufferDescriptor result = { data, len };
+    return result;
+}
+inline void setBufferDescriptorData(BufferDescriptor & out, void * data)
+{
+    out.iov_base = data;
+}
+inline void * bufferDescriptorData(const BufferDescriptor & out)
+{
+    return out.iov_base;
+}
+inline void setBufferDescriptorSize(BufferDescriptor & out, size_t size)
+{
+    out.iov_len = size;
+}
+inline size_t bufferDescriptorSize(const BufferDescriptor & out)
+{
+    return out.iov_len;
+}
 #endif
 
 class ByteBuffer {

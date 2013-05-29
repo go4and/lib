@@ -43,17 +43,16 @@ size_t ByteBuffer::prepare(BufferDescriptor * bufs, size_t start, size_t stop)
 {
     MLOG_DEBUG("prepare(" << start << ", " << stop << "), size: " << data_.size());
 
-    bufs[0].buf = &data_[0] + start;
+    setBufferDescriptorData(bufs[0], &data_[0] + start);
     if(stop > start)
     {
-        bufs[0].len = static_cast<ULONG>(stop - start);
+        setBufferDescriptorSize(bufs[0], stop - start);
         return 1;
     } else {
-        bufs[0].len = static_cast<ULONG>(data_.size() - start);
+        setBufferDescriptorSize(bufs[0], data_.size() - start);
         if(stop)
         {
-            bufs[1].buf = &data_[0];
-            bufs[1].len = static_cast<ULONG>(stop);
+            bufs[1] = makeBufferDescriptor(&data_[0], stop);
             return 2;
         } else
             return 1;
@@ -64,21 +63,22 @@ size_t ByteBuffer::recv(BufferDescriptor * bufs, size_t count)
 {
     MLOG_DEBUG("recv(" << count << "), rpos: " << rpos_ << ", wpos: " << wpos_);
 
-    DWORD result = 0;
+    size_t result = 0;
     size_t rpos = rpos_;
     size_t ready = this->ready();
     for(size_t i = 0; ready && i != count; ++i)
     {
-        size_t len = std::min<size_t>(ready, bufs[i].len);
+        size_t len = std::min(ready, bufferDescriptorSize(bufs[i]));
         ready -= len;
-        result += static_cast<DWORD>(len);
+        result += len;
         if(rpos + len > data_.size())
         {
             size_t tail = data_.size() - rpos_;
-            memcpy(bufs[i].buf, &data_[0] + rpos_, tail);
-            memcpy(bufs[i].buf + tail, &data_[0], len - tail);
+            char * out = static_cast<char*>(bufferDescriptorData(bufs[i]));
+            memcpy(out, &data_[0] + rpos_, tail);
+            memcpy(out + tail, &data_[0], len - tail);
         } else {
-            memcpy(bufs[i].buf, &data_[0] + rpos_, len);
+            memcpy(bufferDescriptorData(bufs[i]), &data_[0] + rpos_, len);
         }
         rpos = trim(rpos + len);
     }
