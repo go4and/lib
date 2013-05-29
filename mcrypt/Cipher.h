@@ -15,6 +15,12 @@
 #include <mstd/pointer_cast.hpp>
 #endif
 
+namespace mstd {
+
+class rc_buffer;
+
+}
+
 namespace mcrypt {
 
 enum CipherMode {
