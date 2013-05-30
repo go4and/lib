@@ -9,6 +9,22 @@ inline BufferDescriptor makeBufferDescriptor(void * data, size_t len)
     BufferDescriptor result = { static_cast<ULONG>(len), static_cast<CHAR*>(data) };
     return result;
 }
+inline void setBufferDescriptorData(BufferDescriptor & out, void * data)
+{
+    out.buf = static_cast<char*>(data);
+}
+inline void * bufferDescriptorData(const BufferDescriptor & out)
+{
+    return out.buf;
+}
+inline void setBufferDescriptorSize(BufferDescriptor & out, size_t size)
+{
+    out.len = size;
+}
+inline size_t bufferDescriptorSize(const BufferDescriptor & out)
+{
+    return out.len;
+}
 #else
 typedef iovec BufferDescriptor;
 inline BufferDescriptor makeBufferDescriptor(void * data, size_t len)
