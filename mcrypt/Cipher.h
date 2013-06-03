@@ -16,6 +16,12 @@
 #include <mstd/rc_buffer.hpp>
 #endif
 
+namespace mstd {
+
+class rc_buffer;
+
+}
+
 namespace mcrypt {
 
 enum CipherMode {
