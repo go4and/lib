@@ -16,9 +16,9 @@ FILE * wfopen(const boost::filesystem::wpath & path, const char * mode)
 #if BOOST_WINDOWS
     wchar_t buf[0x10];
     std::copy(mode, mode + strlen(mode) + 1, buf);
-    return _wfopen(mstd::wfname(path).c_str(), buf);
+    return _wfopen(path.native().c_str(), buf);
 #else
-    return fopen(mstd::apifname(path).c_str(), mode);
+    return fopen(path.native().c_str(), mode);
 #endif
 }
 

@@ -11,6 +11,7 @@
 
 #include <boost/config.hpp>
 
+#include <boost/array.hpp>
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
 

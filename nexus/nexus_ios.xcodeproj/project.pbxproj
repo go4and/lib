@@ -13,6 +13,14 @@
 		C343E1BC16F47CAA000E2CDC /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C343E1BA16F47CAA000E2CDC /* Utils.h */; };
 		C384B8B516F5051700BA58C8 /* ShellConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C384B8B316F5051700BA58C8 /* ShellConnection.cpp */; };
 		C384B8B616F5051700BA58C8 /* ShellConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = C384B8B416F5051700BA58C8 /* ShellConnection.h */; };
+		C394818F17514C270007A4BE /* StackStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C394818717514C270007A4BE /* StackStream.cpp */; };
+		C394819017514C270007A4BE /* StackStream.h in Headers */ = {isa = PBXBuildFile; fileRef = C394818817514C270007A4BE /* StackStream.h */; };
+		C394819117514C270007A4BE /* PacketReader.h in Headers */ = {isa = PBXBuildFile; fileRef = C394818917514C270007A4BE /* PacketReader.h */; };
+		C394819217514C270007A4BE /* PacketWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = C394818A17514C270007A4BE /* PacketWriter.h */; };
+		C394819317514C270007A4BE /* PacketPacker.h in Headers */ = {isa = PBXBuildFile; fileRef = C394818B17514C270007A4BE /* PacketPacker.h */; };
+		C394819417514C270007A4BE /* PacketPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C394818C17514C270007A4BE /* PacketPacker.cpp */; };
+		C394819517514C270007A4BE /* PacketReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C394818D17514C270007A4BE /* PacketReader.cpp */; };
+		C394819617514C270007A4BE /* PacketWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C394818E17514C270007A4BE /* PacketWriter.cpp */; };
 		C3D4504915845E46002107A6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D4504815845E46002107A6 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +31,14 @@
 		C343E1BA16F47CAA000E2CDC /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = SOURCE_ROOT; };
 		C384B8B316F5051700BA58C8 /* ShellConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShellConnection.cpp; sourceTree = SOURCE_ROOT; };
 		C384B8B416F5051700BA58C8 /* ShellConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShellConnection.h; sourceTree = SOURCE_ROOT; };
+		C394818717514C270007A4BE /* StackStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StackStream.cpp; sourceTree = SOURCE_ROOT; };
+		C394818817514C270007A4BE /* StackStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackStream.h; sourceTree = SOURCE_ROOT; };
+		C394818917514C270007A4BE /* PacketReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketReader.h; sourceTree = SOURCE_ROOT; };
+		C394818A17514C270007A4BE /* PacketWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketWriter.h; sourceTree = SOURCE_ROOT; };
+		C394818B17514C270007A4BE /* PacketPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketPacker.h; sourceTree = SOURCE_ROOT; };
+		C394818C17514C270007A4BE /* PacketPacker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketPacker.cpp; sourceTree = SOURCE_ROOT; };
+		C394818D17514C270007A4BE /* PacketReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketReader.cpp; sourceTree = SOURCE_ROOT; };
+		C394818E17514C270007A4BE /* PacketWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PacketWriter.cpp; sourceTree = SOURCE_ROOT; };
 		C3D4504515845E46002107A6 /* libnexus-iphoneos_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libnexus-iphoneos_d.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3D4504815845E46002107A6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -67,6 +83,14 @@
 		C3D4504A15845E46002107A6 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C394818717514C270007A4BE /* StackStream.cpp */,
+				C394818817514C270007A4BE /* StackStream.h */,
+				C394818917514C270007A4BE /* PacketReader.h */,
+				C394818A17514C270007A4BE /* PacketWriter.h */,
+				C394818B17514C270007A4BE /* PacketPacker.h */,
+				C394818C17514C270007A4BE /* PacketPacker.cpp */,
+				C394818D17514C270007A4BE /* PacketReader.cpp */,
+				C394818E17514C270007A4BE /* PacketWriter.cpp */,
 				C384B8B316F5051700BA58C8 /* ShellConnection.cpp */,
 				C384B8B416F5051700BA58C8 /* ShellConnection.h */,
 				C343E1B916F47CAA000E2CDC /* Utils.cpp */,
@@ -88,6 +112,10 @@
 				C343E1B716F47BA1000E2CDC /* Acceptor.h in Headers */,
 				C343E1BC16F47CAA000E2CDC /* Utils.h in Headers */,
 				C384B8B616F5051700BA58C8 /* ShellConnection.h in Headers */,
+				C394819017514C270007A4BE /* StackStream.h in Headers */,
+				C394819117514C270007A4BE /* PacketReader.h in Headers */,
+				C394819217514C270007A4BE /* PacketWriter.h in Headers */,
+				C394819317514C270007A4BE /* PacketPacker.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +173,10 @@
 				C343E1B616F47BA1000E2CDC /* Acceptor.cpp in Sources */,
 				C343E1BB16F47CAA000E2CDC /* Utils.cpp in Sources */,
 				C384B8B516F5051700BA58C8 /* ShellConnection.cpp in Sources */,
+				C394818F17514C270007A4BE /* StackStream.cpp in Sources */,
+				C394819417514C270007A4BE /* PacketPacker.cpp in Sources */,
+				C394819517514C270007A4BE /* PacketReader.cpp in Sources */,
+				C394819617514C270007A4BE /* PacketWriter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

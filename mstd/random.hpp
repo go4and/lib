@@ -39,4 +39,22 @@ private:
     distribution_type dist_;
 };
 
+template<class Generator>
+void generate_bytes(char * out, size_t len, Generator & generator)
+{
+    for(;;)
+    {
+        auto temp = generator();
+        if(len > sizeof(temp))
+        {
+            memcpy(out, &temp, sizeof(temp));
+            out += sizeof(temp);
+            len -= sizeof(temp);
+        } else {
+            memcpy(out, &temp, len);
+            break;
+        }
+    }
+}
+
 }

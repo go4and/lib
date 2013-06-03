@@ -8,6 +8,9 @@ template<class T>
 class rc_array {
 public:
     typedef T value_type;
+    
+    struct uninitialized_type {};
+    static const uninitialized_type uninitialized;
 
     rc_array()
         : data_(0)
@@ -20,6 +23,13 @@ public:
         *sizeAddress() = size;
         *counterAddress() = 1;
         std::uninitialized_fill(data(), data() + size, value_type());
+    }
+
+    explicit rc_array(size_t size, uninitialized_type raw)
+        : data_(new char[size * sizeof(value_type) + header_size])
+    {
+        *sizeAddress() = size;
+        *counterAddress() = 1;
     }
 
     explicit rc_array(const value_type * data, size_t size)
