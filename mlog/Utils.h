@@ -166,6 +166,27 @@ inline std::ostream & operator<<(std::ostream & out, const OutPointer<T> & value
     return out;
 }
 
+#ifdef __OBJC__
+class OutObjC {
+public:
+    explicit OutObjC(id value)
+        : value_(value)
+    {
+    }
+    
+    id value() const { return value_; }
+private:
+    id value_;
+};
+
+inline OutObjC objc(id value)
+{
+    return OutObjC(value);
+}
+
+std::ostream & operator<<(std::ostream & out, const OutObjC & objc);
+#endif
+
 }
 
 #endif

@@ -28,6 +28,15 @@ public:
         *counterAddress() = 1;
     }
 
+    rc_buffer(const char * data, const char * end)
+        : data_(new char[(end - data) + sizeof(counter_t) + sizeof(size_t)])
+    {
+        size_t size = end - data;
+        memcpy(this->data(), data, size);
+        *sizeAddress() = size;
+        *counterAddress() = 1;
+    }
+
     ~rc_buffer()
     {
         reset();
