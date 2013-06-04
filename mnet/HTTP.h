@@ -19,8 +19,8 @@ typedef void CURL;
 namespace mnet {
 
 typedef boost::function<void(int, const boost::property_tree::ptree&)> AsyncPTreeHandler;
-typedef boost::function<void(int, const std::string &)> AsyncDataHandler;
-typedef boost::function<void(int, const std::string &, const std::string &)> AsyncDataExHandler;
+typedef boost::function<void(int, const mstd::rc_buffer &)> AsyncDataHandler;
+typedef boost::function<void(int, const mstd::rc_buffer &, const mstd::rc_buffer &)> AsyncDataExHandler;
 typedef boost::function<void(int)> AsyncHandler;
 typedef boost::function<void(int /* percent */)> ProgressHandler;
 typedef boost::function<void()> Action;

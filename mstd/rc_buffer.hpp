@@ -57,22 +57,31 @@ public:
             detail::atomic_helper<sizeof(int)>::add(counterAddress(), 1);
     }
 
-    size_t size() const
+    inline size_t size() const
     {
         return *sizeAddress();
     }
 
-    void resize(size_t size)
+    inline void resize(size_t size)
     {
         *sizeAddress() = size;
     }
 
-    char * data() const
+    void append(const char * buf, size_t len)
+    {
+        BOOST_ASSERT(*counterAddress() == 1);
+        size_t size = this->size();
+        data_ = static_cast<char*>(realloc(data_, size + len));
+        memcpy(data() + size, buf, len);
+        resize(size + len);
+    }
+
+    inline char * data() const
     {
         return data_ + sizeof(counter_t) + sizeof(size_t);
     }
 
-    unsigned char * udata() const
+    inline unsigned char * udata() const
     {
         return static_cast<unsigned char*>(static_cast<void*>(data()));
     }
@@ -91,24 +100,24 @@ public:
 
     typedef char * rc_buffer::*unspecified_bool_type;
 
-    operator unspecified_bool_type() const
+    inline operator unspecified_bool_type() const
     {
         return data_ == 0 ? 0: &rc_buffer::data_;
     }
 
-    bool operator!() const
+    inline bool operator!() const
     {
         return data_ == 0;
     }
 private:
     typedef unsigned int counter_t;
 
-    size_t * sizeAddress() const
+    inline size_t * sizeAddress() const
     {
         return static_cast<size_t*>(static_cast<void*>(data_ + sizeof(counter_t)));
     }
 
-    volatile counter_t * counterAddress() const
+    inline volatile counter_t * counterAddress() const
     {
         return static_cast<volatile unsigned int*>(static_cast<void*>(data_));
     }

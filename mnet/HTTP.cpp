@@ -34,6 +34,8 @@ public:
 protected:
     CURL * curl_;
 
+    mstd::rc_buffer blankBuffer();
+
     void initCurl(CURLM * curlm, const std::string & url, const std::string & cookies = std::string())
     {
         curlm_ = curlm;
@@ -298,30 +300,57 @@ public:
     void done(int ec)
     {
         MLOG_MESSAGE_EX(ec ? mlog::llWarning : mlog::llDebug, "get data: " << url() << ", code: " << ec);
+        if(!data_)
+            data_ = blankBuffer();
         if(handlerEx_.empty())
             uiEnqueue(boost::bind(handler_, ec, data_));
-        else
+        else {
+            if(!header_)
+                header_ = blankBuffer();
             uiEnqueue(boost::bind(handlerEx_, ec, data_, header_));
+        }
     }
 private:
     static size_t write(const char* buf, size_t size, size_t nmemb, GetDataAsync * self)
     {
         MLOG_MESSAGE(Debug, "GetDataAsync::write(" << static_cast<const void*>(buf) << ", " << size << ", " << nmemb << ", " << self << ")");
-        std::string & data = self->data_;
-        data.insert(data.end(), buf, buf + size * nmemb);
-        return size * nmemb;
+        
+        size *= nmemb;
+        if(!self->data_)
+        {
+            double contentLength;
+            CURLcode res = curl_easy_getinfo(self->curl_, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &contentLength);
+            if(res == CURLE_OK)
+            {
+                size_t length = static_cast<size_t>(contentLength);
+                self->data_ = mstd::rc_buffer(length);
+            } else {
+                self->data_ = mstd::rc_buffer(size);
+            }
+            self->data_.resize(0);
+        }
+        self->data_.append(buf, size);
+        return size;
     }
     
     static size_t writeHeader(const char * buf, size_t size, size_t nmemb, GetDataAsync * self)
     {
         MLOG_MESSAGE(Debug, "GetDataAsync::writeHeader(" << static_cast<const void*>(buf) << ", " << size << ", " << nmemb << ", " << self << ")");
-        return appendToString(buf, size, nmemb, &self->header_);
+
+        size *= nmemb;
+        if(!self->header_)
+        {
+            self->header_ = mstd::rc_buffer(size);
+            self->header_.resize(0);
+        }
+        self->header_.append(buf, size);
+        return size;
     }
     
     AsyncDataHandler handler_;
     AsyncDataExHandler handlerEx_;
-    std::string data_;
-    std::string header_;
+    mstd::rc_buffer data_;
+    mstd::rc_buffer header_;
     mstd::rc_buffer postData_;
     curl_slist * headers_;
 };
@@ -468,8 +497,12 @@ public:
 	    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 30);
 
 	    // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
-	    curl_easy_setopt(curl, CURLOPT_ENCODING, "gzip");
-	    curl_easy_setopt(curl, CURLOPT_HTTP_CONTENT_DECODING, 1);
+        curl_version_info_data * versionData = curl_version_info(CURLVERSION_NOW);
+        if(versionData->features & CURL_VERSION_LIBZ)
+        {
+            curl_easy_setopt(curl, CURLOPT_ENCODING, "gzip");
+            curl_easy_setopt(curl, CURLOPT_HTTP_CONTENT_DECODING, 1);
+        }
 	
 	    #if !BOOST_WINDOWS
 	    /* setting this option is needed to allow libcurl to work
@@ -501,9 +534,14 @@ public:
             return 444;
         }
     }
+
+    mstd::rc_buffer blankBuffer()
+    {
+        return blankBuffer_;
+    }
 private:
     HTTP()
-        : ieUsesProxy_(false)
+        : ieUsesProxy_(false), blankBuffer_(0)
     {
         proxy_.active = false;
         ieProxy_.active = false;
@@ -633,11 +671,17 @@ private:
     std::string userAgent_;
     UIEnqueuer uiEnqueuer_;
     AsyncHTTP asyncHTTP_;
+    mstd::rc_buffer blankBuffer_;
 };
 
 void AsyncTask::uiEnqueue(const boost::function<void()> & action)
 {
     HTTP::instance().uiEnqueue(action);
+}
+
+mstd::rc_buffer AsyncTask::blankBuffer()
+{
+    return HTTP::instance().blankBuffer();
 }
 
 }
@@ -671,9 +715,9 @@ void cancelAll()
     HTTP::instance().asyncHTTP().cancelAll();
 }
 
-boost::property_tree::ptree parseXml(const std::string& data)
+boost::property_tree::ptree parseXml(const mstd::rc_buffer & data)
 {
-    std::istringstream inp(data);
+    std::istringstream inp(std::string(data.data(), data.size()));
     boost::property_tree::ptree result;
     try {
         boost::property_tree::read_xml(inp, result);
@@ -682,25 +726,25 @@ boost::property_tree::ptree parseXml(const std::string& data)
     return result;
 }
 
-boost::property_tree::ptree parseJSON(const std::string& data)
+boost::property_tree::ptree parseJSON(const mstd::rc_buffer & data)
 {
     boost::property_tree::ptree result;
     ParseError err;
-    parseJSON(data, result, err);
+    parseJSON(data.data(), data.size(), result, err);
     return result;
 }
 
 namespace {
 
 struct XmlParser {
-    static inline boost::property_tree::ptree parse(const std::string & data)
+    static inline boost::property_tree::ptree parse(const mstd::rc_buffer & data)
     {
         return parseXml(data);
     }
 };
 
 struct JSONParser {
-    static inline boost::property_tree::ptree parse(const std::string & data)
+    static inline boost::property_tree::ptree parse(const mstd::rc_buffer & data)
     {
         return parseJSON(data);
     }
@@ -712,11 +756,11 @@ public:
     explicit GetTreeAsyncHandler(const AsyncPTreeHandler & handler)
         : handler_(handler) {}
     
-    void operator()(int ec, const std::string & data) const
+    void operator()(int ec, const mstd::rc_buffer & data) const
     {
         if(!ec)
         {
-            MLOG_DEBUG("received tree: " << data);
+            MLOG_DEBUG("received tree: " << mlog::dump(data.data(), data.size()));
             handler_(ec, Parser::parse(data));
         } else
             handler_(ec, boost::property_tree::ptree());
