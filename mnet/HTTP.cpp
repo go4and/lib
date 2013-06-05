@@ -829,4 +829,17 @@ std::string escapeUrl(const std::string & url)
         return std::string();
 }
 
+std::string unescapeUrl(const std::string & url)
+{
+    int outlen;
+    char * temp = curl_easy_unescape(0, url.c_str(), url.length(), &outlen);
+    if(temp)
+    {
+        std::string result(temp, outlen);
+        curl_free(temp);
+        return result;
+    } else
+        return std::string();
+}
+
 }

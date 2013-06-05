@@ -186,8 +186,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(BOOST_ROOT)",
-					$CURL_ROOT/include,
-					$YAJL_ROOT/include,
+					$IOS_CURL_ROOT/include,
+					$IOS_YAJL_ROOT/include,
 					"$(PROJECT_DIR)/..",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
@@ -224,8 +224,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(BOOST_ROOT)",
-					$CURL_ROOT/include,
-					$YAJL_ROOT/include,
+					$IOS_CURL_ROOT/include,
+					$IOS_YAJL_ROOT/include,
 					"$(PROJECT_DIR)/..",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
