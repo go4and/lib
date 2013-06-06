@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include <vector>
 
 #include <boost/config.hpp>

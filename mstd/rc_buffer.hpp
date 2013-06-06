@@ -14,14 +14,14 @@ public:
     }
 
     explicit rc_buffer(size_t size)
-        : data_(new char[size + sizeof(counter_t) + sizeof(size_t)])
+        : data_(static_cast<char*>(malloc(size + sizeof(counter_t) + sizeof(size_t))))
     {
         *sizeAddress() = size;
         *counterAddress() = 1;
     }
 
     rc_buffer(const char * data, size_t size)
-        : data_(new char[size + sizeof(counter_t) + sizeof(size_t)])
+        : data_(static_cast<char*>(malloc(size + sizeof(counter_t) + sizeof(size_t))))
     {
         memcpy(this->data(), data, size);
         *sizeAddress() = size;
@@ -29,7 +29,7 @@ public:
     }
 
     rc_buffer(const char * data, const char * end)
-        : data_(new char[(end - data) + sizeof(counter_t) + sizeof(size_t)])
+        : data_(static_cast<char*>(malloc((end - data) + sizeof(counter_t) + sizeof(size_t))))
     {
         size_t size = end - data;
         memcpy(this->data(), data, size);
@@ -71,7 +71,8 @@ public:
     {
         BOOST_ASSERT(*counterAddress() == 1);
         size_t size = this->size();
-        data_ = static_cast<char*>(realloc(data_, size + len));
+        char * newData = static_cast<char*>(realloc(data_, sizeof(counter_t) + sizeof(size_t) + size + len));
+        data_ = newData;
         memcpy(data() + size, buf, len);
         resize(size + len);
     }
@@ -93,7 +94,7 @@ public:
             typedef detail::atomic_helper<sizeof(int)> helper;
             helper::int_type result = helper::add(counterAddress(), static_cast<helper::int_type>(-1));
             if(result == 1)
-                delete [] data_;
+                free(data_);
             data_ = 0;
         }
     }

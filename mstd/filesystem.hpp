@@ -72,6 +72,7 @@ wfname(const boost::filesystem::wpath & path)
 }
 
 FILE * wfopen(const boost::filesystem::wpath & path, const char * mode);
+FILE * wfopen_append(const boost::filesystem::wpath & path);
 std::streamsize file_size(FILE * file);
 
 class rc_buffer;

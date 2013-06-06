@@ -147,7 +147,7 @@ private:
                 curl_easy_getinfo(msg->easy_handle, CURLINFO_RESPONSE_CODE, &code);
                 MLOG_MESSAGE_EX(code >= 300 ? mlog::llWarning : mlog::llInfo, "done with code: " << code << ", result: " << msg->data.result);
 
-                bool failed = msg->data.result != CURLE_OK || code != 200;
+                bool failed = msg->data.result != CURLE_OK || code >= 300;
                 AsyncTaskPtr tp(task);
                 for(std::vector<AsyncTaskPtr>::iterator i = tasks.begin(), end = tasks.end(); i != end; ++i)
                     if(i->get() == task)
@@ -155,7 +155,7 @@ private:
                         tasks.erase(i);
                         break;
                     }
-                task->done(failed ? (code && code != 200 ? code : 600 + msg->data.result) : 0);
+                task->done(failed ? (code >= 300 ? code : 600 + msg->data.result) : 0);
             }
         }
     }
@@ -249,7 +249,8 @@ class GetDataAsync : public DownloadTask {
 public:
     GetDataAsync(const Request & request)
         : DownloadTask(request.url(), request.cookies(), request.progressHandler()),
-          handler_(request.dataHandler()), handlerEx_(request.dataExHandler()),
+          handler_(request.handler()), directWriter_(request.directWriter()),
+          rangeBegin_(request.rangeBegin()), rangeEnd_(request.rangeEnd()),
           postData_(request.postData()), headers_(0)
     {
         const std::vector<std::string> & headers = request.headers();
@@ -278,36 +279,71 @@ public:
     {
         MLOG_DEBUG("GetDataAsync::doStart(" << url() << ')');
         void * self = this;
-        curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, &GetDataAsync::write);
-        curl_easy_setopt(curl_, CURLOPT_WRITEDATA, self);
-        if(!handlerEx_.empty())
+        if(boost::get<AsyncSizeHandler>(&handler_))
+            curl_easy_setopt(curl_, CURLOPT_NOBODY, 1);
+        else if(boost::get<AsyncHandler>(&handler_))
         {
-            curl_easy_setopt(curl_, CURLOPT_WRITEHEADER, self);
-            curl_easy_setopt(curl_, CURLOPT_HEADER, 0);
-            curl_easy_setopt(curl_, CURLOPT_HEADERFUNCTION, &GetDataAsync::writeHeader);
+            curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, &GetDataAsync::writeDirect);
+            curl_easy_setopt(curl_, CURLOPT_WRITEDATA, &directWriter_);
+        } else {
+            curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, &GetDataAsync::write);
+            curl_easy_setopt(curl_, CURLOPT_WRITEDATA, self);
+            if(boost::get<AsyncDataExHandler>(&handler_))
+            {
+                curl_easy_setopt(curl_, CURLOPT_WRITEHEADER, self);
+                curl_easy_setopt(curl_, CURLOPT_HEADER, 0);
+                curl_easy_setopt(curl_, CURLOPT_HEADERFUNCTION, &GetDataAsync::writeHeader);
+            }
         }
-        if(headers_)
-            curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, headers_);
         if(postData_)
         {
             curl_easy_setopt(curl_, CURLOPT_POST, 1L);
             curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, postData_.data());
             curl_easy_setopt(curl_, CURLOPT_POSTFIELDSIZE, static_cast<long>(postData_.size()));
         }
+        if(rangeBegin_ >= 0)
+        {
+            char buf[0x40];
+            char * p = buf;
+            mstd::itoa(rangeBegin_, p);
+            p += strlen(p);
+            *p++ = '-';
+            mstd::itoa(rangeEnd_ - 1, p);
+            curl_easy_setopt(curl_, CURLOPT_RANGE, buf);
+        }
+        if(headers_)
+            curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, headers_);
         MLOG_DEBUG("GetDataAsync::doStart, done");
     }
     
     void done(int ec)
     {
         MLOG_MESSAGE_EX(ec ? mlog::llWarning : mlog::llDebug, "get data: " << url() << ", code: " << ec);
-        if(!data_)
-            data_ = blankBuffer();
-        if(handlerEx_.empty())
-            uiEnqueue(boost::bind(handler_, ec, data_));
+
+        if(const AsyncHandler * handler = boost::get<AsyncHandler>(&handler_))
+            uiEnqueue(boost::bind(*handler, ec));
         else {
-            if(!header_)
-                header_ = blankBuffer();
-            uiEnqueue(boost::bind(handlerEx_, ec, data_, header_));
+            if(!data_)
+                data_ = blankBuffer();
+            if(const AsyncDataHandler * handler = boost::get<AsyncDataHandler>(&handler_))
+                uiEnqueue(boost::bind(*handler, ec, data_));
+            else if(const AsyncDataExHandler * handler = boost::get<AsyncDataExHandler>(&handler_))
+            {
+                if(!header_)
+                    header_ = blankBuffer();
+                uiEnqueue(boost::bind(*handler, ec, data_, header_));
+            } else if(const AsyncSizeHandler * handler = boost::get<AsyncSizeHandler>(&handler_))
+            {
+                filesize_t size;
+                if(!ec)
+                {
+                    double contentLength;
+                    CURLcode res = curl_easy_getinfo(curl_, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &contentLength);
+                    size = res == CURLE_OK ? static_cast<filesize_t>(contentLength) : -1;
+                } else
+                    size = -1;
+                uiEnqueue(boost::bind(*handler, ec, size));
+            }
         }
     }
 private:
@@ -316,11 +352,11 @@ private:
         MLOG_MESSAGE(Debug, "GetDataAsync::write(" << static_cast<const void*>(buf) << ", " << size << ", " << nmemb << ", " << self << ")");
         
         size *= nmemb;
+        double contentLength;
         if(!self->data_)
         {
-            double contentLength;
             CURLcode res = curl_easy_getinfo(self->curl_, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &contentLength);
-            if(res == CURLE_OK)
+            if(res == CURLE_OK && contentLength >= 0.0)
             {
                 size_t length = static_cast<size_t>(contentLength);
                 self->data_ = mstd::rc_buffer(length);
@@ -346,11 +382,17 @@ private:
         self->header_.append(buf, size);
         return size;
     }
+
+    static size_t writeDirect(const char * buf, size_t size, size_t nmemb, DirectWriter * writer)
+    {
+        return (*writer)(buf, size * nmemb);
+    }
     
-    AsyncDataHandler handler_;
-    AsyncDataExHandler handlerEx_;
+    AsyncRequestHandler handler_;
+    DirectWriter directWriter_;
     mstd::rc_buffer data_;
     mstd::rc_buffer header_;
+    filesize_t rangeBegin_, rangeEnd_;
     mstd::rc_buffer postData_;
     curl_slist * headers_;
 };
@@ -731,6 +773,8 @@ boost::property_tree::ptree parseJSON(const mstd::rc_buffer & data)
     boost::property_tree::ptree result;
     ParseError err;
     parseJSON(data.data(), data.size(), result, err);
+    if(err)
+        MLOG_WARNING("invalid json: " << err.message());
     return result;
 }
 
@@ -814,7 +858,12 @@ void Request::run()
 
 std::ostream & operator<<(std::ostream & out, const Request & request)
 {
-    return out << "[url=" << request.url() << ", cookies=" << request.cookies() << "]";
+    out << "[url=" << request.url();
+    if(request.rangeBegin() >= 0)
+        out << ", range=" << request.rangeBegin() << "-" << request.rangeEnd() - 1;
+    if(!request.cookies().empty())
+        out << ", cookies=" << request.cookies() << "]";
+    return out;
 }
 
 std::string escapeUrl(const std::string & url)
