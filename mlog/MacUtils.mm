@@ -30,9 +30,7 @@ std::string documentsFolder()
 void nslogWrite(LogLevel level, const char * out, size_t len)
 {
     @autoreleasepool {
-        NSString * string = [[NSString alloc] initWithBytes:out length:len encoding:NSUTF8StringEncoding];
-        NSLog(@"%@", string);
-        [string release];
+        NSLog(@"%.*s", static_cast<int>(len), out);
     }
 }
 

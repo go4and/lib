@@ -71,8 +71,8 @@ public:
     {
         BOOST_ASSERT(*counterAddress() == 1);
         size_t size = this->size();
-        char * newData = static_cast<char*>(realloc(data_, sizeof(counter_t) + sizeof(size_t) + size + len));
-        data_ = newData;
+        size_t requiredSize = sizeof(counter_t) + sizeof(size_t) + size + len;
+        data_ = static_cast<char*>(realloc(data_, requiredSize));
         memcpy(data() + size, buf, len);
         resize(size + len);
     }

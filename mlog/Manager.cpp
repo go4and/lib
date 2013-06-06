@@ -114,9 +114,10 @@ public:
     
     void doOutput(LogLevel level, const char * str, size_t len)
     {
+        const size_t limit = 0x400;
         while(len)
         {
-            size_t wr = fwrite(str, 1, std::min<size_t>(0x400, len), handle_);
+            size_t wr = fwrite(str, 1, std::min(limit, len), handle_);
             if(!wr)
             {
                 int err = errno;

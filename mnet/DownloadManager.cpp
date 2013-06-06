@@ -295,10 +295,12 @@ public:
     explicit Impl()
         : concurrentWorkers_(5), maxChunks_(5), minChunkSize_(1 << 19), taskCounter_(0)
     {
+        MLOG_INFO("Impl()");
     }
 
     ~Impl()
     {
+        MLOG_INFO("~Impl()");
     }
 
     void setConcurrentWorkers(size_t value)

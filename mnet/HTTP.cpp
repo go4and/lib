@@ -757,40 +757,36 @@ void cancelAll()
     HTTP::instance().asyncHTTP().cancelAll();
 }
 
-boost::property_tree::ptree parseXml(const mstd::rc_buffer & data)
+void parseXml(boost::property_tree::ptree & result, const mstd::rc_buffer & data)
 {
     std::istringstream inp(std::string(data.data(), data.size()));
-    boost::property_tree::ptree result;
     try {
         boost::property_tree::read_xml(inp, result);
     } catch(boost::property_tree::xml_parser_error&) {
     }
-    return result;
 }
 
-boost::property_tree::ptree parseJSON(const mstd::rc_buffer & data)
+void parseJSON(boost::property_tree::ptree & result, const mstd::rc_buffer & data)
 {
-    boost::property_tree::ptree result;
     ParseError err;
     parseJSON(data.data(), data.size(), result, err);
     if(err)
         MLOG_WARNING("invalid json: " << err.message());
-    return result;
 }
 
 namespace {
 
 struct XmlParser {
-    static inline boost::property_tree::ptree parse(const mstd::rc_buffer & data)
+    static inline void parse(boost::property_tree::ptree & tree, const mstd::rc_buffer & data)
     {
-        return parseXml(data);
+        parseXml(tree, data);
     }
 };
 
 struct JSONParser {
-    static inline boost::property_tree::ptree parse(const mstd::rc_buffer & data)
+    static inline void parse(boost::property_tree::ptree & tree, const mstd::rc_buffer & data)
     {
-        return parseJSON(data);
+        parseJSON(tree ,data);
     }
 };
 
@@ -799,13 +795,15 @@ class GetTreeAsyncHandler {
 public:
     explicit GetTreeAsyncHandler(const AsyncPTreeHandler & handler)
         : handler_(handler) {}
-    
+
     void operator()(int ec, const mstd::rc_buffer & data) const
     {
         if(!ec)
         {
             MLOG_DEBUG("received tree: " << mlog::dump(data.data(), data.size()));
-            handler_(ec, Parser::parse(data));
+            boost::property_tree::ptree tree;
+            Parser::parse(tree, data);
+            handler_(ec, tree);
         } else
             handler_(ec, boost::property_tree::ptree());
     }

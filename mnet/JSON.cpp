@@ -2,6 +2,8 @@
 
 #include "JSON.h"
 
+MLOG_DECLARE_LOGGER(json);
+
 namespace mnet {
 
 namespace {
@@ -33,7 +35,6 @@ public:
     {
         add()->data().assign(s, l);
     }
-
 private:
     void push()
     {
@@ -42,8 +43,6 @@ private:
 
     Tree * add()
     {
-        if(nodes_.empty())
-            push();
         Tree* tr = &nodes_.back()->push_back(Tree::value_type(name_, Tree()))->second;
         name_.clear();
         return tr;
@@ -105,19 +104,19 @@ yajl_callbacks callbacks = {
 
 }
 
-void parseJSON(const char * data, size_t len, boost::property_tree::ptree & tree, ParseError & error)
+void parseJSON(const char * input, size_t len, boost::property_tree::ptree & tree, ParseError & error)
 {
     Builder builder(tree);
     mstd::handle_base<yajl_handle, mstd::global_fun_traits<yajl_handle, void, &yajl_free> > hand(yajl_alloc(&callbacks, NULL, &builder));
-    yajl_status res = yajl_parse(*hand, mstd::pointer_cast<const unsigned char*>(data), len);
+    const unsigned char * buf = mstd::pointer_cast<const unsigned char*>(input);
+    yajl_status res = yajl_parse(*hand, buf, len);
+
     if(res == yajl_status_error)
     {
-        unsigned char * err = yajl_get_error(*hand, 1, mstd::pointer_cast<const unsigned char*>(data), len);
+        unsigned char * err = yajl_get_error(*hand, 1, buf, len);
         error.init(mstd::pointer_cast<char*>(err));
         yajl_free_error(*hand, err);
-        tree.clear();
-    } else
-        error.reset();
+    }
 }
 
 void parseJSON(const boost::filesystem::path & path, boost::property_tree::ptree & tree, ParseError & error)
