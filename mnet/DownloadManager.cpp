@@ -258,8 +258,9 @@ private:
                     best->end = chunk.begin;
                     chunk.state = csWaiting;
                 } else {
-                    chunk.begin = invalidPosition;
-                    chunk.end = invalidPosition;
+                    chunk.begin = 0;
+                    chunk.end = 0;
+                    ec = codeDone;
                 }
             } else
                 ec = codeCancelled;

@@ -8,6 +8,7 @@ const filesize_t sizeUnknown = -1;
 const filesize_t sizeNotFound = -2;
 const int codeCancelled = 1000;
 const int codeOpenFailed = 1001;
+const int codeDone = 1002;
 
 struct DownloadProgress {
     filesize_t complete;
