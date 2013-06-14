@@ -198,6 +198,12 @@ private:
             if(!cancelled_)
             {
                 size_ = size;
+                {
+                    boost::filesystem::path temp = dest_;
+                    temp.remove_filename();
+                    boost::system::error_code ec;
+                    create_directories(temp, ec);
+                }
                 out_ = mstd::wfopen_append(dest_);
                 if(out_)
                 {

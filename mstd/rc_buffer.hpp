@@ -1,6 +1,9 @@
 #pragma once
 
+#include <stdlib.h>
 #include <string.h>
+
+#include <boost/assert.hpp>
 
 #include "atomic.hpp"
 
