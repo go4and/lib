@@ -6,6 +6,11 @@
 
 namespace mcrypt {
 
+size_t HasherDescriptor::size() const
+{
+    return EVP_MD_size(static_cast<const EVP_MD*>(evp_));
+}
+
 GenericHasher::GenericHasher(const HasherDescriptor & descriptor)
 {
     BOOST_STATIC_ASSERT(Context::size == sizeof(EVP_MD_CTX));

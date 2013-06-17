@@ -60,6 +60,7 @@ namespace std { class runtime_error : public exception { public: runtime_error(c
 #include <openssl/sha.h>
 
 #include <mstd/cstdint.hpp>
+#include <mstd/enum_utils.hpp>
 #include <mstd/handle_base.hpp>
 #include <mstd/hton.hpp>
 #include <mstd/itoa.hpp>

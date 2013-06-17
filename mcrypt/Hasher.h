@@ -74,6 +74,7 @@ public:
     {
     }
 
+    size_t size() const;
     const void * handle() const { return evp_; }
 private:
     const void * evp_;

@@ -2,8 +2,10 @@
 
 #include <boost/optional.hpp>
 
+#include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include <boost/preprocessor/wstringize.hpp>
+#include <boost/preprocessor/seq/elem.hpp>
 #include <boost/preprocessor/seq/for_each.hpp>
 
 #include <boost/preprocessor/facilities/apply.hpp>
