@@ -209,6 +209,7 @@
 					BOOST_SP_USE_PTHREADS,
 					"NS_BLOCK_ASSERTIONS=1",
 					BOOST_ASIO_HAS_MOVE,
+					"$(LOGGING_MACROS)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -252,6 +253,7 @@
 					BOOST_SP_USE_PTHREADS,
 					"NS_BLOCK_ASSERTIONS=1",
 					BOOST_ASIO_HAS_MOVE,
+					"$(LOGGING_MACROS)",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;

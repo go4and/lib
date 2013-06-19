@@ -284,6 +284,7 @@
 					"MSTD_USE_PBUFFER=0",
 					BOOST_AC_USE_PTHREADS,
 					BOOST_SP_USE_PTHREADS,
+					"$(LOGGING_MACROS)",
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
@@ -321,6 +322,7 @@
 					"MSTD_USE_PBUFFER=0",
 					BOOST_AC_USE_PTHREADS,
 					BOOST_SP_USE_PTHREADS,
+					"$(LOGGING_MACROS)",
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;

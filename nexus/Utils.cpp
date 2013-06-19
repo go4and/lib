@@ -144,6 +144,7 @@ void setupSocket(boost::asio::ip::tcp::socket & socket, int sendBufferSize, int 
 {
     boost::system::error_code ec;
 
+#if !defined(MLOG_NO_LOGGING)
     if(logger.enabled(mlog::llInfo))
     {
         boost::asio::ip::tcp::socket::send_buffer_size sends;
@@ -155,6 +156,7 @@ void setupSocket(boost::asio::ip::tcp::socket & socket, int sendBufferSize, int 
 
         MLOG_MESSAGE(Info, "old socket options, send: " << sends.value() << ", recv: " << recvs.value());
     }
+#endif
 
     if(socket.set_option(boost::asio::ip::tcp::no_delay(true), ec))
         MLOG_MESSAGE(Error, "set no_delay failed: " << ec << ", " << ec.message());
@@ -164,6 +166,7 @@ void setupSocket(boost::asio::ip::tcp::socket & socket, int sendBufferSize, int 
     if(socket.set_option(boost::asio::ip::tcp::socket::receive_buffer_size(recvBufferSize), ec))
         MLOG_MESSAGE(Error, "set receive_buffer_size failed: " << ec << ", " << ec.message());
 
+#if !defined(MLOG_NO_LOGGING)
     if(logger.enabled(mlog::llInfo))
     {
         boost::asio::ip::tcp::socket::send_buffer_size sends;
@@ -175,6 +178,7 @@ void setupSocket(boost::asio::ip::tcp::socket & socket, int sendBufferSize, int 
 
         MLOG_MESSAGE(Info, "new socket options, send: " << sends.value() << ", recv: " << recvs.value());
     }
+#endif
 }
 
 std::string escapeXml(const std::string & input)
