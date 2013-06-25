@@ -1,4 +1,12 @@
-#include "pch.h"
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+include "pch.h"
 
 #if !MLOG_NO_LOGGING
 
@@ -114,13 +122,17 @@ public:
     
     void doOutput(LogLevel level, const char * str, size_t len)
     {
+        const size_t limit = 0x400;
         while(len)
         {
-            size_t wr = fwrite(str, 1, len, handle_);
-            if(!wr || wr == len)
+            size_t wr = fwrite(str, 1, std::min(limit, len), handle_);
+            if(!wr)
             {
-                BOOST_ASSERT(wr == len);
-                break;
+                int err = errno;
+                if(err == 9)
+                    fflush(handle_);
+                else
+                    break;
             }
             str += wr;
             len -= wr;

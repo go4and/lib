@@ -1,4 +1,12 @@
-#include "pch.h"
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+include "pch.h"
 
 #include "Error.h"
 #include "Hasher.h"
@@ -114,6 +122,22 @@ mstd::rc_buffer GenericPKey::privateDer() const
     return bio2rc(bmem);
 }
 
+KeyType GenericPKey::type() const
+{
+    int type = EVP_PKEY_type(static_cast<EVP_PKEY*>(key_)->type);
+    if(type == EVP_PKEY_RSA)
+        return ktRSA;
+    else if(type == EVP_PKEY_DSA)
+        return ktDSA;
+    else if(type == EVP_PKEY_DH)
+        return ktDH;
+    else if(type == EVP_PKEY_EC)
+        return ktEC;
+    else if(type == NID_undef)
+        return ktNone;
+    return ktUnknown;
+}
+
 PKeyContext::PKeyContext(const GenericPKey & key)
     : context_(EVP_PKEY_CTX_new(static_cast<EVP_PKEY*>(key.handle()), 0))
 {
@@ -179,25 +203,40 @@ size_t PKeyDerive::operator()(char * out, size_t outlen, Error & error)
     return outlen;
 }
 
-PKeyVerify::PKeyVerify(const GenericPKey & key, const HasherDescriptor & hasher, Error & error)
-    : PKeyContext(key)
+void PKeyVerify::init(const GenericPKey & key, const HasherDescriptor & hasher, Padding padding, Error & error)
 {
+    hasher_ = hasher.handle();
     EVP_PKEY_CTX * context = static_cast<EVP_PKEY_CTX*>(handle());
     int res = EVP_PKEY_verify_init(context);
     if(error.checkResult(res))
         return;
-    res = EVP_PKEY_CTX_set_signature_md(context, static_cast<const EVP_MD*>(hasher.handle()));
+    res = EVP_PKEY_CTX_set_signature_md(context, static_cast<const EVP_MD*>(hasher_));
     if(error.checkResult(res))
         return;
+    int type = EVP_PKEY_type(static_cast<EVP_PKEY*>(key.handle())->type);
+    if(type == EVP_PKEY_RSA)
+    {
+        res = EVP_PKEY_CTX_set_rsa_padding(context, getRsaPadding(padding, false));
+        if(error.checkResult(res))
+            return;
+    }
 }
 
 bool PKeyVerify::operator()(const char * input, size_t inlen, const char * sign, size_t signlen, Error & error)
 {
     EVP_PKEY_CTX * context = static_cast<EVP_PKEY_CTX*>(handle());
+
+    HasherDescriptor hdesc(hasher_);
+    GenericHasher hasher(hdesc);
+    hasher.update(input, inlen);
+    size_t outlen = hdesc.size();
+    unsigned char * out = static_cast<unsigned char*>(alloca(outlen));
+    BOOST_VERIFY(hasher.final(out) == outlen);
+
     int res = EVP_PKEY_verify(context,
                               mstd::pointer_cast<const unsigned char*>(sign), static_cast<int>(signlen),
-                              mstd::pointer_cast<const unsigned char*>(input), static_cast<int>(inlen));
-    if(error.checkError(res))
+                              mstd::pointer_cast<const unsigned char*>(out), static_cast<int>(outlen));
+    if(error.checkResult(res))
         return false;
     return res != 0;
 }

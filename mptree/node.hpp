@@ -1,71 +1,11 @@
-#pragma once
-
-#include "src/parsers.hpp"
-#include "src/writers.hpp"
-
-namespace mptree {
-
-class node;
-
-class unparsed;
-typedef boost::intrusive_ptr<unparsed> unparsed_ptr;
-void intrusive_ptr_add_ref(unparsed * obj);
-void intrusive_ptr_release(unparsed * obj);
-
-class node {
-public:
-    node()
-        : parsed_(false)
-    {
-    }
-
-    void mark_parsed()
-    {
-        parsed_ = true;
-    }
-
-    static parser_state static_child_parser(const char * name, size_t len, void * data)
-    {
-        return static_cast<node*>(data)->child_parser(name, len ,true);
-    }
-
-    virtual void complete();
-    virtual void write(node_writer & writer, const char * name, bool in_array) const;
-private:
-    virtual parser_state child_parser(const char * name, size_t len, bool final) = 0;
-    virtual void do_complete() = 0;
-    virtual void write_children(node_writer & writer) const = 0;
-
-    bool parsed_;
-protected:
-    unparsed_ptr unparsed_;
-};
-
-template<class T>
-inline typename boost::enable_if<boost::is_base_of<node, T>, void>::type complete_value(T & out) { out.complete(); }
-
-template<class T>
-inline typename boost::disable_if<boost::is_base_of<node, T>, void>::type complete_value(T & out) {}
-
-inline parser_state make_parser(node & out) { out.mark_parsed(); return parser_state(&node::static_child_parser, 0, &out); }
-inline void write_node(node_writer & writer, const node & out, const char * name, bool in_array) { out.write(writer, name, in_array); }
-
-parser_state make_unparsed_parser(const char * name, size_t len, unparsed_ptr & unparsed);
-
-#define MPTREE_NODE_ITEM_STRING_2(elem) BOOST_PP_STRINGIZE(BOOST_PP_SEQ_ELEM(1, elem))
-#define MPTREE_NODE_ITEM_STRING_3(elem) BOOST_PP_SEQ_ELEM(2, elem)
-
-#define MPTREE_NODE_INVOKE_PARENT_0(a)
-#define MPTREE_NODE_INVOKE_PARENT_1(a) BOOST_PP_APPLY(a)
-
-#define MPTREE_NODE_ITEM_STRING(elem) \
-    BOOST_PP_CAT(MPTREE_NODE_ITEM_STRING_, BOOST_PP_SEQ_SIZE(elem))(elem)
-
-#define MPTREE_NODE_PARSE_CHILD_ITEM(r, data, elem) \
-        if(len == strlen(MPTREE_NODE_ITEM_STRING(elem)) && !strncmp(name, MPTREE_NODE_ITEM_STRING(elem), len)) \
-            return make_parser(this->BOOST_PP_SEQ_ELEM(1, elem)); \
-        /**/
-
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
 #define MPTREE_NODE_PARSE(parentInvoker, parent, seq) \
     mptree::parser_state child_parser(const char * name, size_t len, bool final) \
     { \

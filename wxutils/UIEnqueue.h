@@ -1,4 +1,12 @@
-#pragma once
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+pragma once
 
 #if !defined(BUILDING_WXUTILS)
 #include <wx/defs.h>
@@ -152,6 +160,12 @@ public:
     void operator()(const A & a, const B & b, const C & c) const
     {
         uiEnqueue(boost::bind(f_, a, b, c));
+    }
+
+    template<class A, class B, class C, class D>
+    void operator()(const A & a, const B & b, const C & c, const D & d) const
+    {
+        uiEnqueue(boost::bind(f_, a, b, c, d));
     }
 private:
     F f_;

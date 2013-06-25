@@ -1,4 +1,12 @@
-#pragma once
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+pragma once
 
 #if !MLOG_NO_LOGGING
 
@@ -165,6 +173,27 @@ inline std::ostream & operator<<(std::ostream & out, const OutPointer<T> & value
     value(out);
     return out;
 }
+
+#ifdef __OBJC__
+class OutObjC {
+public:
+    explicit OutObjC(id value)
+        : value_(value)
+    {
+    }
+    
+    id value() const { return value_; }
+private:
+    id value_;
+};
+
+inline OutObjC objc(id value)
+{
+    return OutObjC(value);
+}
+
+std::ostream & operator<<(std::ostream & out, const OutObjC & objc);
+#endif
 
 }
 

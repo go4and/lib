@@ -1,48 +1,12 @@
-#pragma once
-
-#ifndef NEXUS_BUILDING
-
-#include <boost/thread/thread.hpp>
-
-#include <boost/asio/deadline_timer.hpp>
-#include <boost/asio/io_service.hpp>
-#include <boost/asio/windows/stream_handle.hpp>
-
-#endif
-
-#include "Connection.h"
-#include "PacketPacker.h"
-
-#include "Packet.h"
-
-namespace nexus {
-
-class Buffer;
-
-class NEXUS_DECL PipeNode : public boost::noncopyable, public Connection<PipeNode> {
-public:
-    typedef boost::function<void(PacketCode, PacketReader)> Listener;
-
-    PipeNode();
-    ~PipeNode();
-
-    using Connection<PipeNode>::send;
-
-    void send(nexus::PacketCode code)
-    {
-        send(nexus::packCSD(code));
-    }
-
-#define NEXUS_PIPE_NODE_SEND_DEF(z, n, data) \
-    template <BOOST_PP_ENUM_PARAMS(n, typename T)> \
-    void send(nexus::PacketCode code, BOOST_PP_ENUM_BINARY_PARAMS(n, const T, & x)) \
-    { \
-        size_t len = nexus::tupleSize(BOOST_PP_ENUM_PARAMS(n, x)); \
-        send(nexus::packCSD(code, len, BOOST_PP_ENUM_PARAMS(n, x))); \
-    } \
-    /**/
-
-    BOOST_PP_REPEAT_FROM_TO(
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+BOOST_PP_REPEAT_FROM_TO(
         1, BOOST_PP_INC(NEXUS_PACKET_PACKER_MAX_ARITY),
         NEXUS_PIPE_NODE_SEND_DEF, ~)
 

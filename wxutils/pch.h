@@ -1,4 +1,12 @@
-#if defined(_MSC_VER)
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+if defined(_MSC_VER)
 #pragma once
 #endif
 
@@ -14,6 +22,7 @@
 #include <Windows.h>
 #endif
 
+#ifndef __OBJC__
 #include <map>
 #include <vector>
 
@@ -25,6 +34,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
+#include <boost/date_time/posix_time/ptime.hpp>
 #include <boost/date_time/posix_time/posix_time_io.hpp>
 
 #include <boost/move/move.hpp>
@@ -70,5 +80,8 @@
 
 #include <mlog/Dumper.h>
 #include <mlog/Logging.h>
+#else
+#include <wx/toplevel.h>
+#endif
 
 #define BUILDING_WXUTILS

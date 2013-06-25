@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 #include "pch.h"
+=======
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+include "pch.h"
+>>>>>>> 751fc585e47bb4774a5a26110f78678513d85781
 
 #include "GLFont.h"
 
@@ -15,6 +27,11 @@ GLFont::~GLFont()
         glDeleteLists(i->second, 1);
 }
 
+<<<<<<< HEAD
+=======
+#if BOOST_WINDOWS
+
+>>>>>>> 751fc585e47bb4774a5a26110f78678513d85781
 void GLFont::draw(const wchar_t * str)
 {
     draw(str, wcslen(str));
@@ -41,4 +58,9 @@ void GLFont::draw(const wchar_t * str, size_t len)
     glCallLists(len, GL_UNSIGNED_INT, &buffer_[0]);
 }
 
+<<<<<<< HEAD
+=======
+#endif
+
+>>>>>>> 751fc585e47bb4774a5a26110f78678513d85781
 }

@@ -1,4 +1,12 @@
-#pragma once
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+pragma once
 
 #include <string>
 
@@ -27,13 +35,13 @@
 
 namespace mstd {
 
-class tag_message;
-typedef boost::error_info<tag_message, std::string> error_message;
-class tag_errno;
-typedef boost::error_info<tag_errno, int> error_no;
+class BOOST_SYMBOL_VISIBLE tag_message_;
+typedef boost::error_info<tag_message_, std::string> error_message;
+class BOOST_SYMBOL_VISIBLE tag_error_no_;
+typedef boost::error_info<tag_error_no_, int> error_no;
 #if !defined(MSTD_NO_ERROR_CODE)
-class tag_errcode;
-typedef boost::error_info<tag_errno, boost::system::error_code> error_code;
+class BOOST_SYMBOL_VISIBLE tag_error_code_;
+typedef boost::error_info<tag_error_code_, boost::system::error_code> error_code;
 #endif
 
 error_message make_error_message(const std::string & text);

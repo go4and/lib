@@ -1,4 +1,12 @@
-#pragma once
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+pragma once
 
 #include <boost/algorithm/string/predicate.hpp>
 
@@ -41,50 +49,38 @@ void create_directories(const Path & path)
     }
 }
 
-inline std::string utf8fname(const boost::filesystem::wpath & path)
+inline
+#if BOOST_WINDOWS
+std::string
+#else
+const std::string&
+#endif
+utf8fname(const boost::filesystem::wpath & path)
 {
 #if BOOST_WINDOWS
-#if BOOST_FILESYSTEM_VERSION >= 3
 	return utf8(path.native());
 #else
-    return utf8(path.external_file_string());
-#endif
-#else
-#if BOOST_FILESYSTEM_VERSION >= 3
 	return path.native();
-#else
-    return path.external_file_string();
-#endif
 #endif
 }
 
-inline std::wstring wfname(const boost::filesystem::wpath & path)
+inline
+#if BOOST_WINDOWS
+const std::wstring &
+#else
+std::wstring
+#endif
+wfname(const boost::filesystem::wpath & path)
 {
 #if BOOST_WINDOWS
-#if BOOST_FILESYSTEM_VERSION >= 3
     return path.native();
 #else
-    return path.external_file_string();
-#endif
-#else
-#if BOOST_FILESYSTEM_VERSION >= 3
     return deutf8(path.native());
-#else
-    return deutf8(path.external_file_string());
-#endif
-#endif
-}
-
-inline std::string apifname(const boost::filesystem::wpath & path)
-{
-#if BOOST_WINDOWS
-	return narrow(wfname(path));
-#else
-	return utf8fname(path);
 #endif
 }
 
 FILE * wfopen(const boost::filesystem::wpath & path, const char * mode);
+FILE * wfopen_append(const boost::filesystem::wpath & path);
 std::streamsize file_size(FILE * file);
 
 class rc_buffer;

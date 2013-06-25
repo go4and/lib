@@ -1,4 +1,12 @@
-#include "pch.h"
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+include "pch.h"
 
 #include "Error.h"
 
@@ -215,7 +223,7 @@ RSA RSA::fromPUBKEY(const char * buf, size_t len, Error & error)
 
     if(!rsa && error.checkResult(0))
         return RSA(0);
-    return RSA(rsa);
+    return makeRSA(rsa);
 }
 
 RSA RSA::fromNE(const unsigned char * n, size_t nlen, const unsigned char * e, size_t elen, Error & error)
@@ -251,84 +259,5 @@ void RSA::extractN(std::vector<char> & out)
     out.resize(BN_num_bytes(impl->n));
     BN_bn2bin(impl->n, mstd::pointer_cast<unsigned char*>(&out[0]));
 }
-
-#if 0
-RSAPtr RSA::createFromPublicPem(const void * buf, size_t len)
-{
-    BIO * bmem = BIO_new_mem_buf(const_cast<void*>(buf), static_cast<int>(len));
-    EVP_PKEY * key = PEM_read_bio_PUBKEY(bmem, 0, 0, 0);
-    BIO_free_all(bmem);
-
-    if(key)
-    {
-        ::RSA * rsa = extractRsa(key);
-
-        if(key)
-            EVP_PKEY_free(key);
-        if(rsa)
-        {
-            RSAPtr result(new RSA(rsa));
-            return result;
-        } else
-            handleError();
-    } else
-        handleError();
-    throw RSAException(0);
-}
-
-RSAPtr RSA::createFromPrivatePem(const void * buf, size_t len)
-{
-    BIO * bmem = BIO_new_mem_buf(const_cast<void*>(buf), static_cast<int>(len));
-    EVP_PKEY * key = PEM_read_bio_PrivateKey(bmem, 0, 0, 0);
-    BIO_free_all(bmem);
-
-    if(key)
-    {
-        ::RSA * rsa = extractRsa(key);
-        if(key)
-            EVP_PKEY_free(key);
-        if(rsa)
-        {
-            RSAPtr result(new RSA(rsa));
-            return result;
-        } else
-            handleError();
-    } else
-        handleError();
-    throw RSAException(0);
-}
-
-template<class Func>
-static std::vector<char> processEx(Func func, const char * src, size_t len, ::RSA * rsa, bool encrypt, int padding)
-{
-    if(!len)
-        return std::vector<char>();
-    size_t keySize = RSA_size(rsa);
-    size_t tailSize = getPaddingTail(padding);
-    size_t inputBlockSize;
-    size_t outputBlockSize;
-    if(encrypt)
-    {
-        inputBlockSize = keySize - tailSize;
-        outputBlockSize = keySize;
-    } else {
-        inputBlockSize = keySize;
-        outputBlockSize = keySize - tailSize;
-    }
-    const char * end = src + len;
-    std::vector<char> result((len + inputBlockSize - 1) / inputBlockSize * outputBlockSize);
-    char * out = &result[0];
-    while(src != end)
-    {
-        size_t clen = (src + inputBlockSize <= end ? inputBlockSize : end - src);
-        int sz = func(static_cast<int>(clen), mstd::pointer_cast<const unsigned char*>(src), mstd::pointer_cast<unsigned char*>(&result[0]), rsa, padding);
-        checkError(sz);
-        out += sz;
-        src += clen;
-    }
-    result.resize(out - &result[0]);
-    return result;
-}
-#endif
 
 }

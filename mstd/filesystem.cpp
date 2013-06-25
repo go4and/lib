@@ -1,4 +1,12 @@
-#include <boost/config.hpp>
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+include <boost/config.hpp>
 
 #if !BOOST_WINDOWS
 #include <stdio.h>
@@ -11,15 +19,23 @@
 
 namespace mstd {
 
-FILE * wfopen(const boost::filesystem::wpath & path, const char * mode)
+FILE * wfopen(const boost::filesystem::path & path, const char * mode)
 {
 #if BOOST_WINDOWS
     wchar_t buf[0x10];
     std::copy(mode, mode + strlen(mode) + 1, buf);
-    return _wfopen(mstd::wfname(path).c_str(), buf);
+    return _wfopen(path.native().c_str(), buf);
 #else
-    return fopen(mstd::apifname(path).c_str(), mode);
+    return fopen(path.native().c_str(), mode);
 #endif
+}
+
+FILE * wfopen_append(const boost::filesystem::path & path)
+{
+    FILE * result = mstd::wfopen(path, "rb+");
+    if(!result)
+        result = mstd::wfopen(path, "wb");
+    return result;
 }
 
 std::streamsize file_size(FILE * file)

@@ -1,4 +1,12 @@
-#include <boost/config.hpp>
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+include <boost/config.hpp>
 
 #include "filesystem.hpp"
 
@@ -62,7 +70,7 @@ void execute_file(const boost::filesystem::wpath & path)
     parent.remove_filename();
     CreateProcessW(NULL, const_cast<wchar_t*>(wfname(path).c_str()), NULL, NULL, true, CREATE_NO_WINDOW, NULL, wfname(parent).c_str(), &si, &pi);
 #else
-    std::string fname = apifname(path);
+    std::string fname = mstd::utf8fname(path);
     if(!vfork())
     {
         execl(fname.c_str(), fname.c_str(), NULL);
@@ -99,7 +107,7 @@ std::wstring escape(const std::wstring & input)
 void execute_file(const boost::filesystem::wpath & path, const std::vector<std::wstring> & arguments)
 {
 #if !BOOST_WINDOWS
-    std::string fname = apifname(path);
+    std::string fname = mstd::utf8fname(path);
     std::vector<std::string> args;
     args.reserve(arguments.size());
     std::vector<char*> argv;
@@ -142,7 +150,7 @@ void execute_file(const boost::filesystem::wpath & path, const std::vector<std::
 void make_executable(const boost::filesystem::wpath & path, bool user, bool group, bool other)
 {
 #if !BOOST_WINDOWS
-    std::string executable = mstd::apifname(path);
+    std::string executable = mstd::utf8fname(path);
     struct stat st;
     if(!stat(executable.c_str(), &st))
         chmod(executable.c_str(), st.st_mode | (user ? S_IXUSR : 0) | (group ? S_IXGRP : 0) | (other ? S_IXOTH : 0));

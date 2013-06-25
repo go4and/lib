@@ -1,4 +1,12 @@
-#pragma once
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+pragma once
 
 #ifndef MNET_BUILDING
 #include <boost/function.hpp>
@@ -10,6 +18,8 @@
 
 #include <mstd/pointer_cast.hpp>
 #include <mstd/rc_buffer.hpp>
+
+#include <boost/variant/variant.hpp>
 #endif
 
 #include "DownloadDefines.h"
@@ -18,11 +28,13 @@ typedef void CURL;
 
 namespace mnet {
 
-typedef boost::function<void(int, const boost::property_tree::ptree&)> AsyncPTreeHandler;
-typedef boost::function<void(int, const std::string &)> AsyncDataHandler;
-typedef boost::function<void(int, const std::string &, const std::string &)> AsyncDataExHandler;
-typedef boost::function<void(int)> AsyncHandler;
-typedef boost::function<void(int /* percent */)> ProgressHandler;
+typedef boost::function<void(int ec, const boost::property_tree::ptree & tree)> AsyncPTreeHandler;
+typedef boost::function<void(int ec, const mstd::rc_buffer & data)> AsyncDataHandler;
+typedef boost::function<void(int ec, const mstd::rc_buffer & data, const mstd::rc_buffer & headers)> AsyncDataExHandler;
+typedef boost::function<void(int ec, filesize_t size)> AsyncSizeHandler;
+typedef boost::function<size_t(const char * buf, size_t size)> DirectWriter;
+typedef boost::function<void(int ec)> AsyncHandler;
+typedef boost::function<void(int percent)> ProgressHandler;
 typedef boost::function<void()> Action;
 typedef boost::function<void(const Action&)> UIEnqueuer;
 
@@ -49,29 +61,37 @@ void getFileAsync(const std::string & url, const boost::filesystem::wpath & path
 boost::property_tree::ptree parseXml(const std::string& data);
 boost::property_tree::ptree parseJSON(const std::string& data);
 
+typedef boost::variant<AsyncHandler, AsyncDataHandler, AsyncDataExHandler, AsyncSizeHandler> AsyncRequestHandler;
+
 class Request {
 public:
-    Request() {}
+    Request()
+        : rangeBegin_(-1) {}
 
     Request & url(const std::string & value) { url_ = value; return *this; }
     Request & cookies(const std::string & value) { cookies_ = value; return *this; }
     Request & progressHandler(const ProgressHandler & value) { progress_ = value; return *this; }
-    Request & dataHandler(const AsyncDataHandler & value) { handler_ = value; handlerEx_.clear(); return *this; }
-    Request & dataExHandler(const AsyncDataExHandler & value) { handlerEx_ = value; handler_.clear(); return *this; }
+    Request & dataHandler(const AsyncDataHandler & value) { handler_ = value;; return *this; }
+    Request & dataExHandler(const AsyncDataExHandler & value) { handler_ = value; return *this; }
+    Request & sizeHandler(const AsyncSizeHandler & value) { handler_ = value; return *this; }
     Request & xmlHandler(const AsyncPTreeHandler & value);
     Request & jsonHandler(const AsyncPTreeHandler & value);
+    Request & directWriter(const DirectWriter & writer, const AsyncHandler & handler) { directWriter_ = writer; handler_ = handler; return *this; }
     Request & postData(const void * data, size_t len) { postData_ = mstd::rc_buffer(static_cast<const char*>(data), len); return *this; }
     Request & postData(const std::string & data) { return postData(data.c_str(), data.size()); }
     Request & postData(const mstd::rc_buffer & data) { postData_ = data; return *this; }
     Request & header(const std::string & line) { headers_.push_back(line); return *this; }
+    Request & range(filesize_t begin, filesize_t end) { rangeBegin_ = begin; rangeEnd_ = end; return *this; }
 
     const std::string & url() const { return url_; }
     const std::string & cookies() const { return cookies_; }
     const ProgressHandler & progressHandler() const { return progress_; }
-    const AsyncDataHandler & dataHandler() const { return handler_; }
-    const AsyncDataExHandler & dataExHandler() const { return handlerEx_; }
+    const AsyncRequestHandler & handler() const { return handler_; }
+    const DirectWriter & directWriter() const { return directWriter_; }
     const mstd::rc_buffer & postData() const { return postData_; }
     const std::vector<std::string> & headers() const { return headers_; }
+    filesize_t rangeBegin() const { return rangeBegin_; }
+    filesize_t rangeEnd() const { return rangeEnd_; }
 
     void run();
 private:
@@ -79,8 +99,9 @@ private:
     std::string cookies_;
     std::vector<std::string> headers_;
     ProgressHandler progress_;
-    AsyncDataHandler handler_;
-    AsyncDataExHandler handlerEx_;
+    AsyncRequestHandler handler_;
+    DirectWriter directWriter_;
+    filesize_t rangeBegin_, rangeEnd_;
     mstd::rc_buffer postData_;
 };
 
@@ -116,5 +137,6 @@ void cancelAll();
 int getRemoteFileSizeEx(std::string & uri, filesize_t & out);
 
 std::string escapeUrl(const std::string & url);
+std::string unescapeUrl(const std::string & url);
 
 }

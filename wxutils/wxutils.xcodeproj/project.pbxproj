@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		C3A2980F13E0A3B100F7FC1B /* UIEnqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */; };
 		C3A2981013E0A3B100F7FC1B /* UIEnqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */; };
+		C3AFD79F1748E7E00079FE35 /* BlankHint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD7971748E7E00079FE35 /* BlankHint.cpp */; };
+		C3AFD7A01748E7E00079FE35 /* BlankHint.h in Headers */ = {isa = PBXBuildFile; fileRef = C3AFD7981748E7E00079FE35 /* BlankHint.h */; };
+		C3AFD7A11748E7E00079FE35 /* GLFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD7991748E7E00079FE35 /* GLFont.cpp */; };
+		C3AFD7A21748E7E00079FE35 /* GLFont.h in Headers */ = {isa = PBXBuildFile; fileRef = C3AFD79A1748E7E00079FE35 /* GLFont.h */; };
+		C3AFD7A31748E7E00079FE35 /* Preferences.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD79B1748E7E00079FE35 /* Preferences.cpp */; };
+		C3AFD7A41748E7E00079FE35 /* Preferences.h in Headers */ = {isa = PBXBuildFile; fileRef = C3AFD79C1748E7E00079FE35 /* Preferences.h */; };
+		C3AFD7A51748E7E00079FE35 /* StructTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD79D1748E7E00079FE35 /* StructTable.cpp */; };
+		C3AFD7A61748E7E00079FE35 /* StructTable.h in Headers */ = {isa = PBXBuildFile; fileRef = C3AFD79E1748E7E00079FE35 /* StructTable.h */; };
 		C3E07A1C1520EDC900E1F9FF /* Misc.mm in Sources */ = {isa = PBXBuildFile; fileRef = C3E07A1B1520EDC900E1F9FF /* Misc.mm */; };
 		C3E8123616C60B34002FB5B9 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E8123516C60B34002FB5B9 /* mlog.dylib */; };
 		C3EDA4E9138839D1002FAF3C /* Any.h in Headers */ = {isa = PBXBuildFile; fileRef = C3EDA4CB138839D1002FAF3C /* Any.h */; };
@@ -63,6 +71,14 @@
 /* Begin PBXFileReference section */
 		C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIEnqueue.cpp; sourceTree = "<group>"; };
 		C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIEnqueue.h; sourceTree = "<group>"; };
+		C3AFD7971748E7E00079FE35 /* BlankHint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlankHint.cpp; sourceTree = "<group>"; };
+		C3AFD7981748E7E00079FE35 /* BlankHint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlankHint.h; sourceTree = "<group>"; };
+		C3AFD7991748E7E00079FE35 /* GLFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFont.cpp; sourceTree = "<group>"; };
+		C3AFD79A1748E7E00079FE35 /* GLFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFont.h; sourceTree = "<group>"; };
+		C3AFD79B1748E7E00079FE35 /* Preferences.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Preferences.cpp; sourceTree = "<group>"; };
+		C3AFD79C1748E7E00079FE35 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
+		C3AFD79D1748E7E00079FE35 /* StructTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StructTable.cpp; sourceTree = "<group>"; };
+		C3AFD79E1748E7E00079FE35 /* StructTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StructTable.h; sourceTree = "<group>"; };
 		C3E07A1B1520EDC900E1F9FF /* Misc.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Misc.mm; sourceTree = "<group>"; };
 		C3E8123516C60B34002FB5B9 /* mlog.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EDA4C8138839A3002FAF3C /* wxutils.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = wxutils.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +160,10 @@
 		08FB77ACFE841707C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				C3AFD7971748E7E00079FE35 /* BlankHint.cpp */,
+				C3AFD7991748E7E00079FE35 /* GLFont.cpp */,
+				C3AFD79B1748E7E00079FE35 /* Preferences.cpp */,
+				C3AFD79D1748E7E00079FE35 /* StructTable.cpp */,
 				C3A2980D13E0A3B100F7FC1B /* UIEnqueue.cpp */,
 				C3EDA4CD138839D1002FAF3C /* CanvasUtils.cpp */,
 				C3EDA4CF138839D1002FAF3C /* Colors.cpp */,
@@ -172,6 +192,10 @@
 		C34126B616D11A0C00BF26D2 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				C3AFD7981748E7E00079FE35 /* BlankHint.h */,
+				C3AFD79A1748E7E00079FE35 /* GLFont.h */,
+				C3AFD79C1748E7E00079FE35 /* Preferences.h */,
+				C3AFD79E1748E7E00079FE35 /* StructTable.h */,
 				C3A2980E13E0A3B100F7FC1B /* UIEnqueue.h */,
 				C3EDA4CB138839D1002FAF3C /* Any.h */,
 				C3EDA4CC138839D1002FAF3C /* AttachData.h */,
@@ -234,6 +258,10 @@
 				C3EDA502138839D1002FAF3C /* Widget.h in Headers */,
 				C3EDA504138839D1002FAF3C /* WindowUtils.h in Headers */,
 				C3A2981013E0A3B100F7FC1B /* UIEnqueue.h in Headers */,
+				C3AFD7A01748E7E00079FE35 /* BlankHint.h in Headers */,
+				C3AFD7A21748E7E00079FE35 /* GLFont.h in Headers */,
+				C3AFD7A41748E7E00079FE35 /* Preferences.h in Headers */,
+				C3AFD7A61748E7E00079FE35 /* StructTable.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +349,10 @@
 				C3EDA503138839D1002FAF3C /* WindowUtils.cpp in Sources */,
 				C3A2980F13E0A3B100F7FC1B /* UIEnqueue.cpp in Sources */,
 				C3E07A1C1520EDC900E1F9FF /* Misc.mm in Sources */,
+				C3AFD79F1748E7E00079FE35 /* BlankHint.cpp in Sources */,
+				C3AFD7A11748E7E00079FE35 /* GLFont.cpp in Sources */,
+				C3AFD7A31748E7E00079FE35 /* Preferences.cpp in Sources */,
+				C3AFD7A51748E7E00079FE35 /* StructTable.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

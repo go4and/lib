@@ -1,4 +1,12 @@
-#ifdef _MSC_VER
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+ifdef _MSC_VER
 #pragma once
 
 #pragma warning(disable: 4251)

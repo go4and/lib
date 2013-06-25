@@ -1,4 +1,12 @@
-#if defined(_MSC_VER)
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+if defined(_MSC_VER)
 #pragma once
 #endif
 
@@ -75,13 +83,17 @@
 #include <mstd/itoa.hpp>
 #include <mstd/hton.hpp>
 #include <mstd/pointer_cast.hpp>
+#include <mstd/rc_buffer.hpp>
 #include <mstd/reference_counter.hpp>
 #include <mstd/singleton.hpp>
 #include <mstd/threads.hpp>
+#include <mstd/tid_map.hpp>
 #include <mstd/utf8.hpp>
 
+#include <mlog/Dumper.h>
 #include <mlog/Logging.h>
 #include <mlog/ThreadTrace.h>
+#include <mlog/Utils.h>
 
 #include <mcrypt/MD5.h>
 #include <mcrypt/Utils.h>
