@@ -165,10 +165,7 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(BOOST_ROOT)/stage/lib",
-					/opt/local/lib/postgresql90,
-				);
+				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lboost_system-mt-d";
@@ -198,10 +195,7 @@
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(BOOST_ROOT)/stage/lib",
-					/opt/local/lib/postgresql90,
-				);
+				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				OTHER_LDFLAGS = "-lboost_system-mt";
 				SDKROOT = macosx10.7;

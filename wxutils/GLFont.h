@@ -26,8 +26,11 @@ public:
     void draw(const wchar_t * str);
     inline void draw(const std::wstring & str) { draw(str.c_str(), str.length()); }
     inline void draw(const wxString & str) { draw(str.c_str().AsWChar(), str.length()); }
+<<<<<<< HEAD
+=======
 
     wxSize textSize(const wxString & str) { return mdc_.GetTextExtent(str); }
+>>>>>>> 751fc585e47bb4774a5a26110f78678513d85781
 private:
     GLuint makeGlyph(wchar_t ch);
 
