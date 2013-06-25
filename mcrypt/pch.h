@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+#include <boost/version.hpp>
+
 #include <boost/aligned_storage.hpp>
 #include <boost/assert.hpp>
 #include <boost/array.hpp>

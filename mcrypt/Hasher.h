@@ -83,6 +83,8 @@ public:
     }
 
     const void * handle() const { return evp_; }
+
+    size_t size() const;
 private:
     const void * evp_;
 };

@@ -20,12 +20,12 @@ for root, _, files in os.walk(path):
                 fname = os.path.join(root, file)
                 with open(fname, 'rt') as inp:
                     body = inp.read()
-                stop = body.find('*/') if body.beginswith('/*') else -1
+                stop = body.find('*/') if body.startswith('/*') else -1
                 if stop == -1 or body[:stop + 2] != license or body[stop + 3] != '#':
                     print("Patching: " + fname)
                     if stop == -1:
                         stop = -2
-                    body = license + '\n' + ('' if body[stop + 3] == '#' else '#') + body[stop + 2:].lstrip()
+                    body = license + '\n' + body[stop + 2:].lstrip()
                     with open(fname, 'wt') as out:
                         out.write(body)
         except Exception as e:

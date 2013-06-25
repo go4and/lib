@@ -6,7 +6,30 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-#}
+#include "pch.h"
+
+#include "TEA.h"
+
+using namespace boost;
+
+namespace mcrypt {
+
+TEA::TEA(const uint32_t key[4])
+{
+    memcpy(key_, key, sizeof(key_));
+}
+
+void TEA::encryptChunk(uint32_t * data) const
+{
+    uint32_t v0 = data[0], v1 = data[1], sum = 0;
+    uint32_t delta = 0x9e3779b9;
+    uint32_t k0 = key_[0], k1 = key_[1], k2 = key_[2], k3 = key_[3];
+    for(int i = 0; i < 32; ++i)
+    {
+        sum += delta;
+        v0 += ((v1<<4) + k0) ^ (v1 + sum) ^ ((v1>>5) + k1);
+        v1 += ((v0<<4) + k2) ^ (v0 + sum) ^ ((v0>>5) + k3);  /* end cycle */
+    }
     data[0] = v0; data[1] = v1;
 }
 
