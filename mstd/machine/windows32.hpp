@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-ifndef MSTD_MACHINE_COMMON_PROCESSING
+#ifndef MSTD_MACHINE_COMMON_PROCESSING
 #error Dont include this file directly, use machine.hpp
 #endif
 

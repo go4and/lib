@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-pragma once
+#pragma once
 
 namespace boost { namespace asio {
     class io_service;

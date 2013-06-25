@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-ifdef _MSC_VER
+#ifdef _MSC_VER
 #pragma once
 
 #pragma warning(disable: 4251)

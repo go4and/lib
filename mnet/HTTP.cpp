@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-{
+#{
             boost::shared_lock<boost::shared_mutex> lock(proxyMutex_);
 
 	        bool use_proxy = proxy_.active || (proxy_.useSystem && ieUsesProxy_);

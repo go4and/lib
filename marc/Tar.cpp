@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-archive_read_support_format_tar(a);
+#archive_read_support_format_tar(a);
     archive_read_support_compression_gzip(a);
 
 	if ((r = archive_read_open_memory(a, data, size)))

@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-}
+#}
     data[0] = v0; data[1] = v1;
 }
 

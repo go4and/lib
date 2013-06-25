@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-BOOST_PP_REPEAT_FROM_TO(
+#BOOST_PP_REPEAT_FROM_TO(
         1, BOOST_PP_INC(NEXUS_PACKET_PACKER_MAX_ARITY),
         NEXUS_PIPE_NODE_SEND_DEF, ~)
 
