@@ -20,7 +20,7 @@ for root, _, files in os.walk(path):
                 fname = os.path.join(root, file)
                 with open(fname, 'rt') as inp:
                     body = inp.read()
-                stop = body.find('*/')
+                stop = body.find('*/') if body.beginswith('/*') else -1
                 if stop == -1 or body[:stop + 2] != license or body[stop + 3] != '#':
                     print("Patching: " + fname)
                     if stop == -1:
