@@ -1,4 +1,12 @@
-#ifndef MSTD_MACHINE_COMMON_PROCESSING
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+ifndef MSTD_MACHINE_COMMON_PROCESSING
 #error Dont include this file directly, use common.hpp
 #endif
 

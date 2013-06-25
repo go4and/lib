@@ -1,24 +1,11 @@
-#if defined(_MSC_VER)
-#pragma once
-#endif
-
-#if defined(_MSC_VER)
-#include <WinSock2.h>
-#pragma warning(disable: 4245)
-#else
-#include <arpa/inet.h>
-#endif
-
-#include <boost/config.hpp>
-#include <boost/version.hpp>
-
-#include <string.h>
-
-/*#if BOOST_MSVC && !defined(_CPPUNWIND)
-#include <exception>
-namespace std { class runtime_error : public exception { public: runtime_error(const char *) {} }; }
-#endif*/
-
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
 #include <algorithm>
 #include <string>
 #include <vector>

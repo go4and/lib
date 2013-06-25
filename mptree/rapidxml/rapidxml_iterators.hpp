@@ -1,4 +1,12 @@
-#ifndef RAPIDXML_ITERATORS_HPP_INCLUDED
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+ifndef RAPIDXML_ITERATORS_HPP_INCLUDED
 #define RAPIDXML_ITERATORS_HPP_INCLUDED
 
 // Copyright (C) 2006, 2009 Marcin Kalicinski
