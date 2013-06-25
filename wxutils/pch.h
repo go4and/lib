@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-if defined(_MSC_VER)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 

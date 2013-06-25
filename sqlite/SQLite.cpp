@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-include <string.h>
+#include <string.h>
 
 #include <mstd/pointer_cast.hpp>
 #if !defined(MLOG_NO_LOGGING)

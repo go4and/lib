@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-emplate<>
+#emplate<>
 inline __declspec(naked) boost::uint64_t atomic_read<8>(const volatile void *)
 {
     __asm {

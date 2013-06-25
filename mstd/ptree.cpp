@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-include "strings.hpp"
+#include "strings.hpp"
 
 #include "ptree.hpp"
 

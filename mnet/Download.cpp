@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-)
+#)
                 chunk->worker.reset(new Worker(curlm_, out_, downloaded_, chunk, url_));
         }
     }

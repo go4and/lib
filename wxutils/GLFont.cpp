@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-#include "pch.h"
-=======
 /*
 ** The author disclaims copyright to this source code.  In place of
 ** a legal notice, here is a blessing:
@@ -9,8 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-include "pch.h"
->>>>>>> 751fc585e47bb4774a5a26110f78678513d85781
+#include "pch.h"
 
 #include "GLFont.h"
 

@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-pragma once
+#pragma once
 
 #ifndef NEXUS_BUILDING
 #include <boost/date_time/posix_time/ptime.hpp>

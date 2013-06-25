@@ -9,8 +9,12 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
+<<<<<<< HEAD
 include "pch.h"
 >>>>>>> 751fc585e47bb4774a5a26110f78678513d85781
+=======
+#include "pch.h"
+>>>>>>> 1f7bacbb2530b81519acd781a469dcdcefa85f68
 
 #include "Preferences.h"
 

@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-if !_STLP_NO_IOSTREAMS
+#if !_STLP_NO_IOSTREAMS
 #include <ostream>
 #endif
 

@@ -6,7 +6,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-pragma once
+#pragma once
 
 #include <boost/fusion/algorithm/query/find_if.hpp>
 #include <boost/fusion/iterator/distance.hpp>
