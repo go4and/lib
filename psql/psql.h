@@ -18,7 +18,11 @@
 #include <boost/array.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
+
+#include <boost/date_time/posix_time/ptime.hpp>
+
 #include <boost/logic/tribool.hpp>
+
 #include <boost/move/move.hpp>
 
 #include <mstd/cstdint.hpp>
