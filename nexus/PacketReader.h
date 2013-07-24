@@ -225,6 +225,17 @@ public:
         return T(oldPos, pos_);
     }
 
+    template<class T>
+    T readWString()
+    {
+        boost::uint16_t len = read<boost::uint16_t>();
+        T result;
+        result.reserve(len);
+        while(len--)
+            result.push_back(read<uint16_t>());
+        return result;
+    }
+
     std::string readCString()
     {
         const char * p = pos_;
