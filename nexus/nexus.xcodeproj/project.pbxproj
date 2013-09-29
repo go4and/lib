@@ -110,7 +110,7 @@
 		C3AFD78D1748E5700079FE35 /* ByteBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteBuffer.cpp; sourceTree = SOURCE_ROOT; };
 		C3AFD78E1748E5700079FE35 /* ByteBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteBuffer.h; sourceTree = SOURCE_ROOT; };
 		C3AFD78F1748E5700079FE35 /* ChunkedBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChunkedBuffer.h; sourceTree = SOURCE_ROOT; };
-		C3AFD7901748E5700079FE35 /* PipeService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PipeService.cpp; path = PipeService.cpp; sourceTree = SOURCE_ROOT; };
+		C3AFD7901748E5700079FE35 /* PipeService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PipeService.cpp; sourceTree = SOURCE_ROOT; };
 		C3AFD7911748E5700079FE35 /* PipeService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PipeService.h; sourceTree = SOURCE_ROOT; };
 		C3E3CA5016A7F7810035EF18 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = SOURCE_ROOT; };
 		C3E3CA5116A7F7810035EF18 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = SOURCE_ROOT; };
@@ -384,7 +384,7 @@
 					"-lboost_system-mt-d",
 					"-lboost_thread-mt-d",
 				);
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
@@ -429,7 +429,7 @@
 					"-lboost_system-mt",
 					"-lboost_thread-mt",
 				);
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};

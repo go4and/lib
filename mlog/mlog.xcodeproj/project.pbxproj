@@ -223,7 +223,7 @@
 					"-lboost_filesystem-mt-d",
 					"-lboost_system-mt-d",
 				);
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
@@ -262,7 +262,7 @@
 					"-lboost_filesystem-mt",
 					"-lboost_system-mt",
 				);
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 			};
