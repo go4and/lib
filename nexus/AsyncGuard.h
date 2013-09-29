@@ -110,7 +110,7 @@ private:
     }
 
     static detail::TSS<AsyncGuard<T> > & tss;
-
+    
     bool failed_;
 };
 

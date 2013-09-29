@@ -48,7 +48,7 @@ public:
         e_at_domain = '@' >>  e_domain;
         e_domain = e_name >> *('.' >> e_name);
         e_local_part = alnum >> -char_('.') >> -(+e_char >> *('.' >> +e_char));
-        e_name = alpha >> +(*char_('-') >> alnum);
+        e_name = alnum >> +(*char_('-') >> alnum);
         e_char = char_('\041', '\177') - e_special;
         e_special = char_('<') | '>' | '(' | ')' | '[' | ']' | '\\' | '.' | ',' | ';' | ':' | '@' | '\"' | cntrl;
     }

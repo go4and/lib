@@ -70,9 +70,11 @@ public:
     boost::int32_t asInt32(size_t index) const;
     boost::int64_t asInt64(size_t index) const;
     const char * asCString(size_t index) const;
-    ByteArray asArray(size_t index) const;
+    ByteArray asByteArray(size_t index) const;
     boost::posix_time::ptime asTime(size_t index) const;
     bool asBool(size_t index) const;
+
+    inline ByteArray asArray(size_t index) const { return asByteArray(index); }
 
     template<class T>
     typename boost::enable_if<boost::is_same<T, boost::int16_t>, T>::type
@@ -432,6 +434,7 @@ public:
     inline void addArray(const boost::array<unsigned char, N> * value, size_t count, Oid oid = oidByteArray)  { doAddArray(value, count, oid); }
 
     inline void addArray(const std::pair<const char*, const char*> * value, size_t count, Oid oid = oidText) { doAddArray(value, count, oid); }
+    inline void addArray(const ByteArray * value, size_t count, Oid oid = oidByteArray) { doAddArray(value, count, oid); }
     inline void addArray(const std::string * value, size_t count, Oid oid = oidText)  { doAddArray(value, count, oid); }
     inline void addArray(const boost::int64_t * value, size_t count) { doAddArray(value, count, oidInt64); }
     inline void addArray(const boost::int32_t * value, size_t count) { doAddArray(value, count, oidInt32); }
@@ -582,6 +585,18 @@ public:
     }
 };
 
+template<> class AddArrayHelper<ByteArray> : public DynamicAddArrayHelper {
+public:
+    static size_t getSize(const ByteArray & value)
+    {
+        return value.len;
+    }
+    
+    static void write(char * pos, const ByteArray & value)
+    {
+        memcpy(pos, value.data, value.len);
+    }
+};
 template<size_t N> class AddArrayHelper<boost::array<char, N> > : public StaticAddArrayHelper<N> {
 public:
     static void write(char * pos, const boost::array<char, N> & value)

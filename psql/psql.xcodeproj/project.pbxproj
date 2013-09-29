@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		C35AA50C135391D500649921 /* psql.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C35AA50A135391D500649921 /* psql.cpp */; };
 		C35AA50D135391D500649921 /* psql.h in Headers */ = {isa = PBXBuildFile; fileRef = C35AA50B135391D500649921 /* psql.h */; };
-		C3660D5913F5A1FB001F51AA /* libpq.5.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */; };
+		C3C81E1A17F332420050046E /* libpq.5.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3C81E1917F332420050046E /* libpq.5.5.dylib */; };
 		C3E91C0815DCD999001F15B9 /* mlog.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E91C0615DCD999001F15B9 /* mlog.dylib */; };
 		C3E91C0915DCD999001F15B9 /* mstd.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E91C0715DCD999001F15B9 /* mstd.dylib */; };
 /* End PBXBuildFile section */
@@ -18,7 +18,7 @@
 		C3389D47135388790010E3BF /* psql.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = psql.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C35AA50A135391D500649921 /* psql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = psql.cpp; sourceTree = SOURCE_ROOT; };
 		C35AA50B135391D500649921 /* psql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = psql.h; sourceTree = SOURCE_ROOT; };
-		C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpq.5.3.dylib; path = /opt/local/lib/postgresql90/libpq.5.3.dylib; sourceTree = "<absolute>"; };
+		C3C81E1917F332420050046E /* libpq.5.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpq.5.5.dylib; path = ../../../../../../../opt/local/lib/postgresql92/libpq.5.5.dylib; sourceTree = "<group>"; };
 		C3E91C0615DCD999001F15B9 /* mlog.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mlog.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3E91C0715DCD999001F15B9 /* mstd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mstd.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -29,8 +29,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3E91C0815DCD999001F15B9 /* mlog.dylib in Frameworks */,
+				C3C81E1A17F332420050046E /* libpq.5.5.dylib in Frameworks */,
 				C3E91C0915DCD999001F15B9 /* mstd.dylib in Frameworks */,
-				C3660D5913F5A1FB001F51AA /* libpq.5.3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,9 +40,9 @@
 		C315362916AA6D140029F34A /* deps */ = {
 			isa = PBXGroup;
 			children = (
+				C3C81E1917F332420050046E /* libpq.5.5.dylib */,
 				C3E91C0615DCD999001F15B9 /* mlog.dylib */,
 				C3E91C0715DCD999001F15B9 /* mstd.dylib */,
-				C3660D5813F5A1FB001F51AA /* libpq.5.3.dylib */,
 			);
 			name = deps;
 			sourceTree = "<group>";
@@ -212,6 +212,10 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				LD_DYLIB_INSTALL_NAME = "@executable_path/$(EXECUTABLE_PATH)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib/postgresql92,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -224,6 +228,10 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				LD_DYLIB_INSTALL_NAME = "@executable_path/$(EXECUTABLE_PATH)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib/postgresql92,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
