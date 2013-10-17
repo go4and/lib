@@ -1,3 +1,11 @@
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
 #pragma once
 
 #ifndef MCRYPT_BUILDING
@@ -13,14 +21,7 @@
 #include <boost/parameter/preprocessor.hpp>
 
 #include <mstd/pointer_cast.hpp>
-#include <mstd/rc_buffer.hpp>
 #endif
-
-namespace mstd {
-
-class rc_buffer;
-
-}
 
 namespace mcrypt {
 
@@ -144,20 +145,6 @@ public:
         else {
             out.resize(len + descriptor().blockSize());
             size_t outlen = process(&out[0], begin, len);
-            BOOST_ASSERT(out.size() >= outlen);
-            out.resize(outlen);
-        }
-    }
-
-    template<class C2>
-    void process(mstd::rc_buffer & out, const C2 * begin, size_t len)
-    {
-        BOOST_STATIC_ASSERT(sizeof(C2) == 1);
-        if(!len)
-            out.reset();
-        else {
-            out = mstd::rc_buffer(len + descriptor().blockSize());
-            size_t outlen = process(out.data(), mstd::pointer_cast<const char*>(begin), len);
             BOOST_ASSERT(out.size() >= outlen);
             out.resize(outlen);
         }

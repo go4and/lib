@@ -1,3 +1,11 @@
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
 #pragma once
 
 #include <limits>
@@ -39,22 +47,25 @@ private:
     distribution_type dist_;
 };
 
+template<class Value>
+inline bool generate_bytes_helper(char *& out, size_t & len, const Value & value)
+{
+    if(len > sizeof(value))
+    {
+        memcpy(out, &value, sizeof(value));
+        out += sizeof(value);
+        len -= sizeof(value);
+        return false;
+    } else {
+        memcpy(out, &value, len);
+        return true;
+    }
+}
+
 template<class Generator>
 void generate_bytes(char * out, size_t len, Generator & generator)
 {
-    for(;;)
-    {
-        auto temp = generator();
-        if(len > sizeof(temp))
-        {
-            memcpy(out, &temp, sizeof(temp));
-            out += sizeof(temp);
-            len -= sizeof(temp);
-        } else {
-            memcpy(out, &temp, len);
-            break;
-        }
-    }
+    while(!generate_bytes_helper(out, len, generator()));
 }
 
 }

@@ -1,3 +1,11 @@
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
 #include "pch.h"
 
 #include "crc32.h"
@@ -11,7 +19,7 @@ std::vector<char> crc32check(const std::vector<char> & src)
     if(src.size() <= sizeof(crc32_t))
         return std::vector<char>();
     std::vector<char> result(src.begin(), src.end() - sizeof(crc32_t));
-    crc32_t crc = ntohl(*reinterpret_cast<const crc32_t*>(&src[src.size() - sizeof(crc32_t)]));
+    crc32_t crc = mstd::ntoh(*reinterpret_cast<const crc32_t*>(&src[src.size() - sizeof(crc32_t)]));
     return (mcrypt::crc32(result) == crc) ? result : std::vector<char>();
 }
 
@@ -19,7 +27,7 @@ void crc32append(std::vector<char> & data)
 {
     BOOST_STATIC_ASSERT(sizeof(crc32_t) == 4);
 
-    crc32_t crc = htonl(crc32(data));
+    crc32_t crc = mstd::hton(crc32(data));
     unsigned char * start = mstd::pointer_cast<unsigned char*>(&crc);
     data.insert(data.end(), start, start + sizeof(crc));
 }

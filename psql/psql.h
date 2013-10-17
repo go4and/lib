@@ -1,3 +1,11 @@
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
 #pragma once
 
 #include <deque>
@@ -10,7 +18,11 @@
 #include <boost/array.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
+
+#include <boost/date_time/posix_time/ptime.hpp>
+
 #include <boost/logic/tribool.hpp>
+
 #include <boost/move/move.hpp>
 
 #include <mstd/cstdint.hpp>

@@ -5,6 +5,8 @@
 
 #include <Foundation/Foundation.h>
 
+#if !defined(MLOG_NO_LOGGING)
+
 namespace mlog {
 
 std::string doDocumentsFolder()
@@ -44,3 +46,5 @@ std::ostream & operator<<(std::ostream & out, const OutObjC & objc)
 }
 
 }
+
+#endif

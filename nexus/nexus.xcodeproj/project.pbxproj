@@ -385,6 +385,7 @@
 					"-lboost_thread-mt-d",
 				);
 				SDKROOT = macosx10.7;
+				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Debug;
@@ -429,6 +430,7 @@
 					"-lboost_thread-mt",
 				);
 				SDKROOT = macosx10.7;
+				SHARED_PRECOMPS_DIR = "$(OBJROOT)";
 				SYMROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)";
 			};
 			name = Release;

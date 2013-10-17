@@ -1,3 +1,11 @@
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
 #include "pch.hpp"
 
 #include "fwd.hpp"
@@ -391,7 +399,15 @@ std::wstring parseString(pANTLR3_UINT8 inp)
     {
         if(*i == L'\\')
         {
-            *w++ = *++i;
+            ++i;
+            auto ch = *i;
+            if(ch == 'n')
+                ch = '\n';
+            else if(ch == 't')
+                ch = '\t';
+            else if(ch == 'r')
+                ch = '\r';
+            *w++ = ch;
         } else {
             if(i != w)
                 *w = *i;

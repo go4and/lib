@@ -1,21 +1,10 @@
 /*
-** 2006 June 7
-**
 ** The author disclaims copyright to this source code.  In place of
 ** a legal notice, here is a blessing:
 **
 **    May you do good and not evil.
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
-**
-*************************************************************************
-** This header file defines the SQLite interface for use by
-** shared libraries that want to be imported as extensions into
-** an SQLite instance.  Shared libraries that intend to be loaded
-** as extensions by SQLite should #include this file instead of 
-** sqlite3.h.
-**
-** @(#) $Id: sqlite3ext.h,v 1.25 2008/10/12 00:27:54 shane Exp $
 */
 #ifndef _SQLITE3EXT_H_
 #define _SQLITE3EXT_H_

@@ -1,23 +1,12 @@
-#pragma once
-
-#include <boost/scoped_ptr.hpp>
-
-#include <boost/preprocessor/arithmetic/inc.hpp>
-#include <boost/preprocessor/repetition/enum_binary_params.hpp>
-#include <boost/preprocessor/repetition/enum_params.hpp>
-#include <boost/preprocessor/repetition/repeat_from_to.hpp>
-
-
-#define MSTD_PIMPL_MAX_ARITY 5
-#define MSTD_PIMPL_PRIVATE_CTR_DEF(z, n, data) \
-    template <BOOST_PP_ENUM_PARAMS(n, typename T)> \
-    explicit PImpl(BOOST_PP_ENUM_BINARY_PARAMS(n, T, & x)) \
-    : impl_(new Impl(BOOST_PP_ENUM_PARAMS(n, x))) \
-    { \
-    } \
-    /**/
-
-namespace mstd {
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+#namespace mstd {
 
 template<class T>
 class PImpl {

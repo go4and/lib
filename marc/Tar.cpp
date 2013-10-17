@@ -1,67 +1,12 @@
-#include "pch.h"
-
-#include "GZip.h"
-
-#include "Tar.h"
-
-MLOG_DECLARE_LOGGER(tar);
-
-namespace marc {
-
-namespace {
-
-int copy_data(struct archive *ar, struct archive *aw)
-{
-    MLOG_DEBUG("copy_data(" << ar << ", " << aw << ')');
-
-	int r;
-	const void *buff;
-	size_t size;
-	off_t offset;
-    
-	for (;;) {
-		r = archive_read_data_block(ar, &buff, &size, &offset);
-		if (r == ARCHIVE_EOF)
-			return (ARCHIVE_OK);
-		if (r != ARCHIVE_OK)
-			return (r);
-		r = archive_write_data_block(aw, buff, size, offset);
-		if (r != ARCHIVE_OK)
-        {
-            MLOG_WARNING("archive_write_data_block: " << archive_error_string(aw));
-			return (r);
-		}
-	}
-}
-
-bool extract(void * data, size_t size, const boost::filesystem::wpath & dest, int do_extract, int flags)
-{
-    MLOG_MESSAGE(Debug, "extract(" << size << ", " << mstd::utf8fname(dest) << ", " << do_extract << ", " << flags << ')');
-
-	struct archive_entry *entry;
-	int r = 0;
-    
-    struct archive * a = archive_read_new();
-
-    MLOG_MESSAGE(Debug, "archive_read_new: " << a);
-
-    struct archive * ext = archive_write_disk_new();
-
-    MLOG_MESSAGE(Debug, "archive_write_disk_new: " << ext);
-
-    BOOST_SCOPE_EXIT((&a)(&ext)) {
-        archive_read_close(a);
-        archive_read_finish(a);
-        archive_write_close(ext);
-    } BOOST_SCOPE_EXIT_END;
-    
-	archive_write_disk_set_options(ext, flags);
-	/*
-	 * Note: archive_write_disk_set_standard_lookup() is useful
-	 * here, but it requires library routines that can add 500k or
-	 * more to a static executable.
-	 */
-	archive_read_support_format_tar(a);
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
+#archive_read_support_format_tar(a);
     archive_read_support_compression_gzip(a);
 
 	if ((r = archive_read_open_memory(a, data, size)))

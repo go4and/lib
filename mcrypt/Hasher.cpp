@@ -1,3 +1,11 @@
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
 #include "pch.h"
 
 #include "Base64.h"
@@ -5,6 +13,11 @@
 #include "Hasher.h"
 
 namespace mcrypt {
+
+size_t HasherDescriptor::size() const
+{
+    return EVP_MD_size(static_cast<const EVP_MD*>(evp_));
+}
 
 GenericHasher::GenericHasher(const HasherDescriptor & descriptor)
 {

@@ -1,7 +1,17 @@
+/*
+** The author disclaims copyright to this source code.  In place of
+** a legal notice, here is a blessing:
+**
+**    May you do good and not evil.
+**    May you find forgiveness for yourself and forgive others.
+**    May you share freely, never taking more than you give.
+*/
 #pragma once
 
 #if !defined(MCRYPT_BUILDING)
 #include <boost/move/move.hpp>
+
+#include <mstd/enum_utils.hpp>
 #endif
 
 namespace mstd {
@@ -11,6 +21,8 @@ namespace mstd {
 namespace mcrypt {
 
 class Error;
+
+MSTD_DEFINE_ENUM_EX(KeyType, kt, (None)(RSA)(DSA)(DH)(EC)(Unknown));
 
 class GenericPKey {
     BOOST_MOVABLE_BUT_NOT_COPYABLE(GenericPKey);
@@ -52,6 +64,8 @@ public:
     bool operator!() const { return !key_; }
     
     void * handle() const { return key_; }
+
+    KeyType type() const;
 
     mstd::rc_buffer publicPem() const;
     mstd::rc_buffer privatePem() const;
@@ -152,10 +166,14 @@ class HasherDescriptor;
 
 class PKeyVerify : public PKeyContext {
 public:
-    explicit PKeyVerify(const GenericPKey & key, const HasherDescriptor & hasher, Error & error);
+    explicit PKeyVerify(const GenericPKey & key, const HasherDescriptor & hasher, Padding padding, Error & error) : PKeyContext(key){ init(key, hasher, padding, error); }
+    explicit PKeyVerify(const GenericPKey & key, const HasherDescriptor & hasher, Error & error) : PKeyContext(key) { init(key, hasher, pdDefault, error); }
 
     bool operator()(const char * input, size_t inlen, const char * sign, size_t signlen, Error & error);
     inline bool operator()(const unsigned char * input, size_t inlen, const unsigned char * sign, size_t signlen, Error & error) { return (*this)(mstd::pointer_cast<const char*>(input), inlen, mstd::pointer_cast<const char*>(sign), signlen, error); }
+private:
+    void init(const GenericPKey & key, const HasherDescriptor & hasher, Padding padding, Error & error);
+    const void * hasher_;
 };
 
 }

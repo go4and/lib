@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := nexus 
+LOCAL_MODULE := nexus
 
 LOCAL_CFLAGS := -DBOOST_SYSTEM_NO_DEPRECATED -D__GLIBC__ -std=c++0x
 
