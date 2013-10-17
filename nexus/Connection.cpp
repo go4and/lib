@@ -19,7 +19,7 @@ mstd::atomic<size_t> allocatedConnections_;
 
 ConnectionBase::ConnectionBase(bool active, size_t readingBuffer, size_t threshold)
     : asyncOperations_(active), rbuffer_(readingBuffer), rpos_(0), threshold_(threshold),
-      reads_(0), writes_(0), reading_(true)
+      reads_(0), writes_(0), reading_(true), stopReason_(srNone)
 {
     ++allocatedConnections_;
     ++activeConnections_;
@@ -70,8 +70,15 @@ mstd::thread_id ConnectionBase::lastLocker()
     return lastLocker_;
 }
 
-void ConnectionBase::stopReading()
+void ConnectionBase::stopReason(StopReason reason, const boost::system::error_code & ec)
 {
+    if(stopReason_.cas(reason, srNone) == srNone)
+        ec_ = ec;
+}
+
+void ConnectionBase::stopReading(StopReason reason, const boost::system::error_code & ec)
+{
+    stopReason(reason, ec);
     reading_ = false;
 }
 

@@ -635,7 +635,7 @@ bool ResultRowRef::asBool(size_t index) const
     return static_cast<const uint8_t*>(data) != 0;
 }
 
-ByteArray ResultRowRef::asArray(size_t index) const
+ByteArray ResultRowRef::asByteArray(size_t index) const
 {
     const void * data = raw(index);
     checkOid(result_, index, oidByteArray);

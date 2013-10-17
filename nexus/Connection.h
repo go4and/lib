@@ -40,6 +40,11 @@ class Connection;
 
 class ConnectionLock;
 
+typedef int StopReason;
+const int srNone = 0;
+const int srRead = 1;
+const int srWrite = 2;
+
 class NEXUS_DECL ConnectionBase {
 public:
     ConnectionBase(bool active, size_t readingBuffer, size_t threshold);
@@ -53,7 +58,17 @@ public:
     int rpos();
     mstd::thread_id lastLocker();
 
-    void stopReading();
+    void stopReading(StopReason reason, const boost::system::error_code & ec = boost::system::error_code());
+
+    int failedOperation() const
+    {
+        return stopReason_;
+    }
+    
+    const boost::system::error_code & errorCode() const
+    {
+        return ec_;
+    }
 
     static size_t activeConnections();
     static size_t allocatedConnections();
@@ -61,6 +76,7 @@ protected:
     bool activate();
     bool prepare();
     bool reading();
+    void stopReason(StopReason reason, const boost::system::error_code & ec);
 private:
     static mlog::Logger & getLogger();
     void commitWrite(size_t len, ConnectionLock & lock);
@@ -75,6 +91,8 @@ private:
     mstd::atomic<size_t> writes_;
     mstd::atomic<bool> reading_;
     mstd::atomic<mstd::thread_id> lastLocker_;
+    mstd::atomic<StopReason> stopReason_;
+    boost::system::error_code ec_;
 
     template<class, class, class, class>
     friend class Connection;
@@ -249,8 +267,9 @@ public:
 private:
     class AsyncHelper;
 protected:
-    bool stop()
+    bool stop(StopReason reason, const boost::system::error_code & ec = boost::system::error_code())
     {
+        stopReason(reason, ec);
         if(asyncOperations_.shutdown())
         {
             derived().shutdown();
@@ -358,6 +377,7 @@ private:
             MLOG_FMESSAGE(Notice, "handleWrite(" << ec << ", " << ec.message() << ")");
 
             guard.failed();
+            stopReason(srWrite, ec);
         }
     }
 
@@ -396,6 +416,7 @@ private:
             MLOG_FMESSAGE(Notice, "handleRead(" << ec << ", " << ec.message() << ")");
 
             guard.failed();
+            stopReason(srRead, ec);
         }
     }
 
