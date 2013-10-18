@@ -322,7 +322,9 @@ std::string parse(const std::string & fname)
                     std::string temp = boost::lexical_cast<std::string>(onow());
                     std::replace(temp.begin(), temp.end(), ':', '-');
                     result += temp;
-                } 
+                }
+                else if(key == "temp")
+                    result += mstd::utf8fname(boost::filesystem::temp_directory_path());
 #if BOOST_WINDOWS || defined(__APPLE__)
                 else if(key == "documents")
                     result += documentsFolder();
@@ -437,7 +439,7 @@ LogDevice * createDevice(const std::string & name, const std::string & value)
             args.erase(p);
             boost::trim(args);
         }
-        device = new FileLogDevice(mstd::expand_env_vars(parse(args)), threshold, 5);
+        device = new FileLogDevice(expandFilePath(args), threshold, 5);
     }
 #if defined(__APPLE__)
     else if(value == "nslog()")
@@ -583,6 +585,16 @@ private:
 
 typedef boost::intrusive_ptr<Devices> DevicesPtr;
 
+}
+
+boost::filesystem::path expandFilePath(const std::string & input)
+{
+    auto temp = parse(input);
+#if BOOST_WINDOWS
+    return mstd::deutf8(temp);
+#else
+    return temp;
+#endif
 }
 
 class Manager::Impl {
