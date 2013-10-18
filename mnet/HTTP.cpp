@@ -163,7 +163,7 @@ private:
                         tasks.erase(i);
                         break;
                     }
-                task->done(failed ? (code >= 300 ? code : 600 + msg->data.result) : 0);
+                task->done(failed ? static_cast<int>(code >= 300 ? code : 600 + msg->data.result) : 0);
             }
         }
     }
@@ -242,7 +242,7 @@ private:
         if(self->progress_ != pr)
         {
             self->progress_ = pr;
-            uiEnqueue(boost::bind(self->prog_, pr));
+            uiEnqueue(boost::bind(self->prog_, static_cast<int>(pr)));
         }
         return 0;
     }
@@ -656,7 +656,7 @@ private:
             data.headerData.contentType = res == CURLE_OK ? str : "<unknown>";
             long code;
             res = curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &code);
-            data.headerData.statusCode = res == CURLE_OK ? code : 444;
+            data.headerData.statusCode = res == CURLE_OK ? static_cast<int>(code) : 444;
             double contentLength;
             res = curl_easy_getinfo(curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &contentLength);
             data.headerData.contentLength = static_cast<filesize_t>(contentLength);
@@ -874,7 +874,7 @@ std::ostream & operator<<(std::ostream & out, const Request & request)
 
 std::string escapeUrl(const std::string & url)
 {
-    char * temp = curl_easy_escape(0, url.c_str(), url.length());
+    char * temp = curl_easy_escape(0, url.c_str(), static_cast<int>(url.length()));
     if(temp)
     {
         std::string result(temp);
@@ -887,7 +887,7 @@ std::string escapeUrl(const std::string & url)
 std::string unescapeUrl(const std::string & url)
 {
     int outlen;
-    char * temp = curl_easy_unescape(0, url.c_str(), url.length(), &outlen);
+    char * temp = curl_easy_unescape(0, url.c_str(), static_cast<int>(url.length()), &outlen);
     if(temp)
     {
         std::string result(temp, outlen);

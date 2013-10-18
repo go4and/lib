@@ -210,9 +210,9 @@ public:
 
     const_iterator begin() const { return const_iterator(*this, 0); }
     const_iterator end() const { return const_iterator(*this, size()); }
-private:
-    BOOST_MOVABLE_BUT_NOT_COPYABLE(Result);
 
+    BOOST_MOVABLE_BUT_NOT_COPYABLE(Result);
+private:
     Result(PGresult * value);
 
     bool success() const;
@@ -264,14 +264,14 @@ public:
 
     inline Result exec(const std::string & query, const ParametricExecution & pe, bool canHaveErrors)
     {
-        return exec(query.c_str(), pe, canHaveErrors);
+        return boost::move(exec(query.c_str(), pe, canHaveErrors));
     }
     
     Result exec(const char * query, bool canHaveErrors = false);
 
     inline Result exec(const std::string & query, bool canHaveErrors = false)
     {
-        return exec(query.c_str(), canHaveErrors);
+        return boost::move(exec(query.c_str(), canHaveErrors));
     }
 
     void execVoid(const char * query, bool canHaveErrors = false);

@@ -40,7 +40,7 @@ BlowfishChunk::BlowfishChunk(const char * key, size_t keySize)
 {
     BOOST_STATIC_ASSERT((sizeof(EqSize<Context::size, sizeof(BF_KEY)>)));
     BF_KEY * bfkey = static_cast<BF_KEY*>(context_.address());
-    BF_set_key(bfkey, keySize, mstd::pointer_cast<const unsigned char*>(key));
+    BF_set_key(bfkey, static_cast<int>(keySize), mstd::pointer_cast<const unsigned char*>(key));
 }
 
 void BlowfishChunk::decryptChunk(boost::uint32_t * data) const
