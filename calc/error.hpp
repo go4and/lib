@@ -6,7 +6,84 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-#define CALC_ERROR_PUBLIC_FUNCTIONS(r, data, p) CALC_ERROR_PUBLIC_FUNCTIONS_IMPL p
+#pragma once
+
+#ifndef BUILDING_CALC
+#include <boost/preprocessor/seq/for_each.hpp>
+
+#include <boost/optional.hpp>
+#endif
+
+#include "config.hpp"
+
+namespace calc {
+
+enum error_code {
+    error_none,
+    error_empty_input,
+    error_undefined_function,
+    error_invalid_arity,
+    error_lexer,
+    error_extraneous_input,
+    error_missing_token,
+    error_mismatched_token,
+    error_recognition,
+    error_no_viable_alt,
+    error_mismatched_set,
+    error_early_exit,
+    error_syntax,
+    error_no_plugin_provided,
+};
+
+#define CALC_ERROR_PARAMETERS \
+    ((std::wstring, function_name))((size_t, function_arity))((std::string, location))((size_t, expected_arity)) \
+    ((std::string, token_value))((bool, token_eof))((uint32_t, token_id))((std::string, message))
+
+class error {
+private:
+    struct dummy { void nonnull() {} };
+    typedef void (dummy::*safe_bool)();
+public:
+    error()
+        : code_(error_none)
+    {
+    }
+    
+    error_code code() const
+    {
+        return code_;
+    }
+
+    error & init(error_code code)
+    {
+        code_ = code;
+        return *this;
+    }
+
+    void reset()
+    {
+        code_ = error_none;
+    }
+
+    operator safe_bool() const
+    {
+        return code_ != error_none ? &dummy::nonnull : 0;
+    }
+
+    CALC_DECL void out(std::ostream & out) const;
+
+    #define CALC_ERROR_PUBLIC_FUNCTIONS_IMPL(type, name) \
+    const type * name() const \
+    { \
+        return BOOST_PP_CAT(name, _) ? &*BOOST_PP_CAT(name, _) : 0; \
+    } \
+    error & name(const type & value) \
+    { \
+        BOOST_PP_CAT(name, _) = value; \
+        return *this; \
+    } \
+    /**/
+    #define CALC_ERROR_PUBLIC_FUNCTIONS(r, data, p) CALC_ERROR_PUBLIC_FUNCTIONS_IMPL p
     BOOST_PP_SEQ_FOR_EACH(CALC_ERROR_PUBLIC_FUNCTIONS, ~, CALC_ERROR_PARAMETERS);
 private:
     error_code code_;

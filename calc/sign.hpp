@@ -6,7 +6,33 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
 */
-#namespace calc {
+#pragma once
+
+#if !defined(BUILDING_CALC)
+#include <boost/mpl/and.hpp>
+#include <boost/mpl/not.hpp>
+
+#include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/preprocessor/repetition/enum_binary_params.hpp>
+#include <boost/preprocessor/repeat_from_to.hpp>
+
+#include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/function_traits.hpp>
+
+#include <boost/utility/enable_if.hpp>
+#endif
+
+#define CALC_SIGN_MAX_ARITY 5
+#define CALC_SIGN_PRIVATE_REDIRECT(z, n, data) \
+    template <BOOST_PP_ENUM_PARAMS(n, typename T)> \
+    typename boost::function_traits<S>::result_type operator()(void * context, BOOST_PP_ENUM_BINARY_PARAMS(n, T, x)) const \
+    { \
+        return f_(downcast<real_context>(context), BOOST_PP_ENUM_PARAMS(n, x)); \
+    } \
+    /**/
+
+namespace calc {
 
 template<class S, class F>
 class sign_t : public boost::function_traits<S> {

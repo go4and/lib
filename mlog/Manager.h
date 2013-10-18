@@ -59,4 +59,6 @@ typedef boost::error_info<tag_filename, boost::filesystem::path> error_filename;
 typedef mstd::own_exception<Manager> ManagerException;
 #endif
 
+boost::filesystem::path expandFilePath(const std::string & input);
+
 }

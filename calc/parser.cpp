@@ -399,7 +399,15 @@ std::wstring parseString(pANTLR3_UINT8 inp)
     {
         if(*i == L'\\')
         {
-            *w++ = *++i;
+            ++i;
+            auto ch = *i;
+            if(ch == 'n')
+                ch = '\n';
+            else if(ch == 't')
+                ch = '\t';
+            else if(ch == 'r')
+                ch = '\r';
+            *w++ = ch;
         } else {
             if(i != w)
                 *w = *i;
