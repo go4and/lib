@@ -48,11 +48,14 @@
 		C366148213FA83C1001F51AA /* REST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C366148013FA83C1001F51AA /* REST.cpp */; };
 		C366148313FA83C1001F51AA /* REST.h in Headers */ = {isa = PBXBuildFile; fileRef = C366148113FA83C1001F51AA /* REST.h */; };
 		C36A4273148D184F00E9CF52 /* PacketWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C36A4272148D184F00E9CF52 /* PacketWriter.cpp */; };
-		C3AFD7921748E5700079FE35 /* ByteBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD78D1748E5700079FE35 /* ByteBuffer.cpp */; };
+		C3A7E58B18052A09009DB8D1 /* ByteBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3A7E58A18052A09009DB8D1 /* ByteBuffer.cpp */; };
+		C3A7E5B718052A72009DB8D1 /* TraceRoute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3A7E5B618052A72009DB8D1 /* TraceRoute.cpp */; };
 		C3AFD7931748E5700079FE35 /* ByteBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C3AFD78E1748E5700079FE35 /* ByteBuffer.h */; };
 		C3AFD7941748E5700079FE35 /* ChunkedBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C3AFD78F1748E5700079FE35 /* ChunkedBuffer.h */; };
 		C3AFD7951748E5700079FE35 /* PipeService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD7901748E5700079FE35 /* PipeService.cpp */; };
 		C3AFD7961748E5700079FE35 /* PipeService.h in Headers */ = {isa = PBXBuildFile; fileRef = C3AFD7911748E5700079FE35 /* PipeService.h */; };
+		C3DB38F718052960004946F7 /* icmp_header.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C3DB38F418052960004946F7 /* icmp_header.hpp */; };
+		C3DB38F918052960004946F7 /* TraceRoute.h in Headers */ = {isa = PBXBuildFile; fileRef = C3DB38F618052960004946F7 /* TraceRoute.h */; };
 		C3E3CA5216A7F7810035EF18 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3E3CA5016A7F7810035EF18 /* Timer.cpp */; };
 		C3E3CA5316A7F7810035EF18 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = C3E3CA5116A7F7810035EF18 /* Timer.h */; };
 		C3E76580148F3A450069EAFA /* mcrypt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E7657D148F3A450069EAFA /* mcrypt.dylib */; };
@@ -107,11 +110,14 @@
 		C3921B0F1691C48C005F4CC0 /* GenericBuffers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenericBuffers.h; sourceTree = SOURCE_ROOT; };
 		C3A7992B16FC58F000839EA1 /* RingBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = SOURCE_ROOT; };
 		C3A7993C16FC77CA00839EA1 /* Strand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Strand.h; sourceTree = SOURCE_ROOT; };
-		C3AFD78D1748E5700079FE35 /* ByteBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteBuffer.cpp; sourceTree = SOURCE_ROOT; };
+		C3A7E58A18052A09009DB8D1 /* ByteBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ByteBuffer.cpp; sourceTree = SOURCE_ROOT; };
+		C3A7E5B618052A72009DB8D1 /* TraceRoute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TraceRoute.cpp; sourceTree = SOURCE_ROOT; };
 		C3AFD78E1748E5700079FE35 /* ByteBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteBuffer.h; sourceTree = SOURCE_ROOT; };
 		C3AFD78F1748E5700079FE35 /* ChunkedBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChunkedBuffer.h; sourceTree = SOURCE_ROOT; };
 		C3AFD7901748E5700079FE35 /* PipeService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PipeService.cpp; sourceTree = SOURCE_ROOT; };
 		C3AFD7911748E5700079FE35 /* PipeService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PipeService.h; sourceTree = SOURCE_ROOT; };
+		C3DB38F418052960004946F7 /* icmp_header.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = icmp_header.hpp; sourceTree = "<group>"; };
+		C3DB38F618052960004946F7 /* TraceRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TraceRoute.h; sourceTree = "<group>"; };
 		C3E3CA5016A7F7810035EF18 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = SOURCE_ROOT; };
 		C3E3CA5116A7F7810035EF18 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = SOURCE_ROOT; };
 		C3E7657D148F3A450069EAFA /* mcrypt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = mcrypt.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,7 +163,8 @@
 		C3389D65135388960010E3BF /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				C3AFD78D1748E5700079FE35 /* ByteBuffer.cpp */,
+				C3A7E5B618052A72009DB8D1 /* TraceRoute.cpp */,
+				C3A7E58A18052A09009DB8D1 /* ByteBuffer.cpp */,
 				C3AFD7901748E5700079FE35 /* PipeService.cpp */,
 				C3084DDA16DC95330019D2A4 /* Acceptor.cpp */,
 				C35AA4A913538DD100649921 /* Buffer.cpp */,
@@ -180,11 +187,13 @@
 			);
 			name = Source;
 			path = nexus;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		C3A7992A16FC586D00839EA1 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				C3DB38F418052960004946F7 /* icmp_header.hpp */,
+				C3DB38F618052960004946F7 /* TraceRoute.h */,
 				C3AFD78E1748E5700079FE35 /* ByteBuffer.h */,
 				C3AFD78F1748E5700079FE35 /* ChunkedBuffer.h */,
 				C3AFD7911748E5700079FE35 /* PipeService.h */,
@@ -216,7 +225,7 @@
 				C3A7993C16FC77CA00839EA1 /* Strand.h */,
 			);
 			name = Headers;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		C3B8C2AC1546BA6B00E14219 /* Dependencies */ = {
 			isa = PBXGroup;
@@ -252,7 +261,9 @@
 				C35AA4DC13538DD100649921 /* PacketReader.h in Headers */,
 				C35AA4DD13538DD100649921 /* PacketWriter.h in Headers */,
 				C35AA4DE13538DD100649921 /* pch.h in Headers */,
+				C3DB38F718052960004946F7 /* icmp_header.hpp in Headers */,
 				C35AA4E013538DD100649921 /* PipeNode.h in Headers */,
+				C3DB38F918052960004946F7 /* TraceRoute.h in Headers */,
 				C35AA4E213538DD100649921 /* Signals.h in Headers */,
 				C35AA4E613538DD100649921 /* Socket.h in Headers */,
 				C35AA4E813538DD100649921 /* StackStream.h in Headers */,
@@ -292,7 +303,7 @@
 		C3389D5A135388960010E3BF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = IP;
 			};
 			buildConfigurationList = C3389D5D135388960010E3BF /* Build configuration list for PBXProject "nexus" */;
@@ -325,6 +336,7 @@
 				C35AA4D613538DD100649921 /* IoThreadPool.cpp in Sources */,
 				C35AA4D913538DD100649921 /* PacketPacker.cpp in Sources */,
 				C35AA4DB13538DD100649921 /* PacketReader.cpp in Sources */,
+				C3A7E5B718052A72009DB8D1 /* TraceRoute.cpp in Sources */,
 				C35AA4DF13538DD100649921 /* PipeNode.cpp in Sources */,
 				C35AA4E113538DD100649921 /* Signals.cpp in Sources */,
 				C35AA4E513538DD100649921 /* Socket.cpp in Sources */,
@@ -333,9 +345,9 @@
 				C366148213FA83C1001F51AA /* REST.cpp in Sources */,
 				C36A4273148D184F00E9CF52 /* PacketWriter.cpp in Sources */,
 				C3E3CA5216A7F7810035EF18 /* Timer.cpp in Sources */,
+				C3A7E58B18052A09009DB8D1 /* ByteBuffer.cpp in Sources */,
 				C3084DDB16DC95330019D2A4 /* Acceptor.cpp in Sources */,
 				C343E1C416F47D86000E2CDC /* ShellConnection.cpp in Sources */,
-				C3AFD7921748E5700079FE35 /* ByteBuffer.cpp in Sources */,
 				C3AFD7951748E5700079FE35 /* PipeService.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,9 +358,11 @@
 		C3389D6F135388960010E3BF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -367,6 +381,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -393,9 +408,11 @@
 		C3389D70135388960010E3BF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -412,6 +429,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (

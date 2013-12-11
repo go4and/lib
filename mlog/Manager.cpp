@@ -657,7 +657,15 @@ public:
         else if(name == "manager")
         {
             if(prop == "realtime")
-                realtime_ = value == "1" || value == "true";
+            {
+                if(value == "1" || value == "true")
+                    realtime_ = true;
+                else if(value == "0" || value == "false")
+                    realtime_ = false;
+                else
+                    BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Invalid realtime value: " + value));
+            } else
+                BOOST_THROW_EXCEPTION(ManagerException() << mstd::error_message("Unknown manager prop: " + prop));
         } else if(prop == "level")
             setupLevel(name, value, lock);
         else if(prop == "group")

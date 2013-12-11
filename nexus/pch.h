@@ -33,9 +33,14 @@
 #include <boost/asio/strand.hpp>
 #include <boost/asio/streambuf.hpp>
 #include <boost/asio/write.hpp>
-#include <boost/asio/ip/udp.hpp>
+#include <boost/asio/generic/datagram_protocol.hpp>
+#include <boost/asio/ip/icmp.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/ip/udp.hpp>
+#include <boost/asio/ip/unicast.hpp>
 #include <boost/asio/local/stream_protocol.hpp>
+
+#include <boost/date_time/posix_time/posix_time_io.hpp>
 
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/find_if.hpp>
