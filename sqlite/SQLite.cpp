@@ -17,11 +17,7 @@
 
 #include <mlog/Logging.h>
 
-#if defined(_MSC_VER)
-#include "internal/sqlite3.h"
-#else
 #include <sqlite3.h>
-#endif
 
 #include "SQLite.h"
 

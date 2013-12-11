@@ -130,6 +130,33 @@ void restorePosition(wxWindow * window, const StoredPosition & position)
             tlw->Maximize();
     }
 }
+
+int winSB(wxOrientation orient)
+{
+    return orient == wxVERTICAL ? SB_VERT : SB_HORZ;
+}
+
+AutoScroller::AutoScroller(wxWindow * window, wxOrientation orient)
+    : window_(window), orient_(orient)
+{
+    memset(&scrollInfo_, 0, sizeof(scrollInfo_));
+    scrollInfo_.cbSize = sizeof(scrollInfo_);
+    scrollInfo_.fMask = SIF_ALL;
+    BOOST_VERIFY(GetScrollInfo(window->GetHWND(), winSB(orient_), &scrollInfo_));
+}
+
+AutoScroller::~AutoScroller()
+{
+    bool autoScroll = scrollInfo_.nPos + static_cast<int>(scrollInfo_.nPage) >= scrollInfo_.nMax;
+    if(autoScroll)
+    {
+        memset(&scrollInfo_, 0, sizeof(scrollInfo_));
+        scrollInfo_.cbSize = sizeof(scrollInfo_);
+        scrollInfo_.fMask = SIF_ALL;
+        BOOST_VERIFY(GetScrollInfo(window_->GetHWND(), winSB(orient_), &scrollInfo_));
+        window_->ScrollLines(scrollInfo_.nMax);
+    }
+}
 #else
 
 wxFont defaultGuiFont()

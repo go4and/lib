@@ -11,20 +11,10 @@
 namespace wxutils {
 
 boost::optional<wxString> renderDate(const boost::posix_time::ptime & time);
-
-class StructTableBase : public wxGridTableBase {
-public:
-protected:
-    const wxString & one() const { return one_; }
-    const wxString & zero() const { return zero_; }
-    const wxString & renderBool(bool v) const { return v ? one() : zero(); }
-private:
-    static wxString one_;
-    static wxString zero_;
-};
+const wxString & renderBool(bool v);
 
 template<class Item>
-class StructTable : public StructTableBase {
+class StructTable : public wxGridTableBase {
 public:
     typedef std::vector<Item> Value;
 
@@ -130,5 +120,7 @@ private:
     virtual wxString doGetValue(const Item & item, int col) = 0;
     virtual void doSetValue(Item & item, int col, const wxString & value) { BOOST_ASSERT(false); }
 };
+
+void refreshGridRect(wxGrid * grid, int row1, int col1, int row2, int col2);
 
 }

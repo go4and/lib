@@ -37,4 +37,16 @@ struct StoredPosition {
 StoredPosition storePosition(wxWindow * window);
 void restorePosition(wxWindow * window, const StoredPosition & position);
 
+#if BOOST_WINDOWS
+class AutoScroller {
+public:
+    explicit AutoScroller(wxWindow * window, wxOrientation orient);
+    ~AutoScroller();
+private:
+    wxWindow * window_;
+    wxOrientation orient_;
+    SCROLLINFO scrollInfo_;
+};
+#endif
+
 }

@@ -123,17 +123,23 @@ public:
     void doOutput(LogLevel level, const char * str, size_t len)
     {
         const size_t limit = 0x400;
+		bool wasFail = false;
         while(len)
         {
             size_t wr = fwrite(str, 1, std::min(limit, len), handle_);
             if(!wr)
             {
                 int err = errno;
-                if(err == 9)
-                    fflush(handle_);
-                else
+				if(err == 9)
+				{
+                    if(wasFail)
+                        break;
+                    wasFail = true;
+					fflush(handle_);
+				} else
                     break;
-            }
+            } else
+				wasFail = false;
             str += wr;
             len -= wr;
         }
@@ -699,7 +705,7 @@ public:
         return const_cast<detail::LoggerImpl&>(i->second);
     }
 private:
-    typedef boost::unordered_map<std::string, detail::LoggerImpl> Loggers;
+    typedef std::unordered_map<std::string, detail::LoggerImpl> Loggers;
     typedef std::vector<std::pair<const char *, Buffer> > Queue;
 
     void setupGroup(const std::string & name, const std::string & value, boost::mutex::scoped_lock & lock)
@@ -709,7 +715,7 @@ private:
         if(name.empty())
         {
             rootLogger_.group(group);
-            BOOST_FOREACH(const Loggers::value_type & i, loggers_)
+            for(const Loggers::value_type & i : loggers_)
                 const_cast<detail::LoggerImpl&>(i.second).group(group);
         } else
             registerLogger(name, lock).group(group);
@@ -795,7 +801,7 @@ private:
         if(name.empty())
         {
             f(rootLogger_);
-            BOOST_FOREACH(const Loggers::value_type & i, loggers_)
+            for(const Loggers::value_type & i : loggers_)
                 f(const_cast<detail::LoggerImpl&>(i.second));
         } else {
             DevicesPtr newDevices(devices_->clone());

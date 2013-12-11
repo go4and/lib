@@ -26,30 +26,13 @@ template<class F, int N>
 struct arg_type<F, false, N> {
 };
 
-template<class F>
-struct arg_type<F, true, 1> {
-    typedef typename traits_helper<F>::arg1_type type;
+#define CALC_ARG_TYPE(z, index, data) \
+template<class F> \
+struct arg_type<F, true, index> { \
+     typedef typename traits_helper<F>::BOOST_PP_CAT(arg, BOOST_PP_CAT(index, _type)) type; \
 };
 
-template<class F>
-struct arg_type<F, true, 2> {
-    typedef typename traits_helper<F>::arg2_type type;
-};
-
-template<class F>
-struct arg_type<F, true, 3> {
-    typedef typename traits_helper<F>::arg3_type type;
-};
-
-template<class F>
-struct arg_type<F, true, 4> {
-    typedef typename traits_helper<F>::arg4_type type;
-};
-
-template<class F>
-struct arg_type<F, true, 5> {
-    typedef typename traits_helper<F>::arg5_type type;
-};
+BOOST_PP_REPEAT_FROM_TO(1, 13, CALC_ARG_TYPE, ~);
 
 template<class F>
 struct traits {
@@ -93,55 +76,17 @@ private:
         return u(context);
     }
 
-    template<class U>
-    typename boost::enable_if_c<traits<U>::arity == 1, variable>::type
-    execute(const U & u, void * context, variable * stack) const
-    {
-        return u(context,
-                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0]->run(context, stack)));
+#define CALC_INVOKER_EXECUTE_ARG(z, index, data) \
+    convert<typename traits_type::template arg_type<index>::type>::apply(args_[index]->run(context, stack))
+#define CALC_INVOKER_EXECUTE(z, index, data) \
+    template<class U> \
+    typename boost::enable_if_c<traits<U>::arity == index, variable>::type \
+    execute(const U & u, void * context, variable * stack) const \
+    { \
+        return u(context, BOOST_PP_ENUM(index, CALC_INVOKER_EXECUTE_ARG, ~)); \
     }
 
-    template<class U>
-    typename boost::enable_if_c<traits<U>::arity == 2, variable>::type
-    execute(const U & u, void * context, variable * stack) const
-    {
-        return u(context,
-                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0]->run(context, stack)),
-                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1]->run(context, stack)));
-    }
-
-    template<class U>
-    typename boost::enable_if_c<traits<U>::arity == 3, variable>::type
-    execute(const U & u, void * context, variable * stack) const
-    {
-        return u(context,
-                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0]->run(context, stack)),
-                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1]->run(context, stack)),
-                 convert<typename traits_type::template arg_type<2>::type>::apply(args_[2]->run(context, stack)));
-    }
-
-    template<class U>
-    typename boost::enable_if_c<traits<U>::arity == 4, variable>::type
-    execute(const U & u, void * context, variable * stack) const
-    {
-        return u(context,
-                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0]->run(context, stack)),
-                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1]->run(context, stack)),
-                 convert<typename traits_type::template arg_type<2>::type>::apply(args_[2]->run(context, stack)),
-                 convert<typename traits_type::template arg_type<3>::type>::apply(args_[3]->run(context, stack)));
-    }
-
-    template<class U>
-    typename boost::enable_if_c<traits<U>::arity == 5, variable>::type
-    execute(const U & u, void * context, variable * stack) const
-    {
-        return u(context,
-                 convert<typename traits_type::template arg_type<0>::type>::apply(args_[0]->run(context, stack)),
-                 convert<typename traits_type::template arg_type<1>::type>::apply(args_[1]->run(context, stack)),
-                 convert<typename traits_type::template arg_type<2>::type>::apply(args_[2]->run(context, stack)),
-                 convert<typename traits_type::template arg_type<3>::type>::apply(args_[3]->run(context, stack)),
-                 convert<typename traits_type::template arg_type<4>::type>::apply(args_[4]->run(context, stack)));
-    }
+    BOOST_PP_REPEAT_FROM_TO(1, 12, CALC_INVOKER_EXECUTE, ~);
 
     F f_;
     args_type args_;
