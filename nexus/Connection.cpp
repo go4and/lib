@@ -19,7 +19,7 @@ mstd::atomic<size_t> allocatedConnections_;
 
 ConnectionBase::ConnectionBase(bool active, size_t readingBuffer, size_t threshold)
     : asyncOperations_(active), rbuffer_(readingBuffer), rpos_(0), threshold_(threshold),
-      reads_(0), writes_(0), reading_(true), stopReason_(srNone)
+      reads_(0), writes_(0), reading_(true), stopReason_(srNone), lastRead_(Clock::milliseconds()), lastWrite_(lastRead_)
 {
     ++allocatedConnections_;
     ++activeConnections_;

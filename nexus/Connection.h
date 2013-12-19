@@ -30,6 +30,7 @@
 #include "AsyncGuard.h"
 #include "AsyncOperations.h"
 #include "Buffers.h"
+#include "Clock.h"
 #include "Handler.h"
 #include "PacketReader.h"
 
@@ -70,6 +71,28 @@ public:
         return ec_;
     }
 
+    virtual size_t sendQueueSize() = 0;
+
+    Milliseconds lastRead() const
+    {
+        return lastRead_;
+    }
+
+    Milliseconds lastWrite() const
+    {
+        return lastWrite_;
+    }
+
+    void updateLastRead()
+    {
+        lastRead_ = Clock::milliseconds();
+    }
+    
+    void updateLastWrite()
+    {
+        lastWrite_ = Clock::milliseconds();
+    }
+
     static size_t activeConnections();
     static size_t allocatedConnections();
 protected:
@@ -93,6 +116,8 @@ private:
     mstd::atomic<mstd::thread_id> lastLocker_;
     mstd::atomic<StopReason> stopReason_;
     boost::system::error_code ec_;
+    mstd::atomic<Milliseconds> lastRead_;
+    mstd::atomic<Milliseconds> lastWrite_;
 
     template<class, class, class, class>
     friend class Connection;
@@ -194,6 +219,12 @@ public:
     template<class T>
     Connection(bool active, size_t readingBuffer, size_t threshold = 0, const T & t = T())
         : ConnectionBase(active, readingBuffer, threshold), guard_(t) {}
+
+    size_t sendQueueSize()
+    {
+        ConnectionLock lock(this);
+        return pending_.total();
+    }
 
     void send(const Buffer & buffer)
     {
@@ -367,6 +398,8 @@ private:
 
         if(!ec)
         {
+            updateLastWrite();
+        
             ConnectionLock lock(this);
 
             commitWrite(len, lock);
@@ -405,6 +438,7 @@ private:
         if(!ec)
         {
             rpos_ += len;
+            updateLastRead();
 
             PacketReader reader(rbuffer_, rpos_);
             derived().processPackets(reader);

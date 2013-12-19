@@ -24,6 +24,7 @@
 
 #ifndef __OBJC__
 #include <map>
+#include <unordered_map>
 #include <vector>
 
 #include <boost/bind.hpp>
@@ -32,7 +33,6 @@
 #include <boost/function.hpp>
 #include <boost/scope_exit.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
 
 #include <boost/date_time/posix_time/ptime.hpp>
 #include <boost/date_time/posix_time/posix_time_io.hpp>

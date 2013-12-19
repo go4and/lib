@@ -21,7 +21,6 @@
 #include <boost/scope_exit.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/thread.hpp>
-#include <boost/unordered_map.hpp>
 
 #include <boost/date_time/posix_time/ptime.hpp>
 

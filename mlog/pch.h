@@ -39,15 +39,14 @@
 #include <fstream>
 #include <ostream>
 #include <sstream>
+#include <unordered_map>
 #include <vector>
 
 #include <boost/array.hpp>
-#include <boost/foreach.hpp>
 #include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
 
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/stream.hpp>

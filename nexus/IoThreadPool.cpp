@@ -63,7 +63,7 @@ void IoThreadPool::start(size_t count, bool withCurrent)
         impl_->threads.push_back(new boost::thread(tracer(logger, Runner(impl_->ioService))));
     
     if(withCurrent)
-        tracer(logger, Runner(impl_->ioService))();
+        tracer(logger, Runner(impl_->ioService), true)();
 }
 
 void IoThreadPool::stop()

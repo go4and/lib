@@ -190,7 +190,7 @@ private:
     {
     }
 
-    typedef boost::unordered_map<int, std::pair<double, double> > Cache;
+    typedef std::unordered_map<int, std::pair<double, double> > Cache;
     Cache cache_;
 
     MSTD_SINGLETON_DECLARATION(SinCos);

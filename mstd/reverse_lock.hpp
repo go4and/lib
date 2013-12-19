@@ -8,9 +8,22 @@
 */
 #pragma once
 
+#include <exception>
 #include <boost/noncopyable.hpp>
 
 namespace mstd {
+
+class reverse_lock_unlocked_exception : public std::exception {
+public:
+    reverse_lock_unlocked_exception()
+    {
+    }
+    
+    virtual const char* what() const throw()
+    {
+        return "lock did not locked in reverse lock";
+    }
+};
 
 template<class Lock>
 class reverse_lock : public boost::noncopyable {
@@ -18,7 +31,10 @@ public:
     explicit reverse_lock(Lock & lock)
         : lock_(lock)
     {
-        lock_.unlock();
+        if(lock_.owns_lock())
+            lock_.unlock();
+        else
+            throw reverse_lock_unlocked_exception();
     }
     
     ~reverse_lock()

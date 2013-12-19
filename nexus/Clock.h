@@ -28,6 +28,7 @@ class Clock {
 public:
     static Milliseconds milliseconds();
     static boost::posix_time::ptime posix(Milliseconds time) { return timeStart() + boost::posix_time::milliseconds(time); }
+    static Milliseconds toMilliseconds(const boost::posix_time::ptime & time) { return (time - timeStart()).total_milliseconds(); }
 
     static inline Seconds seconds() { return static_cast<Seconds>(milliseconds() / 1000); }
     static inline boost::posix_time::ptime posixNow() { return posix(milliseconds()); }

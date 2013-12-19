@@ -14,21 +14,10 @@
     <ClCompile Include="SQLite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="internal\sqlite3.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SQLite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="internal\sqlite3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="sqlite3.def">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

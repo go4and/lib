@@ -24,6 +24,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include <boost/array.hpp>
@@ -35,7 +36,7 @@
 
 #include <boost/algorithm/string/case_conv.hpp>
 
-#include <boost/type_traits/function_traits.hpp>
+#include <boost/functional/hash.hpp>
 
 #include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
@@ -43,8 +44,7 @@
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/preprocessor/seq/for_each.hpp>
 
-#include <boost/unordered_map.hpp>
-
+#include <boost/type_traits/function_traits.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
