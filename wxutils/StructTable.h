@@ -13,9 +13,10 @@ namespace wxutils {
 boost::optional<wxString> renderDate(const boost::posix_time::ptime & time);
 const wxString & renderBool(bool v);
 
-template<class Item>
+template<class I>
 class StructTable : public wxGridTableBase {
 public:
+    typedef I Item;
     typedef std::vector<Item> Value;
 
     explicit StructTable(const Value & value)
@@ -82,6 +83,11 @@ public:
             wxGridTableMessage msg(this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, value_.size(), oldSize - value_.size());
             GetView()->ProcessTableMessage(msg);
         }
+    }
+
+    const typename Value::value_type * at(size_t index) const
+    {
+        return index < value_.size() ? &value_[index] : nullptr;
     }
 
     int GetNumberRows()
