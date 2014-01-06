@@ -386,6 +386,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
+					"$(BOOST_ROOT)",
 					"$(PROJECT_DIR)/..",
 				);
 				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
@@ -434,6 +435,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
+					"$(BOOST_ROOT)",
 					"$(PROJECT_DIR)/..",
 				);
 				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";

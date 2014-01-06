@@ -235,6 +235,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
+					"$(BOOST_ROOT)",
 					"$(PROJECT_DIR)/..",
 				);
 				LD_DYLIB_INSTALL_NAME = "@executable_path/mnet.dylib";
@@ -282,6 +283,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
+					"$(BOOST_ROOT)",
 					"$(PROJECT_DIR)/..",
 				);
 				LD_DYLIB_INSTALL_NAME = "@executable_path/mnet.dylib";

@@ -10,6 +10,14 @@
 #pragma once
 #endif
 
+#include <boost/config.hpp>
+
+#ifndef BOOST_WINDOWS
+#include <grp.h>
+#include <pwd.h>
+#include <sys/types.h>
+#endif
+
 #include <string.h>
 
 #include <algorithm>
@@ -18,8 +26,6 @@
 #include <queue>
 #include <string>
 #include <vector>
-
-#include <boost/config.hpp>
 
 #include <boost/aligned_storage.hpp>
 #include <boost/array.hpp>

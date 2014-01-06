@@ -12,15 +12,19 @@
 #pragma warning(disable: 4396)
 #endif
 
-#if !defined(MLOG_BUILDING) && !MLOG_NO_LOGGING
+#if !defined(MLOG_BUILDING)
+
+#if !MLOG_NO_LOGGING
 #include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#include <boost/filesystem/path.hpp>
-
 #include <mstd/exception.hpp>
 #include <mstd/reference_counter.hpp>
+#endif
+
+#include <boost/filesystem/path.hpp>
+
 #endif
 
 #include "Defines.h"
