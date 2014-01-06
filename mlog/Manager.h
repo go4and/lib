@@ -13,6 +13,7 @@
 #endif
 
 #if !defined(MLOG_BUILDING)
+
 #if !MLOG_NO_LOGGING
 #include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>

@@ -168,9 +168,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
+					"$(POSTGRESQL_INCLUDE)",
+					"$(BOOST_ROOT)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"$(BOOST_ROOT)/stage/lib",
+					"$(POSTGRESQL_LIB)",
+				);
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lboost_system-mt-d";
@@ -203,9 +208,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
+					"$(POSTGRESQL_INCLUDE)",
+					"$(BOOST_ROOT)",
 					"$(PROJECT_DIR)/..",
 				);
-				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"$(BOOST_ROOT)/stage/lib",
+					"$(POSTGRESQL_LIB)",
+				);
 				OBJROOT = "$(SYMROOT).$(PROJECT_NAME)";
 				OTHER_LDFLAGS = "-lboost_system-mt";
 				SDKROOT = macosx;
@@ -222,10 +232,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				LD_DYLIB_INSTALL_NAME = "@executable_path/$(EXECUTABLE_PATH)";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib/postgresql92,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -238,10 +244,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				LD_DYLIB_INSTALL_NAME = "@executable_path/$(EXECUTABLE_PATH)";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib/postgresql92,
-				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

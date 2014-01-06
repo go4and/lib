@@ -35,6 +35,7 @@ public:
 
     static void start();
     static const boost::posix_time::ptime & timeStart();
+    static const boost::posix_time::time_duration & step();
 };
 
 }

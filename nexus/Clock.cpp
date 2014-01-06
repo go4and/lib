@@ -17,13 +17,14 @@ namespace nexus {
 namespace {
 
 mstd::atomic<Milliseconds> out;
+boost::posix_time::time_duration step_ = boost::posix_time::milliseconds(10);
 
 void tickThread()
 {
     try {
         boost::posix_time::ptime now = boost::posix_time::microsec_clock::universal_time();
         boost::posix_time::ptime timeStart = Clock::timeStart();
-        boost::posix_time::time_duration step = boost::posix_time::milliseconds(10);
+        boost::posix_time::time_duration step = step_;
         size_t i = 1;
         while(!boost::this_thread::interruption_requested())
         {
@@ -93,6 +94,11 @@ const boost::posix_time::ptime & Clock::timeStart()
 void Clock::start()
 {
     ticker.start();
+}
+
+const boost::posix_time::time_duration & Clock::step()
+{
+    return step_;
 }
 
 }

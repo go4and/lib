@@ -17,7 +17,7 @@
 namespace nexus {
 
 template<class T>
-void write(char *& pos, const T & t)
+inline void write(char *& pos, const T & t)
 {
     BOOST_STATIC_ASSERT(boost::is_pod<T>::value && !boost::is_pointer<T>::value);
 
@@ -29,6 +29,27 @@ void write(char *& pos, const T & t)
 #endif
 
     pos += sizeof(t);
+}
+
+template<class T>
+inline void write(char *& pos, const T * t, size_t size)
+{
+    BOOST_STATIC_ASSERT(boost::is_pod<T>::value && !boost::is_pointer<T>::value);
+
+#ifdef NDEBUG
+    memcpy(pos, t, sizeof(T) * size);
+#else
+    const char * p = mstd::pointer_cast<const char*>(t);
+    std::copy(p, p + sizeof(T) * size, pos);
+#endif
+
+    pos += sizeof(T) * size;
+}
+
+template<class T>
+inline void write(char *& pos, const T * t, const T * end)
+{
+    write(pos, t, end - t);
 }
 
 inline void writeWCString(char *& out, const std::wstring & str)

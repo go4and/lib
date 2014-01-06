@@ -210,5 +210,65 @@ std::string escapeXml(const std::string & input)
     return result;
 }
 
+int changeUser(const std::string & user)
+{
+#ifndef BOOST_WINDOWS
+    MLOG_NOTICE("Use user: " << user);
+    passwd * pw = getpwnam(user.c_str());
+    if(pw)
+    {
+        int res = initgroups(user.c_str(), pw->pw_gid);
+        if (res)
+        {
+            int err = errno;
+            MLOG_MESSAGE(Error, "Cannot init group: " << err << ", group: " << pw->pw_gid);
+            return 2;
+        }
+
+        res = chroot(".");
+        if(res)
+        {
+            MLOG_MESSAGE(Error, "Cannot chroot: " << res);
+            return 3;
+        }
+
+        res = setregid(pw->pw_gid, pw->pw_gid);
+        if(res)
+        {
+            MLOG_MESSAGE(Error, "Cannot setregid: " << res);
+            return 4;
+        }
+
+        res = setreuid(pw->pw_uid, pw->pw_uid);
+        if(res)
+        {
+            MLOG_MESSAGE(Error, "Cannot setreuid: " << res);
+            return 4;
+        }
+    } else {
+        MLOG_MESSAGE(Error, "Cannon find user: " << user);
+        return 1;
+    }
+#endif
+    return 0;
+}
+
+void fork()
+{
+#if BOOST_WINDOWS
+    MLOG_ERROR("Fork is not supported under Windows");
+    exit(1);
+#else
+    int err = ::fork();
+    if(err < 0)
+    {
+        MLOG_MESSAGE(Error, "Fork failed: " << err);
+        exit(1);
+    }
+    if(err > 0)
+        exit(0);
+    MLOG_NOTICE("Fork success");
+#endif
+}
 
 }

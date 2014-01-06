@@ -179,7 +179,9 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
     </ClCompile>
-    <Lib />
+    <Lib>
+      <AdditionalDependencies>libcurl_imp.lib;yajl_sd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
