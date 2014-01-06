@@ -349,6 +349,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
+					"$(BOOST_ROOT)",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(BOOST_ROOT)/stage/lib",
@@ -394,6 +395,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(INCLUDE)",
 					"$(PROJECT_DIR)/..",
+					"$(BOOST_ROOT)",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(BOOST_ROOT)/stage/lib",
