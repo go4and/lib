@@ -79,7 +79,6 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>libpq.lib;Secur32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>

@@ -43,7 +43,7 @@ private:
 class tag_source;
 typedef boost::error_info<tag_source, std::wstring> error_source_value;
 class tag_name;
-typedef boost::error_info<tag_source, std::wstring> error_source_name;
+typedef boost::error_info<tag_name, std::wstring> error_source_name;
 
 template<typename Target>
 inline Target lexical_cast(const std::wstring & name, const std::wstring & arg)
@@ -51,8 +51,7 @@ inline Target lexical_cast(const std::wstring & name, const std::wstring & arg)
     try {
         return boost::lexical_cast<Target>(arg);
     } catch(boost::bad_lexical_cast & src) {
-        BOOST_THROW_EXCEPTION(bad_lexical_cast(src) << error_source_name(name) << error_source_value(arg));
-        throw;
+        throw bad_lexical_cast(src) << error_source_name(name) << error_source_value(arg);
     }
 }
 
