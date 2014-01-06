@@ -1,7 +1,0 @@
-option lib
-
-subproject calc 
-
-files
-{
-}

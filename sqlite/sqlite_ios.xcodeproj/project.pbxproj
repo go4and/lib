@@ -13,7 +13,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C3EFF50C156AD2660069B5BD /* libsqlite_ios-iphoneos_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libsqlite_ios-iphoneos_d.a"; path = "libmsqlite-iphoneos_d.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3EFF50C156AD2660069B5BD /* libmsqlite-iphoneos_d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libmsqlite-iphoneos_d.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3EFF50F156AD2660069B5BD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C3EFF520156AD2BE0069B5BD /* SQLite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SQLite.cpp; sourceTree = SOURCE_ROOT; };
 		C3EFF521156AD2BE0069B5BD /* SQLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLite.h; sourceTree = SOURCE_ROOT; };
@@ -43,7 +43,7 @@
 		C3EFF50D156AD2660069B5BD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C3EFF50C156AD2660069B5BD /* libsqlite_ios-iphoneos_d.a */,
+				C3EFF50C156AD2660069B5BD /* libmsqlite-iphoneos_d.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,7 +93,7 @@
 			);
 			name = sqlite_ios;
 			productName = sqlite;
-			productReference = C3EFF50C156AD2660069B5BD /* libsqlite_ios-iphoneos_d.a */;
+			productReference = C3EFF50C156AD2660069B5BD /* libmsqlite-iphoneos_d.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */

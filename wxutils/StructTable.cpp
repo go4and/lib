@@ -12,9 +12,6 @@
 
 namespace wxutils {
 
-wxString StructTableBase::zero_ = L"0";
-wxString StructTableBase::one_ = L"1";
-
 namespace {
 
 class Helper {
@@ -26,9 +23,15 @@ public:
         ss_ << time;
         return ss_.str();
     }
+
+    inline const wxString & renderBool(bool v)
+    {
+        return v ? one_ : zero_;
+    }
 private:
     Helper()
-        : facet_(new boost::posix_time::wtime_facet())
+        : facet_(new boost::posix_time::wtime_facet()),
+          zero_(L"0"), one_(L"1")
     {
         facet_->format(L"%Y-%b-%d %H:%M:%S");
         ss_.imbue(std::locale(ss_.getloc(), facet_));
@@ -36,6 +39,8 @@ private:
 
     std::wstringstream ss_;
     boost::posix_time::wtime_facet * facet_;
+    wxString zero_;
+    wxString one_;
 };
 
 }
@@ -46,6 +51,21 @@ boost::optional<wxString> renderDate(const boost::posix_time::ptime & time)
         return boost::optional<wxString>();
     else
         return Helper::instance().output(time);
+}
+
+const wxString & renderBool(bool v)
+{
+    return Helper::instance().renderBool(v);
+}
+
+void refreshGridRect(wxGrid * grid, int row1, int col1, int row2, int col2)
+{
+    wxRect rect = grid->CellToRect(row1, col1);
+    wxRect temp = grid->CellToRect(row2, col2);
+    rect.SetBottom(temp.GetBottom());
+    rect.SetRight(temp.GetRight());
+    rect.SetLeftTop(grid->CalcScrolledPosition(rect.GetLeftTop()));
+    grid->GetGridWindow()->Refresh(false, &rect);
 }
 
 }

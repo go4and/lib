@@ -9,10 +9,13 @@
 #pragma once
 
 #if !defined(BUILDING_CALC)
-#include <boost/algorithm/string/case_conv.hpp>
+#include <unordered_map>
 
 #include <boost/array.hpp>
-#include <boost/unordered_map.hpp>
+
+#include <boost/algorithm/string/case_conv.hpp>
+
+#include <boost/functional/hash.hpp>
 #endif
 
 #include "config.hpp"
@@ -51,7 +54,7 @@ public:
         map_.clear();
     }
 private:
-    typedef boost::unordered_map<std::pair<std::wstring, size_t>, func> Map;
+	typedef std::unordered_map<std::pair<std::wstring, size_t>, func, boost::hash<std::pair<std::wstring, size_t>>> Map;
 
     template<class T>
     void do_check()

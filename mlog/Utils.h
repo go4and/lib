@@ -40,6 +40,12 @@ inline std::basic_ostream<Ch, CT> & operator<<(std::basic_ostream<Ch, CT> & out,
 MLOG_DECL bool setup(const char * variable, const char * appname);
 MLOG_DECL bool setupFromFile(const char * filename, const char * appname);
 
+template<class T>
+inline std::ostream & operator<<(std::ostream & out, const std::vector<T> & vec)
+{
+    return out << ocollection(vec);
+}
+
 template<class T1, class T2>
 std::ostream & operator<<(std::ostream & out, const std::pair<T1, T2> & p)
 {

@@ -9,8 +9,6 @@
 #pragma once
 
 #if !defined(BUILDING_WXUTILS)
-#include <boost/unordered_map.hpp>
-
 #include <mstd/singleton.hpp>
 
 #include <wx/colour.h>

@@ -9,8 +9,9 @@
 #pragma once
 
 #ifndef BUILDING_WXUTILS
+#include <unordered_map>
+
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
 
 #include <wx/dcmemory.h>
 #endif
@@ -31,7 +32,7 @@ public:
 private:
     GLuint makeGlyph(wchar_t ch);
 
-    boost::unordered_map<wchar_t, GLuint> glyphs_;
+    std::unordered_map<wchar_t, GLuint> glyphs_;
     std::vector<GLuint> buffer_;
     wxMemoryDC mdc_;
 };
