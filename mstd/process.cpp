@@ -149,17 +149,15 @@ void execute_file(const boost::filesystem::wpath & path, const std::vector<std::
 
 void make_executable(const boost::filesystem::wpath & path, bool user, bool group, bool other)
 {
-#if !BOOST_WINDOWS
-    std::string executable = mstd::utf8fname(path);
-    struct stat st;
-    if(!stat(executable.c_str(), &st))
-        chmod(executable.c_str(), st.st_mode | (user ? S_IXUSR : 0) | (group ? S_IXGRP : 0) | (other ? S_IXOTH : 0));
-#else
-    (void)path;
-    (void)user;
-    (void)group;
-    (void)other;
-#endif
+    boost::system::error_code ec;
+    boost::filesystem::perms perms = boost::filesystem::add_perms;
+    if(user)
+        perms |= boost::filesystem::owner_exe;
+    if(group)
+        perms |= boost::filesystem::group_exe;
+    if(other)
+        perms |= boost::filesystem::others_exe;
+    permissions(path, perms, ec);
 }
 
 }

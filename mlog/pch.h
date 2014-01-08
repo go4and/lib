@@ -85,6 +85,10 @@
 #include <mstd/threads.hpp>
 #include <mstd/utf8.hpp>
 
+#else
+
+#include <boost/filesystem/path.hpp>
+
 #endif
 
 #define MLOG_BUILDING
