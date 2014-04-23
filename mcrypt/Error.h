@@ -8,6 +8,10 @@
 */
 #pragma once
 
+#if !defined(MCRYPT_BUILDING)
+#include <string>
+#endif
+
 #include "Config.h"
 
 namespace mcrypt {
