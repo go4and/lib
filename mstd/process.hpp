@@ -13,8 +13,8 @@
 namespace mstd {
 
 boost::filesystem::path executable_path();
-void execute_file(const boost::filesystem::wpath & path);
-void execute_file(const boost::filesystem::wpath & path, const std::vector<std::wstring> & arguments);
+int execute_file(const boost::filesystem::wpath & path);
+int execute_file(const boost::filesystem::wpath & path, const std::vector<std::wstring> & arguments, void ** handle = nullptr);
 void make_executable(const boost::filesystem::wpath & path, bool user = true, bool group = true, bool other = true);
 
 }

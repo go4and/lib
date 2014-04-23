@@ -37,8 +37,7 @@ public:
 
     void clear()
     {
-        wxGridTableMessage msg(this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, value_.size());
-        GetView()->ProcessTableMessage( msg );
+        tableMessage(wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, value_.size());
 
         value_.clear();
     }
@@ -47,8 +46,7 @@ public:
     {
         value_.push_back(item);
 
-        wxGridTableMessage msg(this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1);
-        GetView()->ProcessTableMessage( msg );
+        tableMessage(wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1);
     }
 
     void remove(size_t row)
@@ -57,8 +55,7 @@ public:
         {
             value_.erase(value_.begin() + row);
 
-            wxGridTableMessage msg(this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1);
-            GetView()->ProcessTableMessage( msg );
+            tableMessage(wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1);
         }
     }
 
@@ -75,14 +72,9 @@ public:
     void updateNumberRows(size_t oldSize)
     {
         if(oldSize < value_.size())
-        {
-            wxGridTableMessage msg(this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, value_.size() - oldSize);
-            GetView()->ProcessTableMessage(msg);
-        } else if(value_.size() < oldSize)
-        {
-            wxGridTableMessage msg(this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, value_.size(), oldSize - value_.size());
-            GetView()->ProcessTableMessage(msg);
-        }
+            tableMessage(wxGRIDTABLE_NOTIFY_ROWS_APPENDED, value_.size() - oldSize);
+        else if(value_.size() < oldSize)
+            tableMessage(wxGRIDTABLE_NOTIFY_ROWS_DELETED, value_.size(), oldSize - value_.size());
     }
 
     const typename Value::value_type * at(size_t index) const
@@ -97,6 +89,16 @@ public:
 protected:
     Value value_;
 private:
+    void tableMessage(int id, int i1, int i2 = -1)
+    {
+        auto view = GetView();
+        if(view)
+        {
+            wxGridTableMessage msg(this, id, i1, i2);
+            view->ProcessTableMessage(msg);
+        }
+    }
+    
     bool IsEmptyCell(int row, int col)
     {
         return false;

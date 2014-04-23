@@ -37,7 +37,7 @@ public:
     }
 
     void add(const std::wstring & name, const std::vector<std::wstring> & args, const compiler & f);
-    func find(const std::wstring & name, int arity) const;
+    func find(const std::wstring & name, int arity, bool lowered) const;
 
     const environment * parent() const
     {
