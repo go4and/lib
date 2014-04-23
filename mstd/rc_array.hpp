@@ -8,18 +8,24 @@
 */
 #pragma once
 
+#include <boost/move/move.hpp>
+
 #include "atomic.hpp"
 
 namespace mstd {
 
+class rc_array_base {
+public:
+    struct uninitialized_type {};
+    static const uninitialized_type uninitialized;
+};
+
 template<class T>
-class rc_array {
+class rc_array : public rc_array_base {
+    BOOST_COPYABLE_AND_MOVABLE(rc_array);
 public:
     typedef T value_type;
     
-    struct uninitialized_type {};
-    static const uninitialized_type uninitialized;
-
     rc_array()
         : data_(0)
     {
@@ -70,12 +76,28 @@ public:
             detail::atomic_helper<sizeof(int)>::add(counterAddress(), 1);
     }
 
-    void operator=(const rc_array & rhs)
+    void operator=(BOOST_COPY_ASSIGN_REF(rc_array) rhs)
     {
         reset();
         data_ = rhs.data_;
         if(data_)
             detail::atomic_helper<sizeof(int)>::add(counterAddress(), 1);
+    }
+
+    rc_array(BOOST_RV_REF(rc_array) rhs)
+      : data_(rhs.data_)
+    {
+        rhs.data_ = 0;
+    }
+
+    void operator=(BOOST_RV_REF(rc_array) rhs)
+    {
+        if (this != &rhs)
+        {
+            reset();
+            data_ = rhs.data_;
+            rhs.data_ = 0;
+        }
     }
 
     inline size_t size() const

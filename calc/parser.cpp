@@ -252,7 +252,7 @@ struct InvokationCompiler : public pre_compiler {
 
     pre_program * compile(const compiler_context & context) const
     {
-        func d = context.lookup(name, args.size(), true);
+        func d = context.lookup(name, args.size(), true, false);
         if(d.function.empty())
         {
             context.err.init(error_undefined_function).function_name(name).expected_arity(args.size());

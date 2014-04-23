@@ -24,15 +24,19 @@ public:
     explicit user_function_lookup(const std::vector<std::wstring> & names, const function_lookup & lookup)
         : names_(names), lookup_(lookup) {}
 
-    func operator()(const std::wstring & name, size_t arity, bool lookupArguments) const
+    func operator()(const std::wstring & name, size_t arity, bool lookupArguments, bool lowered) const
     {
-        std::vector<std::wstring>::const_iterator begin = names_.begin(), end = names_.end();
-        std::vector<std::wstring>::const_iterator i = arity == 0 && lookupArguments ? std::find(begin, end, name) : end;
-        if(i == end)
-        {
-            return lookup_(name, arity, false);
-        } else {
-            return func(stack_arg(i - begin), 0);
+        if(!lowered)
+            return (*this)(mstd::to_lower_copy(name), arity, lookupArguments, true);
+        else {
+            std::vector<std::wstring>::const_iterator begin = names_.begin(), end = names_.end();
+            std::vector<std::wstring>::const_iterator i = arity == 0 && lookupArguments ? std::find(begin, end, name) : end;
+            if(i == end)
+            {
+                return lookup_(name, arity, false, true);
+            } else {
+                return func(stack_arg(i - begin), 0);
+            }
         }
     }
 private:
@@ -126,9 +130,10 @@ void environment::add(const std::wstring & name, const std::vector<std::wstring>
     do_add(name, func(user_function_compiler(args, f), args.size()));
 }
 
-func environment::find(const std::wstring & name, int arity) const
+func environment::find(const std::wstring & name, int arity, bool lowered) const
 {
-    return do_find(std::make_pair(boost::to_lower_copy(name), arity));
+    BOOST_ASSERT(!lowered || name == mstd::to_lower_copy(name));
+    return do_find(std::make_pair(lowered ? name : mstd::to_lower_copy(name), arity));
 }
 
 func environment::do_find(const Map::key_type & key) const
@@ -138,7 +143,7 @@ func environment::do_find(const Map::key_type & key) const
     {
         if(!lookup_.empty())
         {
-            func result = lookup_(key.first, key.second, true);
+            func result = lookup_(key.first, key.second, true, true);
             if(!result.function.empty())
                 return result;
         }

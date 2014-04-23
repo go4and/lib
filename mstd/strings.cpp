@@ -322,9 +322,14 @@ private:
     size_t value_;
 };
 
+size_t deutf8_length(const char * str, size_t len)
+{
+    return deutf8(str, str + len, counter()).value();
+}
+
 size_t deutf8_length(const std::string & value)
 {
-    return deutf8(value.begin(), value.end(), counter()).value();
+    return deutf8_length(value.c_str(), value.length());
 }
 
 size_t utf8_length(const std::wstring & value)
@@ -349,23 +354,10 @@ std::wstring MSTD_STDCALL deutf8(const std::string & value)
 
 std::wstring MSTD_STDCALL deutf8(const char * src, size_t len)
 {
-    if(len > maxStackLen)
-    {
-#if MSTD_USE_PBUFFER
-        pbuffer buf = buffers::instance().take(len * sizeof(wchar_t));
-#else
-        std::vector<char> buf(len * sizeof(wchar_t));
-#endif
-        wchar_t * begin = pointer_cast<wchar_t*>(bufferBegin(buf));
-        wchar_t * end = mstd::deutf8(src, src + len, begin);
-        return std::wstring(begin, end);
-    } else if(len)
-    {
-        wchar_t begin[maxStackLen];
-        wchar_t * end = mstd::deutf8(src, src + len, begin);
-        return std::wstring(begin, end);
-    } else
-        return std::wstring();
+    std::wstring result;
+    result.resize(mstd::deutf8_length(src, len));
+    deutf8(src, src + len, result.begin());
+    return std::move(result);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -542,6 +534,40 @@ int istrcmp(const std::wstring & lhs, const std::wstring & rhs)
 #else
     return CompareStringW(LOCALE_USER_DEFAULT, NORM_IGNORECASE, lhs.c_str(), lhs.length(), rhs.c_str(), rhs.length()) - 2;
 #endif
+}
+
+namespace {
+
+class PutCharIterator : public std::iterator<std::output_iterator_tag, char> {
+public:
+    explicit PutCharIterator(std::ostream & out)
+        : out_(out.rdbuf())
+    {
+    }
+    
+    const PutCharIterator & operator*() const
+    {
+        return *this;
+    }
+
+    void operator=(char ch) const
+    {
+        out_->sputc(ch);
+    }
+
+    PutCharIterator & operator++()
+    {
+        return *this;
+    }
+private:
+    std::streambuf * out_;
+};
+
+}
+
+void out_utf8::output(std::ostream & out) const
+{
+    utf8(str_->begin(), str_->end(), PutCharIterator(out));
 }
 
 }

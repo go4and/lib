@@ -58,7 +58,7 @@ boost::filesystem::wpath executable_path()
 #endif
 }
 
-void execute_file(const boost::filesystem::wpath & path)
+int execute_file(const boost::filesystem::wpath & path)
 {
 #if BOOST_WINDOWS
     STARTUPINFOW si;
@@ -68,14 +68,22 @@ void execute_file(const boost::filesystem::wpath & path)
     si.cb = sizeof(si);
     boost::filesystem::wpath parent = path;
     parent.remove_filename();
-    CreateProcessW(NULL, const_cast<wchar_t*>(wfname(path).c_str()), NULL, NULL, true, CREATE_NO_WINDOW, NULL, wfname(parent).c_str(), &si, &pi);
+    if(CreateProcessW(NULL, const_cast<wchar_t*>(wfname(path).c_str()), NULL, NULL, true, CREATE_NO_WINDOW, NULL, wfname(parent).c_str(), &si, &pi))
+    {
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+        return pi.dwProcessId;
+    } else
+        return -1;
 #else
     std::string fname = mstd::utf8fname(path);
-    if(!vfork())
+    int result = vfork();
+    if(!result)
     {
         execl(fname.c_str(), fname.c_str(), NULL);
         _exit(0);
     }
+    return result;
 #endif
 }
 
@@ -104,8 +112,8 @@ std::wstring escape(const std::wstring & input)
 }
 #endif
 
-void execute_file(const boost::filesystem::wpath & path, const std::vector<std::wstring> & arguments)
-{
+int execute_file(const boost::filesystem::wpath & path, const std::vector<std::wstring> & arguments, void ** handle)
+{    
 #if !BOOST_WINDOWS
     std::string fname = mstd::utf8fname(path);
     std::vector<std::string> args;
@@ -119,11 +127,13 @@ void execute_file(const boost::filesystem::wpath & path, const std::vector<std::
         argv.push_back(const_cast<char*>(args.back().c_str()));
     }
     argv.push_back(0);
-    if(!vfork())
+    int result = vfork();
+    if(!result)
     {
         execv(fname.c_str(), &argv[0]);
         _exit(0);
     }
+    return result;
 #else
     STARTUPINFOW si;
     PROCESS_INFORMATION pi;
@@ -143,7 +153,19 @@ void execute_file(const boost::filesystem::wpath & path, const std::vector<std::
         command += escape(*i);
     }
 
-    CreateProcessW(NULL, const_cast<wchar_t*>(command.c_str()), NULL, NULL, true, 0, NULL, wfname(parent).c_str(), &si, &pi);    
+    if(CreateProcessW(NULL, const_cast<wchar_t*>(command.c_str()), NULL, NULL, true, 0, NULL, wfname(parent).c_str(), &si, &pi))
+    {
+        if(handle)
+            *handle = pi.hProcess;
+        else
+            CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+        return pi.dwProcessId;
+    } else {
+        if(handle)
+            *handle = INVALID_HANDLE_VALUE;
+        return -1;
+    }
 #endif
 }
 

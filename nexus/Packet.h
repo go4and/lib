@@ -20,6 +20,7 @@ typedef boost::uint8_t PacketCode;
 
 const PacketCode pcConnected = 1;
 const PacketCode pcDisconnected = 2;
+const PacketCode pcFailed = 3;
 
 class PacketReader;
 

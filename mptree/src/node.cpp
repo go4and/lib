@@ -45,11 +45,11 @@ void write_unparsed(node_writer & writer, const Col & col, size_t idx, bool in_a
 class unparsed_child {
 public:
     explicit unparsed_child(unparsed & holder, const char * name, size_t len)
-        : holder_(holder), name_(name, len), next_(0), child_(0), tail_(0)
+        : holder_(&holder), name_(name, len), next_(0), child_(0), tail_(0)
     {
     }
 
-    unparsed & holder() const { return holder_; }
+    unparsed & holder() const { return *holder_; }
 
     inline const std::string & name() const { return name_; }
     inline const std::string & value() const { return value_; }
@@ -59,7 +59,7 @@ public:
     inline void next(size_t value) { next_ = value; }
     inline void child(size_t value) { child_ = value; }
 private:
-    unparsed & holder_;
+    unparsed * holder_;
     std::string name_;
     std::string value_;
     size_t next_;
@@ -109,9 +109,9 @@ parser_state unparsed_child::unparsed_child_parser(const char * name, size_t len
     if(!name)
         return parser_state(0, 0, 0);
     unparsed_child * self = static_cast<unparsed_child*>(data);
-    auto & children = self->holder_.children_;
+    auto & children = self->holder_->children_;
     size_t idx = children.size();
-    children.push_back(unparsed_child(self->holder_, name, len));
+    children.push_back(unparsed_child(*self->holder_, name, len));
     if(self->tail_)
         children[self->tail_].next_ = idx;
     else

@@ -86,7 +86,7 @@ bool save_file(const boost::filesystem::wpath & path, const rc_buffer & data, bo
         off_t size = data.size();
         if(trimZero)
             size = std::find(buf, buf + size, 0) - buf;
-        result = fwrite(buf, 1, size, file) == size;
+        result = static_cast<off_t>(fwrite(buf, 1, size, file)) == size;
         fclose(file);
     }
     return result;

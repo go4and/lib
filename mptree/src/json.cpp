@@ -68,7 +68,7 @@ public:
         first_.push_back(1);
     }
     
-    void end_struct(const char * name, bool in_array)
+    void end_struct(const char * , bool )
     {
         dec_ident();
         buf_->sputc('}');
@@ -87,7 +87,7 @@ public:
             buf_->sputc('"');
     }
     
-    void end_value(const char * name, bool in_array)
+    void end_value(const char * , bool )
     {
         buf_->sputc('"');
     }
@@ -103,7 +103,7 @@ public:
         first_.push_back(1);
     }
     
-    void end_array(const char * name)
+    void end_array(const char * )
     {
         dec_ident();
         buf_->sputc(']');
@@ -143,7 +143,7 @@ private:
     
     inline void dec_ident()
     {
-        bool empty = first_.back();
+        bool empty = first_.back() != 0;
         first_.pop_back();
         if(!empty)
         {
@@ -156,7 +156,7 @@ private:
     std::vector<char> first_;
 };
 
-class json_builder {
+class json_builder : public boost::noncopyable {
 public:
     explicit json_builder(node & output)
         : output_(output)

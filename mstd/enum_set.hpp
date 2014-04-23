@@ -84,6 +84,13 @@ private:
     value_type value_;
 };
 
+template<class Tag>
+inline enum_set<Tag> & operator|=(enum_set<Tag> & lhs, const enum_set<Tag> & rhs)
+{
+    lhs.value() |= rhs.value();
+    return lhs;
+}
+
 template<class Tag, size_t Id>
 enum_set<Tag> & operator|=(enum_set<Tag> & lhs, enum_set_item<Tag, Id> rhs)
 {
@@ -96,6 +103,18 @@ enum_set<Tag> & operator^=(enum_set<Tag> & lhs, enum_set_item<Tag, Id> rhs)
 {
     lhs.value() ^= enum_set<Tag>(rhs).value();
     return lhs;
+}
+
+template<class Tag>
+enum_set<Tag> operator^(const enum_set<Tag> & lhs, const enum_set<Tag> & rhs)
+{
+    return enum_set<Tag>(lhs.value() ^ rhs.value());
+}
+
+template<class Tag, size_t Id>
+enum_set<Tag> operator^(const enum_set<Tag> & lhs, enum_set_item<Tag, Id> rhs)
+{
+    return lhs ^ enum_set<Tag>(rhs);
 }
 
 template<class Tag>

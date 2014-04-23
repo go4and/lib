@@ -117,11 +117,11 @@ public:
         buf_->sputn(buffer, len);
     }
 
-    void begin_array(const char * name)
+    void begin_array(const char *)
     {
     }
 
-    void end_array(const char * name)
+    void end_array(const char *)
     {
     }
     
@@ -149,7 +149,7 @@ private:
 
 }
 
-void parse_xml(node & root, char * data, const char * root_name)
+void parse_xml(node & root, char * data, const char *)
 {
     rapidxml::xml_document<> document;
     document.parse<0>(data);

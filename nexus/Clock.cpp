@@ -34,7 +34,9 @@ void tickThread()
             {
                 boost::posix_time::ptime cur = boost::posix_time::microsec_clock::universal_time();
                 if((cur - now).total_milliseconds() > 50)
-                    MLOG_MESSAGE(Warning, "Long delay: " << (cur - now).total_milliseconds());
+                {
+                    // MLOG_WARNING("Long delay: " << (cur - now).total_milliseconds());
+                }
                 now = cur;
                 i = 100;
             }
