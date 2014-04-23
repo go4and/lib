@@ -46,10 +46,20 @@ inline std::ostream & operator<<(std::ostream & out, const std::vector<T> & vec)
     return out << ocollection(vec);
 }
 
+inline std::ostream & operator<<(std::ostream & out, const std::wstring & str)
+{
+    return out << mstd::utf8(str);
+}
+
 template<class T1, class T2>
 std::ostream & operator<<(std::ostream & out, const std::pair<T1, T2> & p)
 {
-    return out << '(' << p.first << ',' << p.second << ')';
+    out << '(';
+    out << p.first;
+    out << ',';
+    out << p.second;
+    out << ')';
+    return out;
 }
 
 template<class Collection>

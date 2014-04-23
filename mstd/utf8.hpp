@@ -71,25 +71,27 @@ namespace mstd {
         
         static const value_type ones = detail::ones<value_type>::value;
 
-        size_t result = 0;
+        In start = begin;
 
         for (; begin != end; ++begin)
         {
             value_type c = *begin;
             if(c & (ones ^ 0x7f))
                 break;
-            ++result;
         }
+
+        size_t result = begin - start;
 
         for (; begin != end; ++begin)
         {
             value_type c = *begin;
-            if (!(c & (ones ^ 0x7f)))
+            if (!(c & (ones ^ 0x7f))) {
                 ++result;
-            else if (c & (ones ^ 0x07ff))
+            } else if (c & (ones ^ 0x07ff)) {
                 result += 3;
-            else
+            } else {
                 result += 2;
+            }
         }
 
         return result;
