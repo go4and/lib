@@ -103,6 +103,13 @@ itoa(T i, Char * buf)
             i = -i;
             *p = '-';
             ++p;
+            if(i < 0)
+            {
+                p = detail::pitoa(-(i / detail::blockPow), p);
+                p = detail::pitoa(-(i % detail::blockPow), p);
+                *p = 0;
+                return buf;
+            }
         }
         p = detail::pitoa(i, p);
     } else {
@@ -311,6 +318,12 @@ template<class T>
 inline T str2int16(const char * c)
 {
     return str2int16<T>(c, strlen(c));
+}
+
+template<class T, class C>
+T str2int16(const C & c)
+{
+    return str2int16<T>(c.begin(), c.end());
 }
 
 }

@@ -37,6 +37,7 @@ MSTD_DECL std::string MSTD_STDCALL utf8(const wchar_t * src);
 MSTD_DECL std::string MSTD_STDCALL utf8(const wchar_t * src, size_t len);
 
 MSTD_DECL size_t deutf8_length(const std::string & value);
+MSTD_DECL size_t deutf8_length(const char * str, size_t len);
 MSTD_DECL size_t utf8_length(const std::wstring & value);
 MSTD_DECL bool utf8_length_less(const std::string & value, size_t len);
 
@@ -70,6 +71,24 @@ inline deutf8_functor deutf8()
 inline utf8_functor utf8()
 {
     return utf8_functor();
+}
+
+class out_utf8 {
+public:
+    explicit out_utf8(const std::wstring & str)
+        : str_(&str)
+    {
+    }
+
+    void output(std::ostream & out) const;
+private:
+    const std::wstring * str_;
+};
+
+inline std::ostream & operator<<(std::ostream & out, const out_utf8 & ou)
+{
+    ou.output(out);
+    return out;
 }
 
 void to_lower(std::wstring & inp);

@@ -14,6 +14,8 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/local/stream_protocol.hpp>
 
+#include <mstd/itoa.hpp>
+
 #endif
 
 #include "Config.h"

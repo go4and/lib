@@ -245,6 +245,7 @@
 					"$(INCLUDE)",
 					"$(BOOST_ROOT)",
 					"$(PROJECT_DIR)/..",
+					"$(BOOST_ROOT)",
 				);
 				LD_DYLIB_INSTALL_NAME = "@executable_path/mnet.dylib";
 				LIBRARY_SEARCH_PATHS = (
@@ -293,6 +294,7 @@
 					"$(INCLUDE)",
 					"$(BOOST_ROOT)",
 					"$(PROJECT_DIR)/..",
+					"$(BOOST_ROOT)",
 				);
 				LD_DYLIB_INSTALL_NAME = "@executable_path/mnet.dylib";
 				LIBRARY_SEARCH_PATHS = (

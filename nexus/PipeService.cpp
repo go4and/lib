@@ -176,9 +176,9 @@ public:
                 ++activeOperations_;
                 listener_(id_, -pcConnected, 0, 0);
             } else
-                listener_(-err, 0, 0, 0);
+                listener_(-err, -pcFailed, 0, 0);
         } else {
-            listener_(-error, 0, 0, 0);
+            listener_(-error, -pcFailed, 0, 0);
             context_.releaseConnection(this);
         }
     }
@@ -208,6 +208,11 @@ public:
         } else
             reset();
         checkFinished();
+    }
+
+    void disconnect()
+    {
+        reset();
     }
 private:
     void processPackets()
@@ -331,10 +336,14 @@ struct TimerOperation {
     explicit TimerOperation(const boost::posix_time::ptime & t)
         : time(t)
     {
+        MLOG_DEBUG("TimerOperation(" << t << "), this = " << this);
     }
 
     virtual void run() = 0;
-    virtual ~TimerOperation() {}
+    virtual ~TimerOperation()
+    {
+        MLOG_DEBUG("~TimerOperation(), this = " << this);
+    }
 };
 
 template<class F>
@@ -431,11 +440,11 @@ public:
         post(boost::bind(&Impl::doListen, this, listener, name));
     }
 
-    void connect(const Listener & listener, const std::wstring & name)
+    void connect(const Listener & listener, const std::wstring & name, int retries)
     {
         start();
 
-        post(boost::bind(&Impl::doConnect, this, listener, name));
+        post(boost::bind(&Impl::doConnect, this, listener, name, retries));
     }
 
     HANDLE iocp()
@@ -466,10 +475,12 @@ public:
 
         post(boost::bind(&Impl::doSend, this, id, pack(code, begin, len)));
     }
-private:
-    void deleteConnection(PipeConnection * conn)
+
+    void disconnect(int id)
     {
-        delete conn;
+        auto i = connections_.find(id);
+        if(i != connections_.end())
+            return (*i)->disconnect();
     }
 
     template<class F>
@@ -477,6 +488,11 @@ private:
     {
         IoOperation * iop = actionOperation(f);
         PostQueuedCompletionStatus(iocp_, 0, 1, iop->prepare());
+    }
+private:
+    void deleteConnection(PipeConnection * conn)
+    {
+        delete conn;
     }
 
     void start()
@@ -530,11 +546,12 @@ private:
         }
     }
 
-    void doConnect(const Listener & listener, const std::wstring & name)
+    void doConnect(const Listener & listener, const std::wstring & name, int retries)
     {
-        MLOG_DEBUG("doConnect(" << mstd::utf8(name) << ")");
+        MLOG_DEBUG("doConnect(" << mstd::utf8(name) << ", " << retries << ")");
 
         HANDLE handle = CreateFileW((L"\\\\.\\pipe\\" + name).c_str(), PIPE_ACCESS_DUPLEX, PIPE_NOWAIT, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+        int err = GetLastError();
         MLOG_DEBUG("doConnect, handle: " << handle);
 
         if(handle != INVALID_HANDLE_VALUE) 
@@ -542,9 +559,15 @@ private:
             PipeConnection * connection = new PipeConnection(*this, listener, handle);
             connection->connectDone(0);
         } else {
-            int err = GetLastError();
             MLOG_WARNING("connect failed: " << err);
-            timers_.push(timerOperation(boost::posix_time::milliseconds(250), boost::bind(&Impl::doConnect, this, listener, name)));
+            if(retries)
+            {
+                if(retries > 0)
+                    --retries;
+                timers_.push(timerOperation(boost::posix_time::milliseconds(250), boost::bind(&Impl::doConnect, this, listener, name, retries)));
+            } else {
+                listener(-err, -pcFailed, 0, 0);
+            }                
         }
     }
 
@@ -564,7 +587,7 @@ private:
                     TimerOperation * op;
                     while(!timers_.empty() && (op = timers_.top())->time <= now)
                     {
-                        op = timers_.top();
+                        timers_.pop();
                         op->run();
                         delete op;
                     }
@@ -617,14 +640,24 @@ void PipeService::listen(const Listener & listener, const std::wstring & name)
     impl_->listen(listener, name);
 }
 
-void PipeService::connect(const Listener & listener, const std::wstring & name)
+void PipeService::connect(const Listener & listener, const std::wstring & name, int retries)
 {
-    impl_->connect(listener, name);
+    impl_->connect(listener, name, retries);
 }
 
 void PipeService::send(int id, PacketCode code, const char * begin, size_t len)
 {
     impl_->send(id, code, begin, len);
+}
+
+void PipeService::post(const boost::function<void()> & action)
+{
+    impl_->post(action);
+}
+
+void PipeService::disconnect(int id)
+{
+    impl_->disconnect(id);
 }
 
 }

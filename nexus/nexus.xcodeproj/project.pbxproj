@@ -388,6 +388,7 @@
 					"$(INCLUDE)",
 					"$(BOOST_ROOT)",
 					"$(PROJECT_DIR)/..",
+					"$(BOOST_ROOT)",
 				);
 				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";
@@ -437,6 +438,7 @@
 					"$(INCLUDE)",
 					"$(BOOST_ROOT)",
 					"$(PROJECT_DIR)/..",
+					"$(BOOST_ROOT)",
 				);
 				LIBRARY_SEARCH_PATHS = "$(BOOST_ROOT)/stage/lib";
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION).$(PROJECT_NAME)";

@@ -71,6 +71,9 @@
     <ClCompile Include="ptree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rc_array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="access.hpp">
@@ -275,6 +278,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="yield_k.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="any.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

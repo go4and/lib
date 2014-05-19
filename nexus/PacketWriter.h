@@ -12,90 +12,146 @@
 #include <boost/type_traits/is_pod.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 
+#include <mstd/null.hpp>
 #include <mstd/pointer_cast.hpp>
+#include <mstd/utf8.hpp>
 
 namespace nexus {
 
-template<class T>
-inline void write(char *& pos, const T & t)
+inline void writeBytes(char *& pos, const void * bytes, size_t len)
 {
-    BOOST_STATIC_ASSERT(boost::is_pod<T>::value && !boost::is_pointer<T>::value);
-
 #ifdef NDEBUG
-    memcpy(pos, &t, sizeof(t));
+    memcpy(pos, bytes, len);
 #else
-    const char * p = mstd::pointer_cast<const char*>(&t);
-    std::copy(p, p + sizeof(t), pos);
+    const char * p = static_cast<const char*>(bytes);
+    std::copy(p, p + len, pos);
 #endif
 
-    pos += sizeof(t);
+    pos += len;
 }
 
-template<class T>
-inline void write(char *& pos, const T * t, size_t size)
+template<class Ch, class Result>
+struct EnableIfByte : public boost::enable_if<boost::mpl::or_<boost::is_same<Ch, char>, boost::is_same<Ch, unsigned char> >, Result> {};
+
+template<class Ch>
+inline typename EnableIfByte<Ch, void>::type
+writeBytes(std::vector<Ch> & out, const void * bytes, size_t len)
 {
-    BOOST_STATIC_ASSERT(boost::is_pod<T>::value && !boost::is_pointer<T>::value);
-
-#ifdef NDEBUG
-    memcpy(pos, t, sizeof(T) * size);
-#else
-    const char * p = mstd::pointer_cast<const char*>(t);
-    std::copy(p, p + sizeof(T) * size, pos);
-#endif
-
-    pos += sizeof(T) * size;
+    const char * begin = static_cast<const char*>(bytes);
+    out.insert(out.end(), begin, begin + len);
 }
 
-template<class T>
-inline void write(char *& pos, const T * t, const T * end)
+template<class Ch>
+inline typename EnableIfByte<Ch, size_t>::type
+prepareBytes(std::vector<Ch> & out, size_t len)
+{
+    size_t oldSize = out.size();
+    out.resize(oldSize + len);
+    return oldSize;
+}
+
+template<class Ch>
+inline typename EnableIfByte<Ch, std::back_insert_iterator<std::vector<Ch>>>::type
+writingIterator(std::vector<Ch> & out)
+{
+    return std::back_inserter(out);
+}
+
+template<class Ch, class Len>
+inline typename EnableIfByte<Ch, void>::type
+commitLen(std::vector<Ch> & out, size_t oldSize, Len*)
+{
+    Len size = static_cast<Len>(out.size() - oldSize - sizeof(Len));
+    memcpy(&out[oldSize], &size, sizeof(Len));
+}
+
+template<class T, class U>
+inline typename boost::enable_if<boost::mpl::and_<boost::is_pod<T>, boost::mpl::not_<boost::is_pointer<T> > >, void>::type
+write(U & u, const T & t)
+{
+    writeBytes(u, &t, sizeof(T));
+}
+
+template<class T, class U>
+inline typename boost::enable_if<boost::mpl::and_<boost::is_pod<T>, boost::mpl::not_<boost::is_pointer<T> > >, void>::type
+write(U & u, const T * t, size_t size)
+{
+    writeBytes(u, t, sizeof(T) * size);
+}
+
+template<class T, class U>
+inline void write(U & u, const T * t, const T * end)
 {
     write(pos, t, end - t);
 }
 
-inline void writeWCString(char *& out, const std::wstring & str)
+template<class U>
+inline void writeWCString(U & u, const std::wstring & str)
 {
-    size_t len = (str.length() + 1) * 2;
-    memcpy(out, str.c_str(), len);
-    out += len;
+    writeBytes(u, str.c_str(), (str.length() + 1) * 2);
 }
 
-inline void writeCString(char *& out, const char * str, size_t len)
+template<class U>
+inline void writeCString(U & u, const char * str, size_t len)
 {
     BOOST_ASSERT(!str[len]);
 
-    ++len;
-    memcpy(out, str, len);
-    out += len;
+    writeBytes(u, str, ++len);
 }
 
-inline void writeCString(char *& out, const char * str)
+template<class U>
+inline void writeCString(U & u, const char * str)
 {
-    writeCString(out, str, strlen(str));
+    writeCString(u, str, strlen(str));
 }
 
-inline void writeCString(char *& out, const std::string & str)
+template<class U>
+inline void writeCString(U & u, const std::string & str)
 {
-    writeCString(out, str.c_str(), str.length());
+    writeCString(u, str.c_str(), str.length());
 }
 
-inline void writeLenString(char *& out, const char * str, size_t len)
+template<class Len, class U>
+inline void writeLenString(U & out, const char * str, size_t len)
 {
-    write<uint16_t>(out, len);
-    memcpy(out, str, len);
-    out += len;
+    write<Len>(out, static_cast<Len>(len));
+    writeBytes(out, str, len);
 }
 
-inline void writeLenString(char *& out, const char * str)
+template<class Len, class U>
+inline void writeLenString(U & out, const char * str)
 {
-    writeLenString(out, str, strlen(str));
+    writeLenString<Len>(out, str, strlen(str));
 }
 
-inline void writeLenString(char *& out, const std::string & str)
+template<class Len, class U>
+inline void writeLenString(U & out, const std::string & str)
 {
-    writeLenString(out, str.c_str(), str.length());
+    writeLenString<Len>(out, str.c_str(), str.length());
 }
 
-inline void writePacked(char *& p, boost::uint32_t size)
+template<class Len, class U, class It>
+inline void writeLenUTFString(U & out, It begin, It end)
+{
+    auto mark = prepareBytes(out, sizeof(Len));
+    mstd::utf8(begin, end, writingIterator(out));
+    commitLen(out, mark, mstd::null<Len>());
+}
+
+template<class Len, class U, class It>
+inline void writeLenUTFString(U & out, It begin, size_t len)
+{
+    writeLenUTFString<Len>(out, begin, begin + len);
+}
+
+template<class Len, class U>
+inline void writeLenUTFString(U & out, const std::wstring & str)
+{
+    writeLenUTFString<Len>(out, str.begin(), str.end());
+}
+
+template<class U>
+inline void writePacked(U & p, boost::uint32_t size)
 {
     if(size <= 0x7fff)
         write(p, static_cast<boost::uint16_t>(size));

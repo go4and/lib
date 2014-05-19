@@ -11,10 +11,14 @@
 #if !defined(BUILDING_CALC)
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/not.hpp>
+#include <boost/mpl/pop_front.hpp>
 
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/inc.hpp>
+#include <boost/preprocessor/repeat.hpp>
+#include <boost/preprocessor/repeat_from_to.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
-#include <boost/preprocessor/repeat_from_to.hpp>
 
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -89,49 +93,45 @@ sign_t<S, F> sign(const F & f)
 
 #undef CALC_SIGN_PRIVATE_REDIRECT
 
-template<class Arg1, class Result>
-struct unary_function {
-    typedef Result result_type;
-    typedef Arg1 arg1_type;
-    BOOST_STATIC_CONSTANT(size_t, arity = 1);
+#define CALC_DECLARE_SIGN_ARGUMENT(z, elem, data) typedef typename boost::mpl::at<Vector, boost::mpl::size_t<elem>>::type BOOST_PP_CAT(BOOST_PP_CAT(arg, BOOST_PP_INC(elem)), _type);
+
+template<class Vector, size_t n>
+struct named_arguments_helper;
+
+#define CALC_NAMED_ARGUMENTS_HELPER(z, elem, data) \
+    template<class Vector> \
+    struct named_arguments_helper<Vector, elem> { \
+        BOOST_PP_REPEAT(elem, CALC_DECLARE_SIGN_ARGUMENT, ~); \
+    }; \
+    /**/
+
+BOOST_PP_REPEAT(13, CALC_NAMED_ARGUMENTS_HELPER, ~);
+
+template<class Vector>
+struct named_arguments : public named_arguments_helper<Vector, boost::mpl::size<Vector>::type::value> {
 };
 
-template<class Arg1, class Arg2, class Result>
-struct binary_function {
-    typedef Result result_type;
-    typedef Arg1 arg1_type;
-    typedef Arg2 arg2_type;
-    BOOST_STATIC_CONSTANT(size_t, arity = 2);
+template<class Vector>
+struct vector_function : public named_arguments<typename boost::mpl::pop_front<Vector>::type> {
+    typedef typename boost::mpl::at<Vector, boost::mpl::size_t<0> >::type result_type;
+    typedef typename boost::mpl::pop_front<Vector>::type arguments;
+    static const size_t arity = boost::mpl::size<Vector>::type::value - 1;
 };
 
-template<class Arg1, class Arg2, class Arg3, class Result>
-struct ternary_function {
-    typedef Result result_type;
-    typedef Arg1 arg1_type;
-    typedef Arg2 arg2_type;
-    typedef Arg3 arg3_type;
-    BOOST_STATIC_CONSTANT(size_t, arity = 3);
+template<class... Sign>
+struct generic_function : public vector_function<boost::mpl::vector<Sign...> > {
 };
 
-template<class Arg1, class Arg2, class Arg3, class Arg4, class Result>
-struct quaternary_function {
-    typedef Result result_type;
-    typedef Arg1 arg1_type;
-    typedef Arg2 arg2_type;
-    typedef Arg3 arg3_type;
-    typedef Arg4 arg4_type;
-    BOOST_STATIC_CONSTANT(size_t, arity = 4);
-};
+#define CALC_DECLARE_SIGN(name, n) \
+    template<BOOST_PP_ENUM_PARAMS(n, class Arg), class Result> \
+    struct name : public generic_function<Result, BOOST_PP_ENUM_PARAMS(n, Arg) > { \
+    }; \
+    /**/
 
-template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Result>
-struct quinary_function {
-    typedef Result result_type;
-    typedef Arg1 arg1_type;
-    typedef Arg2 arg2_type;
-    typedef Arg3 arg3_type;
-    typedef Arg4 arg4_type;
-    typedef Arg5 arg5_type;
-    BOOST_STATIC_CONSTANT(size_t, arity = 5);
-};
-
+CALC_DECLARE_SIGN(unary_function, 1);
+CALC_DECLARE_SIGN(binary_function, 2);
+CALC_DECLARE_SIGN(ternary_function, 3);
+CALC_DECLARE_SIGN(quaternary_function, 4);
+CALC_DECLARE_SIGN(quinary_function, 5);
+    
 }

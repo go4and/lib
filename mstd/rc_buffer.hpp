@@ -93,9 +93,29 @@ public:
         return data_ + sizeof(counter_t) + sizeof(size_t);
     }
 
+    inline char * begin() const
+    {
+        return data();
+    }
+
+    inline char * end() const
+    {
+        return begin() + size();
+    }
+
     inline unsigned char * udata() const
     {
         return static_cast<unsigned char*>(static_cast<void*>(data()));
+    }
+    
+    inline unsigned char * ubegin() const
+    {
+        return udata();
+    }
+
+    inline unsigned char * uend() const
+    {
+        return udata() + size();
     }
 
     void reset()

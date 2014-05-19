@@ -32,7 +32,7 @@ void convert(const boost::property_tree::wptree & in, boost::property_tree::ptre
     }
 }
 
-void dumpTree(std::ostream & out, const boost::property_tree::ptree & tree, int ident)
+void dump_tree(std::ostream & out, const boost::property_tree::ptree & tree, int ident)
 {
     if(!tree.data().empty())
         out << ": '" << tree.data() << "'";
@@ -42,11 +42,11 @@ void dumpTree(std::ostream & out, const boost::property_tree::ptree & tree, int 
         for(int j = 0; j != ident; ++j)
             out << ' ';
         out << '"' << i->first << '"';
-        dumpTree(out, i->second, ident + 2);
+        dump_tree(out, i->second, ident + 2);
     }
 }
 
-void dumpTree(std::ostream & out, const boost::property_tree::wptree & tree, int ident)
+void dump_tree(std::ostream & out, const boost::property_tree::wptree & tree, int ident)
 {
     if(!tree.data().empty())
         out << ": '" << utf8(tree.data()) << "'";
@@ -56,7 +56,7 @@ void dumpTree(std::ostream & out, const boost::property_tree::wptree & tree, int
         for(int j = 0; j != ident; ++j)
             out << ' ';
         out << '"' << utf8(i->first) << '"';
-        dumpTree(out, i->second, ident + 2);
+        dump_tree(out, i->second, ident + 2);
     }
 }
 

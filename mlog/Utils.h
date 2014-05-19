@@ -12,6 +12,7 @@
 
 #if !defined(MLOG_BUILDING)
 #include <iosfwd>
+#include <vector>
 #include <boost/range/iterator_range.hpp>
 #endif
 
@@ -40,6 +41,12 @@ inline std::basic_ostream<Ch, CT> & operator<<(std::basic_ostream<Ch, CT> & out,
 MLOG_DECL bool setup(const char * variable, const char * appname);
 MLOG_DECL bool setupFromFile(const char * filename, const char * appname);
 
+inline std::ostream & operator<<(std::ostream & out, const std::wstring & str)
+{
+    out << mstd::out_utf8(str);
+    return out;
+}
+
 template<class T>
 inline std::ostream & operator<<(std::ostream & out, const std::vector<T> & vec)
 {
@@ -49,7 +56,12 @@ inline std::ostream & operator<<(std::ostream & out, const std::vector<T> & vec)
 template<class T1, class T2>
 std::ostream & operator<<(std::ostream & out, const std::pair<T1, T2> & p)
 {
-    return out << '(' << p.first << ',' << p.second << ')';
+    out << '(';
+    out << p.first;
+    out << ',';
+    out << p.second;
+    out << ')';
+    return out;
 }
 
 template<class Collection>

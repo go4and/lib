@@ -12,6 +12,7 @@
 #include <boost/move/move.hpp>
 
 #include <mstd/enum_utils.hpp>
+#include <mstd/pointer_cast.hpp>
 #endif
 
 namespace mstd {

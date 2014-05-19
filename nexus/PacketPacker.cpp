@@ -88,8 +88,6 @@ void CStringPacker::pack(char *& out, CStringRef<char> input)
     out += len;
 }
 
-#ifdef BOOST_WINDOWS
-
 /*
 size_t CStringPacker::packSize(const wchar_t * input)
 {
@@ -110,16 +108,42 @@ size_t CStringPacker::packSize(CStringRef<wchar_t> input)
     return input.get().length() * 2 + 2;
 }
 
-void CStringPacker::pack(char *& out, CStringRef<wchar_t> input)
-{
-    BOOST_STATIC_ASSERT(sizeof(wchar_t) == 2);
+namespace {
 
-    size_t len = input.get().length() * 2 + 2;
-    memcpy(out, input.get().c_str(), len);
-    out += len;
+template<bool fast>
+class CStringPackerHelper;
+
+template<>
+class CStringPackerHelper<true> {
+public:
+    static inline void apply(char *& out, const std::wstring & input)
+    {
+        size_t len = input.length() * 2 + 2;
+        memcpy(out, input.c_str(), len);
+        out += len;
+    }
+};
+
+template<>
+class CStringPackerHelper<false> {
+public:
+    static inline void apply(char *& out, const std::wstring & input)
+    {
+        size_t len = input.length() + 1;
+        for(auto i = input.c_str(), end = i + len + 1; i != end; ++i)
+        {
+            memcpy(out, i, 2);
+            out += 2;
+        }
+    }
+};
+
 }
 
-#endif
+void CStringPacker::pack(char *& out, CStringRef<wchar_t> input)
+{
+    CStringPackerHelper<sizeof(wchar_t) == 2>::apply(out, input.get());
+}
 
 size_t RawDataPacker::packSize(const std::pair<const char*, const char*> & p)
 {

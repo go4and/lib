@@ -233,6 +233,15 @@ public:
         return T(oldPos, pos_);
     }
 
+    template<class Len>
+    std::wstring readLenUTFString()
+    {
+        auto len = read<Len>();
+        const char * begin = pos_;
+        pos_ += len;
+        return mstd::deutf8(begin, len);
+    }
+
     template<class T>
     T readWString()
     {
@@ -333,17 +342,17 @@ public:
         pos_ += len;
     }
 
-    const char * raw()
+    const char * raw() const
     {
         return pos_;
     }
 
-    const char * end()
+    const char * end() const
     {
         return end_;
     }
 
-    const char * marked()
+    const char * marked() const
     {
         return marked_;
     }
