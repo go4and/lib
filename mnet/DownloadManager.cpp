@@ -56,7 +56,7 @@ public:
         fseeko(out, begin, SEEK_SET);
 #endif
         size_t written = fwrite(buf, 1, static_cast<size_t>(len), out);
-        BOOST_VERIFY(written == len);
+        BOOST_VERIFY(static_cast<filesize_t>(written) == len);
         fflush(out);
         begin += len;
 

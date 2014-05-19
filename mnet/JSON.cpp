@@ -145,8 +145,8 @@ void parseJSON(const boost::filesystem::path & path, boost::property_tree::ptree
             if(size)
             {
                 std::vector<char> buffer(size);
-                fread(&buffer[0], 1, size, file);
-                parseJSON(&buffer[0], size, tree, error);
+                size_t read = fread(&buffer[0], 1, size, file);
+                parseJSON(&buffer[0], read, tree, error);
             } else
                 parseJSON(0, 0, tree, error);
         } else

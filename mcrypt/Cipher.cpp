@@ -53,6 +53,7 @@ void GenericCipher::init(const CipherDescriptor & descriptor, CipherMode mode, c
 
     EVP_CIPHER_CTX_init(ctx);
     int res = EVP_CipherInit_ex(ctx, cipher, 0, 0, mstd::pointer_cast<const unsigned char *>(ivec), mode == modeEncrypt ? 1 : 0);
+    (void)res;
     BOOST_ASSERT(res && "cipher init");
     res = EVP_CIPHER_CTX_set_key_length(ctx, static_cast<int>(len));
     BOOST_ASSERT(res && "set key");

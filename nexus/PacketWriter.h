@@ -82,7 +82,7 @@ write(U & u, const T * t, size_t size)
 template<class T, class U>
 inline void write(U & u, const T * t, const T * end)
 {
-    write(pos, t, end - t);
+    write(u, t, end - t);
 }
 
 template<class U>
