@@ -305,7 +305,7 @@ private:
                                     MLOG_MESSAGE(Warning, "done with code: " << code);
                                 else
                                     MLOG_MESSAGE(Notice, "done with code: " << code);
-                                bool error = msg->data.result != CURLE_WRITE_ERROR && (msg->data.result != CURLE_OK || code != 200);
+                                bool error = msg->data.result != CURLE_WRITE_ERROR && (msg->data.result != CURLE_OK || (code != 200 && code != 206));
                                 if(error)
                                 {
                                     if(code == 404)
@@ -351,6 +351,13 @@ private:
                             lastMetaSave = now;
                         }
 
+                        /*int res = 0;
+                        CURLMcode cr = curl_multi_wait(curlm_, 0, 0, 1000, &res);
+                        if(cr != CURLM_OK || res == -1)
+                        {
+                            MLOG_ERROR("curl multi wait failed: " << cr << ", " << res);
+                            break;
+                        }*/
                         FD_ZERO(&readfs);
                         FD_ZERO(&writefs);
                         FD_ZERO(&excfs);
@@ -359,11 +366,16 @@ private:
                         if(cr != CURLM_OK)
                             MLOG_ERROR("curl_multi_fdset failed: " << cr);
                         if(maxfd == -1)
-                            break;
-                        timeval timeout = { 0, 10000 };
-                        int res = select(maxfd + 1, &readfs, &writefs, &excfs, &timeout);
-                        if(res == -1)
-                            break;
+                        {
+                            if(chunks_.empty())
+                                break;
+                            boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+                        } else {
+                            timeval timeout = { 0, 10000 };
+                            int res = select(maxfd + 1, &readfs, &writefs, &excfs, &timeout);
+                            if(res == -1)
+                                break;
+                        }
                     }
                 } catch(boost::thread_interrupted&) {
                     interrupted = true;

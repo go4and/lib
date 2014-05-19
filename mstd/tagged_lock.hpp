@@ -28,17 +28,33 @@ template<class Mutex>
 class MSTD_DECL tagged_lock_base : public boost::noncopyable {
 protected:
     explicit tagged_lock_base(Mutex & mutex)
-        : mutex_(mutex)
+        : mutex_(mutex), locked_(true)
     {
         mutex.lock();
     }
 
     ~tagged_lock_base()
     {
+        if(locked_)
+            mutex_.unlock();
+    }
+public:
+    void unlock()
+    {
+        BOOST_ASSERT(locked_);
         mutex_.unlock();
+        locked_ = false;
+    }
+    
+    void lock()
+    {
+        BOOST_ASSERT(!locked_);
+        mutex_.lock();
+        locked_ = true;
     }
 private:
     Mutex & mutex_;
+    bool locked_;
 };
 
 template<class Tag, class Mutex = boost::mutex>

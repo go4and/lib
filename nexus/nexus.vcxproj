@@ -252,6 +252,7 @@
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="StackStream.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TraceRoute.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>

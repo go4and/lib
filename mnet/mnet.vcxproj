@@ -180,7 +180,7 @@
       <SuppressStartupBanner>false</SuppressStartupBanner>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>libcurl_imp.lib;yajl_sd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yajl_sd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -313,6 +313,7 @@
   <ItemGroup>
     <ClCompile Include="CurlUtils.cpp" />
     <ClCompile Include="Download.cpp" />
+    <ClCompile Include="DownloadManager.cpp" />
     <ClCompile Include="HTTP.cpp" />
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="pch\pch.cpp">
@@ -338,6 +339,7 @@
     <ClInclude Include="CurlUtils.h" />
     <ClInclude Include="Download.h" />
     <ClInclude Include="DownloadDefines.h" />
+    <ClInclude Include="DownloadManager.h" />
     <ClInclude Include="DownloadStats.h" />
     <ClInclude Include="HTTP.h" />
     <ClInclude Include="JSON.h" />

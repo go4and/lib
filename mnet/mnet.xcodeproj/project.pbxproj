@@ -22,6 +22,8 @@
 		C388C080150F5F7700954CA7 /* libyajl_s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C388C07F150F5F7700954CA7 /* libyajl_s.a */; };
 		C3B8CA4114C77100004BDE52 /* JSON.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B8CA3F14C77100004BDE52 /* JSON.cpp */; };
 		C3B8CA4214C77100004BDE52 /* JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = C3B8CA4014C77100004BDE52 /* JSON.h */; };
+		C3D6A5B5187A945E006AB382 /* DownloadManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3D6A5B3187A945E006AB382 /* DownloadManager.cpp */; };
+		C3D6A5B6187A945E006AB382 /* DownloadManager.h in Headers */ = {isa = PBXBuildFile; fileRef = C3D6A5B4187A945E006AB382 /* DownloadManager.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,8 @@
 		C388C07F150F5F7700954CA7 /* libyajl_s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libyajl_s.a; path = ../../../../../opt/local/lib/libyajl_s.a; sourceTree = "<group>"; };
 		C3B8CA3F14C77100004BDE52 /* JSON.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSON.cpp; sourceTree = "<group>"; };
 		C3B8CA4014C77100004BDE52 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
+		C3D6A5B3187A945E006AB382 /* DownloadManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DownloadManager.cpp; sourceTree = "<group>"; };
+		C3D6A5B4187A945E006AB382 /* DownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadManager.h; sourceTree = "<group>"; };
 		D2AAC09D05546B4700DB518D /* mnet.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = mnet.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -85,6 +89,8 @@
 		08FB77ACFE841707C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				C3D6A5B3187A945E006AB382 /* DownloadManager.cpp */,
+				C3D6A5B4187A945E006AB382 /* DownloadManager.h */,
 				C3B8CA3F14C77100004BDE52 /* JSON.cpp */,
 				C3B8CA4014C77100004BDE52 /* JSON.h */,
 				C346422F13D3306700716430 /* CurlUtils.cpp */,
@@ -116,6 +122,7 @@
 			files = (
 				C346423913D3306700716430 /* CurlUtils.h in Headers */,
 				C346423B13D3306700716430 /* Download.h in Headers */,
+				C3D6A5B6187A945E006AB382 /* DownloadManager.h in Headers */,
 				C346423C13D3306700716430 /* DownloadDefines.h in Headers */,
 				C346423D13D3306700716430 /* DownloadStats.h in Headers */,
 				C346423F13D3306700716430 /* HTTP.h in Headers */,
@@ -179,6 +186,7 @@
 			files = (
 				C346423813D3306700716430 /* CurlUtils.cpp in Sources */,
 				C346423A13D3306700716430 /* Download.cpp in Sources */,
+				C3D6A5B5187A945E006AB382 /* DownloadManager.cpp in Sources */,
 				C346423E13D3306700716430 /* HTTP.cpp in Sources */,
 				C3B8CA4114C77100004BDE52 /* JSON.cpp in Sources */,
 			);

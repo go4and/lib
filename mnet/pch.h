@@ -16,6 +16,8 @@
 
 #include <sys/stat.h>
 
+#include <unordered_map>
+
 #include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scope_exit.hpp>

@@ -492,7 +492,7 @@ private:
     
     typedef std::list<Task> Tasks;
     Tasks tasks_;
-    boost::unordered_map<int, Tasks::iterator> id2task_;
+    std::unordered_map<int, Tasks::iterator> id2task_;
     std::vector<Chunk*> active_;
 };
 
