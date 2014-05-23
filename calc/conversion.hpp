@@ -41,4 +41,10 @@ public:
 
 }
 
+template<class Out>
+Out convert(const variable & src)
+{
+    return detail::convert<Out>::apply(src);
+}
+
 }
