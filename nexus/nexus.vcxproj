@@ -267,6 +267,7 @@
     <ClInclude Include="Connection.h" />
     <ClInclude Include="Handler.h" />
     <ClInclude Include="IoThreadPool.h" />
+    <ClInclude Include="MemFunInvoker.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="PacketPacker.h" />
     <ClInclude Include="PacketReader.h" />

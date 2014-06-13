@@ -253,7 +253,7 @@ struct InvokationCompiler : public pre_compiler {
     pre_program * compile(const compiler_context & context) const
     {
         func d = context.lookup(name, args.size(), true, false);
-        if(d.function.empty())
+        if(!d.function)
         {
             context.err.init(error_undefined_function).function_name(name).expected_arity(args.size());
             return 0;
@@ -428,7 +428,7 @@ struct PluginCompiler : public pre_compiler {
     
     pre_program * compile(const compiler_context & context) const
     {
-        if(!context.plugin.empty())
+        if(context.plugin)
             return context.plugin(value, context);
         else {
             context.err.init(error_no_plugin_provided);

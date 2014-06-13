@@ -26,10 +26,10 @@ public:
         : finished_(false)
     {
         for(size_t i = 0; i != t; ++i)
-            threads_.push_back(boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&impl::execute, this))));
+            threads_.push_back(boost::shared_ptr<boost::thread>(new boost::thread(std::bind(&impl::execute, this))));
     }
 
-    void enqueue(const boost::function<void()> & f)
+    void enqueue(const std::function<void()> & f)
     {
         {
             boost::lock_guard<boost::mutex> lock(mutex_);
@@ -58,7 +58,7 @@ private:
                 cond_.timed_wait(lock, boost::posix_time::milliseconds(100));
                 if(!queue_.empty())
                 {
-                    boost::function<void()> f = queue_.front();
+                    std::function<void()> f = queue_.front();
                     queue_.pop_front();
                     reverse_lock<boost::unique_lock<boost::mutex> > rlock(lock);
                     try {
@@ -78,7 +78,7 @@ private:
     boost::condition_variable cond_;
     boost::mutex mutex_;
     bool finished_;
-    std::deque<boost::function<void()> > queue_;
+    std::deque<std::function<void()> > queue_;
 };
 
 thread_pool::thread_pool(size_t threads)
@@ -90,7 +90,7 @@ thread_pool::~thread_pool()
 {
 }
 
-void thread_pool::enqueue(const boost::function<void()> & f)
+void thread_pool::enqueue(const std::function<void()> & f)
 {
     impl_->enqueue(f);
 }

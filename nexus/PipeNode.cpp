@@ -51,7 +51,7 @@ void PipeNode::start(const Listener & listener)
 
 void PipeNode::listen(const std::wstring & name)
 {
-    ioService_.dispatch(boost::bind(&PipeNode::doListen, this, name));
+    ioService_.dispatch(std::bind(&PipeNode::doListen, this, name));
 }
 
 void PipeNode::doListen(const std::wstring & name)
@@ -59,7 +59,7 @@ void PipeNode::doListen(const std::wstring & name)
     HANDLE handle = CreateNamedPipeW((L"\\\\.\\pipe\\" + name).c_str(), PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED, PIPE_WAIT,
                                     PIPE_UNLIMITED_INSTANCES, 0x1000, 0x1000, 0, NULL);
     pipe_.reset(new boost::asio::windows::stream_handle(ioService_, handle));
-    boost::asio::windows::overlapped_ptr overlapped(ioService_, boost::bind(&PipeNode::handleConnected, this, _1, name));
+    boost::asio::windows::overlapped_ptr overlapped(ioService_, std::bind(&PipeNode::handleConnected, this, _1, name));
 
     bool ok = ConnectNamedPipe(pipe_->native(), overlapped.get()) != FALSE;
     DWORD error = GetLastError();
@@ -75,7 +75,7 @@ void PipeNode::doListen(const std::wstring & name)
 
 void PipeNode::connect(const std::wstring & name)
 {
-    ioService_.dispatch(boost::bind(&PipeNode::doConnect, this, name));
+    ioService_.dispatch(std::bind(&PipeNode::doConnect, this, name));
 }
 
 void PipeNode::doConnect(const std::wstring & name)
@@ -88,7 +88,7 @@ void PipeNode::doConnect(const std::wstring & name)
         connectDone();
     } else {
         timer_.expires_from_now(boost::posix_time::milliseconds(250));
-        timer_.async_wait(boost::bind(&PipeNode::handleExpired, this, _1, boost::protect(boost::bind(&PipeNode::doConnect, this, name))));
+        timer_.async_wait(std::bind(&PipeNode::handleExpired, this, _1, [this, name](){ doConnect(name); }));
     }
 }
 
@@ -101,7 +101,7 @@ void PipeNode::connectDone()
     }
 }
 
-void PipeNode::handleExpired(const boost::system::error_code & ec, const boost::function<void()> & action)
+void PipeNode::handleExpired(const boost::system::error_code & ec, const std::function<void()> & action)
 {
     if(!ec)
         action();
@@ -116,7 +116,7 @@ void PipeNode::handleConnected(const boost::system::error_code & ec, const std::
     } else if(ec != boost::asio::error::broken_pipe) {
         MLOG_MESSAGE(Warning, "Listen failed: " << ec << ", " << ec.message());
         timer_.expires_from_now(boost::posix_time::milliseconds(250));
-        timer_.async_wait(boost::bind(&PipeNode::handleExpired, this, _1, boost::protect(boost::bind(&PipeNode::doListen, this, name))));
+        timer_.async_wait(std::bind(&PipeNode::handleExpired, this, _1, [this, name]() { doListen(name); }));
     }
 }
 

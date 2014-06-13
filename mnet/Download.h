@@ -16,7 +16,7 @@ struct DownloadStats;
 
 class Download {
 public:
-    typedef boost::function<void(Download*, DownloadAction, int)> Listener; 
+    typedef std::function<void(Download*, DownloadAction, int)> Listener; 
 
     explicit Download(const std::string & url, const boost::filesystem::wpath & localfile, filesize_t size, const Listener & listener);
     ~Download();

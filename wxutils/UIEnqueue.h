@@ -11,8 +11,6 @@
 #if !defined(BUILDING_WXUTILS)
 #include <wx/defs.h>
 #include <wx/timer.h>
-
-#include <boost/function.hpp>
 #endif
 
 #include "Config.h"
@@ -48,7 +46,7 @@ namespace detail {
             f_();
         }
 
-        F f_;
+        mutable F f_;
     };
 
     void enqueueFunctionEvent(wxEvent & evt);
@@ -82,7 +80,7 @@ namespace detail {
             if(wxIsMainThread())
                 Start(interval);
             else
-                uiEnqueue(boost::bind(&wxTimer::Start, this, interval, false));
+                uiEnqueue(std::bind(&wxTimer::Start, this, interval, false));
         }
 
         void Notify();
@@ -147,25 +145,25 @@ public:
     template<class A>
     void operator()(const A & a) const
     {
-        uiEnqueue(boost::bind(f_, a));
+        uiEnqueue(std::bind(f_, a));
     }
 
     template<class A, class B>
     void operator()(const A & a, const B & b) const
     {
-        uiEnqueue(boost::bind(f_, a, b));
+        uiEnqueue(std::bind(f_, a, b));
     }
 
     template<class A, class B, class C>
     void operator()(const A & a, const B & b, const C & c) const
     {
-        uiEnqueue(boost::bind(f_, a, b, c));
+        uiEnqueue(std::bind(f_, a, b, c));
     }
 
     template<class A, class B, class C, class D>
     void operator()(const A & a, const B & b, const C & c, const D & d) const
     {
-        uiEnqueue(boost::bind(f_, a, b, c, d));
+        uiEnqueue(std::bind(f_, a, b, c, d));
     }
 private:
     F f_;

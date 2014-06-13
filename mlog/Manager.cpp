@@ -774,7 +774,7 @@ private:
                 listener = listener_;
                 listenerChecked = true;
             }
-            if(!listener.empty())
+            if(listener)
                 listener(group, level, logger, p, len);
         }
     }

@@ -10,7 +10,6 @@
 
 #include <vector>
 
-#include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #if defined(_MSC_VER)
@@ -32,7 +31,7 @@ namespace mstd {
 
 class MSTD_DECL command_queue {
 public:
-    typedef boost::function<void()> command_type;
+    typedef std::function<void()> command_type;
 
     command_queue();
     ~command_queue();

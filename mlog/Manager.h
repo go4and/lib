@@ -15,7 +15,6 @@
 #if !defined(MLOG_BUILDING)
 
 #if !MLOG_NO_LOGGING
-#include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -36,7 +35,7 @@ namespace detail {
     class LoggerImpl;
 }
 
-typedef boost::function<void(uint32_t, LogLevel, const char * logger, const char * msg, size_t len)> Listener;
+typedef std::function<void(uint32_t, LogLevel, const char * logger, const char * msg, size_t len)> Listener;
 
 class MLOG_DECL Manager {
     MSTD_SINGLETON_DEFINITION(Manager);

@@ -10,6 +10,8 @@
 #pragma once
 #endif
 
+#define BOOST_BIND_NO_PLACEHOLDERS
+
 #include <curl/curl.h>
 
 #include <yajl/yajl_parse.h>
@@ -18,7 +20,6 @@
 
 #include <unordered_map>
 
-#include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scope_exit.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -54,3 +55,5 @@
 #include <mlog/Logging.h>
 
 #define MNET_BUILDING
+
+using namespace std::placeholders;

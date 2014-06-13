@@ -9,7 +9,6 @@
 #pragma once
 
 #ifndef MCRYPT_BUILDING
-#include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>

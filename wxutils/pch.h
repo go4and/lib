@@ -27,10 +27,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include <boost/bind.hpp>
 #include <boost/cast.hpp>
 #include <boost/format.hpp>
-#include <boost/function.hpp>
 #include <boost/scope_exit.hpp>
 #include <boost/scoped_ptr.hpp>
 

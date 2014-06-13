@@ -34,7 +34,7 @@ program builder::build(const environment & env, const std::wstring & str, error 
     compiler c = parse(str, err);
     if(err)
         return program();
-    function_lookup lookup = boost::bind(&environment::find, &env, _1, _2, _4);
+    function_lookup lookup = std::bind(&environment::find, &env, _1, _2, _4);
     compiler_context context = { lookup, err, plugin_ };
     return c(context);
 }
@@ -44,7 +44,7 @@ program builder::build(const environment & env, const std::string & str, error &
     compiler c = parse(str, err);
     if(err)
         return program();
-    function_lookup lookup = boost::bind(&environment::find, &env, _1, _2, _4);
+    function_lookup lookup = std::bind(&environment::find, &env, _1, _2, _4);
     compiler_context context = { lookup, err, plugin_ };
     return c(context);
 }

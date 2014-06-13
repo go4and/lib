@@ -76,20 +76,24 @@ rc_buffer load_file(const boost::filesystem::wpath & path, bool addZero)
     return rc_buffer();
 }
 
-bool save_file(const boost::filesystem::wpath & path, const rc_buffer & data, bool trimZero)
+bool save_file(const boost::filesystem::wpath & path, const char * buf, size_t len, bool trimZero)
 {
     bool result = false;
     FILE * file = wfopen(path, "wb");
     if(file)
     {
-        const char * buf = data.data();
-        off_t size = data.size();
+        off_t size = len;
         if(trimZero)
             size = std::find(buf, buf + size, 0) - buf;
         result = static_cast<off_t>(fwrite(buf, 1, size, file)) == size;
         fclose(file);
     }
     return result;
+}
+
+bool save_file(const boost::filesystem::wpath & path, const rc_buffer & data, bool trimZero)
+{
+    return save_file(path, data.data(), data.size(), trimZero);
 }
 
 namespace {

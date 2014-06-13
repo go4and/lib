@@ -9,7 +9,6 @@
 #pragma once
 
 #ifndef MNET_BUILDING
-#include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 
 #include <boost/filesystem/path.hpp>
@@ -28,15 +27,15 @@ typedef void CURL;
 
 namespace mnet {
 
-typedef boost::function<void(int ec, const boost::property_tree::ptree & tree)> AsyncPTreeHandler;
-typedef boost::function<void(int ec, const mstd::rc_buffer & data)> AsyncDataHandler;
-typedef boost::function<void(int ec, const mstd::rc_buffer & data, const mstd::rc_buffer & headers)> AsyncDataExHandler;
-typedef boost::function<void(int ec, filesize_t size)> AsyncSizeHandler;
-typedef boost::function<size_t(const char * buf, size_t size)> DirectWriter;
-typedef boost::function<void(int ec)> AsyncHandler;
-typedef boost::function<void(int percent)> ProgressHandler;
-typedef boost::function<void()> Action;
-typedef boost::function<void(const Action&)> UIEnqueuer;
+typedef std::function<void(int ec, const boost::property_tree::ptree & tree)> AsyncPTreeHandler;
+typedef std::function<void(int ec, const mstd::rc_buffer & data)> AsyncDataHandler;
+typedef std::function<void(int ec, const mstd::rc_buffer & data, const mstd::rc_buffer & headers)> AsyncDataExHandler;
+typedef std::function<void(int ec, filesize_t size)> AsyncSizeHandler;
+typedef std::function<size_t(const char * buf, size_t size)> DirectWriter;
+typedef std::function<void(int ec)> AsyncHandler;
+typedef std::function<void(int percent)> ProgressHandler;
+typedef std::function<void()> Action;
+typedef std::function<void(const Action&)> UIEnqueuer;
 
 struct Proxy {
     bool active;

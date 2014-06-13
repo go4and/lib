@@ -38,7 +38,7 @@ public:
         }
     }
 
-    static void uiEnqueue(const boost::function<void()> & action);
+    static void uiEnqueue(const std::function<void()> & action);
 protected:
     CURL * curl_;
 
@@ -222,8 +222,8 @@ public:
         MLOG_DEBUG("DownloadTask, url = " << url() << ", cookies = " << cookies_);
 
         initCurl(curlm, url_, cookies_);
-        curl_easy_setopt(curl_, CURLOPT_NOPROGRESS, prog_.empty() ? 1 : 0);
-        if(!prog_.empty())
+        curl_easy_setopt(curl_, CURLOPT_NOPROGRESS, !prog_ ? 1 : 0);
+        if(prog_)
         {
             void * self = this;
             curl_easy_setopt(curl_, CURLOPT_PROGRESSFUNCTION, &DownloadTask::progress);
@@ -242,7 +242,7 @@ private:
         if(self->progress_ != pr)
         {
             self->progress_ = pr;
-            uiEnqueue(boost::bind(self->prog_, static_cast<int>(pr)));
+            uiEnqueue(std::bind(self->prog_, static_cast<int>(pr)));
         }
         return 0;
     }
@@ -329,17 +329,17 @@ public:
         MLOG_MESSAGE_EX(ec ? mlog::llWarning : mlog::llDebug, "get data: " << url() << ", code: " << ec);
 
         if(const AsyncHandler * handler = boost::get<AsyncHandler>(&handler_))
-            uiEnqueue(boost::bind(*handler, ec));
+            uiEnqueue(std::bind(*handler, ec));
         else {
             if(!data_)
                 data_ = blankBuffer();
             if(const AsyncDataHandler * handler = boost::get<AsyncDataHandler>(&handler_))
-                uiEnqueue(boost::bind(*handler, ec, data_));
+                uiEnqueue(std::bind(*handler, ec, data_));
             else if(const AsyncDataExHandler * handler = boost::get<AsyncDataExHandler>(&handler_))
             {
                 if(!header_)
                     header_ = blankBuffer();
-                uiEnqueue(boost::bind(*handler, ec, data_, header_));
+                uiEnqueue(std::bind(*handler, ec, data_, header_));
             } else if(const AsyncSizeHandler * handler = boost::get<AsyncSizeHandler>(&handler_))
             {
                 filesize_t size;
@@ -350,7 +350,7 @@ public:
                     size = res == CURLE_OK ? static_cast<filesize_t>(contentLength) : -1;
                 } else
                     size = -1;
-                uiEnqueue(boost::bind(*handler, ec, size));
+                uiEnqueue(std::bind(*handler, ec, size));
             }
         }
     }
@@ -439,7 +439,7 @@ public:
                 remove(fname_, err);
             }
         }
-        uiEnqueue(boost::bind(handler_, ec));
+        uiEnqueue(std::bind(handler_, ec));
     }
 private:
     static size_t write(const char* buf, size_t size, size_t nmemb, GetFileAsync * self)
@@ -724,7 +724,7 @@ private:
     mstd::rc_buffer blankBuffer_;
 };
 
-void AsyncTask::uiEnqueue(const boost::function<void()> & action)
+void AsyncTask::uiEnqueue(const std::function<void()> & action)
 {
     HTTP::instance().uiEnqueue(action);
 }
@@ -835,7 +835,7 @@ void getFileAsync(const std::string & url, const boost::filesystem::wpath & path
 {
     MLOG_DEBUG("getFileAsync(" << url << ", " << mstd::utf8fname(path) << ')');
 
-    HTTP::instance().asyncHTTP().addTask(new GetFileAsync(url, path, handler, boost::function<void(size_t)>()));
+    HTTP::instance().asyncHTTP().addTask(new GetFileAsync(url, path, handler, std::function<void(size_t)>()));
 }
 
 void getFileAsync(const std::string & url, const boost::filesystem::wpath & path, const AsyncHandler & handler, const ProgressHandler& progress)
