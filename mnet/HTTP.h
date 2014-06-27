@@ -80,6 +80,8 @@ public:
     Request & postData(const std::string & data) { return postData(data.c_str(), data.size()); }
     Request & postData(const mstd::rc_buffer & data) { postData_ = data; return *this; }
     Request & header(const std::string & line) { headers_.push_back(line); return *this; }
+    Request & clientCertificate(void * certificate, void * key) { clientCertificate_ = certificate; clientKey_ = key; return *this; }
+    Request & certificateAuthority(void * value) { certificateAuthority_ = value; return *this; }
     Request & range(filesize_t begin, filesize_t end) { rangeBegin_ = begin; rangeEnd_ = end; return *this; }
 
     const std::string & url() const { return url_; }
@@ -91,6 +93,9 @@ public:
     const std::vector<std::string> & headers() const { return headers_; }
     filesize_t rangeBegin() const { return rangeBegin_; }
     filesize_t rangeEnd() const { return rangeEnd_; }
+    void * clientCertificate() const { return clientCertificate_; }
+    void * clientKey() const { return clientKey_; }
+    void * certificateAuthority() const { return certificateAuthority_; }
 
     void run();
 private:
@@ -102,6 +107,9 @@ private:
     DirectWriter directWriter_;
     filesize_t rangeBegin_, rangeEnd_;
     mstd::rc_buffer postData_;
+    void * clientCertificate_ = nullptr;
+    void * clientKey_ = nullptr;
+    void * certificateAuthority_ = nullptr;
 };
 
 std::ostream & operator<<(std::ostream & out, const Request & request);

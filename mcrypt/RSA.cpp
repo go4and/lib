@@ -100,6 +100,11 @@ size_t getPaddingTail(int padding)
 
 }
 
+void * RSA::rsaHandle()
+{
+    return static_cast<EVP_PKEY*>(handle())->pkey.rsa;
+}
+
 size_t RSA::publicDecrypt(char * out, const char * src, size_t len, Error & error, Padding padding) const
 {
     ::RSA * impl = static_cast<EVP_PKEY*>(handle())->pkey.rsa;

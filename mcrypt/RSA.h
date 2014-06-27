@@ -111,6 +111,8 @@ public:
     size_t privateEncrypt(char * out, const char * src, size_t len, Error & error, Padding padding = pdDefault) const;
 
     void extractN(std::vector<char> & out);
+
+    void * rsaHandle();
 };
 
 }

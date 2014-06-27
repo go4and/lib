@@ -10,6 +10,8 @@
 
 #include "WindowUtils.h"
 
+MLOG_DECLARE_LOGGER(wxutils_windowutils);
+
 namespace wxutils {
 
 #if BOOST_WINDOWS
@@ -142,11 +144,28 @@ AutoScroller::AutoScroller(wxWindow * window, wxOrientation orient)
     memset(&scrollInfo_, 0, sizeof(scrollInfo_));
     scrollInfo_.cbSize = sizeof(scrollInfo_);
     scrollInfo_.fMask = SIF_ALL;
-    BOOST_VERIFY(GetScrollInfo(window->GetHWND(), winSB(orient_), &scrollInfo_));
+    BOOL res = GetScrollInfo(window->GetHWND(), winSB(orient_), &scrollInfo_);
+    if (!res)
+    {
+        int err = GetLastError();
+        if(err != ERROR_NO_SCROLLBARS)
+        {
+            MLOG_ERROR("GetScrollInfo failed: " << err << ", msg: " << mstd::out_utf8(winutils::getErrorMessage(err)));
+            BOOST_ASSERT(false);
+        }
+        scrollInfo_.fMask = 0;
+    }
 }
 
 AutoScroller::~AutoScroller()
 {
+    if(scrollInfo_.fMask == 0)
+    {
+        scrollInfo_.fMask = SIF_ALL;
+        BOOL res = GetScrollInfo(window_->GetHWND(), winSB(orient_), &scrollInfo_);
+        if(!res)
+            return;
+    }
     bool autoScroll = scrollInfo_.nPos + static_cast<int>(scrollInfo_.nPage) >= scrollInfo_.nMax;
     if(autoScroll)
     {

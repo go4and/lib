@@ -112,6 +112,7 @@ public:
         : exc_(&exc) {}
 
     void out(std::ostream & stream) const;
+    void out(std::wostream & stream) const;
 private:
     boost::exception * exc_;
 };
@@ -127,12 +128,19 @@ inline std::ostream & operator<<(std::ostream & stream, const BoostExceptionOut 
     return stream;
 }
 
+inline std::wostream & operator<<(std::wostream & stream, const BoostExceptionOut & out)
+{
+    out.out(stream);
+    return stream;
+}
+
 class MSTD_DECL StdExceptionOut {
 public:
     explicit StdExceptionOut(std::exception & exc)
         : exc_(&exc) {}
 
     void out(std::ostream & stream) const;
+    void out(std::wostream & stream) const;
 private:
     std::exception * exc_;
 };
@@ -150,6 +158,12 @@ out_exception(E & e)
 }
 
 inline std::ostream & operator<<(std::ostream & stream, const StdExceptionOut & out)
+{
+    out.out(stream);
+    return stream;
+}
+
+inline std::wostream & operator<<(std::wostream & stream, const StdExceptionOut & out)
 {
     out.out(stream);
     return stream;
