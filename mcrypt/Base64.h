@@ -83,11 +83,16 @@ inline size_t debase64(const std::wstring & src, void * out)
     return debase64(src.c_str(), src.length(), out);
 }
 
+inline std::vector<char> debase64(const char * input, size_t length)
+{
+    std::vector<char> result(debase64length(input, length));
+    debase64(input, length, &result[0]);
+    return result;
+}
+
 inline std::vector<char> debase64(const std::string & src)
 {
-    std::vector<char> result(debase64length(src));
-    debase64(src, &result[0]);
-    return result;
+    return debase64(src.c_str(), src.length());
 }
 
 inline std::vector<char> debase64(const std::wstring & src)

@@ -14,6 +14,8 @@
 
 #include <yajl/yajl_parse.h>
 
+#include <openssl/ssl.h>
+
 #include <sys/stat.h>
 
 #include <unordered_map>

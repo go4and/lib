@@ -259,7 +259,11 @@ public:
         : DownloadTask(request.url(), request.cookies(), request.progressHandler()),
           handler_(request.handler()), directWriter_(request.directWriter()),
           rangeBegin_(request.rangeBegin()), rangeEnd_(request.rangeEnd()),
-          postData_(request.postData()), headers_(0)
+          postData_(request.postData()), 
+          clientCertificate_(request.clientCertificate()),
+          clientKey_(request.clientKey()),
+          certificateAuthority_(request.certificateAuthority()),
+          headers_(0)
     {
         const std::vector<std::string> & headers = request.headers();
         for(std::vector<std::string>::const_iterator i = headers.begin(), end = headers.end(); i != end; ++i)
@@ -321,6 +325,11 @@ public:
         }
         if(headers_)
             curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, headers_);
+        if(certificateAuthority_ || clientCertificate_ || clientKey_)
+        {
+            curl_easy_setopt(curl_, CURLOPT_SSL_CTX_FUNCTION, &GetDataAsync::setupSSL);
+            curl_easy_setopt(curl_, CURLOPT_SSL_CTX_DATA, this);
+        }
         MLOG_DEBUG("GetDataAsync::doStart, done");
     }
     
@@ -355,6 +364,41 @@ public:
         }
     }
 private:
+    static CURLcode setupSSL(CURL * curl, void * sslctx, void * param)
+    {
+        GetDataAsync * self = static_cast<GetDataAsync*>(param);
+        SSL_CTX * ctx = static_cast<SSL_CTX*>(sslctx);
+        X509_STORE * store = SSL_CTX_get_cert_store(ctx);
+        if(self->certificateAuthority_)
+        {
+            if(!X509_STORE_add_cert(store, static_cast<X509*>(self->certificateAuthority_)))
+            {
+                MLOG_ERROR("Failed to add CA");
+                return CURLE_SSL_CACERT_BADFILE;
+            }
+        }
+
+        if(self->clientCertificate_)
+        {
+            if(SSL_CTX_use_certificate(ctx, static_cast<X509*>(self->clientCertificate_)) != 1)
+            {
+                MLOG_ERROR("Failed to use certificate");
+                return CURLE_SSL_CERTPROBLEM;
+            }
+        }
+
+        if(self->clientKey_)
+        {
+            if(SSL_CTX_use_RSAPrivateKey(ctx, static_cast<RSA*>(self->clientKey_)) != 1)
+            {
+                MLOG_ERROR("Failed to use client key");
+                return CURLE_SSL_CERTPROBLEM;
+            }
+        }
+
+        return CURLE_OK ;        
+    }
+
     static size_t write(const char* buf, size_t size, size_t nmemb, GetDataAsync * self)
     {
         MLOG_MESSAGE(Debug, "GetDataAsync::write(" << static_cast<const void*>(buf) << ", " << size << ", " << nmemb << ", " << self << ")");
@@ -403,6 +447,9 @@ private:
     filesize_t rangeBegin_, rangeEnd_;
     mstd::rc_buffer postData_;
     curl_slist * headers_;
+    void * clientCertificate_;
+    void * clientKey_;
+    void * certificateAuthority_;
 };
 
 class GetFileAsync : public DownloadTask {

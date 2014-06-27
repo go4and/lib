@@ -82,4 +82,6 @@
 #include <wx/toplevel.h>
 #endif
 
+#include <winutils/ErrorMessage.h>
+
 #define BUILDING_WXUTILS
