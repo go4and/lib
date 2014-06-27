@@ -11,6 +11,8 @@
 #if !defined(BUILDING_WXUTILS)
 #include <wx/defs.h>
 #include <wx/timer.h>
+
+#include <functional>
 #endif
 
 #include "Config.h"

@@ -32,8 +32,8 @@ public:
     typedef typename protocol_type::endpoint endpoint_type;
     typedef typename protocol_type::socket socket_type;
 
-    typedef boost::function<void(socket_type &)> Listener;
-    typedef boost::function<void(Derived &)> AbortListener;
+    typedef std::function<void(socket_type &)> Listener;
+    typedef std::function<void(Derived &)> AbortListener;
 
     explicit GenericAcceptor(boost::asio::io_service & ios, const Listener & listener)
         : listener_(listener), acceptor_(ios), socket_(ios)
@@ -102,7 +102,7 @@ private:
         {
             MLOG_FMESSAGE(Notice, "accept aborted[" << endpoint_ << "]");
             acceptor_.close();
-            if(!abortListener_.empty())
+            if(abortListener_)
                 acceptor_.get_io_service().post(boost::bind(abortListener_, boost::ref(*static_cast<Derived*>(this))));
             return;
         }

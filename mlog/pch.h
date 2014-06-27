@@ -34,6 +34,7 @@
 #endif
 
 #include <exception>
+#include <functional>
 #include <iosfwd>
 #include <iomanip>
 #include <fstream>

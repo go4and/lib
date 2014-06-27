@@ -187,9 +187,9 @@ public:
         chunk.state = csActive;
         ++active_;
         if(!chunk.valid())
-            Request().url(url_).sizeHandler(std::bind(&Task::sizeReceived, this, _1, _2)).run();
+            Request().url(url_).sizeHandler(std::bind(&Task::sizeReceived, this, std::placeholders::_1, std::placeholders::_2)).run();
         else
-            Request().url(url_).range(chunk.begin, chunk.end).directWriter(DirectWriter(chunk), std::bind(&Task::chunkDone, this, _1, std::ref(chunk))).run();
+            Request().url(url_).range(chunk.begin, chunk.end).directWriter(DirectWriter(chunk), std::bind(&Task::chunkDone, this, std::placeholders::_1, std::ref(chunk))).run();
     }
 private:
     void sizeReceived(int ec, filesize_t size)

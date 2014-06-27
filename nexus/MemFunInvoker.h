@@ -28,6 +28,10 @@ template<size_t ...S> struct genSeq<0, S...> { typedef seq<S...> type; };
             : self_(rhs.self_), args_(std::move(rhs.args_)) \
         { \
         } \
+        NEXUS_MEM_FUN_INVOKER_NAME(cls, function, binder)(const NEXUS_MEM_FUN_INVOKER_NAME(cls, function, binder) & rhs) \
+            : self_(rhs.self_), args_(rhs.args_) \
+        { \
+        } \
         void operator=(NEXUS_MEM_FUN_INVOKER_NAME(cls, function, binder) && rhs) \
         { \
             self_ = rhs.self_; \

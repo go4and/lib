@@ -52,7 +52,6 @@
 		C32456601352A9C800999158 /* kmp.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C32456071352A9C800999158 /* kmp.hpp */; };
 		C32456611352A9C800999158 /* lexical_cast.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C32456081352A9C800999158 /* lexical_cast.hpp */; };
 		C32456621352A9C800999158 /* linked_allocator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C32456091352A9C800999158 /* linked_allocator.hpp */; };
-		C32456631352A9C800999158 /* Logging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C324560A1352A9C800999158 /* Logging.cpp */; };
 		C32456641352A9C800999158 /* Logging.h in Headers */ = {isa = PBXBuildFile; fileRef = C324560B1352A9C800999158 /* Logging.h */; };
 		C32456651352A9C800999158 /* long_map.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C324560C1352A9C800999158 /* long_map.hpp */; };
 		C32456661352A9C800999158 /* windows32.hpp in Headers */ = {isa = PBXBuildFile; fileRef = C324560E1352A9C800999158 /* windows32.hpp */; };
@@ -146,7 +145,6 @@
 		C32456071352A9C800999158 /* kmp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kmp.hpp; sourceTree = SOURCE_ROOT; };
 		C32456081352A9C800999158 /* lexical_cast.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lexical_cast.hpp; sourceTree = SOURCE_ROOT; };
 		C32456091352A9C800999158 /* linked_allocator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = linked_allocator.hpp; sourceTree = SOURCE_ROOT; };
-		C324560A1352A9C800999158 /* Logging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logging.cpp; sourceTree = SOURCE_ROOT; };
 		C324560B1352A9C800999158 /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = SOURCE_ROOT; };
 		C324560C1352A9C800999158 /* long_map.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = long_map.hpp; sourceTree = SOURCE_ROOT; };
 		C324560E1352A9C800999158 /* windows32.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = windows32.hpp; sourceTree = "<group>"; };
@@ -333,7 +331,6 @@
 				C32455FB1352A9C800999158 /* exception.cpp */,
 				C346433C13D3339000716430 /* filesystem.cpp */,
 				C32456041352A9C800999158 /* itoa.cpp */,
-				C324560A1352A9C800999158 /* Logging.cpp */,
 				C324560D1352A9C800999158 /* machine */,
 				C32456151352A9C800999158 /* performance_timer.cpp */,
 				C346433D13D3339000716430 /* process.cpp */,
@@ -488,7 +485,6 @@
 				C32456501352A9C800999158 /* email.cpp in Sources */,
 				C32456541352A9C800999158 /* exception.cpp in Sources */,
 				C324565D1352A9C800999158 /* itoa.cpp in Sources */,
-				C32456631352A9C800999158 /* Logging.cpp in Sources */,
 				C324566B1352A9C800999158 /* performance_timer.cpp in Sources */,
 				C32456721352A9C800999158 /* random.cpp in Sources */,
 				C32456771352A9C800999158 /* singleton.cpp in Sources */,

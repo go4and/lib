@@ -10,8 +10,6 @@
 #pragma once
 #endif
 
-#define BOOST_BIND_NO_PLACEHOLDERS
-
 #include <curl/curl.h>
 
 #include <yajl/yajl_parse.h>
@@ -55,5 +53,3 @@
 #include <mlog/Logging.h>
 
 #define MNET_BUILDING
-
-using namespace std::placeholders;
