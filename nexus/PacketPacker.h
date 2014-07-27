@@ -65,7 +65,8 @@ struct PodPacker {
         return sizeof(Type);
     }
     
-    static void pack(char *& out, const Type & t)
+    template<class U>
+    static void pack(U & out, const Type & t)
     {
         write<Type>(out, t);
     }
@@ -294,7 +295,8 @@ struct ForwardPacker {
         return impl.packSize();
     }
     
-    static void pack(char *& pos, const Impl & impl)
+    template<class U>
+    static void pack(U & pos, const Impl & impl)
     {
         impl.pack(pos);
     }

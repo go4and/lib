@@ -34,6 +34,7 @@
 #include <mstd/cstdint.hpp>
 #include <mstd/hton.hpp>
 #include <mstd/pointer_cast.hpp>
+#include <mstd/strings.hpp>
 
 #endif
 

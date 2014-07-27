@@ -8,13 +8,21 @@
 */
 #pragma once
 
+#ifndef NEXUS_BUILDING
+
 #include <boost/static_assert.hpp>
+
+#include <boost/mpl/and.hpp>
+#include <boost/mpl/not.hpp>
+
 #include <boost/type_traits/is_pod.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 
 #include <mstd/null.hpp>
 #include <mstd/pointer_cast.hpp>
 #include <mstd/utf8.hpp>
+
+#endif
 
 namespace nexus {
 

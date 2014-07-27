@@ -794,7 +794,7 @@ struct XmlParser {
 struct JSONParser {
     static inline void parse(boost::property_tree::ptree & tree, const mstd::rc_buffer & data)
     {
-        parseJSON(tree ,data);
+        parseJSON(tree, data);
     }
 };
 
