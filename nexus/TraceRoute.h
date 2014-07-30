@@ -11,6 +11,6 @@ namespace nexus {
 
 std::string makeTrace(const std::string & host);
 
-void makeTraceAsync(boost::asio::io_service & ios, const std::string & host, const boost::function<void(const std::string &)> & listener);
+void makeTraceAsync(boost::asio::io_service & ios, const std::string & host, const std::function<void(const std::string &)> & listener);
 
 }

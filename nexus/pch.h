@@ -10,6 +10,8 @@
 #pragma once
 #endif
 
+#define BOOST_BIND_NO_PLACEHOLDERS
+
 #include <boost/config.hpp>
 
 #ifndef BOOST_WINDOWS
@@ -25,6 +27,7 @@
 #include <exception>
 #include <queue>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 #include <boost/aligned_storage.hpp>
@@ -112,8 +115,6 @@
 
 #if BOOST_WINDOWS
 
-#include <boost/bind/protect.hpp>
-
 #include <boost/thread/thread.hpp>
 
 #include <boost/asio/deadline_timer.hpp>
@@ -124,3 +125,5 @@
 #endif
 
 #define NEXUS_BUILDING
+
+using namespace std::placeholders;

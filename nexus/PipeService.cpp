@@ -437,14 +437,14 @@ public:
     {
         start();
 
-        post(boost::bind(&Impl::doListen, this, listener, name));
+        post(std::bind(&Impl::doListen, this, listener, name));
     }
 
     void connect(const Listener & listener, const std::wstring & name, int retries)
     {
         start();
 
-        post(boost::bind(&Impl::doConnect, this, listener, name, retries));
+        post(std::bind(&Impl::doConnect, this, listener, name, retries));
     }
 
     HANDLE iocp()
@@ -455,7 +455,7 @@ public:
     void connectDone()
     {
         if(!listenName_.empty())
-            post(boost::bind(&Impl::startListen, this));
+            post(std::bind(&Impl::startListen, this));
     }
 
     uint32_t registerConnection(PipeConnection * conn)
@@ -466,14 +466,14 @@ public:
     void releaseConnection(PipeConnection * conn)
     {
         connections_.erase(conn->id());
-        post(boost::bind(&Impl::deleteConnection, this, conn));
+        post(std::bind(&Impl::deleteConnection, this, conn));
     }
 
     void send(int id, PacketCode code, const char * begin, size_t len)
     {
         MLOG_DEBUG("send(" << id << ", " << static_cast<int>(code) << ", " << mlog::dump(begin, len) << ")");
 
-        post(boost::bind(&Impl::doSend, this, id, pack(code, begin, len)));
+        post(std::bind(&Impl::doSend, this, id, pack(code, begin, len)));
     }
 
     void disconnect(int id)
@@ -503,7 +503,7 @@ private:
             int err = GetLastError();;
             MLOG_NOTICE("port = " << iocp_ << ", error: " << err);
 
-            thread_ = boost::thread(boost::bind(&Impl::run, this));
+            thread_ = boost::thread(std::bind(&Impl::run, this));
         }
     }
 
@@ -542,7 +542,7 @@ private:
         } else {
             int err = GetLastError();
             MLOG_ERROR("create named pipe failed: " << err);
-            timers_.push(timerOperation(boost::posix_time::milliseconds(250), boost::bind(&Impl::startListen, this)));
+            timers_.push(timerOperation(boost::posix_time::milliseconds(250), std::bind(&Impl::startListen, this)));
         }
     }
 
@@ -564,7 +564,7 @@ private:
             {
                 if(retries > 0)
                     --retries;
-                timers_.push(timerOperation(boost::posix_time::milliseconds(250), boost::bind(&Impl::doConnect, this, listener, name, retries)));
+                timers_.push(timerOperation(boost::posix_time::milliseconds(250), std::bind(&Impl::doConnect, this, listener, name, retries)));
             } else {
                 listener(-err, -pcFailed, 0, 0);
             }                
@@ -650,7 +650,7 @@ void PipeService::send(int id, PacketCode code, const char * begin, size_t len)
     impl_->send(id, code, begin, len);
 }
 
-void PipeService::post(const boost::function<void()> & action)
+void PipeService::post(const std::function<void()> & action)
 {
     impl_->post(action);
 }

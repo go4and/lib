@@ -187,9 +187,9 @@ public:
         chunk.state = csActive;
         ++active_;
         if(!chunk.valid())
-            Request().url(url_).sizeHandler(boost::bind(&Task::sizeReceived, this, _1, _2)).run();
+            Request().url(url_).sizeHandler(std::bind(&Task::sizeReceived, this, std::placeholders::_1, std::placeholders::_2)).run();
         else
-            Request().url(url_).range(chunk.begin, chunk.end).directWriter(DirectWriter(chunk), boost::bind(&Task::chunkDone, this, _1, boost::ref(chunk))).run();
+            Request().url(url_).range(chunk.begin, chunk.end).directWriter(DirectWriter(chunk), std::bind(&Task::chunkDone, this, std::placeholders::_1, std::ref(chunk))).run();
     }
 private:
     void sizeReceived(int ec, filesize_t size)
@@ -353,7 +353,7 @@ public:
         return taskCounter_;
     }
     
-    void cancel(int id)
+    void cancel(size_t id)
     {
         MLOG_DEBUG("cancel(" << id << ")");
 
@@ -382,7 +382,7 @@ public:
         }
     }
     
-    DownloadProgress getProgress(int id)
+    DownloadProgress getProgress(size_t id)
     {
         auto i = id2task_.find(id);
         if(i != id2task_.end())
@@ -492,7 +492,7 @@ private:
     
     typedef std::list<Task> Tasks;
     Tasks tasks_;
-    std::unordered_map<int, Tasks::iterator> id2task_;
+    std::unordered_map<size_t, Tasks::iterator> id2task_;
     std::vector<Chunk*> active_;
 };
 

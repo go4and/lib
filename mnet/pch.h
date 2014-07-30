@@ -14,11 +14,12 @@
 
 #include <yajl/yajl_parse.h>
 
+#include <openssl/ssl.h>
+
 #include <sys/stat.h>
 
 #include <unordered_map>
 
-#include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scope_exit.hpp>
 #include <boost/scoped_ptr.hpp>

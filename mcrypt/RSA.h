@@ -9,7 +9,6 @@
 #pragma once
 
 #ifndef MCRYPT_BUILDING
-#include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -112,6 +111,8 @@ public:
     size_t privateEncrypt(char * out, const char * src, size_t len, Error & error, Padding padding = pdDefault) const;
 
     void extractN(std::vector<char> & out);
+
+    void * rsaHandle();
 };
 
 }

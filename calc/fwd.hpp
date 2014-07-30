@@ -13,7 +13,6 @@
 #include <vector>
 
 #include <boost/cstdint.hpp>
-#include <boost/function.hpp>
 
 #include <boost/variant/variant.hpp>
 
@@ -30,9 +29,9 @@ struct compiler_context;
 class error;
 typedef boost::int64_t number;
 typedef boost::variant<number, std::wstring> variable;
-typedef boost::function<variable(void*, variable*)> program;
-typedef boost::function<func(const std::wstring&, size_t, bool, bool lowered)> function_lookup;
-typedef boost::function<pre_program*(const std::wstring&, const compiler_context & context)> plugin_compiler;
+typedef std::function<variable(void*, variable*)> program;
+typedef std::function<func(const std::wstring&, size_t, bool, bool lowered)> function_lookup;
+typedef std::function<pre_program*(const std::wstring&, const compiler_context & context)> plugin_compiler;
 
 struct compiler_context {
     const function_lookup & lookup;
@@ -40,7 +39,7 @@ struct compiler_context {
     const plugin_compiler & plugin;
 };
 
-typedef boost::function<program(const compiler_context & context)> compiler;
+typedef std::function<program(const compiler_context & context)> compiler;
 
 class pre_program : public boost::noncopyable {
 public:
@@ -54,7 +53,7 @@ public:
 typedef std::auto_ptr<pre_program> pre_program_ptr;
 
 struct func {
-    typedef boost::function<pre_program*(std::vector<pre_program*>&, const compiler_context & context)> function_type;
+    typedef std::function<pre_program*(std::vector<pre_program*>&, const compiler_context & context)> function_type;
 
     function_type function;
     int arity;

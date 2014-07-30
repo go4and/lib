@@ -141,10 +141,10 @@ func environment::do_find(const Map::key_type & key) const
     Map::const_iterator i = map_.find(key);
     if(i == map_.end())
     {
-        if(!lookup_.empty())
+        if(lookup_)
         {
             func result = lookup_(key.first, key.second, true, true);
-            if(!result.function.empty())
+            if(result.function)
                 return result;
         }
         if(parent_)

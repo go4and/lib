@@ -28,9 +28,7 @@
 #include <vector>
 
 #include <boost/array.hpp>
-#include <boost/bind.hpp>
 #include <boost/format.hpp>
-#include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -64,3 +62,5 @@
 #endif
 
 #define BUILDING_CALC
+
+using namespace std::placeholders;

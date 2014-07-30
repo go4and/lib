@@ -9,7 +9,6 @@
 #pragma once
 
 #ifndef NEXUS_BUILDING
-#include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
 #endif
 
@@ -19,7 +18,7 @@ namespace nexus {
 
 class PipeService : boost::noncopyable {
 public:
-    typedef boost::function<void(int, int, const char *, size_t)> Listener;
+    typedef std::function<void(int, int, const char *, size_t)> Listener;
 
     explicit PipeService();
     ~PipeService();
@@ -36,7 +35,7 @@ public:
 
     void disconnect(int id);
 
-    void post(const boost::function<void()> & action);
+    void post(const std::function<void()> & action);
 private:
     class Impl;
     boost::scoped_ptr<Impl> impl_;

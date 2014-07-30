@@ -16,7 +16,6 @@
 #include <boost/assert.hpp>
 #include <boost/array.hpp>
 #include <boost/crc.hpp>
-#include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>

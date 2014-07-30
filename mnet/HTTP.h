@@ -9,7 +9,6 @@
 #pragma once
 
 #ifndef MNET_BUILDING
-#include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 
 #include <boost/filesystem/path.hpp>
@@ -28,15 +27,15 @@ typedef void CURL;
 
 namespace mnet {
 
-typedef boost::function<void(int ec, const boost::property_tree::ptree & tree)> AsyncPTreeHandler;
-typedef boost::function<void(int ec, const mstd::rc_buffer & data)> AsyncDataHandler;
-typedef boost::function<void(int ec, const mstd::rc_buffer & data, const mstd::rc_buffer & headers)> AsyncDataExHandler;
-typedef boost::function<void(int ec, filesize_t size)> AsyncSizeHandler;
-typedef boost::function<size_t(const char * buf, size_t size)> DirectWriter;
-typedef boost::function<void(int ec)> AsyncHandler;
-typedef boost::function<void(int percent)> ProgressHandler;
-typedef boost::function<void()> Action;
-typedef boost::function<void(const Action&)> UIEnqueuer;
+typedef std::function<void(int ec, const boost::property_tree::ptree & tree)> AsyncPTreeHandler;
+typedef std::function<void(int ec, const mstd::rc_buffer & data)> AsyncDataHandler;
+typedef std::function<void(int ec, const mstd::rc_buffer & data, const mstd::rc_buffer & headers)> AsyncDataExHandler;
+typedef std::function<void(int ec, filesize_t size)> AsyncSizeHandler;
+typedef std::function<size_t(const char * buf, size_t size)> DirectWriter;
+typedef std::function<void(int ec)> AsyncHandler;
+typedef std::function<void(int percent)> ProgressHandler;
+typedef std::function<void()> Action;
+typedef std::function<void(const Action&)> UIEnqueuer;
 
 struct Proxy {
     bool active;
@@ -66,7 +65,7 @@ typedef boost::variant<AsyncHandler, AsyncDataHandler, AsyncDataExHandler, Async
 class Request {
 public:
     Request()
-        : rangeBegin_(-1) {}
+        : rangeBegin_(-1), clientCertificate_(nullptr), clientKey_(nullptr), certificateAuthority_(nullptr) {}
 
     Request & url(const std::string & value) { url_ = value; return *this; }
     Request & cookies(const std::string & value) { cookies_ = value; return *this; }
@@ -81,6 +80,8 @@ public:
     Request & postData(const std::string & data) { return postData(data.c_str(), data.size()); }
     Request & postData(const mstd::rc_buffer & data) { postData_ = data; return *this; }
     Request & header(const std::string & line) { headers_.push_back(line); return *this; }
+    Request & clientCertificate(void * certificate, void * key) { clientCertificate_ = certificate; clientKey_ = key; return *this; }
+    Request & certificateAuthority(void * value) { certificateAuthority_ = value; return *this; }
     Request & range(filesize_t begin, filesize_t end) { rangeBegin_ = begin; rangeEnd_ = end; return *this; }
 
     const std::string & url() const { return url_; }
@@ -92,6 +93,9 @@ public:
     const std::vector<std::string> & headers() const { return headers_; }
     filesize_t rangeBegin() const { return rangeBegin_; }
     filesize_t rangeEnd() const { return rangeEnd_; }
+    void * clientCertificate() const { return clientCertificate_; }
+    void * clientKey() const { return clientKey_; }
+    void * certificateAuthority() const { return certificateAuthority_; }
 
     void run();
 private:
@@ -103,6 +107,9 @@ private:
     DirectWriter directWriter_;
     filesize_t rangeBegin_, rangeEnd_;
     mstd::rc_buffer postData_;
+    void * clientCertificate_;
+    void * clientKey_;
+    void * certificateAuthority_;
 };
 
 std::ostream & operator<<(std::ostream & out, const Request & request);

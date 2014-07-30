@@ -28,7 +28,7 @@ struct DownloadProgress {
     }
 };
 
-typedef boost::function<void(size_t, int)> DownloadListener;
+typedef std::function<void(size_t, int)> DownloadListener;
 
 class DownloadManager : boost::noncopyable {
 public:

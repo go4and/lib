@@ -114,10 +114,10 @@ typedef boost::intrusive_ptr<AsyncTraceRoute> AsyncTraceRoutePtr;
 
 class AsyncTraceRoute : public mstd::reference_counter<AsyncTraceRoute> {
 public:
-    AsyncTraceRoute(boost::asio::io_service & ios, const std::string & host, const boost::function<void(const std::string &)> & listener)
+    AsyncTraceRoute(boost::asio::io_service & ios, const std::string & host, const std::function<void(const std::string &)> & listener)
         : resolver_(ios), socket_(ios, boost::asio::generic::datagram_protocol(AF_INET, IPPROTO_UDP)), host_(host), listener_(listener), sequenceNumber_(0)
     {
-        if(listener_.empty())
+        if(!listener_)
             MLOG_ERROR("empty listener in traceroute");
     }
 
@@ -135,7 +135,7 @@ public:
         if(ec)
         {
             icmp::resolver::query query(icmp::v4(), host_, "");
-            resolver_.async_resolve(query, boost::bind(&AsyncTraceRoute::handleResolve, this, _1, _2, self()));
+            resolver_.async_resolve(query, std::bind(&AsyncTraceRoute::handleResolve, this, std::placeholders::_1, std::placeholders::_2, self()));
         } else {
             destination_ = boost::asio::ip::icmp::endpoint(address, 0);
             startPing(1, self());
@@ -256,7 +256,7 @@ private:
     boost::asio::generic::datagram_protocol::socket socket_;
     boost::optional<boost::asio::streambuf> requestBuffer_;
     std::string host_;
-    boost::function<void(const std::string &)> listener_;
+    std::function<void(const std::string &)> listener_;
     std::ostringstream out_;
     unsigned short sequenceNumber_;
     boost::asio::generic::datagram_protocol::endpoint lastIp_;
@@ -276,7 +276,7 @@ std::string makeTrace(const std::string & host)
     return out.str();
 }
 
-void makeTraceAsync(boost::asio::io_service & ios, const std::string & host, const boost::function<void(const std::string &)> & listener)
+void makeTraceAsync(boost::asio::io_service & ios, const std::string & host, const std::function<void(const std::string &)> & listener)
 {
     AsyncTraceRoutePtr tracer(new AsyncTraceRoute(ios, host, listener));
     tracer->start();

@@ -9,8 +9,6 @@
 #pragma once
 
 #if !defined(BUILDING_WXUTILS)
-#include <boost/function.hpp>
-
 #include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
@@ -47,7 +45,7 @@ public:
         return data_;
     }
 
-    void listen(const boost::function<void()> & listener)
+    void listen(const std::function<void()> & listener)
     {
         deathListener_ = listener;
     }
@@ -59,7 +57,7 @@ public:
     }
 private:
     Data data_;
-    boost::function<void()> deathListener_;
+    std::function<void()> deathListener_;
 };
 
 }

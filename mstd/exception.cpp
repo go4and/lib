@@ -26,6 +26,11 @@ void BoostExceptionOut::out(std::ostream & stream) const
     stream << mstd::get_error_message(*exc_) << " (" << diagnostic_information(*exc_) << ")";
 }
 
+void BoostExceptionOut::out(std::wostream & stream) const
+{
+    stream << mstd::wget_error_message(*exc_) << " (" << mstd::deutf8(diagnostic_information(*exc_)) << ")";
+}
+
 void StdExceptionOut::out(std::ostream &stream) const
 {
     stream << exc_->what();

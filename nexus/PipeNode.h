@@ -29,7 +29,7 @@ class Buffer;
 
 class NEXUS_DECL PipeNode : public boost::noncopyable, public Connection<PipeNode> {
 public:
-    typedef boost::function<void(PacketCode, const PacketReader&)> Listener;
+    typedef std::function<void(PacketCode, const PacketReader&)> Listener;
 
     PipeNode();
     ~PipeNode();
@@ -68,7 +68,7 @@ private:
     void doListen(const std::wstring & name);
     void doConnect(const std::wstring & name);
     void handleConnected(const boost::system::error_code & ec, const std::wstring & name);
-    void handleExpired(const boost::system::error_code & ec, const boost::function<void()> & action);
+    void handleExpired(const boost::system::error_code & ec, const std::function<void()> & action);
 
     void connectDone();
 

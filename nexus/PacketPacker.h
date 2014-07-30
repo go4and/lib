@@ -12,6 +12,7 @@
 
 #include <vector>
 #include <deque>
+#include <unordered_set>
 
 #include <boost/array.hpp>
 
@@ -344,8 +345,8 @@ struct GetPacker<std::deque<T> > {
     typedef CollectionPacker<packer> type;
 };
 
-template<class T>
-struct GetPacker<boost::unordered_set<T> > {
+template<class T, class Hasher, class Eq>
+struct GetPacker<std::unordered_set<T, Hasher, Eq> > {
     typedef typename GetPacker<typename boost::remove_cv<T>::type>::type packer;
     typedef CollectionPacker<packer> type;
 };

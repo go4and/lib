@@ -34,6 +34,7 @@
 #endif
 
 #include <exception>
+#include <functional>
 #include <iosfwd>
 #include <iomanip>
 #include <fstream>
@@ -43,7 +44,6 @@
 #include <vector>
 
 #include <boost/array.hpp>
-#include <boost/function.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>

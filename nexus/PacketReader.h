@@ -262,6 +262,14 @@ public:
         return std::string(p, end);
     }
 
+    std::wstring readCUTFString()
+    {
+        const char * p = pos_;
+        const char * end = p + strlen(p);
+        pos_ = end + 1;
+        return mstd::deutf8(p, end - p);
+    }
+
     void readCString(std::string & result)
     {
         const char * p = pos_;

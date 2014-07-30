@@ -19,7 +19,6 @@ namespace calc {
 class builder {
 public:
     builder()
-        : plugin_(0)
     {
     }
 

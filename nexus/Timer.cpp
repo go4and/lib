@@ -19,7 +19,7 @@ class Manager {
 public:
     void schedule(const mstd::command_queue::command_type & command, const boost::posix_time::time_duration & delay)
     {
-        service_.post(boost::bind(&Manager::doSchedule, this, QueueItem(command, boost::posix_time::microsec_clock::universal_time() + delay)));
+        service_.post(std::bind(&Manager::doSchedule, this, QueueItem(command, boost::posix_time::microsec_clock::universal_time() + delay)));
     }
     
     ~Manager()
@@ -31,7 +31,7 @@ private:
     Manager()
         : work_(service_), timer_(service_)
     {
-        thread_ = boost::thread(boost::bind(&boost::asio::io_service::run, &service_));
+        thread_ = boost::thread([this]() { service_.run(); });
     }
 
     typedef std::pair<mstd::command_queue::command_type, boost::posix_time::ptime> QueueItem;
@@ -53,7 +53,7 @@ private:
         if(!queue_.empty())
         {
             timer_.expires_at(queue_.top().second);
-            timer_.async_wait(boost::bind(&Manager::handleTimer, this, _1));
+            timer_.async_wait(std::bind(&Manager::handleTimer, this, std::placeholders::_1));
         }
     }
     

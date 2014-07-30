@@ -56,7 +56,7 @@ public:
 private:
     bool process(size_t signal)
     {
-        if(signal < handlers_.size() && !handlers_[signal].empty())
+        if(signal < handlers_.size() && handlers_[signal])
         {
             handlers_[signal](signal);
             return true;

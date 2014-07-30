@@ -113,6 +113,7 @@ struct named_arguments : public named_arguments_helper<Vector, boost::mpl::size<
 
 template<class Vector>
 struct vector_function : public named_arguments<typename boost::mpl::pop_front<Vector>::type> {
+    typedef Vector signature_vector;
     typedef typename boost::mpl::at<Vector, boost::mpl::size_t<0> >::type result_type;
     typedef typename boost::mpl::pop_front<Vector>::type arguments;
     static const size_t arity = boost::mpl::size<Vector>::type::value - 1;

@@ -92,6 +92,22 @@ itoa16(T i, Char * buf)
 }
 
 template<class T, class Char>
+typename boost::enable_if_c<sizeof(T) >= sizeof(intptr_t), void>::type
+itoaMinValue(T i, Char * p)
+{
+    p = detail::pitoa(-(i / static_cast<T>(detail::blockPow)), p);
+    p = detail::pitoa(-(i % static_cast<T>(detail::blockPow)), p);
+    *p = 0;
+}
+
+template<class T, class Char>
+typename boost::enable_if_c<sizeof(T) < sizeof(intptr_t), void>::type
+itoaMinValue(T i, Char * buf)
+{
+    return itoaMinValue(static_cast<intptr_t>(i), buf);
+}
+
+template<class T, class Char>
 typename boost::enable_if<boost::is_signed<T>, Char*>::type
 itoa(T i, Char * buf)
 {
@@ -105,9 +121,7 @@ itoa(T i, Char * buf)
             ++p;
             if(i < 0)
             {
-                p = detail::pitoa(-(i / detail::blockPow), p);
-                p = detail::pitoa(-(i % detail::blockPow), p);
-                *p = 0;
+                itoaMinValue(i, p);
                 return buf;
             }
         }

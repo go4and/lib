@@ -190,6 +190,11 @@ public:
         return process(mstd::pointer_cast<char*>(out), mstd::pointer_cast<const char*>(begin), len);
     }
 
+    inline size_t process(char * out, const unsigned char * begin, size_t len)
+    {
+        return process(out, mstd::pointer_cast<const char*>(begin), len);
+    }
+
     inline size_t process(char * out, const char * begin, const char * end)
     {
         return process(out, begin, end - begin);

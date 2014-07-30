@@ -192,6 +192,74 @@ inline std::ostream & operator<<(std::ostream & out, const OutPointer<T> & value
     return out;
 }
 
+BOOST_MPL_HAS_XXX_TRAIT_DEF(const_iterator);
+
+template<class V>
+class OutVariant {
+public:
+    explicit OutVariant(const V & v)
+        : variant_(v)
+    {
+    }
+
+    void operator()(std::ostream & out) const
+    {
+        OutVariantImpl visitor(out);
+        variant_.apply_visitor(visitor);
+    }
+private:
+    class OutVariantImpl {
+    public:
+        typedef void result_type;
+
+        explicit OutVariantImpl(std::ostream & out)
+            : out_(out)
+        {
+        }
+
+        template<class T>
+        typename boost::disable_if<has_const_iterator<T>, void>::type
+        operator()(const T & t) const
+        {
+            out_ << t;
+        }
+
+        void operator()(const std::string & str) const
+        {
+            out_ << str;
+        }
+
+        void operator()(const std::wstring & str) const
+        {
+            out_ << mstd::out_utf8(str);
+        }
+
+        template<class T>
+        typename boost::enable_if<has_const_iterator<T>, void>::type
+        operator()(const T & t) const
+        {
+            out_ << ocollection(t);
+        }
+    private:
+        std::ostream & out_;
+    };
+
+    const V & variant_;
+};
+
+template<class V>
+OutVariant<V> ovariant(const V & v)
+{
+    return OutVariant<V>(v);
+}
+
+template<class V>
+inline std::ostream & operator<<(std::ostream & out, const OutVariant<V> & value)
+{
+    value(out);
+    return out;
+}
+
 #ifdef __OBJC__
 class OutObjC {
 public:
