@@ -82,6 +82,8 @@
 #include <wx/toplevel.h>
 #endif
 
+#if BOOST_WINDOWS
 #include <winutils/ErrorMessage.h>
+#endif
 
 #define BUILDING_WXUTILS

@@ -52,7 +52,7 @@ public:
 
     ~AttachData()
     {
-        if(!deathListener_.empty())
+        if(deathListener_)
             deathListener_();
     }
 private:
