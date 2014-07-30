@@ -59,7 +59,7 @@ void PipeNode::doListen(const std::wstring & name)
     HANDLE handle = CreateNamedPipeW((L"\\\\.\\pipe\\" + name).c_str(), PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED, PIPE_WAIT,
                                     PIPE_UNLIMITED_INSTANCES, 0x1000, 0x1000, 0, NULL);
     pipe_.reset(new boost::asio::windows::stream_handle(ioService_, handle));
-    boost::asio::windows::overlapped_ptr overlapped(ioService_, std::bind(&PipeNode::handleConnected, this, _1, name));
+    boost::asio::windows::overlapped_ptr overlapped(ioService_, std::bind(&PipeNode::handleConnected, this, std::placeholders::_1, name));
 
     bool ok = ConnectNamedPipe(pipe_->native(), overlapped.get()) != FALSE;
     DWORD error = GetLastError();
@@ -88,7 +88,7 @@ void PipeNode::doConnect(const std::wstring & name)
         connectDone();
     } else {
         timer_.expires_from_now(boost::posix_time::milliseconds(250));
-        timer_.async_wait(std::bind(&PipeNode::handleExpired, this, _1, [this, name](){ doConnect(name); }));
+        timer_.async_wait(std::bind(&PipeNode::handleExpired, this, std::placeholders::_1, [this, name](){ doConnect(name); }));
     }
 }
 
@@ -116,7 +116,7 @@ void PipeNode::handleConnected(const boost::system::error_code & ec, const std::
     } else if(ec != boost::asio::error::broken_pipe) {
         MLOG_MESSAGE(Warning, "Listen failed: " << ec << ", " << ec.message());
         timer_.expires_from_now(boost::posix_time::milliseconds(250));
-        timer_.async_wait(std::bind(&PipeNode::handleExpired, this, _1, [this, name]() { doListen(name); }));
+        timer_.async_wait(std::bind(&PipeNode::handleExpired, this, std::placeholders::_1, [this, name]() { doListen(name); }));
     }
 }
 

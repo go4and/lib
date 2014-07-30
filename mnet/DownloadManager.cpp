@@ -353,7 +353,7 @@ public:
         return taskCounter_;
     }
     
-    void cancel(int id)
+    void cancel(size_t id)
     {
         MLOG_DEBUG("cancel(" << id << ")");
 
@@ -382,7 +382,7 @@ public:
         }
     }
     
-    DownloadProgress getProgress(int id)
+    DownloadProgress getProgress(size_t id)
     {
         auto i = id2task_.find(id);
         if(i != id2task_.end())
@@ -492,7 +492,7 @@ private:
     
     typedef std::list<Task> Tasks;
     Tasks tasks_;
-    std::unordered_map<int, Tasks::iterator> id2task_;
+    std::unordered_map<size_t, Tasks::iterator> id2task_;
     std::vector<Chunk*> active_;
 };
 

@@ -65,7 +65,7 @@ typedef boost::variant<AsyncHandler, AsyncDataHandler, AsyncDataExHandler, Async
 class Request {
 public:
     Request()
-        : rangeBegin_(-1) {}
+        : rangeBegin_(-1), clientCertificate_(nullptr), clientKey_(nullptr), certificateAuthority_(nullptr) {}
 
     Request & url(const std::string & value) { url_ = value; return *this; }
     Request & cookies(const std::string & value) { cookies_ = value; return *this; }
@@ -107,9 +107,9 @@ private:
     DirectWriter directWriter_;
     filesize_t rangeBegin_, rangeEnd_;
     mstd::rc_buffer postData_;
-    void * clientCertificate_ = nullptr;
-    void * clientKey_ = nullptr;
-    void * certificateAuthority_ = nullptr;
+    void * clientCertificate_;
+    void * clientKey_;
+    void * certificateAuthority_;
 };
 
 std::ostream & operator<<(std::ostream & out, const Request & request);

@@ -103,7 +103,7 @@ private:
             MLOG_FMESSAGE(Notice, "accept aborted[" << endpoint_ << "]");
             acceptor_.close();
             if(abortListener_)
-                acceptor_.get_io_service().post(boost::bind(abortListener_, boost::ref(*static_cast<Derived*>(this))));
+                acceptor_.get_io_service().post(std::bind(abortListener_, boost::ref(*static_cast<Derived*>(this))));
             return;
         }
 

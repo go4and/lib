@@ -53,7 +53,7 @@ private:
         if(!queue_.empty())
         {
             timer_.expires_at(queue_.top().second);
-            timer_.async_wait(std::bind(&Manager::handleTimer, this, _1));
+            timer_.async_wait(std::bind(&Manager::handleTimer, this, std::placeholders::_1));
         }
     }
     

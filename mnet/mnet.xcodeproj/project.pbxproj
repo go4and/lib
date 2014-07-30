@@ -200,8 +200,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 			};
 			name = Debug;
@@ -211,7 +209,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
 				STRIP_INSTALLED_PRODUCT = YES;
 				STRIP_STYLE = "non-global";
 			};
@@ -220,6 +217,7 @@
 		1DEB916508733D950010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BOOST_LIBRARY_SUFFIX = "-d";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -256,9 +254,11 @@
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
-					"-lboost_filesystem-mt-d",
-					"-lboost_system-mt-d",
-					"-lboost_thread-mt-d",
+					"-lboost_filesystem-mt$(BOOST_LIBRARY_SUFFIX)",
+					"-lboost_system-mt$(BOOST_LIBRARY_SUFFIX)",
+					"-lboost_thread-mt$(BOOST_LIBRARY_SUFFIX)",
+					"-lcrypto.1.0.0",
+					"-lssl.1.0.0",
 				);
 				PRODUCT_NAME = mnet;
 				SDKROOT = macosx;
@@ -305,9 +305,11 @@
 				OBJROOT = "$(BUILD_OUTPUT)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME).$(PROJECT_NAME)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
-					"-lboost_filesystem-mt",
-					"-lboost_system-mt",
-					"-lboost_thread-mt",
+					"-lboost_filesystem-mt$(BOOST_LIBRARY_SUFFIX)",
+					"-lboost_system-mt$(BOOST_LIBRARY_SUFFIX)",
+					"-lboost_thread-mt$(BOOST_LIBRARY_SUFFIX)",
+					"-lcrypto.1.0.0",
+					"-lssl.1.0.0",
 				);
 				PRODUCT_NAME = mnet;
 				SDKROOT = macosx;

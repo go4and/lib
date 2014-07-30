@@ -135,7 +135,7 @@ public:
         if(ec)
         {
             icmp::resolver::query query(icmp::v4(), host_, "");
-            resolver_.async_resolve(query, std::bind(&AsyncTraceRoute::handleResolve, this, _1, _2, self()));
+            resolver_.async_resolve(query, std::bind(&AsyncTraceRoute::handleResolve, this, std::placeholders::_1, std::placeholders::_2, self()));
         } else {
             destination_ = boost::asio::ip::icmp::endpoint(address, 0);
             startPing(1, self());

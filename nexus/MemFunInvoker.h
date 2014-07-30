@@ -11,8 +11,13 @@ namespace nexus {
 namespace detail {
 
 template<size_t ...> struct seq { };
-template<size_t N, int ...S> struct genSeq : genSeq<N - 1, N - 1, S...> { };
-template<size_t ...S> struct genSeq<0, S...> { typedef seq<S...> type; };
+template<size_t N> struct genSeq;
+template<> struct genSeq<0> { typedef seq<> type; };
+template<> struct genSeq<1> { typedef seq<0> type; };
+template<> struct genSeq<2> { typedef seq<0, 1> type; };
+template<> struct genSeq<3> { typedef seq<0, 1, 2> type; };
+template<> struct genSeq<4> { typedef seq<0, 1, 2, 3> type; };
+template<> struct genSeq<5> { typedef seq<0, 1, 2, 3, 4> type; };
 
 }
 

@@ -27,6 +27,7 @@
 #include <exception>
 #include <queue>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 #include <boost/aligned_storage.hpp>
@@ -95,6 +96,7 @@
 #include <mstd/exception.hpp>
 #include <mstd/itoa.hpp>
 #include <mstd/hton.hpp>
+#include <mstd/null.hpp>
 #include <mstd/pointer_cast.hpp>
 #include <mstd/rc_buffer.hpp>
 #include <mstd/reference_counter.hpp>

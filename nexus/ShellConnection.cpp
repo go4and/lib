@@ -47,7 +47,7 @@ public:
 
     void cancel()
     {
-        strand_.dispatch(boost::bind(&ShellConnectionImpl::close, this));
+        strand_.dispatch(std::bind(&ShellConnectionImpl::close, this));
     }
 private:
     void startWrite(const ShellConnectionPtr & self)
