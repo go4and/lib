@@ -30,7 +30,7 @@ class error;
 typedef boost::int64_t number;
 typedef boost::variant<number, std::wstring> variable;
 typedef std::function<variable(void*, variable*)> program;
-typedef std::function<func(const std::wstring&, size_t, bool, bool lowered)> function_lookup;
+typedef std::function<func(const std::wstring& name, size_t arity, bool lookupArguments, bool lowered)> function_lookup;
 typedef std::function<pre_program*(const std::wstring&, const compiler_context & context)> plugin_compiler;
 
 struct compiler_context {

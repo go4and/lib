@@ -10,6 +10,8 @@
 
 #ifndef MPTREE_BUILDING
 #include <boost/array.hpp>
+
+#include <boost/algorithm/string/trim.hpp>
 #endif
 
 #include "src/writers.hpp"
@@ -32,19 +34,44 @@ struct interval {
 };
 
 template<class T>
-bool parse_value(interval<T> & out, const char * val, size_t len)
+std::ostream & operator<<(std::ostream & out, const interval<T> & i)
 {
-    const char * end = val + len;
-    const char * p = std::find(val, end, '-');
+    if(i.first == i.last)
+        out << i.first;
+    else
+        out << i.first << '-' << i.last;
+    return out;
+}
+
+template<class T, class It>
+T parseInt(It begin, It end)
+{
+    auto p = boost::trim_copy(boost::make_iterator_range(begin, end));
+    begin = p.begin(); end = p.end();
+    if(begin != end && *begin == '0')
+    {
+        auto temp = begin;
+        ++temp;
+        if(temp != end && *temp == 'x')
+            return mstd::str2int16_checked<T>(++temp, end);
+    }
+    return mstd::str2int10_checked<T>(begin, end);
+}
+
+template<class T, class Ch>
+bool parse_value(interval<T> & out, const Ch * val, size_t len)
+{
+    const Ch * end = val + len;
+    const Ch * p = std::find(val, end, '-');
     try {
         if(p != end)
         {
-            int first = mstd::str2int10_checked<int>(val, p);
+            int first = parseInt<T>(val, p);
             ++p;
-            out.last = mstd::str2int10_checked<int>(p, end);
+            out.last = parseInt<T>(p, end);
             out.first = first;
         } else {
-            out.first = out.last = mstd::str2int10_checked<int>(val, end);
+            out.first = out.last = parseInt<T>(val, end);
         }
         return true;
     } catch(mstd::bad_str2int_cast&) {
@@ -71,6 +98,24 @@ struct intervals {
     inline iterator end() { return value.end(); }
 };
 
+template<class T, class Col>
+std::ostream & operator<<(std::ostream & out, const intervals<T, Col> & c)
+{
+    out << '[';
+    auto begin = c.begin();
+    auto end = c.end();
+    if(begin != end)
+    {
+        out << *begin;
+        while(++begin != end)
+        {
+            out << ", ";
+            out << *begin;
+        }
+    }
+    return out << ']';
+}
+
 template<class T>
 char * render_interval(const interval<T> & interval, char * buffer)
 {
@@ -93,10 +138,9 @@ void write_value(node_writer & writer, const interval<T> & interval)
     writer.write_raw(buffer, stop - buffer);
 }
 
-template<class T>
-bool parse_value(intervals<T> & out, const char * val, size_t len)
+template<class T, class It>
+bool parse_value(intervals<T> & out, It val, const It & end)
 {
-    const char * end = val + len;
     boost::array<interval<T>, 0x10> buffer;
     std::vector<interval<T> > temp;
     size_t n = 0;
@@ -104,15 +148,15 @@ bool parse_value(intervals<T> & out, const char * val, size_t len)
         interval<T> interval;
         while(val != end)
         {
-            const char * q = std::find(val, end, ',');
-            const char * p = std::find(val, q, '-');
+            auto q = std::find(val, end, ',');
+            auto p = std::find(val, q, '-');
             if(p != q)
             {
-                interval.first = mstd::str2int10_checked<int>(val, p);
+                interval.first = parseInt<T>(val, p);
                 ++p;
-                interval.last = mstd::str2int10_checked<int>(p, q);
+                interval.last = parseInt<T>(p, q);
             } else {
-                interval.first = interval.last = mstd::str2int10_checked<int>(val, q);
+                interval.first = interval.last = parseInt<T>(val, q);
             }
             if(n < buffer.size())
                 buffer[n++] = interval;
@@ -132,6 +176,12 @@ bool parse_value(intervals<T> & out, const char * val, size_t len)
     } catch(mstd::bad_str2int_cast&) {
         return false;
     }
+}
+
+template<class T, class It>
+bool parse_value(intervals<T> & out, const It & val, size_t len)
+{
+    return parse_value(out, val, val + len);
 }
 
 template<class T>

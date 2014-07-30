@@ -31,20 +31,28 @@ compiler builder::parse(const std::string & str, error & err)
 
 program builder::build(const environment & env, const std::wstring & str, error & err)
 {
-    compiler c = parse(str, err);
-    if(err)
-        return program();
-    function_lookup lookup = std::bind(&environment::find, &env, _1, _2, _4);
-    compiler_context context = { lookup, err, plugin_ };
-    return c(context);
+    return build([&env](const std::wstring & name, int arity, bool la, bool lowered){ return env.find(name, arity, lowered); }, str, err);
 }
 
 program builder::build(const environment & env, const std::string & str, error & err)
 {
+    return build([&env](const std::wstring & name, int arity, bool la, bool lowered){ return env.find(name, arity, lowered); }, str, err);
+}
+
+program builder::build(const function_lookup & lookup, const std::wstring & str, error & err)
+{
     compiler c = parse(str, err);
     if(err)
         return program();
-    function_lookup lookup = std::bind(&environment::find, &env, _1, _2, _4);
+    compiler_context context = { lookup, err, plugin_ };
+    return c(context);
+}
+
+program builder::build(const function_lookup & lookup, const std::string & str, error & err)
+{
+    compiler c = parse(str, err);
+    if(err)
+        return program();
     compiler_context context = { lookup, err, plugin_ };
     return c(context);
 }
