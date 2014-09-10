@@ -24,10 +24,15 @@ namespace mstd {
 template<class Ch>
 void cleanup(boost::property_tree::basic_ptree<std::basic_string<Ch>, std::basic_string<Ch> > & tree)
 {
+#if BOOST_VERSION >= 105600
+    typedef std::basic_string<Ch> T;
+#else
+    typedef Ch T;
+#endif
     bool hasElements = false;
-    for(typename boost::property_tree::basic_ptree<std::basic_string<Ch>, std::basic_string<Ch> >::iterator i = tree.begin(), end = tree.end(); i != end; ++i)
+    for(auto i = tree.begin(), end = tree.end(); i != end; ++i)
     {
-        if(!hasElements && i->first != boost::property_tree::xml_parser::xmlattr<Ch>() && i->first != boost::property_tree::xml_parser::xmltext<Ch>())
+        if(!hasElements && i->first != boost::property_tree::xml_parser::xmlattr<T>() && i->first != boost::property_tree::xml_parser::xmltext<T>())
             hasElements = true;
         cleanup(i->second);
     }
