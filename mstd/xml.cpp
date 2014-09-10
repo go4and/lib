@@ -64,7 +64,11 @@ void write_xml(std::ostream & out, const boost::property_tree::wptree & inp)
 {
     boost::property_tree::ptree temp;
     convert(inp, temp);
+#if BOOST_VERSION >= 105600
+    boost::property_tree::write_xml(out, temp, boost::property_tree::xml_writer_make_settings<std::string>(' ', 2));
+#else
     boost::property_tree::write_xml(out, temp, boost::property_tree::xml_writer_make_settings(' ', 2));
+#endif
 }
 
 void write_xml(const boost::filesystem::wpath & path, const boost::property_tree::wptree & inp)
