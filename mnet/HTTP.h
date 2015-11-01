@@ -65,7 +65,7 @@ typedef boost::variant<AsyncHandler, AsyncDataHandler, AsyncDataExHandler, Async
 class Request {
 public:
     Request()
-        : rangeBegin_(-1), clientCertificate_(nullptr), clientKey_(nullptr), certificateAuthority_(nullptr) {}
+        : rangeBegin_(-1), noUI_(false), clientCertificate_(nullptr), clientKey_(nullptr), certificateAuthority_(nullptr) {}
 
     Request & url(const std::string & value) { url_ = value; return *this; }
     Request & cookies(const std::string & value) { cookies_ = value; return *this; }
@@ -83,6 +83,7 @@ public:
     Request & clientCertificate(void * certificate, void * key) { clientCertificate_ = certificate; clientKey_ = key; return *this; }
     Request & certificateAuthority(void * value) { certificateAuthority_ = value; return *this; }
     Request & range(filesize_t begin, filesize_t end) { rangeBegin_ = begin; rangeEnd_ = end; return *this; }
+    Request & noUI(bool value = true) { noUI_ = value; return *this; }
 
     const std::string & url() const { return url_; }
     const std::string & cookies() const { return cookies_; }
@@ -93,6 +94,7 @@ public:
     const std::vector<std::string> & headers() const { return headers_; }
     filesize_t rangeBegin() const { return rangeBegin_; }
     filesize_t rangeEnd() const { return rangeEnd_; }
+    bool noUI() const { return noUI_; }
     void * clientCertificate() const { return clientCertificate_; }
     void * clientKey() const { return clientKey_; }
     void * certificateAuthority() const { return certificateAuthority_; }
@@ -107,6 +109,7 @@ private:
     DirectWriter directWriter_;
     filesize_t rangeBegin_, rangeEnd_;
     mstd::rc_buffer postData_;
+    bool noUI_;
     void * clientCertificate_;
     void * clientKey_;
     void * certificateAuthority_;

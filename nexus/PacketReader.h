@@ -141,7 +141,47 @@ public:
         return std::vector<char>(pos_, end_);
     }
 
-    template<class T>
+	uint8_t readUInt8()
+    {
+		return read<uint8_t>();
+    }
+
+	uint16_t readUInt16()
+    {
+		return read<uint16_t>();
+    }
+
+	uint32_t readUInt32()
+    {
+		return read<uint32_t>();
+    }
+
+	uint64_t readUInt64()
+    {
+		return read<uint64_t>();
+    }
+
+	int8_t readInt8()
+	{
+		return read<int8_t>();
+	}
+
+	int16_t readInt16()
+	{
+		return read<int16_t>();
+	}
+
+	int32_t readInt32()
+	{
+		return read<int32_t>();
+	}
+
+	int64_t readInt64()
+	{
+		return read<int64_t>();
+	}
+
+	template<class T>
     typename boost::enable_if<boost::is_pod<T>, T>::type
     read()
     {
@@ -234,13 +274,19 @@ public:
         return T(oldPos, pos_);
     }
 
+	template<class Len>
+	std::wstring readUTFString(Len len)
+    {
+		const char * begin = pos_;
+		pos_ += len;
+		return mstd::deutf8(begin, len);
+	}
+
     template<class Len>
     std::wstring readLenUTFString()
     {
         auto len = read<Len>();
-        const char * begin = pos_;
-        pos_ += len;
-        return mstd::deutf8(begin, len);
+		return readUTFString(len);
     }
 
     template<class T>

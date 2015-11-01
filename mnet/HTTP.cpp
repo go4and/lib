@@ -26,8 +26,13 @@ public:
     virtual void start(CURLM * curlm) = 0;
     virtual void done(int code) = 0;
 
-    AsyncTask()
-        : curl_(0) {}
+    explicit AsyncTask()
+        : curl_(0), noUI_(false) {}
+
+    void noUI(bool value)
+    {
+        noUI_ = value;
+    }
 
     virtual ~AsyncTask()
     {
@@ -38,7 +43,8 @@ public:
         }
     }
 
-    static void uiEnqueue(const std::function<void()> & action);
+    template<class Action>
+    void notify(const Action & action);
 protected:
     CURL * curl_;
 
@@ -53,6 +59,7 @@ protected:
     }
 private:
     CURLM * curlm_;
+    bool noUI_;
 };
 
 typedef boost::intrusive_ptr<AsyncTask> AsyncTaskPtr;
@@ -242,7 +249,7 @@ private:
         if(self->progress_ != pr)
         {
             self->progress_ = pr;
-            uiEnqueue(std::bind(self->prog_, static_cast<int>(pr)));
+            self->notify(std::bind(self->prog_, static_cast<int>(pr)));
         }
         return 0;
     }
@@ -265,6 +272,7 @@ public:
           certificateAuthority_(request.certificateAuthority()),
           headers_(0)
     {
+        noUI(request.noUI());
         const std::vector<std::string> & headers = request.headers();
         for(std::vector<std::string>::const_iterator i = headers.begin(), end = headers.end(); i != end; ++i)
         {
@@ -338,17 +346,17 @@ public:
         MLOG_MESSAGE_EX(ec ? mlog::llWarning : mlog::llDebug, "get data: " << url() << ", code: " << ec);
 
         if(const AsyncHandler * handler = boost::get<AsyncHandler>(&handler_))
-            uiEnqueue(std::bind(*handler, ec));
+            notify(std::bind(*handler, ec));
         else {
             if(!data_)
                 data_ = blankBuffer();
             if(const AsyncDataHandler * handler = boost::get<AsyncDataHandler>(&handler_))
-                uiEnqueue(std::bind(*handler, ec, data_));
+                notify(std::bind(*handler, ec, data_));
             else if(const AsyncDataExHandler * handler = boost::get<AsyncDataExHandler>(&handler_))
             {
                 if(!header_)
                     header_ = blankBuffer();
-                uiEnqueue(std::bind(*handler, ec, data_, header_));
+                notify(std::bind(*handler, ec, data_, header_));
             } else if(const AsyncSizeHandler * handler = boost::get<AsyncSizeHandler>(&handler_))
             {
                 filesize_t size;
@@ -359,7 +367,7 @@ public:
                     size = res == CURLE_OK ? static_cast<filesize_t>(contentLength) : -1;
                 } else
                     size = -1;
-                uiEnqueue(std::bind(*handler, ec, size));
+                notify(std::bind(*handler, ec, size));
             }
         }
     }
@@ -486,7 +494,7 @@ public:
                 remove(fname_, err);
             }
         }
-        uiEnqueue(std::bind(handler_, ec));
+        notify(std::bind(handler_, ec));
     }
 private:
     static size_t write(const char* buf, size_t size, size_t nmemb, GetFileAsync * self)
@@ -771,9 +779,13 @@ private:
     mstd::rc_buffer blankBuffer_;
 };
 
-void AsyncTask::uiEnqueue(const std::function<void()> & action)
+template<class Action>
+void AsyncTask::notify(const Action & action)
 {
-    HTTP::instance().uiEnqueue(action);
+    if(noUI_)
+        const_cast<Action&>(action)(); // fix for std::bind in MSVC
+    else
+        HTTP::instance().uiEnqueue(action);
 }
 
 mstd::rc_buffer AsyncTask::blankBuffer()

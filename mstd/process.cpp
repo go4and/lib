@@ -7,11 +7,13 @@
 **    May you share freely, never taking more than you give.
 */
 #include <boost/config.hpp>
+#include <boost/scope_exit.hpp>
 
 #include "filesystem.hpp"
 
 #if BOOST_WINDOWS
 #include <Windows.h>
+#include <tlhelp32.h>
 #else
 
 #include "strings.hpp"
@@ -181,5 +183,32 @@ void make_executable(const boost::filesystem::wpath & path, bool user, bool grou
         perms |= boost::filesystem::others_exe;
     permissions(path, perms, ec);
 }
+
+#if BOOST_WINDOWS
+int find_parent(int pid)
+{
+	HANDLE handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	BOOST_SCOPE_EXIT(handle)
+	{
+		if (handle)
+			CloseHandle(handle);
+	} BOOST_SCOPE_EXIT_END;
+	if (handle)
+	{
+		PROCESSENTRY32W pe;
+		memset(&pe, 0, sizeof(pe));
+		pe.dwSize = sizeof(pe);
+
+		if (Process32First(handle, &pe))
+		{
+			do {
+				if (pe.th32ProcessID == pid)
+					return pe.th32ParentProcessID;
+			} while (Process32Next(handle, &pe));
+		}
+	}
+	return 0;
+}
+#endif
 
 }
