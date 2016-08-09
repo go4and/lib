@@ -87,6 +87,11 @@ public:
         rpos_ = trim(rpos_ + transferred);
     }
 
+    inline size_t free() const
+    {
+        return data_.size() - 1 - ready();        
+    }
+
     void append(const char * data, size_t len);
     void ensure(size_t space);
     inline size_t prepareRecv(BufferDescriptor * bufs) { return prepare(bufs, wpos_, (rpos_ ? rpos_ : data_.size()) - 1); }

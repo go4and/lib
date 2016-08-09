@@ -85,6 +85,7 @@
 #include <boost/unordered/unordered_set_fwd.hpp>
 
 #include <boost/utility/enable_if.hpp>
+#include <boost/utility/in_place_factory.hpp>
 
 #include <zlib.h>
 
